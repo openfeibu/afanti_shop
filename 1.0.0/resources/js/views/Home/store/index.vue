@@ -3,10 +3,10 @@
         <div class="mbx w1200">
             <a-breadcrumb>
                 <a-breadcrumb-item><a href="/">首页</a></a-breadcrumb-item>
-                <a-breadcrumb-item >店铺街</a-breadcrumb-item>
+                <a-breadcrumb-item >展馆列表</a-breadcrumb-item>
             </a-breadcrumb>
         </div>
-         <!-- 搜索条件 S -->
+         <!-- 搜索条件 S 
         <div class="goods_where w1200">
             <div class="item">
                 <div class="title">筛选排序：</div>
@@ -20,14 +20,8 @@
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && ($isEmpty(base64Decode.sort_type) || base64Decode.sort_type==''))?'caret red':'caret'" type="caret-down" />
                                 </div>
                             </li>
-                            <li @click="sortChange('distance')" :class="(!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='distance')?'red':''">
-                                距离
-                                <div class="sorts">
-                                    <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='asc') && (!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='distance'))?'caret red':'caret'" type="caret-up" />
-                                    <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && (!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='distance'))?'caret red':'caret'" type="caret-down" />
-                                </div>
-                            </li>
-                            <!-- <li @click="sortChange('goods_sale')" :class="(!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='goods_sale')?'red':''">
+                          
+                           <li @click="sortChange('goods_sale')" :class="(!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='goods_sale')?'red':''">
                                 销量
                                 <div class="sorts">
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='asc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='goods_sale'))?'caret red':'caret'" type="caret-up" />
@@ -40,13 +34,13 @@
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='asc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='goods_comment'))?'caret red':'caret'" type="caret-up" />
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='goods_comment'))?'caret red':'caret'" type="caret-down" />
                                 </div>
-                            </li> -->
+                            </li> 
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 搜索条件 E -->
+        搜索条件 E -->
 
         <div class="home_store_list w1200" v-if="list.length>0">
             <ul>
@@ -64,8 +58,8 @@
                         好评率：100%
                     </div>
                     <div class="right_block">
-                        <div class="jl">距离：<span style="color:#ca151e;font-size:16px">{{v.distance}}</span></div>
-                        <div class="btn" @click="$router.push('/store/'+v.id)">进入店铺</div>
+                       
+                        <div class="btn" @click="$router.push('/store/'+v.id)">进入展馆</div>
                     </div>
                 </li>
             </ul>

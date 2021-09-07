@@ -2,14 +2,7 @@
     <div class="banner_bottom_adv width_center_1200">
         <div class="shop_left_on">
             <ul>
-                <li><router-link to="/user/safe">
-                <img :src="require('@/asset/pc/001.png')" alt="">
-                <p>实名认证</p>
-                </router-link></li>
-                <li><router-link to="/integral/index">
-                <img :src="require('@/asset/pc/002.png')" alt="">
-                <p>积分商城</p>
-                </router-link></li>
+
                 <li><router-link to="/groupbuy">
                 <img :src="require('@/asset/pc/003.png')" alt="">
                 <p>优惠团购</p>
@@ -20,12 +13,21 @@
                 </router-link></li>
                 <li><router-link to="/user/article/notice">
                 <img :src="require('@/asset/pc/005.png')" alt="">
-                <p>公告</p>
+                <p>帮助中心</p>
                 </router-link></li>
-                <li><router-link to="/store/join/index">
+                <li><router-link to="/user/article/notice">
                 <img :src="require('@/asset/pc/006.png')" alt="">
-                <p>入驻商家</p>
+                <p>展馆列表</p>
                 </router-link></li>
+                <li><router-link to="/store">
+                <img :src="require('@/asset/pc/006.png')" alt="">
+                <p>展馆列表</p>
+                </router-link></li>
+                <li><router-link to="/user/article/notice">
+                <img :src="require('@/asset/pc/006.png')" alt="">
+                <p>敬请期待</p>
+                </router-link></li>
+
             </ul>
         </div>
         <div class="shop_right_on">

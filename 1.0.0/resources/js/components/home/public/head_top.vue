@@ -3,15 +3,11 @@
         <div class="head_in">
             <div class="top_shop_left">
                 <ul>
-                    <li><router-link to="/">青梧官网</router-link></li>
-                    <li>|</li>
-                    <li><router-link to="/">商城官网</router-link></li>
+                    <li><router-link to="/">阿凡提官网</router-link></li>
                     <li>|</li>
                     <li><router-link to="/">联系方式</router-link></li>
                     <li>|</li>
                     <li><router-link to="/">关于我们</router-link></li>
-                    <li>|</li>
-                    <li><router-link style="color:#ca151e" to="/"><img width="16px" :src="require('@/asset/order/address_pos3.png')" >{{' '+city+' '||' - '}}</router-link></li>
                 </ul>
             </div>
             <div class="top_shop_right">
@@ -22,13 +18,12 @@
                     <li v-show="isLogin">|</li>
                     <li v-show="isLogin"><router-link to="/user" >个人中心</router-link></li>
                     <li v-show="isLogin">|</li>
-                    <li v-show="isLogin" @click="logout()">注销账号</li>
-                    <li>|</li>
-                    <li><router-link to="/store/join/index" style="color:#ca151e">商家入驻</router-link></li>
-                    <li>|</li>
+                    <li v-show="isLogin" @click="logout()">退出</li>
+          
+<!--                    
                     <li><router-link to="/">手机端</router-link></li>
                     <li>|</li>
-                    <li><router-link to="/">APP下载</router-link></li>
+                    <li><router-link to="/">APP下载</router-link></li> -->
                 </ul>
             </div>
         </div>
@@ -122,7 +117,7 @@ export default {
         }
     },
     created() {
-        this.get_position();
+        // this.get_position();
     },
     mounted() {}
 };
@@ -152,7 +147,7 @@ export default {
               padding:0 5px;
           }
           li:hover{
-              color:#ca151e;
+              color:#1c8d44;
           }
       }
   }
@@ -162,7 +157,7 @@ export default {
       content:'';
   }
   .head_in a:hover{
-      color:#ca151e;
+      color:#1c8d44;
   }
 }
 </style>

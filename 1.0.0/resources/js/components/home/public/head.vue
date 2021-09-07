@@ -13,7 +13,7 @@
                     <li><button class="search_button" type="button" @click="search()"><a-icon type="search" /></button></li>
                     <li>
                         <div class="index_my_car">
-                            <span @click="to_my_store()">我的商城<a-font type="icondianpu" /></span>
+                            <!-- <span @click="to_my_store()">我的商城<a-font type="icondianpu" /></span> -->
                             <span><router-link to="/cart">我的购物车<a-font type="icongouwuche1" /></router-link><div class="shop_car_dot">{{cart_num||0}}</div></span>
                         </div>
                     </li>
@@ -25,7 +25,7 @@
         <div class="shop_top_nav">
             <div class="width_center_1200">
                 <div class="shop_top_nav_left" @mouseover="subnav_show?subnav:subnav=true" @mouseleave="subnav_show?subnav:subnav=false">
-                    全部商品
+                    全部分类
                     <transition name="el-zoom-in-top"><leftBar :goods_class="common.classes" :change_color="change_color" v-show="subnav"></leftBar></transition>
                 </div>
                 <div class="shop_top_nav_right">
@@ -34,17 +34,20 @@
                             <router-link to="/">首页</router-link>
                         </li>
                         <li>
-                            <router-link to="/store">店铺街</router-link>
+                            <router-link to="/store">展馆列表</router-link>
                         </li>
                         <li>
-                            <router-link to="/seckill">秒杀</router-link>
+                            <router-link to="/seckill">秒杀专区</router-link>
                         </li>
                         <li>
-                            <router-link to="/collective/eyJrZXl3b3JkcyI6IiJ9">拼团</router-link>
+                            <router-link to="/collective/eyJrZXl3b3JkcyI6IiJ9">拼团专区</router-link>
                         </li>
                         <li>
+                            <router-link to="/collective/eyJrZXl3b3JkcyI6IiJ9">优惠券</router-link>
+                        </li>
+                        <!-- <li>
                             <router-link to="/integral/index">积分商城</router-link>
-                        </li>
+                        </li> -->
                         <li>
                             <router-link to="/user/article/help">帮助中心</router-link>
                         </li>
@@ -167,14 +170,14 @@ export default {
 }
 .shop_top_nav{
     height: 40px;
-    background:#333;
+    background:#1c8d44;
     font-size: 14px;
     line-height: 40px;
     color:#fff;
     .shop_top_nav_left{
         float: left;
         width: 240px;
-        background:#ca151e;
+        background:#4bb16f;
         box-sizing: border-box;
         padding-left: 15px;
         position: relative;
@@ -192,7 +195,7 @@ export default {
             display: block;
         }
         ul li a:hover{
-            background: #000;
+            background: #4bb16f;
         }
     }
 }
@@ -235,7 +238,7 @@ export default {
         line-height: 38px;
         padding: 0 20px;
         span:hover{
-            color:#ca151e;
+            color:#1c8d44;
         }
         span{
             margin-right: 20px;
@@ -245,13 +248,13 @@ export default {
                 margin-left: 6px;
             }
             a:hover{
-                color:#ca151e;
+                color:#1c8d44;
             }
             .shop_car_dot {
                 position: absolute;
                 top: -24px;
                 line-height: 16px;
-                background: #ca151e;
+                background: #1c8d44;
                 padding: 0 4px;
                 color: #fff;
                 border-radius: 4px;

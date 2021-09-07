@@ -3,35 +3,12 @@
         <ul>
             <li class="left_bar_block" v-for="(v,k) in goods_class" :key="k">
                 <div class="class_1"><a @click="to_nav(v.id,v)" href="javascript:;">{{v.name}}</a></div>
-                <div class="class_2">
+                <!-- <div class="class_2">
                     <ul>
                         <li v-for="(vo,key) in v.children" :key="key" v-show="key<3"><a @click="to_nav(v.id,vo,1)">{{vo.name}}</a></li>
                     </ul>
-                </div>
-                <div class="subbar">
-                    <div class="subbar_top">
-                        <ul>
-                            <!-- <li v-for="(tag_item,tag_key) in v.tags.split(',')" :key="tag_key"><router-link :to="'/goods/params/class_id.'+v.id">{{tag_item}}</router-link></li> -->
-                        </ul>
-                    </div>
-                    <div class="subbar_right">
-                        <ul>
-                            <li v-for="(goods_brand_item,goods_brand_key) in goods_brand" :key="goods_brand_key"><img width="100px" height="50px" :src="goods_brand_item.thumb" alt=""></li>
-                        </ul>
-                        <div class="subbar_right_adv">
-                            <!-- <router-link :to="goods_brand_adv['adv'][0]['adv_link']"><img width="203px" height="96" :src="goods_brand_adv['adv'][0]['adv_image']" :alt="goods_brand_adv['adv'][0]['adv_title']"></router-link> -->
-                        </div>
-                    </div>
-                    <div class="subbar_subnav">
-                        <div class="class2_title"  v-for="(vo,key) in v.children" :key="key">
-                            <h4>{{vo.name}}</h4>
-                            <ul>
-                                <li v-for="(item,index) in vo.children" :key="index"><a @click="to_nav(v.id,item,2)">{{item.name}}</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                </div>
+                </div> -->
+               
             </li>
         </ul>
         
@@ -72,7 +49,8 @@ export default {
             let params = {};
             params.pid = id; // 顶级栏目ID
             params.class_id = [];
-            if(deep == 0){
+            if(info.children && deep == 0){
+              
                 info.children.forEach(item=>{
                     if(!this.$isEmpty(item.children)){
                         item.children.forEach(item2=>{
@@ -81,7 +59,7 @@ export default {
                     }
                 })
             }
-            if(deep == 1){
+            if(info.children && deep == 1){
                 params.sid = info.id;
                 if(!this.$isEmpty(info.children)){
                     info.children.forEach(item=>{
@@ -120,6 +98,7 @@ export default {
         padding: 8px 15px 0 15px;
         a{
             // font-weight: bold;
+            display: block;
         }
     }
     
@@ -234,7 +213,7 @@ export default {
                         
                     }
                     a:hover{
-                        color:#ca151e;
+                        color:#1c8d44;
                     }
                     
                 }
@@ -384,7 +363,7 @@ export default {
                         
                     }
                     a:hover{
-                        color:#ca151e;
+                        color:#1c8d44;
                     }
                     
                 }

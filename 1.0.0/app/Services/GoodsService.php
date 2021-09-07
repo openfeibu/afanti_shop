@@ -24,9 +24,9 @@ class GoodsService extends BaseService{
             'store_id'              => $store_id??0,
             'goods_name'            => request()->goods_name,                         // 商品名
             'goods_subname'         => request()->goods_subname??'',                  // 副标题
-            'goods_no'              => request()->goods_no??'',                       // 商品编号
+            'goods_no'              => request()->goods_no ?? generate_goods_no(),                       // 商品编号
             'brand_id'              => request()->brand_id,                           // 商品品牌
-            'class_id'              => request()->classInfo[2]['id']??0,              // 商品分类
+            'class_id'              => request()->goods_class_id??0,              // 商品分类
             'goods_master_image'    => request()->goods_master_image,                 // 商品主图
             'goods_price'           => abs(request()->goods_price??0),                // 商品价格
             'goods_market_price'    => abs(request()->goods_market_price??0),         // 商品市场价

@@ -63,7 +63,7 @@
                         <div class="unline"></div>
                         <div class="copyright">
                             <span class="copyright_title">商城框架：</span>
-                            <span class="copyright_rs" @click="openWeb">青梧商城系统（QwSystem）</span>
+                            <span class="copyright_rs" @click="openWeb">阿凡提·水果巴扎系统（QwSystem）</span>
                         </div>
                         <div class="unline"></div>
                         <div class="copyright" style="padding-bottom:18px">

@@ -63,7 +63,7 @@ class StoreController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage.`
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -75,5 +75,9 @@ class StoreController extends Controller
         });
         $store_model->destroy($idArray);
         return $this->success([],__('base.success'));
+    }
+    public function seller_login(UserService $user_service){
+        $info = $user_service->login('username','admin');
+        return $info['status']?$this->success($info['data']):$this->error($info['msg']);
     }
 }

@@ -11,6 +11,11 @@ use App\Services\GoodsService;
 
 class GoodsController extends Controller
 {
+    public function __construct(GoodsService $goods_service)
+    {
+        $this->goods_service = $goods_service;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,15 +53,25 @@ class GoodsController extends Controller
         return $this->success(new GoodsTabAdminCollection($list));
     }
 
+    public function create()
+    {
+        $sn = generate_goods_no();
+        var_dump($sn);
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,GoodsService $goods_service)
     {
-        //
+        $info = $goods_service->add();
+        if($info['status']){
+            return $this->success([],__('goods.add_success'));
+        }
+        return $this->error(__('goods.add_error'));
+
     }
 
     /**
@@ -65,9 +80,9 @@ class GoodsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(GoodsService $goods_service,Freight $freight_model,$id)
+    public function show($id)
     {
-        $info = $goods_service->getGoodsInfo($id,'admin');
+        $info = $this->goods_service->getGoodsInfo($id,'admin');
         if($info['status']){
 
             // 获取快递运费模版详情 // 可以不要没什么用

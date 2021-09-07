@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'voku\\' => array($vendorDir . '/voku/portable-ascii/src/voku'),
-    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
+    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src'),
     'Zxing\\' => array($vendorDir . '/khanamiryan/qrcode-detector-decoder/lib'),
     'Yansongda\\Supports\\' => array($vendorDir . '/yansongda/supports/src'),
     'Yansongda\\Pay\\' => array($vendorDir . '/yansongda/pay/src'),

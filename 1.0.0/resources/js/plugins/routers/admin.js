@@ -79,8 +79,9 @@ export default [
         {path:"/Admin/stores/form/:id?",name:"admin_stores_form",component:()=>import("@/views/Admin/stores/form")},
 
         // 商品管理
-        {path:"/Admin/goods",name:"admin_goods",component:()=>import("@/views/Admin/goods/index")}, 
-        {path:"/Admin/goods/form/:id?",name:"admin_goods_form",component:()=>import("@/views/Admin/goods/form")},
+        {path:"/Admin/goods",name:"admin_goods",component:()=>import("@/views/Admin/goods/index")},
+        {path:"/Admin/goods/chose_class/:id?",name:"seller_goods_chose_class",component:()=>import("@/views/Admin/goods/chose_class")}, // 商品分类选择
+        {path:"/Admin/goods/form",name:"admin_goods_form",component:()=>import("@/views/Admin/goods/form")},
 
         // 广告位管理
         {path:"/Admin/adv_positions",name:"admin_adv_positions",component:()=>import("@/views/Admin/adv_positions/index")}, 

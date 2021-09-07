@@ -90,4 +90,12 @@ class GoodsBrandController extends Controller
             return $this->error($rs['msg']);
         }
     }
+    public function all_goods_brands(Request $request)
+    {
+        $name = $request->get('name','');
+        $list = GoodsBrand::when($request->name,function ($query) use ($name){
+            return $query->where('name','like','%'.$name.'%');
+        })->orderBy('id','desc')->get();
+        return $this->success($list);
+    }
 }

@@ -47,6 +47,7 @@ export default
     'adminGoodsClasses' : baseUrl + 'Admin/goods_classes', // 商品分类
     'adminGoodsClassesUploadThumb' : baseUrl + 'Admin/goods_classes/upload/thumb', // 分类缩略图上传
     'adminGoodsClassesClearCache' : baseUrl + 'Admin/goods_classes/cache/clear', // 清空商品分类缓存
+    'adminTopGoodsClasses' : baseUrl + 'Admin/goods_classes/top_goods_classes', // 商品分类
 
     // 店铺管理
     'adminStores' : baseUrl + 'Admin/stores', 
@@ -54,6 +55,7 @@ export default
     // 商品品牌管理
     'adminGoodsBrands' : baseUrl + 'Admin/goods_brands', // 商品品牌
     'adminGoodsBrandsUploadThumb' : baseUrl + 'Admin/goods_brands/upload/thumb', // 品牌缩略图上传
+    'adminAllGoodsBrands' : baseUrl + 'Admin/all_goods_brands', // 商品品牌
 
     // 商品管理
     'adminGoods' : baseUrl + 'Admin/goods', // 商品列表
@@ -91,5 +93,5 @@ export default
     'adminIntegralOrders' : baseUrl + 'Admin/integral_orders', // 积分订单
 
     // 数据统计
-    'adminStatistics' : baseUrl + 'Admin/statistics', 
+    'adminStatistics' : baseUrl + 'Admin/statistics',
 };

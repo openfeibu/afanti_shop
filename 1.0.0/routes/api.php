@@ -68,6 +68,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 店铺管理
         Route::apiResource('stores','StoreController')->except(['store']);
+        Route::get('/stores/{id}/seller_login','StoreController@seller_login'); //登陆店铺
 
         // 全国省市区地址
         Route::apiResource('areas','AreaController');
@@ -76,9 +77,9 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         // 商品品牌
         Route::apiResource('goods_brands','GoodsBrandController');
         Route::post('/goods_brands/upload/thumb','GoodsBrandController@goods_brand_upload')->name('goods_brands.goods_brand_upload'); // 品牌缩略图上传
-
+        Route::get('all_goods_brands','GoodsBrandController@all_goods_brands')->name('goods_brands.all');
         // 商品管理
-        Route::apiResource('goods','GoodsController')->except(['store']);
+        Route::apiResource('goods','GoodsController');
 
         // 广告位管理
         Route::apiResource('adv_positions','AdvPositionController');

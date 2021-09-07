@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Http\Resources\Home\StoreResource\StoreCollection;
 use App\Http\Resources\Home\StoreResource\StoreJoin;
+use App\Models\GoodsClass;
 use App\Models\OrderComment;
 use App\Models\Store;
 use App\Models\StoreClass;
@@ -135,6 +136,7 @@ class StoreService extends BaseService{
                 $choseStoreClasses[$k][$key]['name'] = $class_name[$k][$key];
             }
         }
+        return $this->format($choseStoreClasses);
         */
         $goods_class_model = new GoodsClass();
         $goods_class_list = $goods_class_model->orderBy('is_sort','asc')->get()->toArray();

@@ -6,7 +6,7 @@
         <admin-search :searchConfig="searchConfig" @searchParams="search"></admin-search>
 
         <div class="admin_table_handle_btn">
-            <!-- <a-button style="margin-right:20px" @click="$router.push('/Seller/goods/chose_class')" type="primary" icon="plus">添加商品</a-button> -->
+            <a-button style="margin-right:20px" @click="$router.push('/Admin/goods/form')" type="primary" icon="plus">添加商品</a-button>
             <a-badge :count="0" style="margin-right:20px">
                 <a-button @click="to_nav(1)" icon="check-square">通过审核</a-button>
             </a-badge>

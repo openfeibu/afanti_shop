@@ -80,7 +80,7 @@ export default {
                 return this.$message.error('成团人数');
             }
 
-            let api = this.$apiHandle(this.$api.sellerCollectives,this.id);
+            let api = this.$apiHandle(this.$api.adminCollectives,this.id);
             if(api.status){
                 this.$put(api.url,this.info).then(res=>{
                     if(res.code == 200){
@@ -104,7 +104,7 @@ export default {
             
         },
         get_info(){
-            this.$get(this.$api.sellerCollectives+'/'+this.id).then(res=>{
+            this.$get(this.$api.adminCollectives+'/'+this.id).then(res=>{
                 this.info = res.data;
             })
         },
@@ -125,7 +125,7 @@ export default {
             this.get_goods();
         },
         get_goods(){
-            this.$get(this.$api.sellerCollectives+'/goods/get_collective_goods',this.params).then(res=>{
+            this.$get(this.$api.adminCollectives+'/goods/get_collective_goods',this.params).then(res=>{
                 this.total = res.data.total;
                 this.goods = res.data.data;
             })

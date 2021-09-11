@@ -36,7 +36,7 @@ class GoodsController extends Controller
     public function goods_info($id){
         $goods_info = $this->goods_service->getGoodsInfo($id);
         if($goods_info['status']){
-            $goods_info['data']['store_info'] = $this->store_service->getStoreInfoAndRate($goods_info['data']['store_id'],'id,store_name,store_company_name,area_info,store_address,after_sale_service')['data'];
+            $goods_info['data']['store_info'] = $this->store_service->getStoreInfoAndRate($goods_info['data']['store_id'],'id,store_name,store_description')['data'];
             $goods_info['data']['sale_list'] = $this->goods_service->getSaleSortGoods(['class_id'=>$goods_info['data']['class_id']])['data']; // 销售排名
             $goods_info['data']['coupons'] = $this->coupon_service->getCouponByStoreId($goods_info['data']['store_id'])['data']; // 优惠券
             $goods_info['data']['full_reductions'] = $this->full_reduction_service->getFullReductionByStoreId($goods_info['data']['store_id'])['data']; // 满减

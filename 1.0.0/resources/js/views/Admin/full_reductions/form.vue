@@ -57,7 +57,7 @@ export default {
 
             this.info.times[0] = moment(this.info.times[0]).format('YYYY-MM-DD hh:mm:ss')
             this.info.times[1] = moment(this.info.times[1]).format('YYYY-MM-DD hh:mm:ss')
-            let api = this.$apiHandle(this.$api.sellerFullReductions,this.id);
+            let api = this.$apiHandle(this.$api.adminFullReductions,this.id);
             if(api.status){
                 this.$put(api.url,this.info).then(res=>{
                     if(res.code == 200){
@@ -81,7 +81,7 @@ export default {
             
         },
         get_info(){
-            this.$get(this.$api.sellerFullReductions+'/'+this.id).then(res=>{
+            this.$get(this.$api.adminFullReductions+'/'+this.id).then(res=>{
                 this.info = res.data;
             })
         },

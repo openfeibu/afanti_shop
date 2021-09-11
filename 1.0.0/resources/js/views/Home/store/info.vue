@@ -1,10 +1,19 @@
 <template>
     <div class="home_store_info">
         <banner :list="store_info.store_slide" :height="350" />
-        
+
+        <div class="shopInfo w1200 clear">
+            <div class="shopInfo-test">
+                <div class="title">{{store_info.store_name}}</div>
+                <div class="des">{{store_info.store_description}}</div>
+            </div>
+            <div class="shopInfo-video">
+               <video src=""></video>
+            </div>
+        </div>
         <div class="store_info_block w1200">
             <div class="left_item">
-                <div class="store_info">
+                <!-- <div class="store_info">
                     <div class="store_title">
                         <span class="tip">展馆</span>
                         <span class="title">{{store_info['store_name']||'加载中...'}}</span>
@@ -43,7 +52,7 @@
                         <span class="contact" @click="chat=true">联系客服</span>
                         <div class="clear"></div>
                     </div>
-                </div>
+                </div> -->
                 <!-- // 销售排行 -->
                 <div class="store_info">
                     <div class="store_title"><span class="title">销售排行</span></div>
@@ -90,13 +99,7 @@
                                             <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='goods_sale'))?'caret red':'caret'" type="caret-down" />
                                         </div>
                                     </li>
-                                    <li @click="sortChange('order_comment_count')" :class="(!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='order_comment_count')?'red':''">
-                                        评论
-                                        <div class="sorts">
-                                            <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='asc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='order_comment_count'))?'caret red':'caret'" type="caret-up" />
-                                            <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='order_comment_count'))?'caret red':'caret'" type="caret-down" />
-                                        </div>
-                                    </li>
+                                   
                                 </ul>
                             </div>
                         </div>
@@ -129,16 +132,16 @@
         </div>
         <!-- S -->
 
-        <!-- 聊天 -->
-        <chat v-if="chat" :store_id="store_info.id" />
+         <transition name="fade">
+            <loading v-if="isLoading"></loading>
+        </transition>
     </div>
 </template>
 
 <script>
-import Chat from "@/components/chat/index"
 import Banner from '@/components/home/public/banner'
 export default {
-    components: {Banner,Chat},
+    components: {Banner},
     props: {},
     data() {
       return {
@@ -158,9 +161,9 @@ export default {
           chat:false,
           list:[],
           comment_statistics:[],
-          rate_info:{},
-          desc: ['1.0分', '2.0分', '3.0分', '4.0分', '5.0分'],
           isFav:false,
+          isLoading:true,
+
       };
     },
     watch: {},
@@ -169,7 +172,6 @@ export default {
         get_store_info(){
             this.$get(this.$api.homeStore+'/'+this.id).then(res=>{
                 this.store_info = res.data;
-                this.rate_info = res.data.rate;
             })
         },
         get_goods_list(){
@@ -184,6 +186,7 @@ export default {
                 }else{
                     this.$message.error(res.msg);
                 }
+                this.isLoading = false;
             })
         },
         onChange(e){
@@ -292,14 +295,14 @@ export default {
                     border:1px solid #f1f1f1;
                 }
                 dl dt{
-                    width: 140px;
-                    height: 140px;
+                    width: 160px;
+                    height: 160px;
                     margin:0 auto;
                     padding-top: 20px;
                 }
                 dl dt img{
-                    width: 140px;
-                    height: 140px;
+                    width: 160px;
+                    height: 160px;
                 }
                 dl dd{
                     width: 190px;
@@ -545,5 +548,40 @@ export default {
         display: block;
         content:'';
     }
+   
 }
+ .shopInfo{
+     margin:30px auto;
+        .shopInfo-test{width: 640px;float: left;
+            .title{font-size: 40px;
+                    color: #333;
+                    line-height: 100px;
+                    position: relative;
+                    &:before {
+                       content: "";
+                        width: 30%;
+                        height: 10px;
+                        background: #4bb16f;
+                        position: absolute;
+                        left: 0;
+                        bottom: 30px;
+                        z-index: 0;
+                        opacity: 0.6;
+                    }
+                }
+            .des{
+                    font-size: 16px;
+                    color: #666666;
+                    line-height: 26px;
+                    margin-bottom: 30px;
+            }
+        }
+        .shopInfo-video{
+            width: 540px;
+            float: right;
+            background: #fbfbfb;
+            border-radius: 5px;
+            height:304px ;
+        }
+    }
 </style>

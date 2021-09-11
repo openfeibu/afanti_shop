@@ -31,12 +31,6 @@
 </template>
 
 <script>
-window.VueAMap.initAMapApiLoader({
-  // 高德key
-  key: 'f7619d49a4aea5cb76631ce884ea1817',
-  // 插件集合 （插件按需引入）
-  plugin: ['AMap.Geolocation', 'AMap.ToolBar','AMap.Geocoder']
-});
 import {mapState} from 'vuex'
 export default {
     components: {},
@@ -57,64 +51,8 @@ export default {
                 this.$router.push('/user/login');
 
             });
-        },
-        get_position(){
-            // 修改地址
-            var self = this;
-            window.VueAMap.lazyAMapApiLoaderInstance.load().then(() => {
-               
-                AMap.plugin('AMap.Geolocation',  ()=> {
-                    var geolocation  = new AMap.Geolocation({timeout: 5000});
-                    geolocation.getCurrentPosition()
-                    AMap.event.addListener(geolocation, 'complete', onComplete)
-                    AMap.event.addListener(geolocation, 'error', onError)
-                    // 定位成功
-                    function onComplete (data) {
-                        // console.log(data)
-                        if(data.addressComponent !=undefined && data.addressComponent.city!=undefined){
-                            let city = data.addressComponent.city
-                            let lng = data.position.lng
-                            let lat = data.position.lat
-                            self.city = city;
-                            sessionStorage.setItem('qw_city',city);
-                            sessionStorage.setItem('qw_lng',lng);
-                            sessionStorage.setItem('qw_lat',lat);
-                        }else{
-                            console.log('定位异常.')
-                            self.city = '北京市';
-                            sessionStorage.setItem('qw_city','北京市');
-                            sessionStorage.setItem('qw_lng','116.20');
-                            sessionStorage.setItem('qw_lat','39.56');
-                        }
-                        
-                    }
-                    // 定位出错
-                    function onError (data) {
-                        console.log('定位失败.')
-                        console.log(data)
-                        self.city = '北京市';
-                        sessionStorage.setItem('qw_city','北京市');
-                        sessionStorage.setItem('qw_lng','116.20');
-                        sessionStorage.setItem('qw_lat','39.56');
-                    }
-                })
-            });
-            //判断是否支持 获取本地位置
-            // let _this = this;
-            // if (navigator.geolocation) {
-            //     var n = navigator.geolocation.getCurrentPosition(function(res){
-            //         let lat = res.coords.latitude;
-            //         let lng = res.coords.longitude;
-            //         console.log(_this.amapUrl+lng+','+lat)
-            //         _this.$get(_this.amapUrl+lng+','+lat).then(item=>{
-            //             // console.log(item)
-            //         })
-            //         // console.log(res); // 需要的坐标地址就在res中
-            //     });
-            // } else {
-            //     this.$message.error('该浏览器不支持定位');
-            // }
         }
+    
     },
     created() {
         // this.get_position();

@@ -10,17 +10,18 @@
         <div class="index_bg">
             <!-- 秒杀 -->
             <div class="seckill width_center_1200" v-if="seckill_list.length>0">
-                <div class="seckill_title">商城秒杀<span><router-link to="/seckill">查看更多</router-link></span> </div>
+                <!-- <div class="seckill_title">商城秒杀<span><router-link to="/seckill">查看更多</router-link></span> </div> -->
                 <div class="seckill_left">
                     <div class="seckill_end_time">
-                        {{seckills}} 场
+                        限时秒杀
                         <p class="seckill_icon"><a-font type="iconziyuan"></a-font></p>
-                        <p class="font_skill">距离结束还有</p>
+                        <p class="font_skill"><span>{{seckills}}</span> 场 距结束</p>
                         <ul>
                             <li>{{timeFormat[0]||'00'}}</li>
                             <li>{{timeFormat[1]||'00'}}</li>
                             <li>{{timeFormat[2]||'00'}}</li>
                         </ul>
+                        <div class="more"><router-link to="/seckill" class="transition500">查看更多</router-link></div> 
                     </div>
                 </div>
                 <div class="seckill_right">
@@ -172,7 +173,11 @@
 
         <!-- 底部 -->
         <shop-foot />
+        <transition name="fade">
+            <loading v-if="isLoading"></loading>
+        </transition>
     </div>
+    
 </template>
 
 <script>
@@ -194,6 +199,7 @@ export default {
           seckill_list:[],
           timeFormat:[],
           subnav_show:true,
+          isLoading:true
       };
     },
     watch: {},
@@ -207,6 +213,7 @@ export default {
                     this.timing();
                     this.seckill_list = this.list.seckill_list;
                 }
+                this.isLoading = false;
             })
         },
          // 定时器
@@ -285,13 +292,13 @@ export default {
             padding-top: 20px;
         }
         dl dt{
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             margin:0 auto;
         }
         dl dt img{
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
         }
         dl dd{
             width: 190px;
@@ -357,6 +364,8 @@ export default {
     }
 }
 .seckill{
+    background: #fff;
+    margin-bottom: 50px;
     .seckill_left{
         width: 234px;
         height: 340px;
@@ -366,35 +375,46 @@ export default {
         float: left;
         // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         .seckill_end_time{
-            padding-top:45px;
+            padding-top:25px;
             text-align: center;
             color:#ca151e;
-            font-size: 24px;
-            p{
-                padding-top: 60px;
+            font-size: 28px;
+            .seckill_icon{
+                padding-top: 30px;
             }
             p.font_skill{
-                font-size: 12px;
+                font-size: 14px;
                 color:#666;
-                padding-top: 30px;
-                padding-bottom: 30px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                span{
+                    font-size:24px
+                }
             }
             i{
                 font-size: 40px;
             }
             ul{
                 margin-left: 45px;
+                height: 40px;
             }
             ul li{
                 cursor: pointer;
                 float: left;
                 width: 40px;
                 height: 40px;
-                background: #333;
+                background: #2f3430;
                 color:#fff;
                 margin-right: 10px;
                 text-align: center;
                 line-height: 40px;
+            }
+            .more {
+margin-top: 10px;
+            }
+            .more a{border-radius: 5px;
+background: #4bb16f;font-size: 14px;padding:10px 20px;color:#fff;
+&:hover{background: #1c8d44;}
             }
         }
         

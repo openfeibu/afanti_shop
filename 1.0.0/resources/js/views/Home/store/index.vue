@@ -45,21 +45,15 @@
         <div class="home_store_list w1200" v-if="list.length>0">
             <ul>
                 <li v-for="(v,k) in list" :key="k">
-                    <div class="left_block" @click="$router.push('/store/'+v.id)">
-                        <img v-lazy="v.store_logo" alt="">
+                    <div  @click="$router.push('/store/'+v.id)">
+                        <img class="transition500" v-lazy="v.store_face_image" alt="">
                         <div class="right_item">
                             <div class="title">{{v.store_name||''}}</div>
-                            <div class="qy"><span class="stitle">公司：</span>{{v.store_company_name||''}}</div>
-                            <div class="address" title="12"><span class="stitle">地址：</span>{{(v.area_info||'')+(v.store_address||'')}}</div>
+                            <!-- <div class="qy"><span class="stitle">公司：</span>{{v.store_company_name||''}}</div> -->
+                            <div class="address" title="12"><span class="stitle"></span>{{v.store_description}}</div>
+                            <div class="btn" @click="$router.push('/store/'+v.id)">进入展馆</div>
                         </div>
-                        <div class="comment_rate"></div>
-                    </div>
-                    <div class="center_block">
-                        好评率：100%
-                    </div>
-                    <div class="right_block">
                        
-                        <div class="btn" @click="$router.push('/store/'+v.id)">进入展馆</div>
                     </div>
                 </li>
             </ul>
@@ -68,11 +62,15 @@
                 <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
             </div>
         </div>
-        <a-empty style="margin-top:40px" v-else />
+        <!-- <a-empty style="margin-top:40px" v-else /> -->
+         <transition name="fade">
+            <loading v-if="isLoading"></loading>
+        </transition>
     </div>
 </template>
 
 <script>
+// import Loading from "@/components/home/public/loading"
 export default {
     components: {},
     props: {},
@@ -85,7 +83,8 @@ export default {
           },
           base64Decode:{},
           base64Code:'',
-          list:[{name:1}],
+          list:[],
+          isLoading:true
       };
     },
     watch: {},
@@ -104,7 +103,7 @@ export default {
                 }else{
                     this.$message.error(res.msg);
                 }
-                
+                this.isLoading = false
             })
             // console.log(this.base64Decode)
         },
@@ -150,25 +149,32 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home_store_list{
-    ul{margin-bottom: 30px;}
-    ul li{padding:30px 0;border-bottom: 1px solid #efefef;;&:after{content:'';display: block;clear:both;}}
-    ul li:hover .right_item .title{color:#ca151e}
-    .center_block{line-height: 80px;float: left;width: 200px;text-align: center;}
-    .right_block{float: right;width: 200px;padding-top: 4px;.btn{padding: 5px 20px;color:#fff;background: #ca151e;display: inline-block;margin-top: 10px;cursor: pointer;}}
-    .left_block{
-        cursor: pointer;
-        float: left;
-        width: 500px;
-        img{width: 80px;height: 80px;border:1px solid #efefef;float: left;margin-right: 15px;}
-        .right_item{
-            width: 380px;
-            float: left;
-            .title{font-weight: bold;padding-top: 3px;font-size: 16px;margin-bottom: 5px;}
-            .stitle{color:#666;}
-            .qy,.address{color:#999;width: 335px;text-overflow:ellipsis;overflow:hidden; white-space: nowrap;height: 21px;}
-        }
-        .comment_rate{clear:both;}
+    ul{margin-bottom: 30px;&:after{content:'';display: block;clear:both;}}
+    ul li{float:left;width:550px;height:250px;margin:20px 25px;background:#fbfbfb;position:relative;cursor: pointer;
+     border-radius: 5px;box-shadow: 0 5px 20px #eee;overflow: hidden;
+  
     }
+    ul li:hover .right_item .title{color:#4bb16f}
+    ul li:hover img{ transform: scale(1.1);   -webkit-transform: scale(1.1);}
+    .center_block{line-height: 80px;float: left;width: 200px;text-align: center;}
+
+       
+        img{width:550px;height:250px;}
+        .right_item{
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            padding:15px;
+            right: 0;top: 0;
+            background: rgba(255,255,255,0.8);
+           
+            .title{font-weight: bold;font-size: 24px;margin-bottom: 5px;color:#000;margin-top: 20px;}
+            .qy,.address{color:#333;line-height: 24px;font-size: 14px;height:100px;overflow: hidden;}
+            .btn{
+                width: 120px;height: 40px;background: #4bb16f;text-align: center;line-height: 40px;color: #fff;border-radius: 5px;
+            }
+        }
+ 
 }
 .goods_where{
     border: 1px solid #efefef;

@@ -9,7 +9,7 @@
             </div>
             <div class="store_join_btn float_right">
                 <h4>入驻进度</h4>
-                <p>店铺还未开通时了解店铺开通的最新状况</p>
+                <p>展馆还未开通时了解展馆开通的最新状况</p>
                 <div class="btn" @click="$router.push('/store/join/step_1')">查看入驻进度</div>
             </div>
             <div class="clear"></div>

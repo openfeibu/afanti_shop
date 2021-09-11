@@ -158,6 +158,7 @@ class UploadService extends BaseService{
      * @param integer $id 用户ID
      * @author hg <www.qingwuit.com>
      */
+    /*
     public function store_logo($id=0){
         $path = 'store_logo';
         $opt = [
@@ -168,6 +169,14 @@ class UploadService extends BaseService{
             $path = $path.'/'.$id;
         }
         return $this->uploadPhoto($path,$opt);
+    }
+    */
+    public function store_logo($id=0){
+        $path = 'store_logo';
+        if(!empty($id)){
+            $path = $path.'/'.$id;
+        }
+        return $this->uploadPhoto($path);
     }
     /**
      * 商家幻灯片门面上传

@@ -7,16 +7,7 @@
 
         <div class="admin_table_handle_btn">
             <a-button style="margin-right:20px" @click="$router.push('/Admin/goods/form')" type="primary" icon="plus">添加商品</a-button>
-            <a-badge :count="0" style="margin-right:20px">
-                <a-button @click="to_nav(1)" icon="check-square">通过审核</a-button>
-            </a-badge>
-            <a-badge :count="count.wait" style="margin-right:20px">
-                <a-button @click="to_nav(2)" icon="solution">等待审核</a-button>
-            </a-badge>
-            <a-badge :count="count.refuse" style="margin-right:20px">
-                <a-button @click="to_nav(0)" icon="close-square">审核失败</a-button>
-            </a-badge>
-            <!-- <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button> -->
+            <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
         </div>
         <div class="admin_table_list">
             <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
@@ -43,6 +34,7 @@
                 <span slot="action" slot-scope="rows">
                     <a-button icon="read" @click="$router.push('/goods/'+rows.id)">前往</a-button>
                     <a-button icon="edit" @click="$router.push('/Admin/goods/form/'+rows.id)">查看</a-button>
+                    <a-button icon="edit" @click="$router.push({path:'/Admin/goods/form/'+rows.id,query: { copy: 1 }})">复制</a-button>
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">
@@ -75,6 +67,7 @@ export default {
           selectedRowKeys:[], // 被选择的行
           columns:[
               {title:'商品名称',key:'id',scopedSlots: { customRender: 'name' }},
+              {title:'商品编号',dataIndex: 'goods_no'},
               {title:'上架状态',key:'id',scopedSlots: { customRender: 'goods_status' }},
               {title:'品牌',dataIndex:'brand_name'},
               {title:'价格',dataIndex:'goods_price'},
@@ -115,7 +108,7 @@ export default {
                 cancelText: '取消',
                 onOk:()=> {
                     let ids = this.selectedRowKeys.join(',');
-                    this.$delete(this.$api.sellerGoods+'/'+ids).then(res=>{
+                    this.$delete(this.$api.adminGoods+'/'+ids).then(res=>{
                         if(res.code == 200){
                             this.onload();
                             this.$message.success('删除成功');

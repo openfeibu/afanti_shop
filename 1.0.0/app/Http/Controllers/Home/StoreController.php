@@ -24,7 +24,7 @@ class StoreController extends Controller
 
     // 获取店铺信息
     public function get_store_info(StoreService $store_service,GoodsService $goods_service,$id){
-        $store_info = $store_service->getStoreInfoAndRate($id,'id,store_name,store_company_name,area_info,store_address,store_slide');
+        $store_info = $store_service->getStoreInfoAndRate($id,'id,store_name,area_info,store_slide');
         if($store_info['status']){
             $slide = [];
             if(!empty($store_info['data']['store_slide'])){

@@ -31,7 +31,7 @@ class RefreshTokenAdmin extends BaseMiddleware
         } catch(UnauthorizedHttpException $e){
             return response()->json(['code'=>401,'msg'=>__('auth.no_token')]);
         }
-        
+
         // 如果Token不能解析的情况下
         try{
             // 使用 try 包裹，以捕捉 token 过期所抛出的 TokenExpiredException  异常

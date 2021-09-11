@@ -8,9 +8,9 @@
                 <div :class="info.store_verify==3?'item success':'item'"><a-icon type="check-circle" />审核通过</div>
             </div>
         </div>
-        <a-result :title="info.store_verify==2?'已提交资料，等待管理员审核':(info.store_verify==3?'审核成功，前往店铺设置':'审核失败，是否重新填写资料')"  :status="info.store_verify==2?'info':(info.store_verify==3?'success':'error')">
+        <a-result :title="info.store_verify==2?'已提交资料，等待管理员审核':(info.store_verify==3?'审核成功，前往展馆设置':'审核失败，是否重新填写资料')"  :status="info.store_verify==2?'info':(info.store_verify==3?'success':'error')">
             <template #extra>
-                <a-button key="console" type="primary" @click="next_step">{{info.store_verify==2?'返回首页':(info.store_verify==3?'店铺配置':'重新提交')}}</a-button>
+                <a-button key="console" type="primary" @click="next_step">{{info.store_verify==2?'返回首页':(info.store_verify==3?'展馆配置':'重新提交')}}</a-button>
             </template>
             <div class="desc" v-if="info.store_verify==0">
                 <p style="font-size: 16px;" v-if="info.store_refuse_info !=''">

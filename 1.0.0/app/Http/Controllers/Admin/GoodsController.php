@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\GoodsSku;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
 use App\Models\Goods;
 use App\Http\Resources\Admin\GoodsResource\GoodsTabAdminCollection;
@@ -107,8 +109,10 @@ class GoodsController extends Controller
      */
     public function update(Request $request,GoodsService $goods_service, $id)
     {
-        $goods_service->editGoodsVerify($id,$request->goods_verify,$request->refuse_info);
-        return $this->success([],__('base.success'));
+        $info = $goods_service->edit($id);
+        if($info['status']){
+            return $this->success([],__('goods.add_success'));
+        }
     }
 
     /**
@@ -117,8 +121,26 @@ class GoodsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Goods $goods_model,GoodsSku $goods_sku_model,$id)
     {
-        //
+        $idArray = array_filter(explode(',',$id),function($item){
+            return is_numeric($item);
+        });
+        $goods_model->whereIn('id',$idArray)->delete();
+        $goods_sku_model->whereIn('goods_id',$idArray)->delete();
+        return $this->success([],__('base.success'));
+    }
+
+
+
+    // 商品图片上传
+    public function goods_upload(){
+        $upload_service = new UploadService();
+        $rs = $upload_service->goods();
+        if($rs['status']){
+            return $this->success($rs['data'],$rs['msg']);
+        }else{
+            return $this->error($rs['msg']);
+        }
     }
 }

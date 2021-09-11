@@ -34,8 +34,11 @@ export default
     'adminArticles' : baseUrl + 'Admin/articles', 
 
     // 物流公司
-    'adminExpresses' : baseUrl + 'Admin/expresses', 
-    
+    'adminExpresses' : baseUrl + 'Admin/expresses',
+
+    // 运费配置
+    'adminFreights' : baseUrl + 'Admin/freights',
+
     // 编辑器上传
     'adminEditor' : baseUrl + 'Admin/editor/upload',
 
@@ -50,7 +53,9 @@ export default
     'adminTopGoodsClasses' : baseUrl + 'Admin/goods_classes/top_goods_classes', // 商品分类
 
     // 店铺管理
-    'adminStores' : baseUrl + 'Admin/stores', 
+    'adminStores' : baseUrl + 'Admin/stores',
+    // 配置中心处理
+    'adminStoreConfigs' : baseUrl + 'Admin/store_configs',
     
     // 商品品牌管理
     'adminGoodsBrands' : baseUrl + 'Admin/goods_brands', // 商品品牌
@@ -59,7 +64,7 @@ export default
 
     // 商品管理
     'adminGoods' : baseUrl + 'Admin/goods', // 商品列表
-
+    'adminGoodsUpload' : baseUrl + 'Admin/goods/upload/images',
     // 物流管理
     'adminAreas' : baseUrl + 'Admin/areas', // 全国地址
     'adminAreasClearCache' : baseUrl + 'Admin/areas/cache/clear', // 清空商品分类缓存
@@ -78,6 +83,20 @@ export default
     // 分销日志
     'adminDistributionLogs' : baseUrl + 'Admin/distribution_logs',
 
+    // 优惠券
+    'adminCoupons' : baseUrl + 'Admin/coupons',
+    'adminCouponLogs' : baseUrl + 'Admin/coupon_logs', // 优惠券日志
+
+    // 满减
+    'adminFullReductions' : baseUrl + 'Admin/full_reductions',
+
+    // 秒杀
+    'adminSeckills' : baseUrl + 'Admin/seckills',
+
+    // 拼团
+    'adminCollectives' : baseUrl + 'Admin/collectives',
+    'adminCollectiveLogs' : baseUrl + 'Admin/collective_logs',
+    
     // 结算日志
     'adminOrderSettlements' : baseUrl + 'Admin/order_settlements',
 
@@ -94,4 +113,6 @@ export default
 
     // 数据统计
     'adminStatistics' : baseUrl + 'Admin/statistics',
+
+    'adminGoodsAttrs' : baseUrl + 'Admin/goods_attrs',
 };

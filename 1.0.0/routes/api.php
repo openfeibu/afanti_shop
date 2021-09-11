@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::any('/test','Admin\LoginController@test'); // 测试接口
 
+
 Route::namespace('Admin')->prefix('Admin')->group(function(){
 
     Route::post('/login','LoginController@login'); // 登陆
@@ -68,7 +69,11 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 店铺管理
         Route::apiResource('stores','StoreController')->except(['store']);
-        Route::get('/stores/{id}/seller_login','StoreController@seller_login'); //登陆店铺
+
+        // 商家配置
+        Route::get('store_configs','StoreConfigController@show');
+        Route::put('store_configs','StoreConfigController@update'); // 修改
+        Route::post('store_configs/upload/images','StoreConfigController@config_upload'); // 配置上传图片
 
         // 全国省市区地址
         Route::apiResource('areas','AreaController');
@@ -78,8 +83,15 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('goods_brands','GoodsBrandController');
         Route::post('/goods_brands/upload/thumb','GoodsBrandController@goods_brand_upload')->name('goods_brands.goods_brand_upload'); // 品牌缩略图上传
         Route::get('all_goods_brands','GoodsBrandController@all_goods_brands')->name('goods_brands.all');
+
+        // 属性规格
+        Route::apiResource('goods_attrs','GoodsAttrController');
+
         // 商品管理
         Route::apiResource('goods','GoodsController');
+        Route::post('/goods/upload/images','GoodsController@goods_upload')->name('goods.goods_upload'); // 图片上传
+
+        Route::apiResource('freights','FreightController')->except(['show','update']);
 
         // 广告位管理
         Route::apiResource('adv_positions','AdvPositionController');
@@ -97,6 +109,22 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 分销
         Route::apiResource('distribution_logs','DistributionLogController')->only(['index']); // 分销日志
+
+        // 优惠券
+        Route::apiResource('coupons','CouponController');
+        Route::apiResource('coupon_logs','CouponLogController')->only(['index']); // 优惠券日志
+
+        // 满减
+        Route::apiResource('full_reductions','FullReductionController');
+
+        // 秒杀
+        Route::apiResource('seckills','SeckillController');
+        Route::get('seckills/goods/get_seckill_goods','SeckillController@get_seckill_goods'); // 获取商品列表
+
+        // 拼团
+        Route::apiResource('collectives','CollectiveController');
+        Route::get('collectives/goods/get_collective_goods','CollectiveController@get_collective_goods'); // 获取商品列表
+        Route::apiResource('collective_logs','CollectiveLogController')->only(['index']); // 拼团日志
 
         // 结算日志
         Route::apiResource('order_settlements','OrderSettlementController')->except(['update','destroy']);
@@ -119,6 +147,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::get('/statistics/store','StatisticController@store')->name('statistics.store'); // 店铺
         Route::get('/statistics/order','StatisticController@order')->name('statistics.order'); // 订单
         Route::get('/statistics/pay','StatisticController@pay')->name('statistics.pay'); // 支付
+
 
     });
 
@@ -239,8 +268,8 @@ Route::namespace('Home')->group(function(){
     Route::get('/agreement/{ename}','AgreementController@show'); 
 
     // 网站公共配置获取
-    Route::get('/common','CommonController@common'); 
-
+    Route::get('/common','CommonController@common');
+    Route::get('/config','CommonController@config');
     // 获取商品栏目
     Route::get('/goods_classes','GoodsClassController@goods_classes'); 
 

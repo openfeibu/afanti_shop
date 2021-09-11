@@ -26,7 +26,7 @@ class GoodsService extends BaseService{
             'goods_subname'         => request()->goods_subname??'',                  // 副标题
             'goods_no'              => request()->goods_no ?? generate_goods_no(),                       // 商品编号
             'brand_id'              => request()->brand_id,                           // 商品品牌
-            'class_id'              => request()->goods_class_id??0,              // 商品分类
+            'class_id'              => request()->class_id??0,              // 商品分类
             'goods_master_image'    => request()->goods_master_image,                 // 商品主图
             'goods_price'           => abs(request()->goods_price??0),                // 商品价格
             'goods_market_price'    => abs(request()->goods_market_price??0),         // 商品市场价
@@ -320,7 +320,7 @@ class GoodsService extends BaseService{
         }
 
         $goods_class_service = new GoodsClassService;
-        $goods_info['goods_class'] = $goods_class_service->getGoodsClassByGoodsId($id)['data'];
+        $goods_info['goods_class'] = $goods_class_service->getGoodsClassByGoodsClassId($goods_info['class_id']);
         
 
         return $this->format($goods_info);

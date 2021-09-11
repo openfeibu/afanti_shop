@@ -1,6 +1,6 @@
 <template>
     <a-form-model :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }">
-        <a-form-model-item label="店铺门面">
+        <a-form-model-item label="展馆门面">
             <a-upload
                 list-type="picture-card"
                 class="avatar-uploader"

@@ -16,6 +16,7 @@ export default
     "homeSendSms" : baseUrl + "send_sms", // 发送短信
 
     'homeCommon' : baseUrl + 'common',  // pC公共数据获取
+    'homeConfig' : baseUrl + 'config',  // config单个数据获取值
     'homeAgreement' : baseUrl + 'agreement',  // 站点协议
     'homeArticle' : baseUrl + 'article',  // 文章获取
     'homeGoodsClasses' : baseUrl + 'goods_classes',  // 商品分类获取

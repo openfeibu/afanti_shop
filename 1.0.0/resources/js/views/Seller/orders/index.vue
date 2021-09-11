@@ -70,7 +70,7 @@ export default {
             //   {title:'#',dataIndex:'id',fixed:'left'},
               {title:'订单名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
               {title:'订单号',dataIndex:'order_no'},
-              {title:'店铺',dataIndex:'store_name'},
+              {title:'展馆',dataIndex:'store_name'},
               {title:'买家',dataIndex:'buyer_name'},
               {title:'订单总额',key:'id',scopedSlots: { customRender: 'total_price' }},
               {title:'订单状态',key:'id',scopedSlots: { customRender: 'order_status' }},

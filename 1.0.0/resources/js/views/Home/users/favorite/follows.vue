@@ -3,7 +3,7 @@
         <div class="user_main">
             <div class="block_title">
                 <span><div class="btn" @click="$router.push('/user/favorite')">收藏商品</div></span>
-                关注店铺
+                关注展馆
             </div>
             <div class="x20"></div>
             <div class="admin_table_list" >
@@ -45,7 +45,7 @@ export default {
           selectedRowKeys:[], // 被选择的行
           columns:[
               {title:'#',dataIndex:'id',fixed:'left'},
-              {title:'店铺',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
+              {title:'展馆',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],
           list:[],

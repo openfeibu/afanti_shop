@@ -2,7 +2,7 @@
     <div class="favorite">
         <div class="user_main">
             <div class="block_title">
-                <span><div class="btn"  @click="$router.push('/user/follows')">关注店铺</div></span>
+                <span><div class="btn"  @click="$router.push('/user/follows')">关注展馆</div></span>
                 收藏商品
             </div>
             <div class="x20"></div>

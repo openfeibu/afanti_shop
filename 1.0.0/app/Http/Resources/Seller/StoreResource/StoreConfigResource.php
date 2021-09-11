@@ -15,6 +15,7 @@ class StoreConfigResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'                        => $this->id,
             'store_name'                =>  $this->store_name,
             'store_logo'                =>  $this->store_logo,
             'store_face_image'          =>  $this->store_face_image,
@@ -31,7 +32,6 @@ class StoreConfigResource extends JsonResource
             'store_money'               =>  $this->store_money,
             'store_frozen_money'        =>  $this->store_frozen_money,
             'area_id'                   =>  [$this->province_id,$this->city_id,$this->region_id],
-            'after_sale_service'        =>  empty($this->after_sale_service)?'':$this->after_sale_service,
         ];
     }
 }

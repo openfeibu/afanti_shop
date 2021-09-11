@@ -1,6 +1,6 @@
 <template>
     <a-form-model :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }">
-        <a-form-model-item label="店铺LOGO">
+        <a-form-model-item label="展馆LOGO">
             <a-upload
                 list-type="picture-card"
                 class="avatar-uploader"
@@ -16,11 +16,11 @@
                 </div>
             </a-upload>
         </a-form-model-item>
-        <a-form-model-item label="店铺名称">
+        <a-form-model-item label="展馆名称">
             <a-input v-model="info.store_name"></a-input>
         </a-form-model-item>
-        <a-form-model-item label="店铺描述">
-            <a-textarea placeholder="店铺描述" v-model="info.store_description" :rows="4" />
+        <a-form-model-item label="展馆描述">
+            <a-textarea placeholder="展馆描述" v-model="info.store_description" :rows="4" />
         </a-form-model-item>
         <a-form-model-item label="联系电话">
             <a-input v-model="info.store_mobile"></a-input>

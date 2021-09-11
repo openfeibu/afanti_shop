@@ -75,4 +75,14 @@ class GoodsClassService extends BaseService{
         $data = [$tr_class,$sec_class,$first_class];
         return $this->format($data);
     }
+    public function getGoodsClassByGoodsClassId($class_id,$classes=[]){
+        $goods_class_model = new GoodsClass;
+        $class = $goods_class_model->where('id',$class_id)->first(['id','pid','name'])->toArray();
+        $classes = array_merge([$class],$classes);
+        if($class && $class['pid'])
+        {
+            return $this->getGoodsClassByGoodsClassId($class['pid'],$classes);
+        }
+        return $classes;
+    }
 }

@@ -45,7 +45,7 @@ export default {
           selectedRowKeys:[], // 被选择的行
           searchConfig:[
               {label:'用户ID',name:'user_id',type:'text'},
-              {label:'是否店铺',name:'is_seller',type:'select',data:[{label:'全部',value:''},{label:'是',value:1},{label:'否',value:0}]},
+              {label:'是否展馆',name:'is_seller',type:'select',data:[{label:'全部',value:''},{label:'是',value:1},{label:'否',value:0}]},
           ],
           columns:[
               {title:'#',dataIndex:'id',fixed:'left'},
@@ -53,7 +53,7 @@ export default {
             //   {title:'手机',dataIndex:'phone'},
               {title:'资金',key:'id',scopedSlots: { customRender: 'money' }},
               {title:'类型',key:'id',scopedSlots: { customRender: 'is_type' }},
-              {title:'是否店铺',key:'id',scopedSlots: { customRender: 'is_seller' }},
+              {title:'是否展馆',key:'id',scopedSlots: { customRender: 'is_seller' }},
               {title:'原因',dataIndex:'info'},
               {title:'创建时间',dataIndex:'created_at'},
           ],

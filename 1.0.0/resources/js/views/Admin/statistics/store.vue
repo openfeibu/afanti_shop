@@ -2,7 +2,7 @@
     <div class="qingwu">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
-            店铺分析
+            展馆分析
         </div>
         <div class="unline underm"></div>
 
@@ -63,13 +63,13 @@ export default {
           ],
           columns:[
               {title:'#',dataIndex:'id',fixed:'left'},
-              {title:'店铺名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
-              {title:'店铺状态',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
+              {title:'展馆名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
+              {title:'展馆状态',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
               {title:'审核状态',key:'id',fixed:'left',scopedSlots: { customRender: 'verify' }},
               {title:'所属公司',dataIndex:'store_company_name'},
               {title:'法人名称',dataIndex:'legal_person'},
               {title:'联系电话',dataIndex:'store_phone'},
-              {title:'店铺余额',dataIndex:'store_money'},
+              {title:'展馆余额',dataIndex:'store_money'},
               {title:'申请时间',fixed:'right',dataIndex:'created_at'},
             //   {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],

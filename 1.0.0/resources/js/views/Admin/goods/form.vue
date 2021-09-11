@@ -14,7 +14,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item label="商品分类" :rules="{ required: true}">
-                    <a-tree-select tree-default-expand-all v-model="info.goods_class_id">
+                    <a-tree-select tree-default-expand-all v-model="info.class_id">
                         <template v-for="(v,k) in categoryList">
                             <a-tree-select-node v-if="v.id != id" :title="v.name" :value="v.id" :key="k">
                                 <template v-for="(vo,key) in v.children">
@@ -54,7 +54,7 @@
                     </div>
                     <div class="goods_upload_btn">
                         <a-upload
-                                :action="$api.sellerGoodsUpload"
+                                :action="$api.adminGoods+'/upload/images'"
                                 :data="{token:$getSession('token_type')}"
                                 :multiple="true"
                                 :show-upload-list="false"
@@ -68,7 +68,7 @@
                 </a-form-model-item>
                 <template v-if="skuList.length<=0">
                     <a-form-model-item label="平台价格" :rules="{ required: true}">
-                        <a-input v-model="info.goods_price" type="number" suffix="￥" />
+                        <a-input v-model="info.goods_price" type="number" suffix="￥" @input="changeGoodsPrice()"/>
                     </a-form-model-item>
                     <a-form-model-item label="市场价格" :rules="{ required: true}">
                         <a-input v-model="info.goods_market_price" type="number" suffix="￥" />
@@ -154,7 +154,7 @@
 
 <script>
     import wangEditor from "@/components/wangeditor"
-    import GoodsAttrModal from "@/components/seller/goods_attr_modal"
+    import GoodsAttrModal from "@/components/admin/goods_attr_modal"
     export default {
         components: {wangEditor,GoodsAttrModal},
         props: {},
@@ -165,7 +165,7 @@
                 },
                 list:[],
                 categoryList:[],
-                storeList:[], //店铺列表
+                storeList:[], //展馆列表
                 brandList:[],// 品牌列表
                 freightList:[], // 运费模版
                 platform:false, // 平台PC false 手机 TRUE
@@ -180,25 +180,24 @@
 
                 // 构建sku
                 skuList:[],
-
+                market_price_rate: 1,
+                copy: 0,
             };
         },
         watch: {},
         computed: {},
         methods: {
             handleSubmit(){
-
                 // 验证代码处
                 // if(this.$isEmpty(this.info.name)){
                 //     return this.$message.error('分类名不能为空');
                 // }
 
-
                 let api = this.$apiHandle(this.$api.adminGoods,this.id);
                 this.info.classInfo = this.classInfo; // 获取商品栏目
                 this.info.skuList = this.skuList; // 获取商品SKU
                 this.info.goods_status = this.info.goods_status?1:0;
-                if(api.status){
+                if(api.status && !this.copy){
                     this.$put(api.url,this.info).then(res=>{
                         if(res.code == 200){
                             this.$message.success(res.msg)
@@ -208,10 +207,10 @@
                         }
                     })
                 }else{
-                    this.$post(api.url,this.info).then(res=>{
+                    this.$post(this.$api.adminGoods,this.info).then(res=>{
                         if(res.code == 200){
                             this.$message.success(res.msg)
-                            return this.$router.go(-2);
+                            return this.$router.back();
                         }else{
                             return this.$message.error(res.msg)
                         }
@@ -221,39 +220,21 @@
 
             },
             get_info(){
-                this.$get(this.$api.sellerGoods+'/'+this.id).then(res=>{
+                this.$get(this.$api.adminGoods+'/'+this.id).then(res=>{
                     this.goodsAttr = res.data.attrList||[];
                     this.skuList = res.data.skuList||[];
                     res.data.goods_status = res.data.goods_status==0?false:true;
                     this.info = res.data;
                     this.check_platform(false);
-                    this.goodsBrandHandleSearch(this.info.goods_brand.name);
                     this.$forceUpdate();
+                    if(this.copy)
+                    {
+                        this.info.goods_no = '';
+                    }
                 })
             },
-            get_goods_class(){
-//                this.$get(this.$api.sellerStoreGoodsClasses).then(res=>{
-//                    this.goodsClassList = res.data;
-//                    if(!this.$isEmpty(this.$route.query.id)){
-//                        let idsStr = this.$route.query.id;
-//                        let ids = idsStr.split(',');
-//                        this.goodsClassList.forEach(item=>{
-//                            if(item[0].id == ids[0] && item[1].id == ids[1] && item[2].id == ids[2]){
-//                                this.classInfo = item;
-//                            }
-//                        })
-//                    }
-//                    if(this.classInfo.length<=0){
-//                        this.$message.error("非法栏目");
-//                        setTimeout(()=>{
-//                            this.$router.go(-1);
-//                        },1000);
-//
-//                    }
-//                })
-            },
             get_freight_list(){
-                this.$get(this.$api.sellerFreights).then(res=>{
+                this.$get(this.$api.adminFreights).then(res=>{
                     if(res.code == 200 && res.data.length>0){
                         res.data.splice(0,1);
                         this.freightList = res.data;
@@ -262,14 +243,21 @@
             },
 
             onload(){
+                var query=this.$route.query;
+                this.copy = query.copy;
 
                 // 判断你是否是编辑
                 if(!this.$isEmpty(this.$route.params.id)){
                     this.id = this.$route.params.id;
                     this.get_info();
                 }else{
-                    this.info.goods_stock = '';
+                    this.$get(this.$api.homeConfig,{name:'goods_stock'}).then(res=>{
+                        this.info.goods_stock = res.data;
+                    })
                 }
+                this.$get(this.$api.homeConfig,{name:'market_price_rate'}).then(res=>{
+                    this.market_price_rate = parseFloat(res.data);
+                })
                 this.$get(this.$api.adminAllGoodsBrands).then(res=>{
                     this.brandList = res.data;
                     this.id ?  '' : this.info.brand_id = this.brandList[0].id;
@@ -278,7 +266,7 @@
                     this.storeList = res.data.data;
                 })
                 this.$get(this.$api.adminGoodsClasses,{}).then(res=>{
-                    this.categoryList = res.data;
+                    this.categoryList = res.data;``
                 });
 
                 this.get_freight_list();
@@ -504,15 +492,9 @@
                     this.brandList = res.data.data;
                 })
             },
-            // 修改栏目
-            to_chose_class(){
-                if(this.info.id>0){
-                    this.$router.push('/Seller/goods/chose_class/'+this.info.id);
-                }else{
-                    this.$router.go(-1);
-                }
-            },
-
+            changeGoodsPrice(){
+                this.info.goods_market_price = this.$formatFloat(this.info.goods_price * this.market_price_rate);
+            }
 
         },
         created() {

@@ -10,7 +10,7 @@
                 <a-tab-pane :key="0" tab="网站配置">
                     <web-config></web-config>
                 </a-tab-pane>
-                <a-tab-pane :key="1" tab="店铺配置">
+                <a-tab-pane :key="1" tab="展馆配置">
                     <store-config></store-config>
                 </a-tab-pane>
                 <a-tab-pane :key="2" tab="积分配置">

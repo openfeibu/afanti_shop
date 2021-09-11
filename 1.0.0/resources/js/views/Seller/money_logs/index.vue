@@ -1,6 +1,6 @@
 <template>
     <div class="qingwu">
-        <div class="admin_table_page_title">店铺资金</div>
+        <div class="admin_table_page_title">展馆资金</div>
         <div class="unline underm"></div>
 
         <div class="admin_table_handle_btn">
@@ -8,7 +8,7 @@
         <div class="admin_table_list">
             <div class="money_logs_title">
                 <a-descriptions bordered :column="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }">
-                    <a-descriptions-item label="店铺余额">
+                    <a-descriptions-item label="展馆余额">
                     <font color="red">￥{{store_info.store_money||0.00}}</font>
                     </a-descriptions-item>
                     <a-descriptions-item label="冻结资金">

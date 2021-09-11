@@ -17,12 +17,8 @@ class StoreService extends BaseService{
     public function getHomeStoreList(){
         $store_model = new Store;
         $params = request()->params??'';
-        $lat = request()->lat??'39.56';
-        $lng = request()->lng??'116.20'; // 默认北京的经纬度
 
-        $distance = "ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN(('$lat' * PI() / 180 - store_lat * PI() / 180) / 2),2) + COS(40.0497810000 * PI() / 180) * COS(store_lat * PI() / 180) * POW(SIN(('$lng' * PI() / 180 - store_lng * PI() / 180) / 2),2))) * 1000 )  AS distance ";
-
-        $store_model = $store_model->select(DB::raw('*,'.$distance))->withCount(['comments','comments as good_comment'=>function($q){
+        $store_model = $store_model->withCount(['comments','comments as good_comment'=>function($q){
             $q->whereRaw('(score+agree+speed+service)>=15');
         }]);
 
@@ -30,11 +26,7 @@ class StoreService extends BaseService{
             if(!empty($params)){
                 $params_array = json_decode(base64_decode($params),true);
                 // 排序
-                if(isset($params_array['sort_type']) && !empty($params_array['sort_type'])){
-                    $store_model = $store_model->orderBy($params_array['sort_type'],$params_array['sort_order']);
-                }else{
-                    $store_model = $store_model->orderBy('distance','desc')->orderBy('id','desc');
-                }
+                $store_model = $store_model->orderBy($params_array['sort_type'],$params_array['sort_order']);
 
                 // 关键词
                 if(isset($params_array['keywords']) && !empty($params_array['keywords'])){

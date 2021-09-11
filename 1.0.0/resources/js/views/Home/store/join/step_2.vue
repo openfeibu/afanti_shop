@@ -11,10 +11,10 @@
         <a-divider><font style="font-size:20px">入驻资料填写</font></a-divider>
         <div class="store_join_form">
             <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
-                <a-form-model-item label="店铺名称">
+                <a-form-model-item label="展馆名称">
                     <a-input v-model="info.store_name" />
                 </a-form-model-item>
-                <a-form-model-item label="店铺LOGO">
+                <a-form-model-item label="展馆LOGO">
                     <a-upload
                         list-type="picture-card"
                         class="avatar-uploader"
@@ -139,7 +139,7 @@ export default {
         next_step(){
             console.log(this.choseClasses)
             if(this.$isEmpty(this.info.store_name)){
-                return this.$message.error('店铺名称不能为空');
+                return this.$message.error('展馆名称不能为空');
             }
             if(this.$isEmpty(this.info.store_company_name)){
                 return this.$message.error('公司名称不能为空');
@@ -238,7 +238,7 @@ export default {
                 this.areas = res.data
             })
         },
-        // 获取店铺信息
+        // 获取展馆信息
         get_store(){
             this.$get(this.$api.homeStoreJoin).then(res=>{
                 if(res.code == 200){

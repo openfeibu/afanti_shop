@@ -77,11 +77,14 @@ export default [
         // 店铺管理
         {path:"/Admin/stores",name:"admin_stores",component:()=>import("@/views/Admin/stores/index")}, 
         {path:"/Admin/stores/form/:id?",name:"admin_stores_form",component:()=>import("@/views/Admin/stores/form")},
+        // 店铺配置中心
+        {path:"/Admin/stores/configs/:id?",name:"admin_stores_configs",component:()=>import("@/views/Admin/stores/configs/index")},
 
         // 商品管理
         {path:"/Admin/goods",name:"admin_goods",component:()=>import("@/views/Admin/goods/index")},
-        {path:"/Admin/goods/chose_class/:id?",name:"seller_goods_chose_class",component:()=>import("@/views/Admin/goods/chose_class")}, // 商品分类选择
+        {path:"/Admin/goods/chose_class/:id?",name:"admin_goods_chose_class",component:()=>import("@/views/Admin/goods/chose_class")}, // 商品分类选择
         {path:"/Admin/goods/form",name:"admin_goods_form",component:()=>import("@/views/Admin/goods/form")},
+        {path:"/Admin/goods/form/:id?",name:"admin_goods_form",component:()=>import("@/views/Admin/goods/form")}, // 商品编辑
 
         // 广告位管理
         {path:"/Admin/adv_positions",name:"admin_adv_positions",component:()=>import("@/views/Admin/adv_positions/index")}, 
@@ -120,6 +123,25 @@ export default [
         {path:"/Admin/statistics/user",name:"admin_statistics_user",component:()=>import("@/views/Admin/statistics/user")}, 
         {path:"/Admin/statistics/store",name:"admin_statistics_store",component:()=>import("@/views/Admin/statistics/store")}, 
         {path:"/Admin/statistics/order",name:"admin_statistics_order",component:()=>import("@/views/Admin/statistics/order")}, 
-        {path:"/Admin/statistics/pay",name:"admin_statistics_pay",component:()=>import("@/views/Admin/statistics/pay")}, 
+        {path:"/Admin/statistics/pay",name:"admin_statistics_pay",component:()=>import("@/views/Admin/statistics/pay")},
+
+
+        // 优惠券
+        {path:"/Admin/coupons",name:"admin_coupons",component:()=>import("@/views/Admin/coupons/index")},
+        {path:"/Admin/coupons/form/:id?",name:"admin_coupons_form",component:()=>import("@/views/Admin/coupons/form")},
+        {path:"/Admin/coupon_logs",name:"admin_coupon_logs",component:()=>import("@/views/Admin/coupon_logs/index")}, // 优惠券日志
+
+        // 满减
+        {path:"/Admin/full_reductions",name:"admin_full_reductions",component:()=>import("@/views/Admin/full_reductions/index")},
+        {path:"/Admin/full_reductions/form/:id?",name:"admin_full_reductionsform",component:()=>import("@/views/Admin/full_reductions/form")},
+
+        // 秒杀
+        {path:"/Admin/seckills",name:"admin_seckills",component:()=>import("@/views/Admin/seckills/index")},
+        {path:"/Admin/seckills/form/:id?",name:"admin_seckills_form",component:()=>import("@/views/Admin/seckills/form")},
+
+        // 拼团
+        {path:"/Admin/collectives",name:"admin_collectives",component:()=>import("@/views/Admin/collectives/index")},
+        {path:"/Admin/collectives/form/:id?",name:"admin_collectives_form",component:()=>import("@/views/Admin/collectives/form")},
+        {path:"/Admin/collective_logs/:collective_id",name:"admin_collective_logs",component:()=>import("@/views/Admin/collective_logs/index")},
     ]},
 ];

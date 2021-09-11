@@ -1,23 +1,12 @@
 <template>
     <div class="qingwu">
-        <div class="admin_table_page_title">店铺管理</div>
+        <div class="admin_table_page_title">展馆管理</div>
         <div class="unline underm"></div>
 
         <admin-search :searchConfig="searchConfig" @searchParams="search"></admin-search>
 
         <div class="admin_table_handle_btn">
-            <a-badge :count="0" style="margin-right:20px">
-                <a-button @click="to_nav(3)" icon="check-square">通过审核</a-button>
-            </a-badge>
-            <a-badge :count="count.wait" style="margin-right:20px">
-                <a-button @click="to_nav(2)" icon="solution">等待审核</a-button>
-            </a-badge>
-            <a-badge :count="count.refuse" style="margin-right:20px">
-                <a-button @click="to_nav(0)" icon="close-square">拒绝入驻</a-button>
-            </a-badge>
-            <a-badge :count="count.write" style="margin-right:20px">
-                <a-button @click="to_nav(1)" icon="book">填写资料</a-button>
-            </a-badge>
+            <a-button style="margin-right:20px" @click="$router.push('/Admin/goods/form')" type="primary" icon="plus">添加展馆</a-button>
             <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
         </div>
         <div class="admin_table_list">
@@ -39,7 +28,7 @@
                     </div>
                 </span>
                 <span slot="action" slot-scope="rows">
-                    <a-button icon="read" @click="$router.push('/Admin/stores/form/'+rows.id)">查看详情</a-button>
+                    <a-button icon="read" @click="$router.push({path:'/Admin/stores/configs',query:{'id':rows.id}})">配置</a-button>
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">
@@ -63,18 +52,12 @@ export default {
           },
           total:0, //总页数
           searchConfig:[
-              {label:'店铺名称',name:'store_name',type:'text'},
-              {label:'公司名称',name:'store_company_name',type:'text'},
+              {label:'展馆名称',name:'store_name',type:'text'},
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[
-              {title:'店铺名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
-              {title:'店铺状态',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
-              {title:'审核状态',key:'id',fixed:'left',scopedSlots: { customRender: 'verify' }},
-              {title:'所属公司',dataIndex:'store_company_name'},
-              {title:'法人名称',dataIndex:'legal_person'},
-              {title:'联系电话',dataIndex:'store_phone'},
-              {title:'店铺余额',dataIndex:'store_money'},
+              {title:'展馆名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
+              {title:'展馆状态',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
               {title:'申请时间',fixed:'right',dataIndex:'created_at'},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],

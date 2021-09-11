@@ -126,7 +126,7 @@
             <div class="left_item">
                 <div class="store_info">
                     <div class="store_title">
-                        <span class="tip">店铺</span>
+                        <span class="tip">展馆</span>
                         <span class="title">{{store_info['store_name']||'加载中...'}}</span>
                     </div>
                     <div class="rate">
@@ -136,7 +136,7 @@
                         <div class="clear"></div>
                     </div>
                     <div class="store_rate">
-                        <div class="title">店铺评分：</div>
+                        <div class="title">展馆评分：</div>
                         <div class="item">
                             <span style="float:left;padding-top:2px;margin-right:10px">描述相符</span>
                             <a-rate style="font-size:14px;float:left" :value="rate_info.agreeAll" :tooltips="desc" disabled />
@@ -159,7 +159,7 @@
                     <div class="store_com" style="margin-top:10px">公司名称：<font color="#999">{{store_info.store_company_name}}</font></div>
                     <div class="store_com" style="margin-bottom:10px">公司地址：<font color="#999">{{store_info.area_info+' '+store_info.store_address}}</font></div>
                     <div class="btn">
-                        <span class="navstore" @click="$router.push('/store/'+store_info.id)">进入店铺</span>
+                        <span class="navstore" @click="$router.push('/store/'+store_info.id)">进入展馆</span>
                         <span class="contact" @click="chat=true">联系客服</span>
                         <div class="clear"></div>
                     </div>

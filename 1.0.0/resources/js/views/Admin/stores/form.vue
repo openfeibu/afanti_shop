@@ -2,18 +2,18 @@
     <div class="qingwu">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
-            店铺信息
+            展馆信息
         </div>
         <div class="unline underm"></div>
         <div class="admin_form">
             <a-descriptions bordered layout="vertical" :column="{ xxl: 4, xl: 4, lg: 2, md: 2, sm: 2, xs: 1 }">
-                <a-descriptions-item label="店铺名">{{info.store_name}}</a-descriptions-item>
-                <a-descriptions-item label="店铺Logo" >
+                <a-descriptions-item label="展馆名">{{info.store_name}}</a-descriptions-item>
+                <a-descriptions-item label="展馆Logo" >
                     <div v-viewer>
                         <img height="120px" :src="info.store_logo" alt="">
                     </div>
                 </a-descriptions-item>
-                <a-descriptions-item label="店铺状态">
+                <a-descriptions-item label="展馆状态">
                     <a-tag v-if="info.store_status==1" color="green">正常</a-tag>
                     <a-tag v-if="info.store_status==0" color="red">关闭</a-tag>
                 </a-descriptions-item>
@@ -23,7 +23,7 @@
                     <a-tag v-if="info.store_verify==2" color="blue">{{info.store_verify_cn}}</a-tag>
                     <a-tag v-if="info.store_verify==3" color="green">{{info.store_verify_cn}}</a-tag>
                 </a-descriptions-item>
-                <a-descriptions-item label="店铺描述" :span="4">{{info.store_description}}</a-descriptions-item>
+                <a-descriptions-item label="展馆描述" :span="4">{{info.store_description}}</a-descriptions-item>
                 <a-descriptions-item label="企业名称">{{info.store_company_name}}</a-descriptions-item>
                 <a-descriptions-item label="企业电话">{{info.store_mobile}}</a-descriptions-item>
                 <a-descriptions-item label="所在地区">{{info.area_info}}</a-descriptions-item>
@@ -47,12 +47,12 @@
                 <a-descriptions-item label="紧急联系人电话">{{info.emergency_contact_phone}}</a-descriptions-item>
                 <a-descriptions-item label="申请时间">{{info.created_at}}</a-descriptions-item>
                 <a-descriptions-item label="修改时间">{{info.updated_at}}</a-descriptions-item>
-                <a-descriptions-item label="店铺余额" :span="4"><font style="font-size:18px;font-weight:bold;color:red;">{{info.store_money}}</font></a-descriptions-item>
+                <a-descriptions-item label="展馆余额" :span="4"><font style="font-size:18px;font-weight:bold;color:red;">{{info.store_money}}</font></a-descriptions-item>
             </a-descriptions>
             
             <div class="verify_btn">
                 <a-form-model :label-col="{ span: 2 }" :wrapper-col="{ span: 18 }">
-                    <a-form-model-item label="店铺状态">
+                    <a-form-model-item label="展馆状态">
                         <a-select v-model="info.store_status">
                             <a-select-option :value="1">开启</a-select-option>
                             <a-select-option :value="0">关闭</a-select-option>

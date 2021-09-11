@@ -35,7 +35,7 @@ export default {
               {title:'#',dataIndex:'id',fixed:'left'},
               {title:'分销名称',fixed:'left',dataIndex:'name'},
               {title:'用户',dataIndex:'nickname'},
-              {title:'店铺',dataIndex:'store_name'},
+              {title:'展馆',dataIndex:'store_name'},
               {title:'订单号',dataIndex:'order_no'},
               {title:'商品金额',dataIndex:'money'},
               {title:'佣金比例',dataIndex:'lev'},

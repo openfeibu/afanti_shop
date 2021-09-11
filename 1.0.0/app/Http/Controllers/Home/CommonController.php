@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\ConfigResource\ConfigResource;
+use App\Models\Config;
 use App\Services\ConfigService;
 use App\Services\GoodsBrandService;
 use App\Services\GoodsClassService;
@@ -18,5 +19,10 @@ class CommonController extends Controller
         // 可以使用 Resource 控制达到脱敏
         $data['common'] = ConfigResource::make($config_service->getFormatConfig())->resolve();
         return $this->success($data);
+    }
+    public function config(Request $request)
+    {
+        $val = Config::where('name',$request->get('name',''))->value('val');
+        return $this->success($val);
     }
 }

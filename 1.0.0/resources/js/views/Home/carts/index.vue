@@ -21,7 +21,7 @@
 
         <div class="cart_table" v-if="params.total>0">
             <div class="store_list" v-for="(v,k) in list" :key="k">
-                <div class="store_title"><a-checkbox :indeterminate="v.css" :checked='v.checked' @change="onCheckAllStoreChange(k)">{{v.store_name}}</a-checkbox><span class="open_store" @click="$router.push('/store/'+v.store_id)">进入店铺</span></div>
+                <div class="store_title"><a-checkbox :indeterminate="v.css" :checked='v.checked' @change="onCheckAllStoreChange(k)">{{v.store_name}}</a-checkbox><span class="open_store" @click="$router.push('/store/'+v.store_id)">进入展馆</span></div>
                 <div class="goods_list">
                     <ul>
                         <li v-for="(vo,key) in v.cart_list" :key="key">

@@ -41,8 +41,6 @@ class StoreCollection extends ResourceCollection
                     'id'                            =>  $item->id,
                     'store_name'                    =>  $item->store_name,
                     'store_logo'                    =>  $item->store_logo,
-                    'store_company_name'            =>  $item->store_company_name,
-                    'legal_person'                  =>  $item->legal_person,
                     'store_phone'                   =>  $item->store_phone,
                     'store_money'                   =>  $item->store_money,
                     'store_status'                  =>  $item->store_status,

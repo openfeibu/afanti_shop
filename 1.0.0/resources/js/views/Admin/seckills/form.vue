@@ -81,7 +81,7 @@ export default {
 
             this.info.start_time = moment(this.info.start_time).format('YYYY-MM-DD HH')+':00:00'
 
-            let api = this.$apiHandle(this.$api.sellerSeckills,this.id);
+            let api = this.$apiHandle(this.$api.adminSeckills,this.id);
             if(api.status){
                 this.$put(api.url,this.info).then(res=>{
                     if(res.code == 200){
@@ -105,7 +105,7 @@ export default {
             
         },
         get_info(){
-            this.$get(this.$api.sellerSeckills+'/'+this.id).then(res=>{
+            this.$get(this.$api.adminSeckills+'/'+this.id).then(res=>{
                 this.info = res.data;
             })
         },
@@ -126,7 +126,7 @@ export default {
             this.get_goods();
         },
         get_goods(){
-            this.$get(this.$api.sellerSeckills+'/goods/get_seckill_goods',this.params).then(res=>{
+            this.$get(this.$api.adminSeckills+'/goods/get_seckill_goods',this.params).then(res=>{
                 this.total = res.data.total;
                 this.goods = res.data.data;
             })

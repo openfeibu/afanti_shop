@@ -37,19 +37,9 @@ class GoodsClassService extends BaseService{
         $class_goods = [];
         foreach($goods_class_list as $k=>$v){
             $class_goods[$k]['name'] = $v['name'];
-            $class_goods[$k]['id'] = $v['id'];
+            $class_goods[$k]['class_id'] = $class_goods[$k]['id'] = $v['id'];
+            $class_goods[$k]['thumb'] = $v['thumb'];
             $class_goods[$k]['goods'] = [];
-            $class_goods[$k]['class_id'] = [];
-            $v['children'] = $v['children'] ?? [];
-            foreach($v['children'] as $vo){
-                if(isset($vo['children'])){
-                    $vo['children'] = $vo['children'] ?? [];
-                    foreach($vo['children'] as $item){
-                        $class_goods[$k]['class_id'][] = $item['id'];
-                    }
-                }
-                
-            }
         }
 
         foreach($class_goods as &$v){
@@ -57,8 +47,7 @@ class GoodsClassService extends BaseService{
                 return $q->where(['store_status'=>1,'store_verify'=>3]);
             })->with(['goods_skus'=>function($q){
                 return $q->orderBy('goods_price','asc');
-            }])->where(['goods_status'=>1,'goods_verify'=>1])->whereIn('class_id',$v['class_id'])->take($goods_num)->get());
-            unset($v['class_id']);
+            }])->where(['goods_status'=>1,'goods_verify'=>1])->where('class_id',$v['id'])->take($goods_num)->get());
         }
 
         return $this->format($class_goods);

@@ -23,7 +23,7 @@
                 <a-form-model-item label="分类名称">
                     <a-input v-model="info.name"></a-input>
                 </a-form-model-item>
-                <a-form-model-item label="图标">
+                <a-form-model-item label="图标" >
                     <a-upload
                         list-type="picture-card"
                         class="avatar-uploader"
@@ -32,7 +32,7 @@
                         :data="{token:$getSession('token_type')}"
                         @change="upload"
                     >
-                        <img v-if="info.thumb" :src="info.thumb" />
+                        <img v-if="info.thumb" :src="info.thumb" width="400px"/>
                         <div v-else>
                             <a-font v-if="!loading" type='iconplus' />
                             <a-icon v-else type="loading" />

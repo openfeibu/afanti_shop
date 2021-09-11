@@ -230,6 +230,7 @@ class UploadService extends BaseService{
      * @param integer $id 用户ID
      * @author hg <www.qingwuit.com>
      */
+    /*
     public function goods_class($id=0){
         $path = 'goods_class';
         $opt = [
@@ -240,6 +241,14 @@ class UploadService extends BaseService{
             $path = $path.'/'.$id;
         }
         return $this->uploadPhoto($path,$opt);
+    }
+    */
+    public function goods_class($id=0){
+        $path = 'goods_class';
+        if(!empty($id)){
+            $path = $path.'/'.$id;
+        }
+        return $this->uploadPhoto($path);
     }
 
     /**

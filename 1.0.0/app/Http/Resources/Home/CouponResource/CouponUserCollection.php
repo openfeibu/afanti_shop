@@ -21,7 +21,6 @@ class CouponUserCollection extends ResourceCollection
                     'name'                      =>  $item->name,
                     'money'                     =>  $item->money,
                     'use_money'                 =>  $item->use_money,
-                    'nickname'                  =>  $item->store->store_name,
                     'status'                    =>  $item->status,
                     'created_at'                =>  $item->created_at->format('Y-m-d H:i:s'),
                 ];

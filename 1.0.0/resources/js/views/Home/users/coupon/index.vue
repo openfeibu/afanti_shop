@@ -52,7 +52,7 @@ export default {
             this.params.page = e;
         },
         onload(){
-            this.$get(this.$api.homeCoupon,this.params).then(res=>{
+            this.$get(this.$api.homeUserCoupon,this.params).then(res=>{
                 this.total = res.data.total;
                 this.list = res.data.data;
             });

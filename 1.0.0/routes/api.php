@@ -330,6 +330,7 @@ Route::namespace('Home')->group(function(){
         Route::post('/users/edit_user_check','UserCheckController@edit_user_check'); // 修改用户认证资料
         Route::post('/users/user_check_upload','UserCheckController@user_check_upload'); // 用户认证图片上传
 
+        Route::get('/users/coupons','CouponLogController@index'); // 优惠券列表
         // 收藏/关注
         Route::apiResource('favorites','FavoriteController')->except(['update','show']);
 

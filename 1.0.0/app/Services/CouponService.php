@@ -95,4 +95,15 @@ class CouponService extends BaseService{
 
         return $this->format(new CouponCollection($list));
     }
+    // 根据店铺ID 获取优惠券 列表
+    public function getCoupons(){
+        $coupon_model = new Coupon();
+        $list = $coupon_model->where('stock','>',0)->where('start_time','<',now())->where('end_time','>',now())->get();
+
+        if($list->isEmpty()){
+            return $this->format_error('coupon_empty');
+        }
+
+        return $this->format(new CouponCollection($list));
+    }
 }

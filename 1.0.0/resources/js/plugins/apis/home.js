@@ -77,6 +77,7 @@ export default
     // 优惠券
     'homeCoupon' : baseUrl + 'coupons',  
 
+    'homeUserCoupon' : baseUrl + 'users/coupons',
     // 秒杀
     'homeSeckill' : baseUrl + 'seckills',  
     

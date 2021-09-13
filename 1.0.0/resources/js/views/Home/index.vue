@@ -70,7 +70,7 @@
                     <!-- <div class="index_adv_goods_left"><img v-lazy="(list.class_left_adv[k] && list.class_left_adv[k].image_url)?list.class_left_adv[k].image_url:require('@/asset/pc/pc_class_btadv.jpg')" :alt="v.name"></div> -->
                     <div class="index_class_goods_right">
                         <ul>
-                             <li class="index_adv_goods_left"><img v-lazy="(list.class_left_adv[k] && list.class_left_adv[k].image_url)?list.class_left_adv[k].image_url:require('@/asset/pc/pc_class_btadv.jpg')" :alt="v.name"></li>
+                             <li class="index_adv_goods_left"><img v-lazy="v.thumb" :alt="v.name"></li>
 
                             <!-- <li v-for="(vo,key) in v.goods" :key="key" @click="toGoods(vo.id)">
                                 <div class="product_act_in">
@@ -82,86 +82,17 @@
                                     </dl>
                                 </div>
                             </li> -->
-                            <li @click="toGoods(vo.id)">
+                            <li v-for="(vo,key) in v.goods" :key="key" @click="toGoods(vo.id)">
                                 <div class="product_act_in">
                                     <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/14.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
+                                        <dt><img v-lazy="vo.goods_master_image||''" :alt="vo.goods_name" /></dt>
+                                        <dd class="product_title" :title="vo.goods_name">{{vo.goods_name}}</dd>
+                                        <dd class="product_subtitle">{{vo.goods_subname}}</dd>
+                                        <dd class="product_price">￥{{vo.goods_price}}<span>{{vo.goods_market_price}}元</span></dd>
                                     </dl>
                                 </div>
                             </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/15.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/16.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/pro.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/pro.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/pro.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/pro.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
-                            <li @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="require('@/asset/pc/pro.jpg')"  /></dt>
-                                        <dd class="product_title" >新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_subtitle">新疆果业大礼盒（果之贡品）</dd>
-                                        <dd class="product_price">￥222<span>223元</span></dd>
-                                    </dl>
-                                </div>
-                            </li>
+                           
                             
                         </ul>
                     </div>
@@ -173,9 +104,7 @@
 
         <!-- 底部 -->
         <shop-foot />
-        <transition name="fade">
-            <loading v-if="isLoading"></loading>
-        </transition>
+         <loading v-if="isLoading"></loading>
     </div>
     
 </template>

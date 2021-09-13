@@ -1,17 +1,19 @@
 <template>
-    <div class="shop_foot width_center_1200">
-        <!-- <shop-index-adv :adv="adv"></shop-index-adv> -->
-        <ul>
-            <li><router-link to="">500强企业 品质保证</router-link></li>
-            <li><router-link to="">7天退货 15天换货</router-link></li>
-            <li><router-link to="">99元起免运费</router-link></li>
-            <li><router-link to="">448家维修网点 全国联保</router-link></li>
-        </ul>
-        <div class="foot_copyright">
-            <p>Copyright © 2012-2016 xxxxxx.COM 版权所有 保留一切权利</p>
-            <p>公安备案 | {{common.common.icp}} | 技术支持：飞步科技</p>
+    <div class="footerbg">
+        <div class="shop_foot width_center_1200">
+            <!-- <shop-index-adv :adv="adv"></shop-index-adv> -->
+            <ul class="clear">
+                <li><router-link to="">五星服务</router-link></li>
+                <li><router-link to="">极速配送</router-link></li>
+                <li><router-link to="">品质保障</router-link></li>
+                <li><router-link to="">优质服务</router-link></li>
+            </ul>
+            <div class="foot_copyright">
+                <p>Copyright © 2012-2016 xxxxxx.COM 版权所有 保留一切权利</p>
+                <p>公安备案 | {{common.common.icp}} | 技术支持：<a target="_black" href="http://www.feibu.info">飞步科技</a></p>
+            </div>
+            <a-back-top />
         </div>
-        <a-back-top />
     </div>
 </template>
 
@@ -42,32 +44,32 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+// .footerbg{
+//      background: #fff url('~@/asset/pc/footerBg.png') no-repeat top / cover;
+// }
 .shop_foot{
+   
     padding-top: 10px;
     text-align: center;
     ul{
         margin:40px auto 0 auto;
         width: 664px;
         border-top: 1px solid #efefef;
-        padding-top: 40px;
+        padding: 20px 0;
     }
     ul li{
         float: left;
-        margin-right: 40px;
-        margin-bottom: 60px;
+       text-align: center;
+        
         font-size: 14px;
-        a:hover{
-            color:#ca151e;
-        }
+        width: 25%;
     }
-    ul li:last-child{
-        margin-right: 0px;
-    }
+
     .foot_copyright{
         clear: both;
         font-size: 12px;
-        line-height: 35px;
-        padding-bottom: 20px;
+        line-height: 28px;
+        padding-bottom: 10px;
     }
 }
 </style>

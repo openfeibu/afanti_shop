@@ -26,8 +26,10 @@
                 </div>
             </div>
             <div class="goods_info_top_right" >
-                <div class="goods_info_title">{{goods_info.goods_name||'加载中...'}}
-                    <p>{{goods_info.goods_subname||'加载中...'}}</p>
+                <div class="goods_info_title">
+                    <span>{{store_info['store_name']}}</span>
+                    <b>{{goods_info.goods_name}}  </b>
+                    <p>{{goods_info.goods_subname}}</p>
                     <div :class="isFav?'goods_info_sc red_color':'goods_info_sc'" @click="goods_fav()">{{isFav?'已收藏':'收藏'}}<a-icon type="like" /></div>
                 </div>
                 <div class="goods_info_group">
@@ -42,7 +44,7 @@
                 
                     <!-- <div class="goods_info_active"><span>优惠：</span><font class="noy" v-if="goods_info.goods_freight<=0 && goods_info.freight_id<=0">包邮</font><font v-else-if="store_info.free_freight>0">满{{store_info.free_freight}}包邮</font><font class="noz" v-else>暂无优惠</font></div> -->
                     <div class="goods_info_sale_num">累计销量<font color="#ca151e">{{goods_info.goods_sale}}</font></div>
-                    <div class="goods_info_phone_read">手机查看<a-icon style="font-size:16px" type="qrcode" /></div>
+                    
 
                     <!-- 优惠券 S -->
                     <div class="coupons_block" v-if="coupons.length>0">
@@ -100,7 +102,7 @@
                 </div>
                 
                 <div class="goods_info_num">
-                    <div class="goods_info_num_title">购买数量：</div>
+                    <div class="goods_info_num_title">数量：</div>
                     <div class="goods_info_num_jian" @click="change_buy_num(false)"><a-icon type="minus" /></div>
                     <div class="goods_info_num_input"><input v-model="buy_num" type="text" value="1"></div>
                     <div class="goods_info_num_jia" @click="change_buy_num(true)"><a-icon type="plus" /></div>
@@ -126,38 +128,12 @@
             <div class="left_item">
                 <div class="store_info">
                     <div class="store_title">
+
                         <span class="tip">展馆</span>
-                        <span class="title">{{store_info['store_name']||'加载中...'}}</span>
-                    </div>
-                    <div class="rate">
-                        <span style="float:left;padding-top:2px;margin-right:10px">综合评分</span>
-                        <a-rate style="font-size:14px;float:left" :value="rate_info.scoreAll" :tooltips="desc" disabled />
-                        <span style="float:left;padding-top:2px;" class="ant-rate-text">{{ desc[rate_info.scoreAll - 1] }}</span>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="store_rate">
-                        <div class="title">展馆评分：</div>
-                        <div class="item">
-                            <span style="float:left;padding-top:2px;margin-right:10px">描述相符</span>
-                            <a-rate style="font-size:14px;float:left" :value="rate_info.agreeAll" :tooltips="desc" disabled />
-                            <span style="float:left;padding-top:2px;" class="ant-rate-text">{{ desc[rate_info.scoreAll - 1] }}</span>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="item">
-                            <span style="float:left;padding-top:2px;margin-right:10px">服务态度</span>
-                            <a-rate style="font-size:14px;float:left" :value="rate_info.serviceAll" :tooltips="desc" disabled />
-                            <span style="float:left;padding-top:2px;" class="ant-rate-text">{{ desc[rate_info.scoreAll - 1] }}</span>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="item">
-                            <span style="float:left;padding-top:2px;margin-right:10px">发货速度</span>
-                            <a-rate style="font-size:14px;float:left" :value="rate_info.speedAll" :tooltips="desc" disabled />
-                            <span style="float:left;padding-top:2px;" class="ant-rate-text">{{ desc[rate_info.scoreAll - 1] }}</span>
-                            <div class="clear"></div>
-                        </div>
+                        <span class="title">{{store_info['store_name']}}</span>
                     </div>
                     <div class="store_com" style="margin-top:10px">公司名称：<font color="#999">{{store_info.store_company_name}}</font></div>
-                    <div class="store_com" style="margin-bottom:10px">公司地址：<font color="#999">{{store_info.area_info+' '+store_info.store_address}}</font></div>
+                  
                     <div class="btn">
                         <span class="navstore" @click="$router.push('/store/'+store_info.id)">进入展馆</span>
                         <span class="contact" @click="chat=true">联系客服</span>
@@ -236,17 +212,16 @@
             <div class="clear"></div>
         </div>
 
-        <!-- 聊天 -->
-        <chat v-if="chat" :store_id="store_info.id" />
+        <loading v-if="isLoading"></loading>
 
     </div>
 </template>
 
 <script>
-import Chat from "@/components/chat/index"
+
 import PicZoom from '@/components/home/goods/vue-piczoom.vue' // 放大镜组件 
 export default {
-    components: {PicZoom,Chat},
+    components: {PicZoom},
     props: {},
     data() {
       return {
@@ -284,6 +259,7 @@ export default {
           collectives:false, // 拼团
           collective_list:[], // 正在进行的团
           collective_id:0,
+          isLoading:true,
       };
     },
     watch: {
@@ -321,6 +297,7 @@ export default {
                     this.$message.error(res.msg);
                     this.$router.go(-1);
                 }
+                 this.isLoading = false;
             })
         },
         // 定时器
@@ -828,6 +805,7 @@ export default {
         }
         .goods_info_num_input{
             float: left;
+            text-align: center;
         }
         .goods_info_num_input input{
             height: 27px;
@@ -838,6 +816,7 @@ export default {
             box-sizing: border-box;
             padding: 0 8px;
             color:#666;
+            text-align: center;
         }
     }
     .goods_info_btn{
@@ -846,13 +825,13 @@ export default {
     }
     .goods_info_add_cart,.goods_info_buy{
         cursor: pointer;
-        line-height: 40px;
+        line-height: 46px;
         float: left;
         margin-right: 20px;
-        background: #ff5c14;
+        background: #e4393c;
         border-radius: 3px;
         color:#fff;
-        padding: 0 15px;
+        padding: 0 20px;
         i{
             margin-right: 6px;
             font-size: 16px;
@@ -861,7 +840,7 @@ export default {
     }
     .goods_info_buy{
         cursor: pointer;
-        background: #ca151e;
+        background: #4bb16f;
         i{
             font-size: 16px;
             font-weight: bold;
@@ -892,6 +871,20 @@ export default {
             line-height: 35px;
             font-size: 14px;
         }
+        span{
+            background: #e4393c;
+            font-size: 12px;color: #fff;
+            padding:2px 10px;
+            border-radius: 3px;
+            vertical-align: middle;
+            display: inline-block;
+            *display: inline-block;
+        }
+        b{
+             vertical-align: middle;
+            display: inline-block;
+            *display: inline-block;
+        }
     }
     .goods_info_group{
         position: relative;
@@ -902,10 +895,10 @@ export default {
         background: url("../../../asset/pc/summary-bg.jpg");
     }
     .goods_info_price{
-        color:#ca151e;
-        font-size: 28px;
+        color:#e4393c;
+        font-size: 26px;
         line-height: 28px;
-        font-weight: bold;
+      
         span{
             line-height: 28px;
             color:#999;
@@ -1075,11 +1068,11 @@ export default {
 }
 .goods_info_sc.red_color{
     color:#fff;
-    background: #ca151e;
+    background: #ff5c15;
 }
 .goods_info_sc:hover{
     color:#fff;
-    background: #ca151e;
+    background: #ff5c15;
 }
 .goods_info_spec{
     margin-top: 20px;

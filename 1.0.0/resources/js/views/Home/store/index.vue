@@ -50,7 +50,7 @@
                         <div class="right_item">
                             <div class="title">{{v.store_name||''}}</div>
                             <!-- <div class="qy"><span class="stitle">公司：</span>{{v.store_company_name||''}}</div> -->
-                            <div class="address" title="12"><span class="stitle"></span>{{v.store_description}}</div>
+                            <div class="address" :title="v.store_description"><span class="stitle"></span>{{v.store_description}}</div>
                             <div class="btn" @click="$router.push('/store/'+v.id)">进入展馆</div>
                         </div>
                        

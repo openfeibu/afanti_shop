@@ -421,9 +421,7 @@ class GoodsService extends BaseService{
         $goods_model = new Goods();
         $list = $goods_model->whereHas('store',function($q){
             return $q->where(['store_status'=>1,'store_verify'=>3]);
-        })->with(['store'=>function($q){
-            return $q->select('id','store_name','store_logo');
-        }])->with(['goods_skus'=>function($q){
+        })->with(['goods_skus'=>function($q){
             return $q->orderBy('goods_price','asc');
         }])->where($where)->where($this->status)->take($take)->orderBy('goods_sale','desc')->get();
         return $this->format(new GoodsListCollection($list) );

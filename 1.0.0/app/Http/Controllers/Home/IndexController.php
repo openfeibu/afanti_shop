@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\AdvService;
 use App\Services\GoodsClassService;
 use App\Services\SeckillService;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use Hash;
 
 class IndexController extends Controller
 {
@@ -19,5 +22,12 @@ class IndexController extends Controller
         $data['banner'] = $adv_service->getAdvList('PC_首页幻灯片')['data'];
         $data['seckill_list'] = $seckill_service->getIndexSeckillAndGoods(4)['data'];
         return $this->success($data);
+    }
+    public function test(UserService $user_service)
+    {
+        $user_model = User::find(10);
+        $user_model->pay_password = Hash::make("123456");
+        $user_model->save();
+        echo "success";
     }
 }

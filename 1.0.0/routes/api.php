@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
  * 商城总后台 路由
  * 
  */
-Route::any('/test','Admin\LoginController@test'); // 测试接口
+//Route::any('/test','Admin\LoginController@test'); // 测试接口
 
 
 Route::namespace('Admin')->prefix('Admin')->group(function(){
@@ -257,6 +257,8 @@ Route::namespace('Seller')->prefix('Seller')->group(function(){
  */
 Route::namespace('Home')->group(function(){
 
+    Route::get('/test','IndexController@test');
+
     Route::post('/login','LoginController@login'); // 登陆
     Route::post('/register','LoginController@register'); // 注册
     Route::post('/forget_password','LoginController@forget_password'); // 忘记密码
@@ -304,12 +306,13 @@ Route::namespace('Home')->group(function(){
     // 秒杀页面
     Route::get('/seckills','SeckillController@index'); // 首页数据
 
+    Route::get('/coupons','CouponController@index'); // 优惠券列表
+
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车
         Route::apiResource('carts','CartController')->except(['show']);
 
         // 优惠券
-        Route::get('/coupons','CouponController@index'); // 优惠券列表
         Route::post('/coupons/receive','CouponController@receive_coupon'); // 领取优惠券
 
         // 用户收货地址

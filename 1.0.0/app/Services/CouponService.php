@@ -36,7 +36,7 @@ class CouponService extends BaseService{
             $coupon_log_model = new CouponLog();
 
             // 先查看是否存在
-            if($coupon_log_model->where('coupon_id',$coupon_id)->exists()){
+            if($coupon_log_model->where('user_id',$user_info['id'])->where('coupon_id',$coupon_id)->exists()){
                 return $this->format_error(__('markets.coupon_exists'));
             }
             $coupon_log_model->user_id = $user_info['id'];
@@ -95,7 +95,7 @@ class CouponService extends BaseService{
 
         return $this->format(new CouponCollection($list));
     }
-    // 根据店铺ID 获取优惠券 列表
+    // 获取优惠券 列表
     public function getCoupons(){
         $coupon_model = new Coupon();
         $list = $coupon_model->where('stock','>',0)->where('start_time','<',now())->where('end_time','>',now())->get();

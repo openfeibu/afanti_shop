@@ -69,6 +69,9 @@ export default
     'adminAreas' : baseUrl + 'Admin/areas', // 全国地址
     'adminAreasClearCache' : baseUrl + 'Admin/areas/cache/clear', // 清空商品分类缓存
 
+    // 运费配置
+    'adminFreights' : baseUrl + 'Admin/freights',
+
     // 广告管理
     'adminAdvPositions' : baseUrl + 'Admin/adv_positions',  // 广告位
     'adminAdvs' : baseUrl + 'Admin/advs',  // 广告管理

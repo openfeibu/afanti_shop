@@ -55,6 +55,9 @@ export default [
         {path:"/Admin/expresses",name:"admin_expresses_index",component:()=>import("@/views/Admin/expresses/index")}, // 物流公司列表
         {path:"/Admin/expresses/form/:id?",name:"admin_aexpresses_form",component:()=>import("@/views/Admin/expresses/form")}, // 物流公司编辑
 
+        // 配送运费
+        {path:"/Admin/freights/form",name:"admin_freights",component:()=>import("@/views/Admin/freights/form")},
+
         // 积分商城 商品分类
         {path:"/Admin/integral_goods_classes",name:"admin_integral_goods_classes",component:()=>import("@/views/Admin/integral_goods_classes/index")}, 
         {path:"/Admin/integral_goods_classes/form/:id?",name:"admin_integral_goods_classes_form",component:()=>import("@/views/Admin/integral_goods_classes/form")},

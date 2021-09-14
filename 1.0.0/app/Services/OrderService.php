@@ -589,7 +589,9 @@ class OrderService extends BaseService{
         // 循环查看是否存在优惠券
         $coupon_log_model = new CouponLog();
         foreach($list as $k=>&$v){
-            $coupon_list = $coupon_log_model->select('id','money','name')->where('user_id',$user_info['id'])->where('store_id',$k)->where('use_money','<=',$v['store_total_price'])->where('status',0)->get();
+            $coupon_list = $coupon_log_model->select('id','money','name')->where('user_id',$user_info['id'])
+                //->where('store_id',$k)
+                ->where('use_money','<=',$v['store_total_price'])->where('status',0)->get();
             $v['is_coupon'] = true;
             if($coupon_list->isEmpty()){
                 $v['is_coupon'] = false;

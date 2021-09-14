@@ -48,12 +48,13 @@ class OrderService extends BaseService{
         if(!$rs['status']){
             return $this->format_error($rs['msg']);
         }
+        $create_order_data = $rs['data'];
 
         // 优惠券的处理
         if(!isset(request()->coupon_id)){
             return $this->format_error('coupon_id empty');
         }
-        $coupon_id = explode(',',request()->coupon_id);
+        $coupon_id = request()->coupon_id;
 
         // 地址验证
         $address_resp = $this->checkAddress();
@@ -80,24 +81,23 @@ class OrderService extends BaseService{
         try{
             DB::beginTransaction();
                 $resp_data = [];
-                foreach($rs['data'] as $k=>$v){
-                    $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
+                $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
 
-                    $order_data = [
-                        'order_no'                  =>  $make_rand, // 订单号
-                        'user_id'                   =>  $user_info['id'], // 用户ID
-                        'store_id'                  =>  $v['store_info']['id'], // 店铺ID
-                        'order_name'                =>  $v['goods_list'][0]['goods_name'], // 商品ID
-                        'order_image'               =>  $v['goods_list'][0]['goods_master_image'], // 商品图片
-                        'receive_name'              =>  $address_info['receive_name'], // 收件人姓名
-                        'receive_tel'               =>  $address_info['receive_tel'], // 收件人电话
-                        'receive_area'              =>  $address_info['area_info'], // 收件人地区
-                        'receive_address'           =>  $address_info['address'], // 详细地址
-                        'coupon_id'                 =>  isset($coupon_id[$k])?intval(abs($coupon_id[$k])):0, // 优惠券ID
-                        'remark'                    =>  request()->remark??'', // 备注
-                    ];
+                $order_data = [
+                    'order_no'                  =>  $make_rand, // 订单号
+                    'user_id'                   =>  $user_info['id'], // 用户ID
+                    'order_name'                =>  $create_order_data['goods_name'], // 商品ID
+                    'order_image'               =>  $create_order_data['goods_master_image'], // 商品图片
+                    'receive_name'              =>  $address_info['receive_name'], // 收件人姓名
+                    'receive_tel'               =>  $address_info['receive_tel'], // 收件人电话
+                    'receive_area'              =>  $address_info['area_info'], // 收件人地区
+                    'receive_address'           =>  $address_info['address'], // 详细地址
+                    'coupon_id'                 =>  isset($coupon_id)?intval(abs($coupon_id)):0, // 优惠券ID
+                    'remark'                    =>  request()->remark??'', // 备注
+                ];
 
-                    $order_info = $order_model->create($order_data); // 订单数据插入数据库
+                $order_info = $order_model->create($order_data); // 订单数据插入数据库
+                foreach($create_order_data['list'] as $k=>$v){
 
                     // 初始化其他费用
                     $total_price = 0 ; // 总金额
@@ -111,7 +111,7 @@ class OrderService extends BaseService{
                         $order_goods_data = [
                             'order_id'      =>$order_info->id, // 订单ID
                             'user_id'       =>$order_data['user_id'], // 用户ID
-                            'store_id'      =>$order_data['store_id'], // 店铺ID
+                            'store_id'      =>$vo['store_id'], // 店铺ID
                             'sku_id'        =>$vo['sku_id'], // skuid
                             'goods_id'      =>$vo['id'], // 商品id
                             'goods_name'    =>$vo['goods_name'], // 商品名称
@@ -538,8 +538,9 @@ class OrderService extends BaseService{
             return $this->format_error(__('auth.no_token'));
         }
         
-        $list = [];
+        $list = $order_data = [];
         $this->cartId = []; // 购物车ID 初始化
+        $create_order_data['total'] = 0;
         foreach($params['order'] as $v){
             $data = [];
             $data = $goods_model->with(['store'=>function($q){
@@ -560,6 +561,9 @@ class OrderService extends BaseService{
             $data['total'] = round($v['buy_num']*$data['goods_price'],2);
             $data['total_weight'] = round($v['buy_num']*$data['goods_weight'],2);
 
+            $create_order_data['goods_master_image'] = $create_order_data['goods_master_image'] ?? $data['goods_master_image'];
+            $create_order_data['order_name'] = $create_order_data['order_name'] ?? $data['goods_name'];
+
             // 判断是否是团购
             $data['collective_id'] = 0;
             if(isset($v['collective_id'])){
@@ -573,7 +577,7 @@ class OrderService extends BaseService{
                 $list[$data['store']['id']]['store_total_price'] = 0;
             }
             $list[$data['store']['id']]['store_total_price'] += $data['total'];
-
+            $create_order_data['total'] += $list[$data['store']['id']]['store_total_price'];
             // 判断是否库存足够
             if($v['buy_num']>$data['goods_stock']){
                 return $this->format_error(__('orders.stock_error'));
@@ -585,29 +589,27 @@ class OrderService extends BaseService{
             }
 
         }
+        $list = array_merge($list,[]);
+        $create_order_data['list'] = $list;
 
         // 循环查看是否存在优惠券
         $coupon_log_model = new CouponLog();
-        foreach($list as $k=>&$v){
-            $coupon_list = $coupon_log_model->select('id','money','name')->where('user_id',$user_info['id'])
-                //->where('store_id',$k)
-                ->where('use_money','<=',$v['store_total_price'])->where('status',0)->get();
-            $v['is_coupon'] = true;
-            if($coupon_list->isEmpty()){
-                $v['is_coupon'] = false;
-            }
-            $v['coupons'] = $coupon_list;
-            if($v['is_coupon']){
-                $v['coupon_id'] = $coupon_list[0]['id'];
-            }else{
-                $v['coupon_id'] = 0;
-            }
+        $coupon_list = $coupon_log_model->select('id','money','name')->where('user_id',$user_info['id'])
+            ->where('use_money','<=',$create_order_data['total'])
+            ->where('status',0)
+            ->get();
+        $create_order_data['coupon']['is_coupon'] = true;
+        if($coupon_list->isEmpty()){
+            $create_order_data['coupon']['is_coupon'] = false;
+        }
+        $create_order_data['coupon']['coupons'] = $coupon_list;
+        if($create_order_data['coupon']['is_coupon']){
+            $create_order_data['coupon']['coupon_id'] = $coupon_list[0]['id'];
+        }else{
+            $create_order_data['coupon']['coupon_id'] = 0;
         }
 
-        $list = array_merge($list,[]);
-
-        return $this->format($list);
-
+        return $this->format($create_order_data);
         
     }
 

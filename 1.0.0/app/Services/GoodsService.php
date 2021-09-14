@@ -353,7 +353,6 @@ class GoodsService extends BaseService{
         try{
             if(!empty($params)){
                 $params_array = json_decode(base64_decode($params),true);
-                
                 // 品牌
                 if(isset($params_array['brand_id']) && !empty($params_array['brand_id'])){
                     $goods_model = $goods_model->where('brand_id',$params_array['brand_id']);

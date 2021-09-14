@@ -48,15 +48,16 @@
 
                     <!-- 优惠券 S -->
                     <div class="coupons_block" v-if="coupons.length>0">
+                        <span>优惠券：</span>
                         <ul>
-                            <li v-for="(v,k) in coupons" :key="k" @click="receiveCoupon(v.id)">
-                                <div class="price">￥{{v.money}} </div>
-                                <div class="block">
-                                    <div>优 惠 券</div>
-                                    <div>满￥{{v.use_money}}可用</div>
-                                </div>
+                            <li v-for="(v,k) in coupons" :key="k"  v-if='k<5'  @click="receiveCoupon(v.id)" >
+                                <div class="price">满{{v.use_money}}减{{v.money}} </div>
+                               
                             </li>
                         </ul>
+                        <div class="coupon-more" @click="$router.push('/coupon')">
+                            更多>
+                        </div>
                     </div>
                     <!-- 优惠券 E -->
                     
@@ -132,11 +133,11 @@
                         <span class="tip">展馆</span>
                         <span class="title">{{store_info['store_name']}}</span>
                     </div>
-                    <div class="store_com" style="margin-top:10px">公司名称：<font color="#999">{{store_info.store_company_name}}</font></div>
+                    <div class="store_com fb-overflow-3 " >{{store_info.store_description}}</div>
                   
                     <div class="btn">
                         <span class="navstore" @click="$router.push('/store/'+store_info.id)">进入展馆</span>
-                        <span class="contact" @click="chat=true">联系客服</span>
+                        <!-- <span class="contact" @click="">联系客服</span> -->
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -156,7 +157,7 @@
                     <div style="line-height:90px;text-align:center;color:#999;" v-else>暂时没有商品~~</div>
                 </div>
             </div>
-            <div class="right_item">
+            <div class="right_item tablist" >
                  <a-tabs default-active-key="1" >
                 <a-tab-pane key="1" tab="商品详情" force-render>
                     <div v-html="goods_info.goods_content||''"></div>
@@ -575,6 +576,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 .goods_info_content{
     .right_item{
         border:1px solid #efefef;
@@ -712,12 +714,12 @@ export default {
             .btn{
                 border-top: 1px solid #efefef;
                 span:hover{
-                    background: #ca151e;
+                    background: #4bb16f;
                     color:#fff;
                 }
                 span{
                     text-align: center;
-                    width: 50%;
+                    width: 100%;
                     box-sizing: border-box;
                     height: 40px;
                     line-height: 40px;
@@ -730,7 +732,9 @@ export default {
                 }
             }
             .store_com{
-                padding:3px 10px;
+               margin:10px;
+                line-height: 20px 10px;
+                color:#999
             }
             .store_rate{
                 padding-left:10px;
@@ -758,13 +762,14 @@ export default {
                 box-sizing: border-box;
                 border-bottom: 1px solid #efefef;
                 .tip{
-                    background: #ca151e;
+                    background: #e4393c;
                     color:#fff;
                     text-align: center;
                     line-height: 24px;
                     border-radius: 3px;
                     margin-right: 10px;
                     padding:2px 10px;
+                    font-size: 12px;
                 }
                 .title{
                     color:#000;
@@ -885,6 +890,7 @@ export default {
             display: inline-block;
             *display: inline-block;
         }
+        
     }
     .goods_info_group{
         position: relative;
@@ -1115,33 +1121,38 @@ export default {
 .coupons_block{
     margin-top: 20px;
     width: 550px;
+     span {
+         display: inline-block;*display: inline-block;*zoom:1;vertical-align: middle;color: #999;font-size:14px;
+     }
+     .coupon-more{
+             display: inline-block;*display: inline-block;*zoom:1;vertical-align: middle;color: #999;font-size:14px;cursor: pointer;
+       &:hover{
+           color: #df3033;
+       }
+       }
+     ul {
+         display: inline-block;*display: inline-block;*zoom:1;vertical-align: middle;
+     }
     ul li{
-        border:1px dashed #999;
+        border:1px dashed #df3033;
+        background: #ffdedf;
         display: inline-block;
-        padding: 5px;
+        padding: 2px 10px;
         margin-right: 10px;
         cursor: pointer;
+         border-radius: 3px;
         .price{
-            font-size: 30px;
-            font-weight: bold;
-            float: left;
-            margin-right: 10px;
-            line-height: 30px;
+         
+            color: #df3033;font-size: 12px;
+            text-align: center;
         }
-        .block{
-            float: left;
-            font-size: 12px;
-            color:#b5621b;
-            line-height: 14px;
-        }
+      
         &:after{
             clear: both;
             display: block;
             content:'';
         }
-        &:nth-child(n+4){
-            display: none;
-        }
+
     }
 }
 .goods_info_full_reduction{
@@ -1202,4 +1213,5 @@ export default {
         }
     }
 }
+
 </style>

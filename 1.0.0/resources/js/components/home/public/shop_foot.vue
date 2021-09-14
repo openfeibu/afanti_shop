@@ -12,17 +12,18 @@
                 <p>Copyright © 2012-2016 xxxxxx.COM 版权所有 保留一切权利</p>
                 <p>公安备案 | {{common.common.icp}} | 技术支持：<a target="_black" href="http://www.feibu.info">飞步科技</a></p>
             </div>
-            <a-back-top />
+            <!-- <a-back-top /> -->
+            <fixedpower />
         </div>
     </div>
 </template>
 
 <script>
-// import ShopIndexAdv from "@/components/home/public/shop_index_adv.vue"
+import Fixedpower from "@/components/home/public/fixed_power.vue"
 import {mapState} from 'vuex'
 export default {
     components: {
-        // ShopIndexAdv,
+         Fixedpower,
     },
     props: {},
     data() {

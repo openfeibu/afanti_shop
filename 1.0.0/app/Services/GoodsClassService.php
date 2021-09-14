@@ -43,11 +43,14 @@ class GoodsClassService extends BaseService{
         }
 
         foreach($class_goods as &$v){
-            $v['goods'] = new GoodsListCollection($goods_model->whereHas('store',function($q){
+            $goods_list = $goods_model->whereHas('store',function($q){
                 return $q->where(['store_status'=>1,'store_verify'=>3]);
-            })->with(['goods_skus'=>function($q){
+            })->with(['store'=>function($q){
+                return $q->select('id','store_name','store_logo');
+            }])->with(['goods_skus'=>function($q){
                 return $q->orderBy('goods_price','asc');
-            }])->where(['goods_status'=>1,'goods_verify'=>1])->where('class_id',$v['id'])->take($goods_num)->get());
+            }])->where(['goods_status'=>1,'goods_verify'=>1])->where('class_id',$v['id'])->take($goods_num)->get();
+            $v['goods'] = new GoodsListCollection($goods_list);
         }
 
         return $this->format($class_goods);

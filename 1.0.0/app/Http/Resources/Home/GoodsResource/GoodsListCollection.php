@@ -41,6 +41,8 @@ class GoodsListCollection extends ResourceCollection
                 'goods_stock'           =>  $goods_stock,
                 'goods_sale'            =>  $item->goods_sale,
                 'goods_master_image'    =>  $this->thumb($item->goods_master_image),
+                'store_id'            =>  $item->store_id,
+                'store_name'            =>  $item->store->store_name,
             ];
         });
         

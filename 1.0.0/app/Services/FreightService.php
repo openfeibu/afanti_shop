@@ -11,7 +11,6 @@ class FreightService extends BaseService{
             return $this->format_error(__('base.error'));
         }
         $freight_model = new Freight();
-        $store_id = $this->get_store(true);
         foreach($list as $k=>$v){
             if($v['id'] != 0){ // 如果是已经存在的数据
                 $freight_model = $freight_model->find($v['id']);
@@ -22,7 +21,6 @@ class FreightService extends BaseService{
                     $freight_model = $freight_model->find($v['id']);
                 }
                 $freight_model->is_type=0;
-                $freight_model->store_id=$store_id;
                 $freight_model->name='默认运费';
                 $freight_model->f_weight=$v['f_weight'];
                 $freight_model->f_price=$v['f_price'];
@@ -30,7 +28,6 @@ class FreightService extends BaseService{
                 $freight_model->o_price=$v['o_price'];
             }else{
                 $freight_model->is_type=1;
-                $freight_model->store_id=$store_id;
                 $freight_model->name=$v['name'];
                 $freight_model->f_weight=$v['f_weight'];
                 $freight_model->f_price=$v['f_price'];

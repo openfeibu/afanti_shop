@@ -362,7 +362,7 @@ Route::namespace('Home')->group(function(){
         Route::post('/order/wechat_pay_check','OrderController@wechat_pay_check'); // 微信支付验证
         Route::put('/order/edit_order_status','OrderController@edit_order_status'); // 取消订单
         Route::get('/order/get_order_info/{id}','OrderController@get_order_info'); // 查看订单信息
-
+        Route::get('/order/get_freight','OrderController@get_freight'); // 生成订单前处理
         // 积分订单
         Route::get('/integral_order','IntegralController@get_orders'); // 获取积分订单列表
         Route::get('/integral_order/get_order_info/{id}','IntegralController@get_order_info'); // 查看积分订单信息

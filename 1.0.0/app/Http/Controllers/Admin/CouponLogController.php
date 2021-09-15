@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Seller\CouponLogResource\CouponLogCollection;
@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class CouponLogController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -19,5 +20,4 @@ class CouponLogController extends Controller
         $list = $coupon_log_model->with('user')->orderBy('id','desc')->paginate($request->per_page??30);
         return $this->success(new CouponLogCollection($list));
     }
-
 }

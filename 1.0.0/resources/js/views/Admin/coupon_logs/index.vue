@@ -52,7 +52,7 @@ export default {
        
  
         onload(){
-            this.$get(this.$api.sellerCouponLogs,this.params).then(res=>{
+            this.$get(this.$api.adminCouponLogs,this.params).then(res=>{
                 this.total = res.data.total;
                 this.list = res.data.data;
             });

@@ -11,7 +11,11 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    
+    public function __construct(OrderService $order_service)
+    {
+        $this->order_service = $order_service;
+    }
+
     // 获取订单列表
     public function get_orders(){
         $order_service = new OrderService();
@@ -66,4 +70,13 @@ class OrderController extends Controller
         $rs = $order_service->getOrderInfoById($id,'user');
         return $rs['status']?$this->success(new OrderResource($rs['data']),$rs['msg']):$this->error($rs['msg']);
     }
+    public function get_freight(Request $request)
+    {
+        $freight_id = $request->freight_id;
+        $total_weight = $request->total_weight;
+        $province_id = $request->province_id;
+        $freight = $this->order_service->sumFreight($freight_id,$total_weight,$province_id); // 直接计算运费，如果多个不同的商品取第一个商品的运费
+        return $this->success(['freight' => $freight]);
+    }
+
 }

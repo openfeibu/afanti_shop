@@ -88,15 +88,19 @@
             </div>
 
             <div class="sum_block">
-                <div v-if="order.coupon.is_coupon">
+
+                <div v-if="order.coupon">
                     优惠券：
-                    <a-select style="width:130px;margin-right:10px;" v-model="order.coupon.coupon_id">
+                    <a-select style="width:130px;margin-right:10px;" v-model="order.coupon.coupon_id" @change="couponChangeHandle">
                         <a-select-option :value="0" >不使用优惠券</a-select-option>
                         <a-select-option v-for="(val,key) in order.coupon.coupons" :key="key" :value="val.id" >{{val.money}}优惠券</a-select-option>
                     </a-select>
                 </div>
 
-                <div class="total">总金额：<span>￥{{order.total}}</span>( 不包含运费和优惠 )</div>
+                <div class="order_price">总商品金额：<span>￥{{order.order_price}}</span></div>
+                <div class="freight">运费：<span>￥{{freight}}</span></div>
+                <div class="discount">优惠：<span>-￥{{discount}}</span></div>
+                <div class="total">应付金额：<span>￥{{order.order_price + freight - discount}}</span></div>
                 <div :class="loading?'btn hide':'btn'" @click="create_order">{{loading?'加载中..':'创建订单'}}</div>
                 <div class="clear"></div>
             </div>
@@ -118,13 +122,15 @@ export default {
           total:0,
           remark:'',
           loading:false,
+          freight: 0,
+          discount: 0,
+          province_id:0,
       };
     },
     watch: {},
     computed: {},
     methods: {
         onload(){
-            this.get_address();
             this.create_order_before();
         },
         // 获取地址
@@ -133,9 +139,11 @@ export default {
                 res.data.forEach(item=>{
                     if(item.is_default==1){
                         this.address_id = item.id;
+                        this.province_id = item.province_id;
                     }
                 })
                 this.address = res.data;
+                this.get_freight();
             })
         },
         // 地址选择
@@ -145,22 +153,42 @@ export default {
                     this.get_address();
                     this.$message.success('设置地址成功');
                     this.address_id = id;
+
                 }else{
                     this.$message.destroy();
                     this.$message.error(res.msg)
                 }
             })
         },
+        get_freight(){
+            var params = {freight_id:this.order.freight_id,total_weight:this.order.total_weight,province_id:this.province_id};
+            this.$get(this.$api.homeOrder+'/get_freight',params).then(res=>{
+                if(res.code == 200){
+                    this.freight = this.$formatFloat(res.data.freight);
+                }
+            })
+        },
+        couponChangeHandle(val){
+            var that = this
+            var hh = that.order.coupon.coupons.filter(function (c, i, a) {//第一个参数为当前项,第二个参数为索引,第三个为原值
+                if (c.id == that.order.coupon.coupon_id) {
+                    return c
+                }
+            })
+            if(this.order.coupon.coupon_id)
+            {
+                this.discount = this.order.discount + this.$formatFloat(hh[0].money);
+            }else{
+                this.discount = this.order.discount;
+            }
+        },
         // 订单建立前预览商品信息
         create_order_before(){
             this.$get(this.$api.homeOrder+'/create_order_before',{params:this.$route.params.params}).then(res=>{
                 if(res.code == 200){
-//                    res.data.forEach(item=>{
-//                        item.goods_list.forEach(item2=>{
-//                            this.total += item2.total;
-//                        })
-//                    })
                     this.order = res.data;
+                    this.get_address();
+                    this.couponChangeHandle();
                 }else{
                     // this.$message.destroy();
                     this.$message.error(res.msg)
@@ -196,9 +224,11 @@ export default {
         }
     },
     created() {
-        this.onload(); 
+        this.onload();
     },
-    mounted() {}
+    mounted() {
+
+    }
 };
 </script>
 <style lang="scss" scoped>

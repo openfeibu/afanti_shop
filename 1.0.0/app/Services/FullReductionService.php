@@ -28,4 +28,15 @@ class FullReductionService extends BaseService{
 
         return $this->format($info);
     }
+    // 根据店铺ID 获取满减 详情
+    public function getFullReductionInfo($total_price){
+        $fr_model = new FullReduction();
+        $info = $fr_model->where('start_time','<',now())->where('end_time','>',now())->where('use_money','<=',$total_price)->orderBy('use_money','asc')->first();
+
+        if(!$info){
+            return $this->format_error(__('markets.full_reduction_empty'));
+        }
+
+        return $this->format($info);
+    }
 }

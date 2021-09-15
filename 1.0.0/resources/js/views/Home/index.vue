@@ -28,10 +28,12 @@
                         <ul>
                             <li v-for="(v,k) in seckill_list" :key="k" @click="toGoods(v.id)">
                                 <dl>
-                                    <dt><img style="width: 180px; height: 180px" v-lazy="v.goods_master_image" :alt="v.goods_name" /></dt>
+                                    <dt><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></dt>
                                     <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
-                                    <dd class="product_subtitle">{{v.goods_subname}}</dd>
-                                    <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}</span></dd>
+                                    <!-- <dd class="product_subtitle">{{v.goods_subname}}</dd> -->
+                                    <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
+                                    <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}元</span></dd>
+                                    <dd class="product_buy">立即抢购</dd>
                                 </dl>
                             </li>
                             
@@ -88,6 +90,7 @@
                                         <dt><img v-lazy="vo.goods_master_image||''" :alt="vo.goods_name" /></dt>
                                         <dd class="product_title" :title="vo.goods_name">{{vo.goods_name}}</dd>
                                         <dd class="product_subtitle">{{vo.goods_subname}}</dd>
+                                        <dd class="product_store_name"><span>{{vo.store_name}}</span></dd>
                                         <dd class="product_price">￥{{vo.goods_price}}<span>{{vo.goods_market_price}}元</span></dd>
                                     </dl>
                                 </div>
@@ -110,7 +113,6 @@
 </template>
 
 <script>
-import Chat from "@/components/chat/index"
 import ShopHead from '@/components/home/public/head'
 import Banner from '@/components/home/public/banner'
 import BannerBottomAdv from "@/components/home/public/banner_bottom_adv"
@@ -119,7 +121,7 @@ import ShopIndexAdv from "@/components/home/public/shop_index_adv"
 // import VueLazyload from 'vue-lazyload' // 图片懒加载
 // Vue.use(VueLazyload)
 export default {
-    components: {ShopHead,Banner,BannerBottomAdv,ShopFoot,ShopIndexAdv,Chat},
+    components: {ShopHead,Banner,BannerBottomAdv,ShopFoot,ShopIndexAdv},
     props: {},
     data() {
       return {
@@ -218,16 +220,16 @@ export default {
             transition: all 0.2s linear;
         }
         dl{
-            padding-top: 20px;
+            padding-top: 10px;
         }
         dl dt{
-            width: 160px;
-            height: 160px;
+            width: 180px;
+            height: 180px;
             margin:0 auto;
         }
         dl dt img{
-            width: 160px;
-            height: 160px;
+            width: 100%;
+            height: 100%;
         }
         dl dd{
             width: 190px;
@@ -237,26 +239,38 @@ export default {
         }
         dl dd.product_title{
             font-size: 14px;
-            margin-top: 25px;
+            margin-top: 5px;
             height: 30px;
-            line-height: 30px;
+            line-height: 30px; text-align: left;
         }
         dl dd.product_subtitle{
             margin-top: 0px;
             font-size: 12px;
             color:#b0b0b0;
             line-height: 14px;
+            text-align: left;
         }
         dl dd.product_price{
-            margin-top: 10px;
             font-size: 16px;
             color:#ca151e;
             line-height: 34px;
+             text-align: left;
             span{
                 font-size: 14px;
                 color:#b0b0b0;
                 margin-left: 8px;
                 text-decoration: line-through;
+            }
+        }
+        .product_store_name{
+            text-align: left;
+            span{
+                background: #4bb16f;
+                color: #fff;
+                font-size: 12px;
+                padding:0 10px;
+                height: 24px;line-height: 24px;
+                border-radius: 2px;
             }
         }
     }
@@ -376,47 +390,68 @@ background: #4bb16f;font-size: 14px;padding:10px 20px;color:#fff;
             box-sizing: border-box;
             -webkit-transition: all .2s linear;
             transition: all .2s linear;
-            dl dt{
-                width: 180px;
-                height: 180px;
-                margin:0 auto;
-                margin-top: 20px;
-            }
-            dl dt img{
-                width: 180px;
-                height: 180px;
-            }
-            dl dd{
-                width: 220px;
-                overflow: hidden;
-                text-align: center;
-                width: 190px;
-                margin:0 auto;
-            }
-            dl dd.product_title{
+            cursor: pointer;
+         dl dt{
+            width: 180px;
+            height: 180px;
+            margin:20px auto 0 auto;
+        }
+        dl dt img{
+            width: 100%;
+            height: 100%;
+        }
+        dl dd{
+            width: 190px;
+            overflow: hidden;
+            text-align: center;
+            margin:0 auto;
+        }
+        dl dd.product_title{
+            font-size: 14px;
+            margin-top: 5px;
+            height: 30px;
+            line-height: 30px; text-align: left;
+        }
+        dl dd.product_subtitle{
+            margin-top: 0px;
+            font-size: 12px;
+            color:#b0b0b0;
+            line-height: 14px;
+            text-align: left;
+        }
+        dl dd.product_price{
+            font-size: 16px;
+            color:#ca151e;
+            line-height: 34px;
+             text-align: left;
+            span{
                 font-size: 14px;
-                margin-top: 25px;
-                height: 30px;
-                line-height: 30px;
-            }
-            dl dd.product_subtitle{
-                margin-top: 0px;
-                font-size: 12px;
                 color:#b0b0b0;
-                line-height: 14px;
+                margin-left: 8px;
+                text-decoration: line-through;
             }
-            dl dd.product_price{
-                margin-top: 10px;
-                font-size: 16px;
-                color:#ca151e;
-                line-height: 34px;
-                span{
-                    font-size: 14px;
-                    color:#b0b0b0;
-                    margin-left: 8px;
-                    text-decoration: line-through;
-                }
+        }
+        .product_store_name{
+            text-align: left;
+            span{
+                background: #4bb16f;
+                color: #fff;
+                font-size: 12px;
+                padding:0 10px;
+                height: 24px;line-height: 24px;
+                border-radius: 2px;
             }
+        }
+        .product_buy{
+            background: #e22929;
+            color: #fff;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+            
         }
         ul li:hover{
             box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

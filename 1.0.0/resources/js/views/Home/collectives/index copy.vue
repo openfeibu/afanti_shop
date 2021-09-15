@@ -1,30 +1,22 @@
 <template>
     <div class="integral_index">
         <!-- <div><banner :list="banner" :height="350" /></div> -->
-        <div class="mbx w1200">
-            <a-breadcrumb>
-                <a-breadcrumb-item><a href="/">首页</a></a-breadcrumb-item>
-                <a-breadcrumb-item >拼团专区</a-breadcrumb-item>
-            </a-breadcrumb>
-        </div>
+
      
 
 
         <div class="s_goods_content w1200" v-if="params.total>0">
             <!-- 产品列表 S -->
-            <div class="s_goods_list2">
+            <div class="s_goods_list">
                 <div class="item" v-for="(v,k) in list" :key="k">
-                    <dl>
-                        <router-link :to="'/goods/'+v.id">
-                            <dt><img width="180px" height="180px" v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
-                            <dd class="title">{{v.goods_name}}</dd>
-                            <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
-                            <dd class="price">￥{{v.goods_price}} <font>拼团价</font></dd>
-                            
-                            <dd class="product_buy" >
-                                <span>{{v.need}} </span>人成团,立即拼团
-                            </dd>
-                        </router-link>
+                    <dl><router-link :to="'/goods/'+v.id">
+                        <dt><img width="180px" height="180px" v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
+                        <dd class="title">{{v.goods_name}}</dd>
+                        <dd class="price">￥{{v.goods_price}} <font>拼团价</font></dd>
+                        <dd>
+                            <span>立即购买</span>
+                            <span>{{v.need}} 人成团</span>
+                        </dd></router-link>
                     </dl>
                 </div>
                 <div class="clear"></div>
@@ -36,14 +28,15 @@
             </div>
         </div>
         <a-empty style="margin-top:40px" v-else />
-       <loading v-if="isLoading"></loading>
+
     </div>
 </template>
 
 <script>
+import banner from '@/components/home/public/banner'
 import {mapState} from 'vuex'
 export default {
-    components: {},
+    components: {banner},
     props: {},
     data() {
       return {
@@ -54,7 +47,9 @@ export default {
               is_collective:1,
           },
           list:[],
-          isLoading:true
+          banner:[],
+          base64Code:'',
+          base64Decode:{},
       };
     },
     watch: {},
@@ -62,7 +57,7 @@ export default {
     methods: {
         // 初始化数据
         onload(){
-            
+            this.params.params = this.base64Code;
             this.$post(this.$api.homeGoods+'/search/all',this.params).then(res=>{
                 if(res.code == 200){
                     this.params.total = res.data.total;
@@ -73,23 +68,114 @@ export default {
                 }else{
                     this.$message.error(res.msg);
                 }
-                this.isLoading = false
+                
             })
-   
+            console.log(this.base64Decode)
         },
-         onChange(e){
+        onChange(e){
             this.params.page = e;
-            this.isLoading = true;
             this.onload();
         },
+        // 分类改变
+        classChange(pid,info,deep=0,sid=0){
+            this.base64Decode.class_id = [];
+            this.base64Decode.pid = pid;
+            if(deep == 0){
+                info.children.forEach(item=>{
+                    if(!this.$isEmpty(item.children)){
+                        item.children.forEach(item2=>{
+                            this.base64Decode.class_id.push(item2.id);
+                        })
+                    }
+                })
+                this.base64Decode.sid = undefined;
+                this.base64Decode.tid = undefined;
+            }
+            if(deep == 1){
+                this.base64Decode.sid = info.id;
+                if(!this.$isEmpty(info.children)){
+                    info.children.forEach(item=>{
+                        this.base64Decode.class_id.push(item.id);
+                    })
+                }else{
+                    this.base64Decode.class_id = [0];
+                }
+                this.base64Decode.tid = undefined;
+            }
+            if(deep == 2){
+                this.base64Decode.sid = info.pid;
+                this.base64Decode.tid = info.id;
+                this.base64Decode.class_id.push(info.id);
+            }
+            if(deep == 3){
+                this.base64Decode.pid = undefined;
+                this.base64Decode.tid = undefined;
+                this.base64Decode.tid = undefined;
+                this.base64Decode.class_id = undefined;
+            }
+            this.$router.push('/s/'+window.btoa(JSON.stringify(this.base64Decode)))
+        },
+        // 品牌改变
+        brandChange(e){
+            this.base64Decode.brand_id = e;
+            this.$router.push('/s/'+window.btoa(JSON.stringify(this.base64Decode)))
+        },
+        // 排序
+        sortChange(e=''){
+            if(e == ''){
+                if(this.base64Decode.sort_order== 'desc'){
+                    this.base64Decode.sort_order= 'asc';
+                }else{
+                    this.base64Decode.sort_order= 'desc';
+                }
+                if(this.base64Decode.sort_type != undefined){
+                    this.base64Decode.sort_order= 'asc';
+                }
+                this.base64Decode.sort_type = undefined
+            }else{
+                if(this.base64Decode.sort_type == undefined || this.base64Decode.sort_type != e){
+                    this.base64Decode.sort_order= 'asc';
+                }else{
+                    if(this.base64Decode.sort_order== 'desc'){
+                        this.base64Decode.sort_order= 'asc';
+                    }else{
+                        this.base64Decode.sort_order= 'desc';
+                    }
+                }
+                
+                this.base64Decode.sort_type= e;
+                console.log(this.base64Decode.sort_type)
+            }
+            this.$router.push('/s/'+window.btoa(JSON.stringify(this.base64Decode)))
+
+        }
     },
     created() {
-        this.onload()
-       
+        if(this.$route.params.params != undefined){
+            this.base64Code = this.$route.params.params;
+            this.base64Decode = JSON.parse(window.atob(this.base64Code));
+            this.onload();
+        }
+        this.$get(this.$api.homeGoods+'/collection/banner').then(res=>{
+            if(res.code == 200){
+                this.banner = res.data;
+            }
+            
+        })
     },
     mounted() {},
     beforeRouteUpdate (to, from, next) {
-      
+        if(from.params.params != to.params.params){
+            this.params.page = 1;
+            this.base64Code = to.params.params;
+            this.base64Decode = JSON.parse(window.atob(to.params.params));
+            this.onload();
+            // this.goods_id = to.params.id;
+            // this.get_goods_info();
+        }
+        next();
+        // react to route changes...
+        // don't forget to call next()
     }
 };
 </script>
@@ -102,16 +188,6 @@ export default {
         padding:0 20px;
         box-sizing: border-box;
         border-bottom: 1px solid #efefef;
-        dt{
-            width: 180px;
-            height: 180px;
-            margin:20px auto 0 auto;
-            padding:0 !important;
-        }
-        img{
-            width: 100%;
-            height: 100%;
-        }
         &:last-child{
             border-bottom: none;
         }
@@ -225,89 +301,4 @@ export default {
         }
     }
 }
-
-.s_goods_list2 {
-    margin-top: 40px;
-    margin-bottom: 30px;
-     .item {
-        float: left;
-        width: 224px;
-        height: 364px;
-        box-sizing: border-box;
-        margin: 0 20px 20px 0;
-    }
-    .item dl {
-        border: 1px solid #efefef;
-        box-sizing: border-box;
-        width: 224px;
-        height: 338px;
-        transition: all 0.2s linear;
-    }
-    .item dl dt {
-        padding-top: 20px;
-        padding-bottom: 0;
-        text-align: center;
-    }
-    .item:hover dl {
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-        margin-top: -3px;
-    }
-    .item dl dd.title {
-        color: #000;
-        font-size: 14px;
-        margin-top: 5px;
-        height: 30px;
-        line-height: 30px; text-align: left;
-        overflow: hidden;
-        width: 190px;
-        margin:5px auto 0 auto;
-    }
-    .item dl dd.price {
-        color: #e01d20;
-        line-height: 30px;
-        text-align: left;
-        padding: 0 15px;
-        font-size: 20px;
-        overflow: hidden;
-    }
-    .item dl dd.price font {
-        color: #999;
-        font-size: 12px;
-    }
-    .item dl dd span.integral {
-        width: 100%;
-        display: block;
-        border-top: 1px solid #efefef;
-        float: left;
-        line-height: 41px;
-        text-align: center;
-    }
-   
-   
-     .product_store_name{
-            text-align: left;
-            padding: 0 15px;
-            span{
-                background: #4bb16f;
-                color: #fff;
-                font-size: 12px;
-                padding:0 10px;
-                height: 24px;line-height: 24px;
-                border-radius: 2px;
-            }
-        }
-     .product_buy{
-                 background: #e43838;
-    color: #fff;
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    margin-top: 5px;
-    text-align: center;
-    span{
-        font-size: 20px;
-    }
-        }
-}
-
 </style>

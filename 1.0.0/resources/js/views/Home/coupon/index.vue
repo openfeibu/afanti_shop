@@ -4,7 +4,7 @@
         <div class="mbx w1200">
             <a-breadcrumb>
                 <a-breadcrumb-item><a href="/">首页</a></a-breadcrumb-item>
-                <a-breadcrumb-item >拼团专区</a-breadcrumb-item>
+                <a-breadcrumb-item >优惠券</a-breadcrumb-item>
             </a-breadcrumb>
         </div>
      
@@ -15,25 +15,12 @@
             <div class="s_goods_list2">
                 <div class="item" v-for="(v,k) in list" :key="k">
                     <dl>
-                        <router-link :to="'/goods/'+v.id">
-                            <dt><img width="180px" height="180px" v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
-                            <dd class="title">{{v.goods_name}}</dd>
-                            <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
-                            <dd class="price">￥{{v.goods_price}} <font>拼团价</font></dd>
-                            
-                            <dd class="product_buy" >
-                                <span>{{v.need}} </span>人成团,立即拼团
-                            </dd>
-                        </router-link>
+                       
                     </dl>
                 </div>
                 <div class="clear"></div>
             </div>
-            <!-- 产品列表 E -->
 
-            <div class="fy">
-                <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
-            </div>
         </div>
         <a-empty style="margin-top:40px" v-else />
        <loading v-if="isLoading"></loading>
@@ -48,10 +35,8 @@ export default {
     data() {
       return {
           params:{
-              page:1,
-              per_page:30,
-              total:0,
-              is_collective:1,
+        
+
           },
           list:[],
           isLoading:true
@@ -63,11 +48,9 @@ export default {
         // 初始化数据
         onload(){
             
-            this.$post(this.$api.homeGoods+'/search/all',this.params).then(res=>{
+            this.$get(this.$api.homeCoupon,this.params).then(res=>{
                 if(res.code == 200){
-                    this.params.total = res.data.total;
-                    this.params.per_page = res.data.per_page;
-                    this.params.current_page = res.data.current_page;
+                   
                     this.list = res.data.data;
                     // console.log(this.params);
                 }else{
@@ -76,21 +59,13 @@ export default {
                 this.isLoading = false
             })
    
-        },
-         onChange(e){
-            this.params.page = e;
-            this.isLoading = true;
-            this.onload();
-        },
+        }
     },
     created() {
         this.onload()
        
     },
     mounted() {},
-    beforeRouteUpdate (to, from, next) {
-      
-    }
 };
 </script>
 <style lang="scss" scoped>

@@ -32,9 +32,23 @@
                     <p>{{goods_info.goods_subname}}</p>
                     <div :class="isFav?'goods_info_sc red_color':'goods_info_sc'" @click="goods_fav()">{{isFav?'已收藏':'收藏'}}<a-icon type="like" /></div>
                 </div>
+                 <div class="goods_info_active">
+                     <div class="goods_skill"  v-if="seckills">
+                        <span><a-icon type="history" /></span>
+                        <span>秒杀活动</span>
+                        <span class="span_time">距离结束 {{seckills.format_time||'0 天 00 时 00 分 00 秒'}}</span>
+                    </div>
+                      
+                    <div class="goods_skill tuan_active" v-if="collectives" >
+                        <span><a-icon type="usergroup-delete" /></span>
+                        <span>团购活动 </span>
+                        <span class="span_time">团购价：￥ {{$formatFloat(goods_info.goods_price*(1-collectives.discount/100)||'0.00')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 需要 {{collectives.need}} 人</span>
+                    </div>
+                 </div>
                 <div class="goods_info_group">
                     <template v-if="seckills">
-                        <div class="goods_info_price"><span>秒杀价：</span>￥{{goods_info.goods_price*(1-seckills.discount/100)||'0.00'}}</div>
+                     
+                        <div class="goods_info_price"><span>秒杀价：</span>￥{{$formatFloat(goods_info.goods_price*(1-seckills.discount/100))||'0.00'}}</div>
                         <div class="goods_info_market_price"><span>市场价：</span><div class="overx_goods_info">￥{{goods_info.goods_market_price||'0.00'}}</div></div>
                     </template>
                     <template v-else>
@@ -64,22 +78,13 @@
                 </div>
                 <!-- 参加活动 -->
                 <div class="goods_info_active">
-                    <div class="goods_skill" v-if="seckills">
-                        <span><a-icon type="history" /></span>
-                        <span>参加秒杀活动</span>
-                        <span class="span_time">距离结束 {{seckills.format_time||'0 天 00 时 00 分 00 秒'}}</span>
-                    </div>
-                    <div class="goods_skill tuan_active" v-if="collectives"  @click="collective_id=-1;buy()">
-                        <span><a-icon type="usergroup-delete" /></span>
-                        <span>参加团购活动 <span style="font-weight:bold; margin-left:15px;" >( 点击开新团 )</span></span>
-                        <span class="span_time">团购价：￥ {{$formatFloat(goods_info.goods_price*(1-collectives.discount/100)||'0.00')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 需要 {{collectives.need}} 人</span>
-                    </div>
+                  
                     <div class="tuan_list" v-if="collectives && collective_list.length>0">
                         <a-carousel autoplay :autoplaySpeed="3000" speed="1000" :vertical="true" :adaptiveHeight="true" :dots="false">
                             <div class="tuan_item" v-for="(v,k) in collective_list" :key="k">
                                 <img v-lazy="v.avatar||require('@/asset/user/user_default.png')">
                                 <div class="nickname">{{v.nickname}}</div>
-                                <div class="btn" @click="collective_id=v.id;buy()">参团</div>
+                                <div class="btn" @click="collective_id=v.id;buy()">立即参团</div>
                                 <div class="orders_count">已经参团 {{v.orders_count}} / {{v.need}} 人</div>
                             </div>
                         </a-carousel>
@@ -113,7 +118,12 @@
                 <div class="goods_info_btn">
                     <!-- <div v-show="goods_info.is_groupbuy==1" class="goods_info_add_groupbuy" @click="group_buy()"><i class="icon iconfont">&#xe601;</i>选择团购</div> -->
                     <template v-if="seckills">
-                        <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
+                        <div class="goods_info_buy" style="background:#fe0851" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
+                    </template>
+                    <template v-else-if="collectives">
+                        <div class="goods_info_buy" style="background:#67c23a"  @click="collective_id=-1;buy()"><a-icon type="team" />我要开团</div>
+                        <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
+                        <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
                     </template>
                     <template v-else>
                         <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
@@ -842,10 +852,14 @@ export default {
             font-size: 16px;
             font-weight: bold;
         }
+        &:hover{
+            opacity: 0.8;
+        }
     }
     .goods_info_buy{
         cursor: pointer;
         background: #4bb16f;
+        padding:0 30px;
         i{
             font-size: 16px;
             font-weight: bold;
@@ -946,7 +960,7 @@ export default {
     }
     
     .goods_info_active{
-        margin-top: 20px;
+    
         span{
             color:#999;
         }
@@ -965,12 +979,12 @@ export default {
             background: #999;
         }
         .goods_skill{
-            margin-bottom: 10px;
-            background: #fef0f0;
-            border:1px solid  #fde2e2;
+           
+            background: #fe0851;
+            border:1px solid  #fe0851;
             font-size: 14px;
             span{
-                color:#f56c6c;
+                color:#fff;
                 line-height: 40px;
                 i{
                     font-size: 18px;
@@ -978,6 +992,7 @@ export default {
                     margin-right: 20px;
                     margin-left: 20px;
                     float: left;
+                    color:#fff;
                 }
             }
             span.span_time{
@@ -985,19 +1000,15 @@ export default {
                 margin-right: 30px;
             }
         }
-        .tuan_active{
+         .tuan_active{
             cursor: pointer;
-            background: #f0f9eb;
-            border: 1px solid #e1f3d8;
+            background: #4bb16f;
+            border: 1px solid #4bb16f;
+
             span{
-                color:#67c23a;
+                color:#fff;
             }
-            &:hover{
-                background: #67c23a;
-                span{
-                    color:#fff;
-                }
-            }
+            
         }
     }
 }
@@ -1170,7 +1181,7 @@ export default {
     }
 }
 .tuan_list{
-    margin-bottom: 10px;
+    margin: 10px 0;
     height: 32px;
     
     .tuan_item{
@@ -1210,6 +1221,9 @@ export default {
             float: right;
             line-height: 32px;
             padding:0 10px;
+             &:hover{
+            opacity: 0.8;
+        }
         }
     }
 }

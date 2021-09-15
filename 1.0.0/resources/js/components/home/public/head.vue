@@ -40,10 +40,10 @@
                             <router-link to="/seckill">秒杀专区</router-link>
                         </li>
                         <li>
-                            <router-link to="/collective/eyJrZXl3b3JkcyI6IiJ9">拼团专区</router-link>
+                            <router-link to="/collective">拼团专区</router-link>
                         </li>
                         <li>
-                            <router-link to="/collective/eyJrZXl3b3JkcyI6IiJ9">优惠券</router-link>
+                            <router-link to="/coupon">优惠券</router-link>
                         </li>
                         <!-- <li>
                             <router-link to="/integral/index">积分商城</router-link>
@@ -195,6 +195,9 @@ export default {
             display: block;
         }
         ul li a:hover{
+            background: #4bb16f;
+        }
+        ul li a.router-link-active{
             background: #4bb16f;
         }
     }

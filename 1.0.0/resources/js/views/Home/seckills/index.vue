@@ -20,19 +20,19 @@
                 <a-col :span="6">
                     <div :class="timeIndex==1?'item ck':'item'" @click="timeChange(1)">
                         <span class="title">{{timeList[1]||'00'}}:00 场</span>
-                        <span class="name">预约中</span>
+                        <span class="name">即将开始</span>
                     </div>
                 </a-col>
                 <a-col :span="6">
                     <div :class="timeIndex==2?'item ck':'item'" @click="timeChange(2)">
                         <span class="title">{{timeList[2]||'00'}}:00 场</span>
-                        <span class="name">预约中</span>
+                        <span class="name">即将开始</span>
                     </div>
                 </a-col>
                 <a-col :span="6">
                     <div :class="timeIndex==3?'item ck':'item'" @click="timeChange(3)">
                         <span class="title">{{timeList[3]||'00'}}:00 场</span>
-                        <span class="name">预约中</span>
+                        <span class="name">即将开始</span>
                     </div>
                 </a-col>
             </a-row>
@@ -42,16 +42,28 @@
         <!-- 产品列表 S -->
         <div class="goods_list w1200" v-if="list.length>0">
             <ul>
-                <li v-for="(v,k) in list" :key="k"><router-link :to="'/goods/'+v.id">
+                <li v-for="(v,k) in list" :key="k">
+                    <router-link :to="'/goods/'+v.id">
                     <div class="product_act_in">
-                        <dl>
+                        <!-- <dl>
                             <dt><img v-lazy="v.goods_master_image" :alt="v.goods_name" /></dt>
                             <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
                             <dd class="product_subtitle">{{v.goods_subname||'-'}}</dd>
                             <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}元</span></dd>
                         </dl>
+              -->
+                                <dl>
+                                    <dt><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></dt>
+                                    <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
+                                    <!-- <dd class="product_subtitle">{{v.goods_subname}}</dd> -->
+                                    <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
+                                    <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}元</span></dd>
+                                    <dd class="product_buy">立即抢购</dd>
+                                </dl>
+                        
                     </div>
-                </router-link></li>
+                </router-link>
+                </li>
             </ul>
             <div class="clear"></div>
             <div class="fy" style="margin-top:30px">
@@ -60,12 +72,14 @@
         </div>
         <a-empty v-else style="margin-top:250px" />
         <!-- 产品列表 E -->
+        <loading v-if="isLoading" />
     </div>
 </template>
 
 <script>
+import Loading from '../../../components/home/public/loading.vue';
 export default {
-    components: {},
+    components: {Loading},
     props: {},
     data() {
       return {
@@ -79,6 +93,7 @@ export default {
               total:0,
               start_time:0,
           },
+          isLoading:true,
       };
     },
     watch: {},
@@ -86,12 +101,14 @@ export default {
     methods: {
         onload(){
             this.timeList = [moment().format('H'),moment().add(1,'hours').format('H'),moment().add(2,'hours').format('H'),moment().add(3,'hours').format('H')]
-            this.get_list();
+           this.isLoading=true;
+           this.get_list();
         },
         get_list(){
             this.$get(this.$api.homeSeckill,this.params).then(res=>{
                 this.params.total = res.data.total;
                 this.list = res.data.data;
+                this.isLoading=false;
             })
         },
         onChange(e){
@@ -143,18 +160,18 @@ export default {
         margin-top: 30px;
         ul li{
             width: 220px;
-            height: 300px;
+           height: 340px;
             margin-bottom: 14px;
             margin-right: 20px;
             box-sizing: border-box;
-            &:nth-child(4n){
+            &:nth-child(5n){
                 margin-right: 0;
             }
             
             float: left;
             .product_act_in{
                 width: 220px;
-                height: 300px;
+                padding:0 0 0 0;
                 background: #fff;
                 box-sizing: border-box;
                 -webkit-transition: all .2s linear;
@@ -162,46 +179,65 @@ export default {
                 // background: #fafafa;
                 border:1px solid #f1f1f1;
             }
-            dl dt{
-                width: 140px;
-                height: 140px;
-                margin:0 auto;
-                padding-top: 20px;
-            }
-            dl dt img{
-                width: 140px;
-                height: 140px;
-            }
-            dl dd{
-                width: 190px;
-                overflow: hidden;
-                text-align: center;
-                margin:0 auto;
-                line-height: 30px;
-            }
-            dl dd.product_title{
+             dl dt{
+            width: 180px;
+            height: 180px;
+            margin:20px auto 0 auto;
+        }
+        dl dt img{
+            width: 100%;
+            height: 100%;
+        }
+        dl dd{
+            width: 190px;
+            overflow: hidden;
+            text-align: center;
+            margin:0 auto;
+        }
+        dl dd.product_title{
+            font-size: 14px;
+            margin-top: 5px;
+            height: 30px;
+            line-height: 30px; text-align: left;
+        }
+        dl dd.product_subtitle{
+            margin-top: 0px;
+            font-size: 12px;
+            color:#b0b0b0;
+            line-height: 14px;
+            text-align: left;
+        }
+        dl dd.product_price{
+            font-size: 16px;
+            color:#ca151e;
+            line-height: 34px;
+             text-align: left;
+            span{
                 font-size: 14px;
-                margin-top: 30px;
-                height: 30px;
-            }
-            dl dd.product_subtitle{
-                margin-top: 0px;
-                font-size: 12px;
                 color:#b0b0b0;
-                line-height: 14px;
+                margin-left: 8px;
+                text-decoration: line-through;
             }
-            dl dd.product_price{
-                margin-top: 10px;
-                font-size: 16px;
-                color:#ca151e;
-                line-height: 34px;
-                span{
-                    font-size: 14px;
-                    color:#b0b0b0;
-                    margin-left: 8px;
-                    text-decoration: line-through;
-                }
+        }
+        .product_store_name{
+            text-align: left;
+            span{
+                background: #4bb16f;
+                color: #fff;
+                font-size: 12px;
+                padding:0 10px;
+                height: 24px;line-height: 24px;
+                border-radius: 2px;
             }
+        }
+        .product_buy{
+               background: #e43838;
+    color: #fff;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 5px;
+        }
         }
         
         ul li:hover .product_act_in{
@@ -230,7 +266,7 @@ export default {
                 color:#666;
             }
             &.ck{
-                background: #ca151e;
+                background: #4bb16f;
                 color:#fff;
                 .title{
                     font-weight: bold;

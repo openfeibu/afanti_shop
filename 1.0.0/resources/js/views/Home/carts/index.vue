@@ -26,10 +26,14 @@
                     <ul>
                         <li v-for="(vo,key) in v.cart_list" :key="key" :class="{'active' : vo.checked}">
                             <span class="checkbox_goods"><a-checkbox :indeterminate="false" :checked='vo.checked' @change="onChange(k,key)" /></span>
-                            <router-link :to="'/goods/'+vo.goods_id"><dl class="goods_item">
-                                <dt><img :src="vo.goods_image||require('@/asset/order/default.png')" :alt="vo.goods_name"></dt>
-                                <dd>{{vo.goods_name}}</dd>
-                            </dl></router-link>
+                           
+                            <dl class="goods_item">
+                                 <router-link :to="'/goods/'+vo.goods_id">
+                                    <dt><img :src="vo.goods_image||require('@/asset/order/default.png')" :alt="vo.goods_name"></dt>
+                                    <dd>{{vo.goods_name}}</dd>
+                                  </router-link>
+                            </dl>
+                          
                             <span class="attr">{{vo.sku_name||'-'}}</span>
                             <span class="price">￥{{vo.goods_price}}</span>
                             <span class="num">

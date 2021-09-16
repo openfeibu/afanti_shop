@@ -125,6 +125,7 @@ export default {
           freight: 0,
           discount: 0,
           province_id:0,
+          modal:null
       };
     },
     watch: {},
@@ -184,6 +185,7 @@ export default {
         },
         // 订单建立前预览商品信息
         create_order_before(){
+            let that = this;
             this.$get(this.$api.homeOrder+'/create_order_before',{params:this.$route.params.params}).then(res=>{
                 if(res.code == 200){
                     this.order = res.data;
@@ -191,7 +193,14 @@ export default {
                     this.couponChangeHandle();
                 }else{
                     // this.$message.destroy();
-                    this.$message.error(res.msg)
+                    console.log(that.$router.history.matched)
+                    this.modal =  this.$error({
+                        title: '阿凡提',
+                        content: '有产品库存信息发生变化，请返回购物车修改',
+                        onOk() {
+                            return that.$router.push("/cart")
+                        },
+                    });
                     // return this.$router.go(-1)
                 }
                 
@@ -228,6 +237,12 @@ export default {
     },
     mounted() {
 
+    },
+    beforeDestroy(){
+        if(this.modal != null){
+this.modal.destroy();
+        }
+         
     }
 };
 </script>

@@ -19,7 +19,7 @@ class CartService extends BaseService{
         if(!$user_info = $user_service->getUserInfo()){
             return $this->format_error(__('carts.add_error').'4'); // 获取用户失败
         }
-        
+        $this->autoUpdate($user_info['id']);
         $cart_list = $cart_model->where(['user_id'=>$user_info['id']])
                                 // 获取店铺信息
                                 ->with(['store'=>function($q){
@@ -33,9 +33,26 @@ class CartService extends BaseService{
                                 }])
                                 ->groupBy('store_id')
                                 ->get();
+
         return $this->format(new CartCollection($cart_list));
     }
-
+    public function autoUpdate($user_id)
+    {
+        $cart_list = Cart::where(['user_id'=>$user_id])->with(['goods'=>function($q){
+            return $q->select('id','goods_stock');
+        }])->get();
+        foreach ($cart_list as $key => $cart)
+        {
+            $goods_stock = $cart->goods->goods_stock;
+            if(!empty($cart->goods_sku)){
+                $goods_stock = $cart->goods_sku->goods_stock;
+            }
+            if($cart->buy_num > $goods_stock)
+            {
+                Cart::where('id',$cart->id)->update(['buy_num' => $goods_stock]);
+            }
+        }
+    }
     // 获取购物车数量
     public function getCount(){
         $cart_model = new Cart();

@@ -64,12 +64,12 @@
                     <div class="coupons_block" v-if="coupons.length>0">
                         <span>优惠券：</span>
                         <ul>
-                            <li v-for="(v,k) in coupons" :key="k"  v-if='k<5'  @click="receiveCoupon(v.id)" >
+                            <li v-for="(v,k) in coupons" :key="k"  v-if='k<4'  @click="receiveCoupon(v.id)" >
                                 <div class="price">满{{v.use_money}}减{{v.money}} </div>
                                
                             </li>
                         </ul>
-                        <div class="coupon-more" @click="$router.push('/coupon')">
+                        <div class="coupon-more" @click="showDrawer">
                             更多>
                         </div>
                     </div>
@@ -222,7 +222,36 @@
             </div>
             <div class="clear"></div>
         </div>
-
+        <a-drawer
+        title="领取优惠券"
+        placement="left"
+        :closable="false"
+        :visible="visible"
+        :after-visible-change="afterVisibleChange"
+        @close="onClose"
+        >
+             <div class="coupon_list_item" v-for="(v,k) in coupons" :key="k" @click="receiveCoupon(v.id)">
+                <div class="q-price ">
+                    <em>¥</em>
+                    <strong>{{v.money}}</strong>
+                    <span class="q-limit" data-tips="">满{{v.use_money}}元可用</span>
+                </div>
+              
+            </div>
+              
+        </a-drawer>
+        <a-modal
+            title="阿凡提"
+            cancelText="取消"
+            okText="去购物车结算"
+            :visible="modal"
+            closable="false"
+            @ok="modalOk"
+            @cancel="modalCancel"
+           okType="danger"
+            >
+            <p>商品已成功加入购物车！</p>
+        </a-modal>
         <loading v-if="isLoading"></loading>
 
     </div>
@@ -271,6 +300,8 @@ export default {
           collective_list:[], // 正在进行的团
           collective_id:0,
           isLoading:true,
+          visible: false,
+          modal: false,
       };
     },
     watch: {
@@ -395,7 +426,8 @@ export default {
             };
             this.$post(this.$api.homeCarts,params).then(res=>{
                 this.cart_count();
-                this.$returnInfo(res);
+      
+                this.modal = true;
             })
             // this.$get(this.$api.homeCarts).then(res=>{
             //     this.$returnInfo(res);
@@ -518,15 +550,15 @@ export default {
         // 购买数量修改
         change_buy_num:function(type){
             if(type){
-                if(this.buy_num+1>this.goods_info.goods_stock){
+                if(parseInt(this.buy_num)+1>this.goods_info.goods_stock){
                     return this.$message.error('库存不足');
                 }
-                this.buy_num += 1;
+                this.buy_num = parseInt(this.buy_num) + 1;
             }else{
-                if(this.buy_num<=1){
+                if(parseInt(this.buy_num)<=1){
                     return this.$message.error('最低购买数量为 1');
                 }
-                this.buy_num -= 1
+                this.buy_num = parseInt(this.buy_num) - 1
             }
         },
         goods_fav(){
@@ -563,8 +595,22 @@ export default {
             this.$post(this.$api.homeCoupon+'/receive',{id:id}).then(res=>{
                 return this.$returnInfo(res)
             })
-        }
-        
+        },
+        afterVisibleChange(val) {
+        console.log('visible', val);
+        },
+        showDrawer() {
+        this.visible = true;
+        },
+        onClose() {
+        this.visible = false;
+        },
+        modalOk() {
+            this.$router.push('/cart') 
+        },
+        modalCancel() {
+        this.modal = false;
+        },
     },
     created() {
         this.goods_id = this.$route.params.id;
@@ -1131,7 +1177,7 @@ export default {
 }
 .coupons_block{
     margin-top: 20px;
-    width: 550px;
+    width: 100%;
      span {
          display: inline-block;*display: inline-block;*zoom:1;vertical-align: middle;color: #999;font-size:14px;
      }
@@ -1227,5 +1273,44 @@ export default {
         }
     }
 }
+.coupon_list_item{
+        width:100%;margin:10px 0;
+        height: 100px;
+        border-radius: 5px;
+        cursor: pointer;
+        border:1px solid #eee;background: #FCEEF0 url(~@/asset/pc/couponBtn.png) no-repeat right center/auto 100%;
+        &.active{
+            background: #eeeeee url(~@/asset/pc/couponBtn2.png) no-repeat right center/auto 100%;
+             .q-price {color:#666}
+        }
+        .q-price {
+            text-align: center;
+            padding:20px 0 0 0;
+            width: 85%;
+            height: auto;
+            line-height: 30px;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #e43838;
+            font-size: 14px;
+            strong{
+                font-size: 32px;
+            }
+            .q-limit{display: block;}
+        }
+        .q-price em {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            font: 400 18px arial;
+            vertical-align: top;
+            margin: 3px 3px 0 0;
+        }
+        .q-range{
+            text-align: left;font-size: 14px;color: #666;margin-left: 30px;
+        }
+    }
 
 </style>

@@ -33,9 +33,9 @@
                             <span class="attr">{{vo.sku_name||'-'}}</span>
                             <span class="price">￥{{vo.goods_price}}</span>
                             <span class="num">
-                                <font @click="edit(vo.cart_id,0)"><a-icon type="minus" /></font>
+                                <font @click="edit(vo.cart_id,0,k,key)"><a-icon type="minus" /></font>
                                 <input type="text" disabled v-model="vo.buy_num">
-                                <font @click="edit(vo.cart_id,1)"><a-icon type="plus" /></font>
+                                <font @click="edit(vo.cart_id,1,k,key)"><a-icon type="plus" /></font>
                             </span>
                             <span class="total">￥{{$formatFloat(vo.goods_price*vo.buy_num,2)}}</span>
                             <span class="handle" @click="del(vo.cart_id)">移除</span>
@@ -47,26 +47,27 @@
         </div>
 
 
-        <div class="cart_th" v-if="params.total>0">
+        <div class="cart_footer" v-if="params.total>0">
+            <div class="w1200">
             <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
-            <span class="goods"></span>
-            <span class="attr"></span>
-            <span class="price"></span>
-            <span class="num"></span>
+            
             <span class="total" >已选择 <font color="#ca151e">{{allCount}}</font> 件，总计 <font color="#ca151e">{{$formatFloat(allPrice)}} </font>元</span>
-            <span class="handle" style="width:140px;text-align:right;"><div class="error_btn" style="padding:5px 30px;" @click="buy">结算</div></span>
+            <span class="handle" style="width:140px;"><div class="error_btn" @click="buy">结算</div></span>
+            </div>
         </div>
 
         <div style="min-height:600px;padding-top:100px" v-else>
             <a-empty />
         </div>
         
+        <loading v-if="isLoading" ></loading>
 
 
     </div>
 </template>
 
 <script>
+
 export default {
     components: {},
     props: {},
@@ -82,31 +83,58 @@ export default {
           checkAll:false,
           allCount:0,// 选中商品数量
           allPrice:0.00,// 选中商品价格
+          isLoading:true
       };
     },
     watch: {},
     computed: {},
     methods: {
         onload(){
+            
             this.$get(this.$api.homeCarts,this.params).then(res=>{
                 this.params.total = res.data.total;
                 this.params.per_page = res.data.per_page;
                 this.params.current_page = res.data.current_page;
                 this.list = res.data.data;
-                this.list.forEach(item=>{
+                // this.list.forEach(item=>{
 
-                })
+                // })
+                this.isLoading = false
             })
         },
        
         del(id){
-            this.$delete(this.$api.homeCarts+'/'+id).then(res=>{
-                this.onload();
-                this.cart_count();
-                return this.$returnInfo(res);
-            })
+                let that= this;
+                that.$confirm({
+                    title: '是否要删除该商品',
+                    content: '',
+                    okText: '确认',
+                    okType: 'danger',
+                    cancelText: '取消',
+                    onOk() {
+                         that.$delete(that.$api.homeCarts+'/'+id).then(res=>{
+                            that.onload();
+                            that.cart_count();
+                            return that.$returnInfo(res);
+                        })
+                    },
+                    onCancel() {
+                    console.log('Cancel');
+                    },
+                });
+                
+           
         },
-        edit(id,type){
+        edit(id,type,k,key){
+            console.log( id )
+            if(type == 1){
+                console.log( this.list[k].cart_list[key].buy_num )
+                this.list[k].cart_list[key].buy_num += 1
+            }else if (type == 0){
+                this.list[k].cart_list[key].buy_num -= 1
+            }   
+            return false;
+
             this.$put(this.$api.homeCarts+'/'+id,{is_type:type,buy_num:1}).then(res=>{
                 this.onload();
                 this.cart_count();
@@ -226,20 +254,20 @@ export default {
     .goods_item{
         float: left;
         dt{
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 80px;
             background: #efefef;
             margin:0 20px;
             border-radius: 2px;
             float: left;
             img{
-                width: 40px;
-                height: 40px;
+                width: 80px;
+                height: 80px;
                 border-radius: 2px;
             }
         }
         dd{
-            width: 350px;
+            width: 300px;
             float: left;
         }
     }
@@ -249,7 +277,7 @@ export default {
     ul li{
         border:1px solid #efefef;
         padding-left: 20px;
-        height: 60px;
+        height: 120px;
         border-bottom: none;
         box-sizing: border-box;
         padding-top: 10px;
@@ -354,5 +382,34 @@ export default {
         width: 120px;
         display: inline-block;
     }
+}
+.cart_footer{
+    background: #f5f5f5;
+    padding:10px 20px;
+    height: 60px;
+    line-height: 40px;
+    .total{
+        float: left;
+        width: 950px;
+        text-align: right;
+    }
+    .handle{
+        text-align: center;
+        height: 40px;
+        float: left;
+        .error_btn{    height: 40px;
+                display: block;
+                width: 100px;
+                float: right;
+                line-height: 40px;
+                padding: 0;
+                text-align: center;
+                font-size: 16px;
+                background: #e43838;
+            }
+    }
+    .ant-checkbox-wrapper{float: left;}
+    position: fixed;bottom: 0;left:0;
+    width: 100%;
 }
 </style>

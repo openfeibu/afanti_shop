@@ -66,6 +66,7 @@ export default {
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[
+              {title:'ID',dataIndex:'id'},
               {title:'商品名称',key:'id',scopedSlots: { customRender: 'name' }},
               {title:'商品编号',dataIndex: 'goods_no'},
               {title:'上架状态',key:'id',scopedSlots: { customRender: 'goods_status' }},

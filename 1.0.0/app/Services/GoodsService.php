@@ -5,6 +5,7 @@ use App\Http\Resources\Home\GoodsResource\GoodsListCollection;
 use App\Http\Resources\Home\GoodsResource\GoodsSearchCollection;
 use App\Http\Resources\Home\GoodsResource\SeckillGoodsCollection;
 use App\Http\Resources\Home\GoodsResource\StoreGoodsListCollection;
+use App\Models\Cart;
 use App\Models\Goods;
 use App\Models\GoodsAttr;
 use App\Models\GoodsSku;
@@ -78,7 +79,7 @@ class GoodsService extends BaseService{
         $config_service = new ConfigService;
         $goods_skus_model = new GoodsSku;
         $store_id = $this->get_store(true);
-        $goods_model = $goods_model->where(['store_id'=>$store_id,'id'=>$goods_id])->first();
+        $goods_model = $goods_model->where(['id'=>$goods_id])->first();
 
         // 商品名
         if(isset(request()->goods_name) && !empty(request()->goods_name)){
@@ -314,9 +315,22 @@ class GoodsService extends BaseService{
             }
             $goods_attr = $goods_attr_model->whereIn('id',$attr_id)->with('specs')->orderBy('id','desc')->get()->toArray();
             $goods_info['goods_price'] = $sku[0]['goods_price'];
-            $goods_info['goods_price'] = $sku[0]['goods_stock'];
+            $goods_info['goods_stock'] = $sku[0]['goods_stock'];
             $goods_info['attrList'] = $goods_attr;
             $goods_info['skuList'] = $skuList;
+        }
+
+        $user_service = new UserService;
+        $user_info = $user_service->getUserInfo();
+        if($user_info)
+        {
+            $cart_model = new Cart();
+            $cart_info = $cart_model->where([
+                'user_id'=> $user_info['id'],
+                'goods_id'=> $goods_info['id'],
+                'sku_id'=> empty($sku) ? 0 : $sku[0]['id'],
+            ])->first();
+            $goods_info['goods_stock'] = empty($cart_info) ? $goods_info['goods_stock'] : $goods_info['goods_stock'] - $cart_info->buy_num;
         }
 
         $goods_class_service = new GoodsClassService;

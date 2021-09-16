@@ -30,6 +30,13 @@ class CartController extends Controller
         $rs = $cart_service->editCart($id);
         return $rs['status']?$this->success($rs['data'],$rs['msg']):$this->error($rs['msg']);
     }
+    // 修改购物车
+    public function update_number(Request $request){
+        $id = $request->id;
+        $cart_service = new CartService;
+        $rs = $cart_service->updateCart($id);
+        return $rs['status']?$this->success($rs['data'],$rs['msg']):$this->error($rs['msg']);
+    }
 
     // 删除购物车商品
     public function destroy(Cart $cart_model,$id){

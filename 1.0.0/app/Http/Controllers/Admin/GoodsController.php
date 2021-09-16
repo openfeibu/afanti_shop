@@ -111,7 +111,7 @@ class GoodsController extends Controller
     {
         $info = $goods_service->edit($id);
         if($info['status']){
-            return $this->success([],__('goods.add_success'));
+            return $this->success([],__('goods.edit_success'));
         }
     }
 

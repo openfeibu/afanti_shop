@@ -311,7 +311,6 @@ Route::namespace('Home')->group(function(){
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车
         Route::apiResource('carts','CartController')->except(['show']);
-
         // 优惠券
         Route::post('/coupons/receive','CouponController@receive_coupon'); // 领取优惠券
 

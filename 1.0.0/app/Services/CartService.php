@@ -26,7 +26,7 @@ class CartService extends BaseService{
                                     return $q->select('id','store_name','store_logo');
                                 },'carts'=>function($q) use($user_info){// 获取同一店铺的购物车数据
                                     return $q->where('user_id',$user_info['id'])->with(['goods'=>function($query){
-                                        $query->select('id','goods_name','goods_master_image','goods_price');
+                                        $query->select('id','goods_name','goods_master_image','goods_price','goods_stock');
                                     },'goods_sku'=>function($query){
                                         $query->select('id','sku_name','goods_image','goods_price');
                                     }]);
@@ -48,7 +48,7 @@ class CartService extends BaseService{
         }
         
         $cart_count = $cart_model->where(['user_id'=>$user_info['id']])
-                                ->groupBy('store_id')
+                                //->groupBy('goods_id')
                                 ->count();
         return $this->format($cart_count);
     }
@@ -82,9 +82,14 @@ class CartService extends BaseService{
         }
 
         // 获取商品店铺信息
+
         $goods_model = new Goods();
-        $goods_info = $goods_model->select('id','store_id')->with('goods_skus')->where('id',$goods_id)->first();
-        
+        $goods_info = $goods_model->select('id','store_id','goods_stock')->with('goods_skus')->where('id',$goods_id)->first();
+
+        // $goods_stock = $cart_info['sku_id'] ?  $goods_info['goods_skus'][ $cart_info['sku_id']]['goods_stock'] : $goods_info['goods_stock'];
+        $goods_stock  = $goods_info['goods_stock'];
+
+
         if(!empty(count($goods_info->goods_skus)) && $sku_id == 0){
             return $this->format_error(__('carts.not_chose_sku')); // 未选择SKU
         }
@@ -95,13 +100,17 @@ class CartService extends BaseService{
             'user_id'=>$user_info['id'],
             'goods_id'=>$goods_id,
             'sku_id'=>$sku_id,
-            // 'buy_num'=>$buy_num,
-
         ])->first();
 
         // 如果数据库不存在
         try{
             DB::beginTransaction(); // 事务开始
+            $total_buy_num = empty($cart_info) ? $buy_num : $cart_info->buy_num+$buy_num;
+            if($total_buy_num > $goods_stock)
+            {
+                $max_buy_num = empty($cart_info) ? $goods_stock : $goods_stock-$cart_info->buy_num;
+                return $this->format_error(__('carts.under_stock',['number' => $max_buy_num])); // 库存不足
+            }
             if(empty($cart_info)){
                 // 加入购物车
                     $cart_model->user_id = $user_info['id'];
@@ -144,11 +153,27 @@ class CartService extends BaseService{
         ])->first();
 
         if(empty($cart_info)){
-            return $this->format_error(__('carts.add_error').'5'); // 获取用户失败
+            return $this->format_error(__('carts.add_error').'5'); // 获取购物车失败
         }
+
+        // 获取商品店铺信息
+        /*
+         * 待优化，有属性的时候库存应使用属性的
+         */
+        $goods_model = new Goods();
+        $goods_info = $goods_model->select('id','store_id','goods_stock')->with('goods_skus')->where('id',$cart_info['goods_id'])->first();
+
+       // $goods_stock = $cart_info['sku_id'] ?  $goods_info['goods_skus'][ $cart_info['sku_id']]['goods_stock'] : $goods_info['goods_stock'];
+        $goods_stock  = $goods_info['goods_stock'];
 
         // 判断是否修改数量大于0
         if(!empty($buy_num) && $buy_num>1){
+
+            if($buy_num > $goods_stock)
+            {
+                return $this->format_error(__('carts.under_stock',['number' => $goods_stock])); // 未选择SKU
+            }
+
             $cart_info->buy_num = $buy_num;
             $cart_info->save();
             return $this->format([],__('carts.edit_success'));
@@ -165,10 +190,16 @@ class CartService extends BaseService{
             return $this->format([],__('carts.edit_success'));
         }else{
             $cart_info->buy_num += 1; // 加减购物车只能为1
+
+            if($cart_info->buy_num > $goods_stock)
+            {
+                return $this->format_error(__('carts.under_stock',['number' => $goods_stock])); // 库存不足
+            }
+
             $cart_info->save();
             return $this->format([],__('carts.edit_success'));
         }
     }
 
-    
+
 }

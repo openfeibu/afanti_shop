@@ -45,6 +45,7 @@ class CartCollection extends ResourceCollection
                                                         'goods_price'           =>  $goods_price,
                                                         'sku_name'              =>  $sku_name,
                                                         'checked'               =>  false,
+                                                        'goods_stock' => $cartItem->goods->goods_stock,
                                                     ];
                                                 }),
                 ];

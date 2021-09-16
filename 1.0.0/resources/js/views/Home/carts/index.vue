@@ -47,7 +47,7 @@
         </div>
 
 
-        <div class="cart_footer" v-if="params.total>0">
+        <div  id="cart_footer" class="cart_footer" :class="{'active' : fixed}" >
             <div class="w1200">
             <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
             
@@ -56,9 +56,9 @@
             </div>
         </div>
 
-        <div style="min-height:600px;padding-top:100px" v-else>
+        <!-- <div style="min-height:600px;padding-top:100px" v-else>
             <a-empty />
-        </div>
+        </div> -->
         
         <loading v-if="isLoading" ></loading>
 
@@ -83,7 +83,9 @@ export default {
           checkAll:false,
           allCount:0,// 选中商品数量
           allPrice:0.00,// 选中商品价格
-          isLoading:true
+          isLoading:true,
+          cartFooterTop:0,
+          fixed:false
       };
     },
     watch: {},
@@ -99,10 +101,30 @@ export default {
                 // this.list.forEach(item=>{
 
                 // })
-                this.isLoading = false
+                this.isLoading = false;
+                this.scrollFun()
             })
         },
-       
+       scrollFun(){
+           let that = this;
+           window.onscroll = function(){
+               if(that.cartFooterTop == 0){
+                  that.cartFooterTop  =  document.getElementById("cart_footer").offsetTop;
+         
+               }
+               let scrollTop = document.documentElement.scrollTop;
+               let bodyHeight = document.documentElement.clientHeight;
+            //    console.log(scrollTop+ bodyHeight )
+            //    console.log(that.cartFooterTop )
+                
+               if(scrollTop+ bodyHeight >=  that.cartFooterTop ){
+                  that.fixed = false;
+               }else if( that.fixed == false){
+                   that.fixed = true;
+               }
+           }
+           
+       },
         del(id){
                 let that= this;
                 that.$confirm({
@@ -409,7 +431,10 @@ export default {
             }
     }
     .ant-checkbox-wrapper{float: left;}
-    position: fixed;bottom: 0;left:0;
+    &.active{
+          position: fixed;bottom: 0;left:0;
     width: 100%;
+    }
+  
 }
 </style>

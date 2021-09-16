@@ -20,9 +20,8 @@ class GoodsService extends BaseService{
     public function add(){
         $goods_model = new Goods();
         $config_service = new ConfigService;
-        $store_id = $this->get_store(true);
         $data = [
-            'store_id'              => $store_id??0,
+            'store_id'              => request()->store_id??0,
             'goods_name'            => request()->goods_name,                         // 商品名
             'goods_subname'         => request()->goods_subname??'',                  // 副标题
             'goods_no'              => request()->goods_no ?? generate_goods_no(),                       // 商品编号
@@ -78,9 +77,12 @@ class GoodsService extends BaseService{
         $goods_model = new Goods();
         $config_service = new ConfigService;
         $goods_skus_model = new GoodsSku;
-        $store_id = $this->get_store(true);
         $goods_model = $goods_model->where(['id'=>$goods_id])->first();
 
+        // 展馆
+        if(isset(request()->store_id) && !empty(request()->store_id)){
+            $goods_model->store_id = request()->store_id;
+        }
         // 商品名
         if(isset(request()->goods_name) && !empty(request()->goods_name)){
             $goods_model->goods_name = request()->goods_name;

@@ -24,7 +24,6 @@ class OrderCollection extends ResourceCollection
                     'order_name'            =>  $item->order_name,
                     'order_image'           =>  $item->order_image,
                     'total_price'           =>  $item->total_price,
-                    'store_name'            =>  $item->store->store_name,
                     'buyer_name'            =>  $item->user->username??'',
                     'order_status'          =>  $item->order_status,
                     'order_status_cn'       =>  $order_service->getOrderStatusCn($item),

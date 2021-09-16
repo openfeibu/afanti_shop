@@ -177,9 +177,9 @@ export default {
             })
             if(this.order.coupon.coupon_id)
             {
-                this.discount = this.order.discount + this.$formatFloat(hh[0].money);
+                this.discount = this.$formatFloat(this.order.discount)+this.$formatFloat(hh[0].money);
             }else{
-                this.discount = this.order.discount;
+                this.discount = this.$formatFloat(this.order.discount);
             }
         },
         // 订单建立前预览商品信息

@@ -45,8 +45,11 @@ export function returnInfo(res) {
 //     return s/temp;  
 // }
 export function formatFloat(value, length = 2) {
-
-    return value.toFixed(length);
+    if(typeof value !== 'number')
+    {
+        value = parseFloat(value);
+    }
+    return parseFloat(value.toFixed(length));
 }
 
 function padLeftZero(str) {

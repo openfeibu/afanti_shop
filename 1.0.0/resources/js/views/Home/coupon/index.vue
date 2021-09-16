@@ -11,7 +11,7 @@
         <div class="s_goods_content w1200" v-if="list.length > 0">
             <!-- 产品列表 S -->
             <div class="coupon_list clear">
-                <div class="coupon_list_item" v-for="(v,k) in list" :key="k" @click="receiveCoupon(v.id)">
+                <div class="coupon_list_item active" v-for="(v,k) in list" :key="k" @click="receiveCoupon(v.id)">
                     <div class="q-price ">
                         <em>¥</em>
                         <strong>{{v.money}}</strong>
@@ -103,7 +103,11 @@ export default {
         height: 120px;
         border-radius: 5px;
         cursor: pointer;
-        border:1px solid #eee;background: #fff url(~@/asset/pc/couponBtn.png) no-repeat right center/auto 100%;
+        border:1px solid #eee;background: #FCEEF0 url(~@/asset/pc/couponBtn.png) no-repeat right center/auto 100%;
+        &.active{
+            background: #eeeeee url(~@/asset/pc/couponBtn2.png) no-repeat right center/auto 100%;
+             .q-price {color:#666}
+        }
         .q-price {
             padding:20px 0 0 30px;
             width: 220px;

@@ -274,67 +274,79 @@ export default {
         .goods_list{
             margin-top: 30px;
             ul li{
-                width: 220px;
-                height: 300px;
-                margin-bottom: 14px;
-                margin-right: 20px;
-                box-sizing: border-box;
-                &:nth-child(4n){
-                    margin-right: 0;
-                }
-                
-                float: left;
-                .product_act_in{
-                    width: 220px;
-                    height: 300px;
-                    background: #fff;
-                    box-sizing: border-box;
-                    -webkit-transition: all .2s linear;
-                    transition: all .2s linear;
-                    // background: #fafafa;
-                    border:1px solid #f1f1f1;
-                }
-                dl dt{
-                    width: 160px;
-                    height: 160px;
-                    margin:0 auto;
-                    padding-top: 20px;
-                }
-                dl dt img{
-                    width: 160px;
-                    height: 160px;
-                }
-                dl dd{
-                    width: 190px;
-                    overflow: hidden;
-                    text-align: center;
-                    margin:0 auto;
-                    line-height: 30px;
-                }
-                dl dd.product_title{
-                    font-size: 14px;
-                    margin-top: 30px;
-                    height: 30px;
-                }
-                dl dd.product_subtitle{
-                    margin-top: 0px;
-                    font-size: 12px;
-                    color:#b0b0b0;
-                    line-height: 14px;
-                }
-                dl dd.product_price{
-                    margin-top: 10px;
-                    font-size: 16px;
-                    color:#ca151e;
-                    line-height: 34px;
-                    span{
-                        font-size: 14px;
-                        color:#b0b0b0;
-                        margin-left: 8px;
-                        text-decoration: line-through;
-                    }
-                }
+  
+        cursor: pointer;
+        width: 220px;
+        height: 300px;
+        margin-bottom: 14px;
+        margin-left: 20px;
+        box-sizing: border-box;
+        float: left;
+        .product_act_in{
+            width: 220px;
+            height: 300px;
+            background: #fff;
+            box-sizing: border-box;
+            transition: all 0.2s linear;
+        }
+        dl{
+            padding-top: 10px;
+        }
+        dl dt{
+            width: 180px;
+            height: 180px;
+            margin:0 auto;
+        }
+        dl dt img{
+            width: 100%;
+            height: 100%;
+        }
+        dl dd{
+            width: 190px;
+            overflow: hidden;
+            text-align: center;
+            margin:0 auto;
+        }
+        dl dd.product_title{
+            font-size: 14px;
+            margin-top: 5px;
+            height: 30px;
+            line-height: 30px; text-align: left;
+        }
+        dl dd.product_subtitle{
+            margin-top: 0px;
+            font-size: 12px;
+            color:#b0b0b0;
+            line-height: 14px;
+            text-align: left;
+        }
+        dl dd.product_price{
+            font-size: 16px;
+            color:#ca151e;
+            line-height: 34px;
+             text-align: left;
+            span{
+                font-size: 14px;
+                color:#b0b0b0;
+                margin-left: 8px;
+                text-decoration: line-through;
             }
+        }
+        .product_store_name{
+            text-align: left;
+            span{
+                background: #4bb16f;
+                color: #fff;
+                font-size: 12px;
+                padding:0 10px;
+                height: 24px;line-height: 24px;
+                border-radius: 2px;
+            }
+        }
+         &:nth-child(4n){
+                margin-left: 0;
+            }
+    }
             
             ul li:hover .product_act_in{
                 box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

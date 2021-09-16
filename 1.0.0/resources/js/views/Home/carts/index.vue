@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div class="cart_th" v-if="params.total>0">
+        <div class="cart_th" >
             <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
             <span class="goods">商品</span>
             <span class="attr">规格</span>
@@ -19,12 +19,12 @@
             <span class="handle">操作</span>
         </div>
 
-        <div class="cart_table" v-if="params.total>0">
+        <div class="cart_table" >
             <div class="store_list" v-for="(v,k) in list" :key="k">
                 <div class="store_title"><a-checkbox :indeterminate="v.css" :checked='v.checked' @change="onCheckAllStoreChange(k)">{{v.store_name}}</a-checkbox><span class="open_store" @click="$router.push('/store/'+v.store_id)">进入展馆</span></div>
-                <div class="goods_list">
+                <div class="goods_list" >
                     <ul>
-                        <li v-for="(vo,key) in v.cart_list" :key="key">
+                        <li v-for="(vo,key) in v.cart_list" :key="key" :class="{'active' : vo.checked}">
                             <span class="checkbox_goods"><a-checkbox :indeterminate="false" :checked='vo.checked' @change="onChange(k,key)" /></span>
                             <router-link :to="'/goods/'+vo.goods_id"><dl class="goods_item">
                                 <dt><img :src="vo.goods_image||require('@/asset/order/default.png')" :alt="vo.goods_name"></dt>
@@ -52,7 +52,7 @@
             <a-checkbox :indeterminate="indeterminate" :checked="checkAll" @change="onCheckAllChange">全选</a-checkbox>
             
             <span class="total" >已选择 <font color="#ca151e">{{allCount}}</font> 件，总计 <font color="#ca151e">{{$formatFloat(allPrice)}} </font>元</span>
-            <span class="handle" style="width:140px;"><div class="error_btn" @click="buy">结算</div></span>
+            <span class="handle" style="width:140px;"><div class="error_btn" :class="{'active' : allCount > 0 }" @click="buy">结算</div></span>
             </div>
         </div>
 
@@ -74,9 +74,7 @@ export default {
     data() {
       return {
           params:{
-              page:1,
-              per_page:100,
-              total:0,
+             
           },
           list:[],
           indeterminate:false,
@@ -85,7 +83,10 @@ export default {
           allPrice:0.00,// 选中商品价格
           isLoading:true,
           cartFooterTop:0,
-          fixed:false
+          fixed:false,
+          clickId:null,
+          clickTimer:null
+          
       };
     },
     watch: {},
@@ -94,6 +95,7 @@ export default {
         onload(){
             
             this.$get(this.$api.homeCarts,this.params).then(res=>{
+                console.log(res.data.data)
                 this.params.total = res.data.total;
                 this.params.per_page = res.data.per_page;
                 this.params.current_page = res.data.current_page;
@@ -148,13 +150,37 @@ export default {
            
         },
         edit(id,type,k,key){
-            console.log( id )
+            let that = this;
+            if(id == that.clickId){
+                //同个商品点多次
+                clearTimeout(that.clickTimer);
+            }else{
+                that.clickId = id;
+            }
+            let Num = that.list[k].cart_list[key].buy_num ;
             if(type == 1){
-                console.log( this.list[k].cart_list[key].buy_num )
-                this.list[k].cart_list[key].buy_num += 1
+                console.log(parseInt(that.list[k].cart_list[key].goods_stock))
+                if(Num+1 > parseInt(that.list[k].cart_list[key].goods_stock)){
+                     return this.$message.error('库存不足');
+                   
+                }
+                that.list[k].cart_list[key].buy_num += 1
             }else if (type == 0){
-                this.list[k].cart_list[key].buy_num -= 1
+                if(Num-1 == 0){
+                     return this.$message.error('最低购买数量为1');
+                   
+                }
+                that.list[k].cart_list[key].buy_num -= 1
             }   
+            that.onCheckConst();
+            that.clickTimer = setTimeout(function(){
+                that.$put(that.$api.homeCarts+'/'+id,{buy_num:that.list[k].cart_list[key].buy_num}).then(res=>{
+                    // that.onload();
+                    that.cart_count();
+                    
+                    
+                })
+            },500)
             return false;
 
             this.$put(this.$api.homeCarts+'/'+id,{is_type:type,buy_num:1}).then(res=>{
@@ -273,6 +299,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .goods_list{
+ 
     .goods_item{
         float: left;
         dt{
@@ -306,6 +333,9 @@ export default {
         &:last-child{
             border-bottom: 1px solid #efefef;
         }
+           &.active{
+        background-color: #f5fff9;
+    }
         span{
             float: left;
         }
@@ -427,7 +457,10 @@ export default {
                 padding: 0;
                 text-align: center;
                 font-size: 16px;
-                background: #e43838;
+                background: #8a8585;
+                &.active{
+                    background: #e43838;
+                }
             }
     }
     .ant-checkbox-wrapper{float: left;}

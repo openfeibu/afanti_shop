@@ -78,7 +78,7 @@ class OrderService extends BaseService{
         $collective_service = new CollectiveService();
 
         // 循环生成订单 多个商家则生成多个订单
-        //try{
+        try{
             DB::beginTransaction();
                 $resp_data = [];
                 $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
@@ -193,11 +193,11 @@ class OrderService extends BaseService{
                 $this->delCart();
             DB::commit();
             return $this->format($resp_data);
-//        }catch(\Exception $e){
-//            Log::channel('qwlog')->debug('createOrder:'.json_encode($e->getMessage()));
-//            DB::rollBack();
-//            return $this->format_error(__('orders.error'));
-//        }
+        }catch(\Exception $e){
+            Log::channel('qwlog')->debug('createOrder:'.json_encode($e->getMessage()));
+            DB::rollBack();
+            return $this->format_error(__('orders.error'));
+        }
         
 
     }
@@ -541,6 +541,7 @@ class OrderService extends BaseService{
         $total_weight = 0;
         $discount = 0; //满减+拼团，不含优惠券，优惠卷需要根据用户选择
         $first_goods_id = 0;
+
         foreach($params['order'] as $v){
             $data = [];
             $data = $goods_model->with(['store'=>function($q){

@@ -32,7 +32,7 @@ class CartService extends BaseService{
                                     }]);
                                 }])
                                 ->groupBy('store_id')
-                                ->paginate(request()->per_page??30);
+                                ->get();
         return $this->format(new CartCollection($cart_list));
     }
 

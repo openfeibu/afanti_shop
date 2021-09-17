@@ -26,14 +26,13 @@ class CartService extends BaseService{
                                     return $q->select('id','store_name','store_logo');
                                 },'carts'=>function($q) use($user_info){// 获取同一店铺的购物车数据
                                     return $q->where('user_id',$user_info['id'])->with(['goods'=>function($query){
-                                        $query->select('id','goods_name','goods_master_image','goods_price','goods_stock');
+                                        $query->select('id','goods_name','goods_master_image','goods_price','goods_stock','goods_status');
                                     },'goods_sku'=>function($query){
                                         $query->select('id','sku_name','goods_image','goods_price');
                                     }]);
                                 }])
                                 ->groupBy('store_id')
                                 ->get();
-
         return $this->format(new CartCollection($cart_list));
     }
     public function autoUpdate($user_id)
@@ -41,15 +40,19 @@ class CartService extends BaseService{
         $cart_list = Cart::where(['user_id'=>$user_id])->with(['goods'=>function($q){
             return $q->select('id','goods_stock');
         }])->get();
+
         foreach ($cart_list as $key => $cart)
         {
-            $goods_stock = $cart->goods->goods_stock;
-            if(!empty($cart->goods_sku)){
-                $goods_stock = $cart->goods_sku->goods_stock;
-            }
-            if($cart->buy_num > $goods_stock)
+            if(!empty($cart->goods))
             {
-                Cart::where('id',$cart->id)->update(['buy_num' => $goods_stock]);
+                $goods_stock = $cart->goods->goods_stock;
+                if(!empty($cart->goods_sku)){
+                    $goods_stock = $cart->goods_sku->goods_stock;
+                }
+                if($cart->buy_num > $goods_stock)
+                {
+                    Cart::where('id',$cart->id)->update(['buy_num' => $goods_stock]);
+                }
             }
         }
     }

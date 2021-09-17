@@ -45,9 +45,10 @@ class CartCollection extends ResourceCollection
                                                         'goods_price'           =>  $goods_price,
                                                         'sku_name'              =>  $sku_name,
                                                         'checked'               =>  false,
-                                                        'goods_stock' => $cartItem->goods->goods_stock,
+                                                        'goods_stock' => $cartItem->goods->goods_stock??0,
+                                                        'goods_status' => !empty($cartItem->goods) && $cartItem->goods->goods_status == 1 ? 1 : 0,
                                                     ];
-                                                }),
+                                                })->sortBy('goods_status'),
                 ];
             }),
 

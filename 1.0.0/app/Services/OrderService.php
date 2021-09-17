@@ -546,8 +546,11 @@ class OrderService extends BaseService{
             $data = [];
             $data = $goods_model->with(['store'=>function($q){
                 return $q->select('id','store_name','store_logo');
-            }])->select('id','store_id','goods_name','goods_master_image','goods_price','goods_stock','goods_weight','freight_id')->where('id',$v['goods_id'])->first();
-
+            }])->select('id','store_id','goods_name','goods_master_image','goods_price','goods_stock','goods_weight','freight_id','goods_status')->where('id',$v['goods_id'])->first();
+            if(!$data or $data['goods_status'] != 1)
+            {
+                return $this->format_error(__('orders.goods_failure'));
+            }
             $first_goods_id = $first_goods_id ? $first_goods_id : $v['goods_id'];
             $data['sku_name'] = '-';
             $data['buy_num'] = abs(intval($v['buy_num']));
@@ -593,9 +596,8 @@ class OrderService extends BaseService{
                 $this->cartId[] = $v['cart_id'];
             }
             $total_weight += $data['total_weight'];
-
-
         }
+
         $list = array_merge($list,[]);
         $create_order_data['list'] = $list;
 

@@ -11,7 +11,7 @@
         <div class="s_goods_content w1200" v-if="list.length > 0">
             <!-- 产品列表 S -->
             <div class="coupon_list clear">
-                <div class="coupon_list_item active" v-for="(v,k) in list" :key="k" @click="receiveCoupon(v.id)">
+                <div class="coupon_list_item" :class="{'active': v.coupon_log_id != null}" v-for="(v,k) in list" :key="k" @click="receiveCoupon(v.id,k)">
                     <div class="q-price ">
                         <em>¥</em>
                         <strong>{{v.money}}</strong>
@@ -62,10 +62,15 @@ export default {
    
         },
         // 领取优惠券
-        receiveCoupon(id){
-            this.$post(this.$api.homeCoupon+'/receive',{id:id}).then(res=>{
-                return this.$returnInfo(res)
-            })
+        receiveCoupon(id,k){
+            if( this.list[k].coupon_log_id == null ){
+                this.$post(this.$api.homeCoupon+'/receive',{id:id}).then(res=>{
+                    if(res.code == 200){
+                        this.list[k].coupon_log_id = 1;
+                    }
+                    return this.$returnInfo(res)
+                })
+            }
         }
     },
     created() {
@@ -96,10 +101,10 @@ export default {
 }   
 }
 .coupon_list{
-    padding:20px 0;
+    padding:40px 0;
     min-height: 500px;
     .coupon_list_item{
-        width:24%;margin:20px 0.5%;float: left;
+        width:24%;margin:10px 0.5%;float: left;
         height: 120px;
         border-radius: 5px;
         cursor: pointer;

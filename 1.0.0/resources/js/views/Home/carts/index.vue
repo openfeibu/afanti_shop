@@ -24,14 +24,14 @@
                 <div class="store_title"><a-checkbox :indeterminate="v.css" :checked='v.checked' @change="onCheckAllStoreChange(k)">{{v.store_name}}</a-checkbox><span class="open_store" @click="$router.push('/store/'+v.store_id)">进入展馆</span></div>
                 <div class="goods_list" >
                     <ul>
-                        <li v-for="(vo,key) in v.cart_list" :key="key" :class="{'active' : vo.checked}">
+                        <li v-for="(vo,key) in v.cart_list" :key="key" :class="{'active' : vo.checked}" v-if="vo.goods_status == 1" >
                             <span class="checkbox_goods"><a-checkbox :indeterminate="false" :checked='vo.checked' @change="onChange(k,key)" /></span>
                            
                             <dl class="goods_item">
-                                 <router-link :to="'/goods/'+vo.goods_id">
+                                <router-link :to="'/goods/'+vo.goods_id">
                                     <dt><img :src="vo.goods_image||require('@/asset/order/default.png')" :alt="vo.goods_name"></dt>
                                     <dd>{{vo.goods_name}}</dd>
-                                  </router-link>
+                                </router-link>
                             </dl>
                           
                             <span class="attr">{{vo.sku_name||'-'}}</span>
@@ -40,6 +40,25 @@
                                 <font @click="edit(vo.cart_id,0,k,key)"><a-icon type="minus" /></font>
                                 <input type="text" disabled v-model="vo.buy_num">
                                 <font @click="edit(vo.cart_id,1,k,key)"><a-icon type="plus" /></font>
+                            </span>
+                            <span class="total">￥{{$formatFloat(vo.goods_price*vo.buy_num,2)}}</span>
+                            <span class="handle" @click="del(vo.cart_id)">移除</span>
+                        </li>
+                        <li v-for="(vo,key) in v.cart_list" :key="key" class="failure" v-if="vo.goods_status == 0" >
+                            <span class="checkbox_goods">失效</span>
+                            <dl class="goods_item">
+                                <router-link :to="'/goods/'+vo.goods_id">
+                                    <dt><img :src="vo.goods_image||require('@/asset/order/default.png')" :alt="vo.goods_name"></dt>
+                                    <dd>{{vo.goods_name}}</dd>
+                                </router-link>
+                            </dl>
+                          
+                            <span class="attr">{{vo.sku_name||'-'}}</span>
+                            <span class="price">￥{{vo.goods_price}}</span>
+                            <span class="num">
+                            
+                                <input type="text" disabled v-model="vo.buy_num">
+                              
                             </span>
                             <span class="total">￥{{$formatFloat(vo.goods_price*vo.buy_num,2)}}</span>
                             <span class="handle" @click="del(vo.cart_id)">移除</span>
@@ -208,7 +227,7 @@ export default {
                     count++;
                 }
             })
-            // console.log(count,this.list[k].cart_list.length);
+        
             if(count==this.list[k].cart_list.length){
                 this.$set(this.list[k],'css',false);
                 this.$set(this.list[k],'checked',true);
@@ -338,8 +357,17 @@ export default {
             border-bottom: 1px solid #efefef;
         }
            &.active{
-        background-color: #f5fff9;
-    }
+            background-color: #f5fff9;
+         }
+         &.failure{
+             background-color: #f0f0f0;
+             border-bottom: 1px solid #f5fff9;
+             color:#ccc;
+             a{
+                 color:#ccc
+             }
+             .checkbox_goods{color: #666;}
+         }
         span{
             float: left;
         }

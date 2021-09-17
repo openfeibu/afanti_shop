@@ -64,7 +64,7 @@
                     <div class="coupons_block" v-if="coupons.length>0">
                         <span>优惠券：</span>
                         <ul>
-                            <li v-for="(v,k) in coupons" :key="k"  v-if='k<4'  @click="receiveCoupon(v.id)" >
+                            <li :class="{'active': v.coupon_log_id != null}" v-for="(v,k) in coupons" :key="k"  v-if="k < 4"  @click="receiveCoupon(v.id,k)" >
                                 <div class="price">满{{v.use_money}}减{{v.money}} </div>
                                
                             </li>
@@ -230,7 +230,7 @@
         :after-visible-change="afterVisibleChange"
         @close="onClose"
         >
-             <div class="coupon_list_item" v-for="(v,k) in coupons" :key="k" @click="receiveCoupon(v.id)">
+             <div class="coupon_list_item" :class="{'active': v.coupon_log_id != null}" v-for="(v,k) in coupons" :key="k" @click="receiveCoupon(v.id,k)">
                 <div class="q-price ">
                     <em>¥</em>
                     <strong>{{v.money}}</strong>
@@ -591,10 +591,15 @@ export default {
             })
         },
         // 领取优惠券
-        receiveCoupon(id){
-            this.$post(this.$api.homeCoupon+'/receive',{id:id}).then(res=>{
-                return this.$returnInfo(res)
-            })
+        receiveCoupon(id,k){
+            if( this.coupons[k].coupon_log_id == null ){
+                this.$post(this.$api.homeCoupon+'/receive',{id:id}).then(res=>{
+                    if(res.code == 200){
+                        this.coupons[k].coupon_log_id = 1;
+                    }
+                    return this.$returnInfo(res)
+                })
+            }
         },
         afterVisibleChange(val) {
         console.log('visible', val);
@@ -1203,12 +1208,16 @@ export default {
             color: #df3033;font-size: 12px;
             text-align: center;
         }
-      
+       
         &:after{
             clear: both;
             display: block;
             content:'';
         }
+        &.active{
+            background: #eeeeee ;color:#666;
+             .price {color:#666}
+        }    
 
     }
 }

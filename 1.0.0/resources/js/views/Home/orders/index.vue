@@ -240,7 +240,7 @@ export default {
     },
     beforeDestroy(){
         if(this.modal != null){
-this.modal.destroy();
+        this.modal.destroy();
         }
          
     }

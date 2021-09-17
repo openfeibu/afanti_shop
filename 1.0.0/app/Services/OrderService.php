@@ -68,7 +68,7 @@ class OrderService extends BaseService{
         if(empty($user_info)){
             return $this->format_error(__('base.error').' - order_service');
         }
-        
+
         // 实例化订单表
         $order_model = new Order();
         $order_goods_model = new OrderGoods();
@@ -84,7 +84,6 @@ class OrderService extends BaseService{
                 $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
 
                 $order_data = [
-                    'store_id' => $create_order_data['store_id'],
                     'order_no'                  =>  $make_rand, // 订单号
                     'user_id'                   =>  $user_info['id'], // 用户ID
                     'order_name'                =>  $create_order_data['order_name'], // 商品ID

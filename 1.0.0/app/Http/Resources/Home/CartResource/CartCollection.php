@@ -48,7 +48,7 @@ class CartCollection extends ResourceCollection
                                                         'goods_stock' => $cartItem->goods->goods_stock??0,
                                                         'goods_status' => !empty($cartItem->goods) && $cartItem->goods->goods_status == 1 ? 1 : 0,
                                                     ];
-                                                })->sortByDesc('goods_status'),
+                                                }),
                 ];
             }),
 

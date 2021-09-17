@@ -27,7 +27,7 @@ class CartCollection extends ResourceCollection
                     'css'                   =>  false,
                     'cart_list'             =>  $item->carts->map(function($cartItem){
 
-                                                    // 是否存在sku 
+                                                    // 是否存在sku
                                                     $goods_image = empty($cartItem->goods)?'':$this->thumb($cartItem->goods->goods_master_image,150);
                                                     $goods_price = $cartItem->goods->goods_price??'0.00';
                                                     $sku_name = '-';
@@ -48,7 +48,7 @@ class CartCollection extends ResourceCollection
                                                         'goods_stock' => $cartItem->goods->goods_stock??0,
                                                         'goods_status' => !empty($cartItem->goods) && $cartItem->goods->goods_status == 1 ? 1 : 0,
                                                     ];
-                                                })->sortBy('goods_status'),
+                                                })->sortByDesc('goods_status'),
                 ];
             }),
 

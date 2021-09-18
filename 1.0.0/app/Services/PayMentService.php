@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\OrderPay;
+use App\Services\Order\PaySuccessService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -90,75 +91,25 @@ class PayMentService extends BaseService{
         
         // 判断是否是余额支付
         if($payment_name == 'money'){
-            $pay_password = request()->pay_password;
-            if(empty($pay_password)){
-                return $this->format_error(__('orders.pay_password_error'));
-            }
-            $user_info = auth('user')->user();
-            if(!Hash::check($pay_password , $user_info->pay_password)){
-                return $this->format_error(__('orders.pay_password_error'));
-            }
-            if($order_pay->total_price>$user_info->money){
-                return $this->format_error(__('orders.balance_insufficient'));
-            }
-            // 金额日志 用户账户变更
-            $ml_service = new MoneyLogService();
-            $ml_info = $ml_service->editMoney(__('users.money_log_order'),$order_pay->user_id,-$order_pay->total_price);
-            if(!$ml_info['status']){
-                return $this->format_error($ml_info['msg']);
-            }else{
-                $order_model = new Order();
-                $oid_arr = explode(',',$order_pay->order_ids);
-                $rs = $order_model->whereIn('id',$oid_arr)->update([
-                    'order_status'  =>  2,
-                    'pay_time'      =>  now(),
-                    'payment_name'  =>  $payment_name,
-                ]);
+            $pay_success_service = new PaySuccessService();
+            return $pay_success_service->onPaymentByBalance($payment_name,$order_pay);
 
-                // 订单支付表修改状态
-                $order_pay->payment_name = $payment_name;
-                $order_pay->pay_status = 1;
-                $order_pay->order_balance = $order_pay->total_price;
-                $order_pay->save();
-
-                // 订单送积分
-                $config_service = new ConfigService();
-                $config_service->giveIntegral('order');
-
-                // 建立分销信息
-                $distribution_service = new DistributionService();
-                // $oid_arr = explode(',',$order_pay->order_ids);
-                $distribution_service->addDisLog($oid_arr);
-
-                return $this->format([],__('orders.balance_pay_success'));
-            }
         }else{
-            // 是否是在线充值
-            $isRecharge=false;
-            $rechargeBody = '商城在线充值';
-            if(!empty(request()->recharge??0)){
-                $isRecharge=true;
-            }
-            
             // 获取支付配置
             $rs = $this->getPaymentConfig($payment_name);
             if(!$rs['status']){
                 return $this->format_error($rs['msg']);
             }
+            // 根据订单支付数据查询订单名称
+            $order_id = explode(',',$order_pay->order_ids)[0];
+            if(empty($order_id)){
+                return $this->format_error(__('orders.error').' - 51');
+            }
 
-            // 假如不是充值订单则需要订单查询
-            if(!$isRecharge){
-                // 根据订单支付数据查询订单名称
-                $order_id = explode(',',$order_pay->order_ids)[0];
-                if(empty($order_id)){
-                    return $this->format_error(__('orders.error').' - 51');
-                }
-
-                $order_model = new Order();
-                $order_info = $order_model->select('order_name')->where('id',$order_id)->first();
-                if(empty($order_info)){
-                    return $this->format_error(__('orders.error').' - 59');
-                }
+            $order_model = new Order();
+            $order_info = $order_model->select('order_name')->where('id',$order_id)->first();
+            if(empty($order_info)){
+                return $this->format_error(__('orders.error').' - 59');
             }
 
             // 订单支付表修改状态
@@ -166,23 +117,21 @@ class PayMentService extends BaseService{
             $order_pay->save();
 
             // 如果长度过长128将信息裁掉
-            if(!$isRecharge){
-                $orderNameLen = mb_strlen($order_info['order_name']);
-                if($orderNameLen>30){
-                    $order_info['order_name'] = mb_substr($order_info['order_name'],0,30);
-                }
+            $orderNameLen = mb_strlen($order_info['order_name']);
+            if($orderNameLen>30){
+                $order_info['order_name'] = mb_substr($order_info['order_name'],0,30);
             }
 
             if($rs['data'] == 'wechat'){  // 微信支付
                 // 支付订单信息
-                $pay_order_info['out_trade_no'] = 'W'.$order_pay->pay_no.($isRecharge?'R':'');
+                $pay_order_info['out_trade_no'] = 'W'.$order_pay->pay_no;
                 $pay_order_info['total_fee'] = abs($order_pay->total_price??1);
                 $pay_order_info['total_fee'] = $pay_order_info['total_fee']*100;
-                $pay_order_info['body'] = $isRecharge?$rechargeBody:$order_info['order_name'];
+                $pay_order_info['body'] = $order_info['order_name'];
             }elseif($rs['data'] == 'ali'){
-                $pay_order_info['out_trade_no'] = 'A'.$order_pay->pay_no.($isRecharge?'R':'');
+                $pay_order_info['out_trade_no'] = 'A'.$order_pay->pay_no;
                 $pay_order_info['total_amount'] = abs($order_pay->total_price??1);
-                $pay_order_info['subject'] = $isRecharge?$rechargeBody:$order_info['order_name'];
+                $pay_order_info['subject'] = $order_info['order_name'];
             }
             $rs = $this->payCall($payment_name,$pay_order_info);
             return $rs['status']?$this->format($rs['data']):$this->format_error($rs['msg']);
@@ -342,23 +291,13 @@ class PayMentService extends BaseService{
      */
     public function payHandle($payment_name,$out_trade_no='',$notify_info=[]){
         $trade_no = ''; // 平台支付流水号
-        $pay_no = str_replace(['A','W','R'],'',$out_trade_no); // 得到正常得到pay_no
-        // 实例化orderPay模型
-        $order_pay_model = new OrderPay();
-        $order_pay_model = $order_pay_model->where('pay_no',$pay_no)->first();
-        $order_ids = $order_pay_model->order_ids; // 订单ID
-        $user_id = $order_pay_model->user_id; // 用户ID
-        $oid_arr = [];
-        if(!empty($order_ids)){
-            $oid_arr = explode(',',$order_ids);
-        }
         // 微信和支付宝和余额
         if($payment_name == 'wechat'){
             if($notify_info['result_code'] != 'SUCCESS'){
                 throw new \Exception(__('orders.payment_failed').':'.$out_trade_no);
             }
             $trade_no = $notify_info['transaction_id']??'';
-            
+
         }elseif($payment_name == 'ali'){
             // 如果状态不为true 则表示支付失败
             if($notify_info['trade_status'] != 'TRADE_SUCCESS'){
@@ -369,54 +308,9 @@ class PayMentService extends BaseService{
             $trade_no = '';
         }
 
-        $lastWord = substr($out_trade_no,-1,1);
-        $isRecharge = false;
-        if($lastWord == 'R'){
-            $isRecharge = true;
-        }
-
         try{
-            DB::beginTransaction();
-            $order_pay_model->trade_no = $trade_no;
-            // $order_pay_model->payment_name = $payment_name;
-            // $order_pay_model->pay_type = $isRecharge?'r':'o';
-            $order_pay_model->pay_status = 1;
-            $order_pay_model->pay_time = time();
-            $order_pay_model->save();
-
-            // 如果不是充值则取修改订单状态
-            if($isRecharge){
-                // 金额日志 用户账户变更
-                $ml_service = new MoneyLogService();
-                $ml_info = $ml_service->editMoney(__('users.money_log_recharge'),$user_id,$order_pay_model->total_price);
-                if(!$ml_info['status']){
-                    throw new \Exception($ml_info['msg']);
-                }
-
-            }else{
-                $order_model = new Order();
-                $rs = $order_model->whereIn('id',$oid_arr)->update([
-                    'order_status'  =>  2,
-                    'pay_time'      =>  now(),
-                    'payment_name'  =>  $payment_name,
-                ]);
-
-                // 订单送积分
-                $config_service = new ConfigService();
-                $config_service->giveIntegral('order');
-
-                // 建立分销信息
-                $distribution_service = new DistributionService();
-                $distribution_service->addDisLog($oid_arr);
-
-                // 金额日志 用户账户变更
-                $ml_service = new MoneyLogService();
-                $ml_info = $ml_service->editMoney(__('users.money_log_order'),$user_id,-$order_pay_model->total_price);
-                if(!$ml_info['status']){
-                    throw new \Exception($ml_info['msg']);
-                }
-            }
-            DB::commit();
+            $pay_success_service = new PaySuccessService();
+            $rs = $pay_success_service->onPaymentNotify($payment_name,$trade_no,$out_trade_no);
             return $this->format($rs);
         }catch(\Exception $e){
             DB::rollBack();

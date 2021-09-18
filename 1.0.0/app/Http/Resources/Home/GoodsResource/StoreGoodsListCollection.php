@@ -35,7 +35,8 @@ class StoreGoodsListCollection extends ResourceCollection
                     'goods_market_price'    =>  $goods_market_price,
                     'goods_sale'            =>  $item->goods_sale,
                     'goods_master_image'    =>  $this->thumb($item->goods_master_image,300),
-             
+                    'store_id'              =>  $item->store_id,
+                    'store_name'            =>  $item->store->store_name,
                 ];
             }),
             'total'=>$this->total(), // 数据总数

@@ -77,10 +77,11 @@
                         <a-input v-model="info.goods_weight" type="number" suffix="Kg" />
                     </a-form-model-item>
                     <a-form-model-item label="商品库存" :rules="{ required: true}">
-                        <a-input v-model="info.goods_stock" type="number">
+                        <a-input v-model="info.goods_stock" type="number" :min="0">
                             <a-icon slot="suffix" type="stock"></a-icon>
                         </a-input>
                     </a-form-model-item>
+
                 </template>
                 <a-form-model-item label="规格属性(SKU)">
                     <div class="attr_modal">
@@ -254,6 +255,7 @@
                     this.$get(this.$api.homeConfig,{name:'goods_stock'}).then(res=>{
                         this.info.goods_stock = res.data;
                     })
+                    this.info.goods_status = true;
                 }
                 this.$get(this.$api.homeConfig,{name:'market_price_rate'}).then(res=>{
                     this.market_price_rate = parseFloat(res.data);

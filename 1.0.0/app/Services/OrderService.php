@@ -80,117 +80,117 @@ class OrderService extends BaseService{
         // 循环生成订单 多个商家则生成多个订单
         try{
             DB::beginTransaction();
-                $resp_data = [];
-                $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
+            $resp_data = [];
+            $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
 
-                $order_data = [
-                    'order_no'                  =>  $make_rand, // 订单号
-                    'user_id'                   =>  $user_info['id'], // 用户ID
-                    'order_name'                =>  $create_order_data['order_name'], // 商品ID
-                    'order_image'               =>  $create_order_data['order_image'], // 商品图片
-                    'receive_name'              =>  $address_info['receive_name'], // 收件人姓名
-                    'receive_tel'               =>  $address_info['receive_tel'], // 收件人电话
-                    'receive_area'              =>  $address_info['area_info'], // 收件人地区
-                    'receive_address'           =>  $address_info['address'], // 详细地址
-                    'coupon_id'                 =>  isset($coupon_id)?intval(abs($coupon_id)):0, // 优惠券ID
-                    'remark'                    =>  request()->remark??'', // 备注
-                ];
+            $order_data = [
+                'order_no'                  =>  $make_rand, // 订单号
+                'user_id'                   =>  $user_info['id'], // 用户ID
+                'order_name'                =>  $create_order_data['order_name'], // 商品ID
+                'order_image'               =>  $create_order_data['order_image'], // 商品图片
+                'receive_name'              =>  $address_info['receive_name'], // 收件人姓名
+                'receive_tel'               =>  $address_info['receive_tel'], // 收件人电话
+                'receive_area'              =>  $address_info['area_info'], // 收件人地区
+                'receive_address'           =>  $address_info['address'], // 详细地址
+                'coupon_id'                 =>  isset($coupon_id)?intval(abs($coupon_id)):0, // 优惠券ID
+                'remark'                    =>  request()->remark??'', // 备注
+            ];
 
-                $order_info = $order_model->create($order_data); // 订单数据插入数据库
+            $order_info = $order_model->create($order_data); // 订单数据插入数据库
 
-                // 初始化其他费用
-                $total_price = 0 ; // 总金额
-                $order_price = 0 ; // 订单总金额
-                $total_weight = 0; // 总重量
-                $freight_money = 0; // 运费
-                $coupon_money = 0; // 优惠券 金额
+            // 初始化其他费用
+            $total_price = 0 ; // 总金额
+            $order_price = 0 ; // 订单总金额
+            $total_weight = 0; // 总重量
+            $freight_money = 0; // 运费
+            $coupon_money = 0; // 优惠券 金额
 
-                foreach($create_order_data['list'] as $k=>$v){
-                    // 循环将订单商品插入
-                    foreach($v['goods_list'] as $vo){
-                        $order_goods_data = [
-                            'order_id'      =>$order_info->id, // 订单ID
-                            'user_id'       =>$order_data['user_id'], // 用户ID
-                            'store_id'      =>$vo['store_id'], // 店铺ID
-                            'sku_id'        =>$vo['sku_id'], // skuid
-                            'goods_id'      =>$vo['id'], // 商品id
-                            'goods_name'    =>$vo['goods_name'], // 商品名称
-                            'goods_image'   =>$vo['goods_master_image'], // 商品图片
-                            'sku_name'      =>$vo['sku_name'], // sku名称
-                            'buy_num'       =>$vo['buy_num'], // 购买数量
-                            'goods_price'   =>$vo['goods_price'], // 商品价格
-                            'total_price'   =>$vo['total'], // 总价格
-                            'total_weight'  =>$vo['total_weight'], // 总重量
-                        ];
+            foreach($create_order_data['list'] as $k=>$v){
+                // 循环将订单商品插入
+                foreach($v['goods_list'] as $vo){
+                    $order_goods_data = [
+                        'order_id'      =>$order_info->id, // 订单ID
+                        'user_id'       =>$order_data['user_id'], // 用户ID
+                        'store_id'      =>$vo['store_id'], // 店铺ID
+                        'sku_id'        =>$vo['sku_id'], // skuid
+                        'goods_id'      =>$vo['id'], // 商品id
+                        'goods_name'    =>$vo['goods_name'], // 商品名称
+                        'goods_image'   =>$vo['goods_master_image'], // 商品图片
+                        'sku_name'      =>$vo['sku_name'], // sku名称
+                        'buy_num'       =>$vo['buy_num'], // 购买数量
+                        'goods_price'   =>$vo['goods_price'], // 商品价格
+                        'total_price'   =>$vo['total'], // 总价格
+                        'total_weight'  =>$vo['total_weight'], // 总重量
+                    ];
 
-                        // 秒杀
-                        $seckill_info = $seckill_service->getSeckillInfoByGoodsId($order_goods_data['goods_id']);
-                        if($seckill_info['status']){
-                            $coupon_money += $order_goods_data['total_price']*($seckill_info['data']['discount']/100);
-                        }
-                        
-                        $order_goods_model->create($order_goods_data); // 插入订单商品表
-
-                        // 开始减去库存
-                        $this->orderStock($order_goods_data['goods_id'],$order_goods_data['sku_id'],$order_goods_data['buy_num']);
-                        
-                        // 将商品总总量加起来
-                        $total_weight += $order_goods_data['total_weight'];
-
-                        // 将金额全部计算加载到订单里面
-                        $order_price += $order_goods_data['total_price'];
+                    // 秒杀
+                    $seckill_info = $seckill_service->getSeckillInfoByGoodsId($order_goods_data['goods_id']);
+                    if($seckill_info['status']){
+                        $coupon_money += $order_goods_data['total_price']*($seckill_info['data']['discount']/100);
                     }
+
+                    $order_goods_model->create($order_goods_data); // 插入订单商品表
+
+                    // 开始减去库存
+                    $this->orderStock($order_goods_data['goods_id'],$order_goods_data['sku_id'],$order_goods_data['buy_num']);
+
+                    // 将商品总总量加起来
+                    $total_weight += $order_goods_data['total_weight'];
+
+                    // 将金额全部计算加载到订单里面
+                    $order_price += $order_goods_data['total_price'];
                 }
-                // 获取优惠券的金额 并插入数据库
-                if($order_data['coupon_id']>0){
-                    $cpli = $coupon_log_model->where('id',$order_data['coupon_id'])
-                        ->where('user_id',$order_data['user_id'])
-                        ->where('use_money','<=',($order_price+$freight_money))
-                        ->where('start_time','<',now())->where('end_time','>',now())
-                        ->where('status',0)->first();
-                    if(empty($cpli)){
-                        $order_data['coupon_id'] = 0;
-                    }else{
-                        $coupon_money = $cpli['money'];
-                        $cpli->status = 1;
-                        $cpli->order_id = $order_info->id;
-                        $cpli->save();
-                    }
+            }
+            // 获取优惠券的金额 并插入数据库
+            if($order_data['coupon_id']>0){
+                $cpli = $coupon_log_model->where('id',$order_data['coupon_id'])
+                    ->where('user_id',$order_data['user_id'])
+                    ->where('use_money','<=',($order_price+$freight_money))
+                    ->where('start_time','<',now())->where('end_time','>',now())
+                    ->where('status',0)->first();
+                if(empty($cpli)){
+                    $order_data['coupon_id'] = 0;
+                }else{
+                    $coupon_money = $cpli['money'];
+                    $cpli->status = 1;
+                    $cpli->order_id = $order_info->id;
+                    $cpli->save();
                 }
+            }
 
-                // 满减
-                $full_reduction_resp = $full_reduction_service->getFullReductionInfo($order_price);
-                if($full_reduction_resp['status']){
-                    $coupon_money += $full_reduction_resp['data']['money'];
+            // 满减
+            $full_reduction_resp = $full_reduction_service->getFullReductionInfo($order_price);
+            if($full_reduction_resp['status']){
+                $coupon_money += $full_reduction_resp['data']['money'];
+            }
+
+            // 判断是否是拼团 如果是拼团减去他的金额
+            $collective_id = $v['goods_list'][0]['collective_id']??0;
+            if($collective_id != 0){
+                $collective_resp = $collective_service->getCollectiveInfoByGoodsId($v['goods_list'][0]['id']);
+                if($collective_resp['status']){
+                    $coupon_money += $order_price*($collective_resp['data']['discount']/100); // 得出拼团减去的钱
                 }
+                $collective_id = $collective_service->createCollectiveLog($collective_id,$collective_resp,$order_goods_data);
+            }
 
-                // 判断是否是拼团 如果是拼团减去他的金额
-                $collective_id = $v['goods_list'][0]['collective_id']??0;
-                if($collective_id != 0){
-                    $collective_resp = $collective_service->getCollectiveInfoByGoodsId($v['goods_list'][0]['id']);
-                    if($collective_resp['status']){
-                        $coupon_money += $order_price*($collective_resp['data']['discount']/100); // 得出拼团减去的钱
-                    }
-                    $collective_id = $collective_service->createCollectiveLog($collective_id,$collective_resp,$order_goods_data);
-                }
+            $freight_money = $this->sumFreight( $create_order_data['freight_id'],$total_weight,$address_info['province_id']); // 直接计算运费，如果多个不同的商品取第一个商品的运费
 
-                $freight_money = $this->sumFreight( $create_order_data['freight_id'],$total_weight,$address_info['province_id']); // 直接计算运费，如果多个不同的商品取第一个商品的运费
+            // 订单总金额做修改，然后保存
+            $total_price = $order_price+$freight_money-$coupon_money; // 暂时总金额等于[订单金额+运费-优惠金额]
 
-                // 订单总金额做修改，然后保存
-                $total_price = $order_price+$freight_money-$coupon_money; // 暂时总金额等于[订单金额+运费-优惠金额]
+            $resp_data['order_id'][] = $order_info->id;
+            $resp_data['order_no'][] = $make_rand;
+            $order_info->total_price = round($total_price,2);
+            $order_info->order_price = $order_price;
+            $order_info->freight_money = $freight_money; // 运费
+            $order_info->coupon_money = $coupon_money; // 优惠金额修改
+            $order_info->coupon_id = $order_data['coupon_id']; // 优惠券ID修改 ，以免非法ID传入
+            $order_info->collective_id = $collective_id; // 团购ID修改
+            $order_info->save(); // 保存入数据库
 
-                $resp_data['order_id'][] = $order_info->id;
-                $resp_data['order_no'][] = $make_rand;
-                $order_info->total_price = round($total_price,2);
-                $order_info->order_price = $order_price;
-                $order_info->freight_money = $freight_money; // 运费
-                $order_info->coupon_money = $coupon_money; // 优惠金额修改
-                $order_info->coupon_id = $order_data['coupon_id']; // 优惠券ID修改 ，以免非法ID传入
-                $order_info->collective_id = $collective_id; // 团购ID修改
-                $order_info->save(); // 保存入数据库
-
-                // 执行成功则删除购物车
-                $this->delCart();
+            // 执行成功则删除购物车
+            $this->delCart();
             DB::commit();
             return $this->format($resp_data);
         }catch(\Exception $e){
@@ -198,7 +198,7 @@ class OrderService extends BaseService{
             DB::rollBack();
             return $this->format_error(__('orders.error'));
         }
-        
+
 
     }
 
@@ -230,7 +230,7 @@ class OrderService extends BaseService{
 
     // 库存消减增加 is_type 0 减少  1增加
     public function orderStock($goods_id,$sku_id,$num,$is_type=0){
-        
+
         try{
             if(empty($sku_id)){
                 $goods_model = new Goods;
@@ -250,12 +250,12 @@ class OrderService extends BaseService{
         }catch(\Exception $e){
             throw new \Exception(__('base.error').' - stock');
         }
-        
+
     }
 
     // 销量消减增加 is_type 0 减少  1增加
     public function orderSale($goods_id,$num,$is_type=0){
-        
+
         try{
             $goods_model = new Goods;
             if(empty($is_type)){
@@ -266,7 +266,7 @@ class OrderService extends BaseService{
         }catch(\Exception $e){
             throw new \Exception(__('base.error').' - stock');
         }
-        
+
     }
 
     /**
@@ -308,7 +308,7 @@ class OrderService extends BaseService{
         // 判断是否存在 指定订单
         if(!$order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->exists()){
             return $this->format_error(__('orders.error').' - pay2');
-        } 
+        }
         // 判断是否已经支付过了
         $order_list = $order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->where('order_status',1)->get();
         if($order_list->isEmpty()){
@@ -318,7 +318,7 @@ class OrderService extends BaseService{
         // 十秒钟不能重复支付 设计订单支付号 当前时间到秒的十位+用户ID+订单ID号
         $second = substr(date('YmdHis'),0,13);
         $pay_no = $second.$user_info['id'].$order_str; // 订单支付号
-        $rs = $this->createPayOrder(false,$user_info,$pay_no,$order_list);
+        $rs = $this->createPayOrder($user_info,$pay_no,$order_list);
 
         // 创建支付订单失败
         if(!$rs['status']){
@@ -332,40 +332,30 @@ class OrderService extends BaseService{
 
     }
 
-    // 创建支付订单
-    // @param bool $recharge_pay 是否是充值 还是订单
+    // 订单，创建支付订单
     // @param string $pay_no 支付订单号
-    protected function createPayOrder($recharge_pay = false,$user_info,$pay_no='',$order_list=[]){
+    protected function createPayOrder($user_info,$pay_no='',$order_list=[]){
         // 创建支付订单
         $create_data = [];
-        if($recharge_pay){
-            $pay_no = date('YmdHis').mt_rand(10000,99999);
-            $create_data = [
-                'user_id'               =>  $user_info['id'],
-                'pay_no'                =>  $pay_no,
-                'pay_type'              =>  'r',
-                'total_price'           =>  abs(request()->total??1), // 充值金额
-            ];
-        }else{
-            $order_ids = [];
-            $total_price = 0;
-            $order_balance = 0;
-            foreach($order_list as $v){
-                $order_ids[] = $v['id'];
-                $total_price += $v['total_price']; 
-                $order_balance += $v['order_balance']; 
-            }
-            $create_data = [
-                'user_id'                   =>  $user_info['id'],
-                'pay_no'                    =>  $pay_no,
-                'order_ids'                 =>  implode(',',$order_ids),
-                'pay_type'                  =>  'o',
-                'total_price'               =>  $total_price, // 订单总金额
-                'order_balance'             =>  $order_balance, // 余额支付金额
-            ];
+        $order_ids = [];
+        $total_price = 0;
+        $order_balance = 0;
+        foreach($order_list as $v){
+            $order_ids[] = $v['id'];
+            $total_price += $v['total_price'];
+            $order_balance += $v['order_balance'];
         }
+        $create_data = [
+            'user_id'                   =>  $user_info['id'],
+            'pay_no'                    =>  $pay_no,
+            'order_ids'                 =>  implode(',',$order_ids),
+            'pay_type'                  =>  'o',
+            'total_price'               =>  $total_price, // 订单总金额
+            'order_balance'             =>  $order_balance, // 余额支付金额
+        ];
+
         $order_pay_model = new OrderPay();
-        
+
         try{
             $order_pay_info = $order_pay_model->create($create_data);
         }catch(\Exception $e){
@@ -374,7 +364,7 @@ class OrderService extends BaseService{
         }
 
         return $this->format($order_pay_info);
-        
+
     }
 
     /**
@@ -423,22 +413,22 @@ class OrderService extends BaseService{
                 $coupon_log_model->where('order_id',$order_id)->update(['status'=>0,'order_id'=>0]);
 
                 // 库存修改
-            break;
+                break;
             case 1: // 等待支付
-            break;
+                break;
             case 2: // 等待发货
-            break;
+                break;
             case 3: // 确认收货
                 if(empty($order_model->delivery_no) || empty($order_model->delivery_code)){ // 只有待支付的订单能取消
                     return $this->format_error(__('base.error').' - 3');
                 }
-            break;
+                break;
             case 4: // 等待评论
-            break;
+                break;
             case 5: // 5售后
-            break;
+                break;
             case 6: // 6订单完成
-            break;
+                break;
         }
         $order_model->order_status = $order_status;
         $order_model->save();
@@ -454,7 +444,7 @@ class OrderService extends BaseService{
 
         $address_model = new Address();
         $address_info = $address_model->find($id);
-        
+
         if(empty($address_info)){
             return $this->format_error(__('orders.no_address').'2');
         }
@@ -479,7 +469,7 @@ class OrderService extends BaseService{
         if(empty($info) || ($info->f_weight==0 && $info->f_price==0)){
             return 0;
         }
-        
+
         $area = [];
         if(!empty($info->area_id)){
             $area = explode(',',$info->area_id);
@@ -522,7 +512,7 @@ class OrderService extends BaseService{
         }
 
         return 0;
-        
+
     }
 
     // 根据订单ID获取商品数据并格式化
@@ -534,7 +524,7 @@ class OrderService extends BaseService{
         if(!$user_info = $user_service->getUserInfo()){
             return $this->format_error(__('auth.no_token'));
         }
-        
+
         $list = $order_data = [];
         $this->cartId = []; // 购物车ID 初始化
         $create_order_data['total'] = $create_order_data['order_price'] = 0;
@@ -577,7 +567,7 @@ class OrderService extends BaseService{
                 $create_order_data['collective_id'] = $v['collective_id'];
                 $data['collective_id'] = $v['collective_id'];
             }
-            
+
             $list[$data['store']['id']]['goods_list'][] = $data;
             $list[$data['store']['id']]['store_info'] = $data['store'];
 
@@ -639,7 +629,7 @@ class OrderService extends BaseService{
         $create_order_data['discount'] = $discount;
 
         return $this->format($create_order_data);
-        
+
     }
 
     // base64 代码验证
@@ -673,11 +663,11 @@ class OrderService extends BaseService{
             $store_id = $this->get_store(true);
             $order_model = $order_model->where('store_id',$store_id);
         }
-        
+
         $order_model = $order_model->with(['user'=>function($q){
             return $q->select('id','username');
         },'order_goods']);
-        
+
         // 订单号
         $order_no  = request()->order_no;
         if(!empty($order_no)){
@@ -707,7 +697,7 @@ class OrderService extends BaseService{
         if(!empty($created_at)){
             $order_model = $order_model->whereBetween('created_at',[$created_at[0],$created_at[1]]);
         }
-        
+
         // 订单状态
         if(isset(request()->order_status) && request()->order_status!=-1){
             $order_model = $order_model->where('order_status',request()->order_status);
@@ -724,7 +714,7 @@ class OrderService extends BaseService{
         }
 
         $order_model = $order_model->orderBy('id','desc')
-                    ->paginate(request()->per_page??30);
+            ->paginate(request()->per_page??30);
         return $this->format($order_model);
     }
 
@@ -774,7 +764,7 @@ class OrderService extends BaseService{
                 }else{
                     $cn = __('admins.order_refund_over');
                 }
-                
+
                 break;
             case 6:
                 $cn = __('admins.order_completion');
@@ -799,5 +789,5 @@ class OrderService extends BaseService{
         }
         return $cn;
     }
-    
+
 }

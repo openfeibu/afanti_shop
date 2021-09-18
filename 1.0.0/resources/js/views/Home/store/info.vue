@@ -279,7 +279,7 @@ export default {
         width: 220px;
         height: 300px;
         margin-bottom: 14px;
-        margin-left: 20px;
+        margin-right: 20px;
         box-sizing: border-box;
         float: left;
         .product_act_in{
@@ -344,7 +344,7 @@ export default {
             }
         }
          &:nth-child(4n){
-                margin-left: 0;
+                margin-right: 0;
             }
     }
             

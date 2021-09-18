@@ -19,7 +19,7 @@
                             <li :class="(!$isEmpty(base64Decode.pid) && base64Decode.pid==v.id)?'red':''" v-for="(v,k) in common.classes" :key="k" @click="classChange(v.id,v)">{{v.name}}</li>
                         </ul>
                     </div>
-                    <div class="sec" v-for="(v,k) in common.classes" :key="k">
+                    <!-- <div class="sec" v-for="(v,k) in common.classes" :key="k">
                         <ul v-if="(!$isEmpty(base64Decode.pid) && base64Decode.pid==v.id)">
                             <li :class="(!$isEmpty(base64Decode.sid) && base64Decode.sid==vo.id)?'red':''" v-for="(vo,key) in v.children" @click="classChange(v.id,vo,1)" :key="key">{{vo.name}}</li>
                         </ul>
@@ -30,7 +30,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="sec" v-for="(v,k) in common.classes" :key="k">
                         <ul v-if="(!$isEmpty(base64Decode.pid) && base64Decode.pid==v.id)">
                             <li  v-for="(vo,key) in v.children" :key="key">{{vo.name}}</li>
@@ -38,7 +38,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="item">
+            <!-- <div class="item">
                 <div class="title">品牌筛选：</div>
                 <div class="list">
                     <div class="first">
@@ -48,7 +48,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="item">
                 <div class="title">筛选排序：</div>
                 <div class="list">
@@ -75,13 +75,13 @@
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='goods_sale'))?'caret red':'caret'" type="caret-down" />
                                 </div>
                             </li>
-                            <li @click="sortChange('order_comment_count')" :class="(!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='order_comment_count')?'red':''">
+                            <!-- <li @click="sortChange('order_comment_count')" :class="(!$isEmpty(base64Decode.sort_type) && base64Decode.sort_type=='order_comment_count')?'red':''">
                                 评论
                                 <div class="sorts">
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='asc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='order_comment_count'))?'caret red':'caret'" type="caret-up" />
                                     <a-icon :class="((!$isEmpty(base64Decode.sort_order) && base64Decode.sort_order=='desc') && (!$isEmpty(base64Decode.sort_type)  &&  base64Decode.sort_type=='order_comment_count'))?'caret red':'caret'" type="caret-down" />
                                 </div>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>
@@ -91,20 +91,21 @@
 
         <div class="s_goods_content w1200" v-if="params.total>0">
             <!-- 产品列表 S -->
-            <div class="s_goods_list">
-                <div class="item" v-for="(v,k) in list" :key="k">
-                    <dl><router-link :to="'/goods/'+v.id">
-                        <dt><img width="180px" height="180px" v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
-                        <dd class="title">{{v.goods_name}}</dd>
-                        <dd class="price">￥{{v.goods_price}}</dd>
-                        <dd>
-                            <span>立即购买</span>
-                            <span>{{v.order_comment_count}} 人评论</span>
-                        </dd></router-link>
-                    </dl>
-                </div>
+            <ul class="good_list">
+                <li class="item" v-for="(v,k) in list" :key="k">
+                    <div class="product_act_in">
+                        <dl><router-link :to="'/goods/'+v.id">
+                            <dt><img width="180px" height="180px" v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
+                            <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
+                            <dd class="product_subtitle">{{v.goods_subname||'-'}}</dd>
+                            <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
+                            <dd class="product_price">￥{{v.goods_price}}</dd>
+                            </router-link>
+                        </dl>
+                    </div>
+                </li>
                 <div class="clear"></div>
-            </div>
+            </ul>
             <!-- 产品列表 E -->
 
             <div class="fy">
@@ -112,14 +113,15 @@
             </div>
         </div>
         <a-empty style="margin-top:40px" v-else />
- 
+        <loading v-if="isLoading"></loading>
     </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import Loading from '../../../components/home/public/loading.vue';
 export default {
-    components: {},
+    components: {Loading},
     props: {},
     data() {
       return {
@@ -131,6 +133,7 @@ export default {
           list:[],
           base64Code:'',
           base64Decode:{},
+          isLoading:true
       };
     },
     watch: {},
@@ -138,7 +141,10 @@ export default {
     methods: {
         // 初始化数据
         onload(){
+      
+            this.isLoading = true;
             this.params.params = this.base64Code;
+            console.log( this.params.params )
             this.$post(this.$api.homeGoods+'/search/all',this.params).then(res=>{
                 if(res.code == 200){
                     this.params.total = res.data.total;
@@ -149,9 +155,10 @@ export default {
                 }else{
                     this.$message.error(res.msg);
                 }
+                this.isLoading = false;
                 
             })
-            console.log(this.base64Decode)
+            
         },
         onChange(e){
             this.params.page = e;
@@ -161,14 +168,11 @@ export default {
         classChange(pid,info,deep=0,sid=0){
             this.base64Decode.class_id = [];
             this.base64Decode.pid = pid;
+          console.log(info)
+
             if(deep == 0){
-                info.children.forEach(item=>{
-                    if(!this.$isEmpty(item.children)){
-                        item.children.forEach(item2=>{
-                            this.base64Decode.class_id.push(item2.id);
-                        })
-                    }
-                })
+                
+                
                 this.base64Decode.sid = undefined;
                 this.base64Decode.tid = undefined;
             }
@@ -240,6 +244,7 @@ export default {
     },
     mounted() {},
     beforeRouteUpdate (to, from, next) {
+        console.log(1 )
         if(from.params.params != to.params.params){
             this.params.page = 1;
             this.base64Code = to.params.params;
@@ -271,6 +276,7 @@ export default {
             display: block;
             content:'';
         }
+       
         .title{
             float: left;
             margin-right: 20px;
@@ -297,11 +303,11 @@ export default {
                     border-radius: 3px;
                     &:hover{
                         color:#fff;
-                        background-color:#ca151e;
+                       background-color: #4bb16f;
                     }
                     &.red{
                        color:#fff;
-                       background-color:#ca151e; 
+                       background-color: #4bb16f;
                     }
                 }
             }
@@ -376,4 +382,84 @@ export default {
         }
     }
 }
+.good_list{
+        margin-top: 30px;
+        li{
+  
+        cursor: pointer;
+        width: 220px;
+        height: 300px;
+        margin-bottom: 14px;
+        margin-left: 20px;
+        box-sizing: border-box;
+        float: left;
+        &:hover .product_act_in{
+                box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+                margin-top:-3px;
+            }
+        .product_act_in{
+            width: 220px;
+            height: 300px;
+            background: #fff;
+            box-sizing: border-box;
+            transition: all 0.2s linear;
+        }
+        dl{
+            padding-top: 10px;
+        }
+        dl dt{
+            width: 180px;
+            height: 180px;
+            margin:0 auto;
+        }
+        dl dt img{
+            width: 100%;
+            height: 100%;
+        }
+        dl dd{
+            width: 190px;
+            overflow: hidden;
+            text-align: center;
+            margin:0 auto;
+        }
+        dl dd.product_title{
+            font-size: 14px;
+            margin-top: 5px;
+            height: 30px;
+            line-height: 30px; text-align: left;
+        }
+        dl dd.product_subtitle{
+            margin-top: 0px;
+            font-size: 12px;
+            color:#b0b0b0;
+            line-height: 14px;
+            text-align: left;
+        }
+        dl dd.product_price{
+            font-size: 16px;
+            color:#ca151e;
+            line-height: 34px;
+             text-align: left;
+            span{
+                font-size: 14px;
+                color:#b0b0b0;
+                margin-left: 8px;
+                text-decoration: line-through;
+            }
+        }
+        .product_store_name{
+            text-align: left;
+            span{
+                background: #4bb16f;
+                color: #fff;
+                font-size: 12px;
+                padding:0 10px;
+                height: 24px;line-height: 24px;
+                border-radius: 2px;
+            }
+        }
+        
+    }
+}
+
 </style>

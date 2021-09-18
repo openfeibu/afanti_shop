@@ -75,7 +75,7 @@ export default {
                      opacity: 1;
                  }
             }
-            .des{position: absolute;right: -150px;top: 0;width: 100px;background: #7a6e6e;height: 40px;line-height: 40px;font-size: 12px;color: #fff;overflow: hidden;z-index: 1;
+            .des{position: absolute;right: -150px;top: 0;width: 100px;background: #4bb16f;height: 40px;line-height: 40px;font-size: 12px;color: #fff;overflow: hidden;z-index: 1;
                 
             }
             .contactDes{
@@ -88,18 +88,18 @@ export default {
     }
 }
 .icon1{
-    width: 40px;height: 40px; background:#7a6e6e url(~@/asset/pc/me.png) no-repeat center/60%
+    width: 40px;height: 40px; background:#1e8d44 url(~@/asset/pc/me.png) no-repeat center/60%
 }
 .icon2{
-    width: 40px;height: 40px; background:#7a6e6e url(~@/asset/pc/car.png) no-repeat center/60%
+    width: 40px;height: 40px; background:#1e8d44 url(~@/asset/pc/car.png) no-repeat center/60%
 }
 .icon3{
-    width: 40px;height: 40px; background:#7a6e6e url(~@/asset/pc/coupon.png) no-repeat center/60%
+    width: 40px;height: 40px; background:#1e8d44 url(~@/asset/pc/coupon.png) no-repeat center/60%
 }
 .icon4{
-    width: 40px;height: 40px; background:#7a6e6e url(~@/asset/pc/kf.png) no-repeat center/60%
+    width: 40px;height: 40px; background:#1e8d44 url(~@/asset/pc/kf.png) no-repeat center/60%
 }
 .icon5{
-    width: 40px;height: 40px; background:#7a6e6e url(~@/asset/pc/top.png) no-repeat center/60%
+    width: 40px;height: 40px; background:#1e8d44 url(~@/asset/pc/top.png) no-repeat center/60%
 }
 </style>

@@ -167,6 +167,7 @@
 .home .step_bar .step .item.check {
     color: #333;
     font-weight: bold;
+    background: #d1eada;
 }
 
 .home .step_bar .step .item.success {

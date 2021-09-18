@@ -11,7 +11,7 @@
 
         <!-- 地址信息选择 S -->
         <div class="block">
-            <div class="title">选择送货地址</div>
+            <div class="title">选择送货地址<router-link to="/user/address/form">新增收货地址</router-link></div>
             <div class="address_list" v-if="address.length>0">
                 <ul>
                     <li :class="v.is_default==1?'red':''" v-for="(v,k) in address" :key="k" @click="addressChange(v.id)">
@@ -22,11 +22,12 @@
                         <div class="area_info">{{v.area_info+' '+v.address}}</div>
                         <div class="cmarker"><a-font type="iconcmarker"></a-font></div>
                     </li>
+                    
                 </ul>
             </div>
 
             <div class="empty_address" v-else>
-                没有设置收货地址，请先前往<router-link to="/user/address">设置</router-link>
+                没有设置收货地址，请先前往<router-link to="/user/address/form">设置</router-link>
             </div>
         </div>
         <!-- 地址信息选择 E -->
@@ -89,21 +90,29 @@
 
             <div class="sum_block">
 
-                <div v-if="order.coupon">
-                    优惠券：
-                    <a-select style="width:130px;margin-right:10px;" v-model="order.coupon.coupon_id" @change="couponChangeHandle">
-                        <a-select-option :value="0" >不使用优惠券</a-select-option>
-                        <a-select-option v-for="(val,key) in order.coupon.coupons" :key="key" :value="val.id" >{{val.money}}优惠券</a-select-option>
-                    </a-select>
+                <div class="sum_block_item"  v-if="order.coupon"  >
+                    <div class="label">优惠券：</div>
+                    <div class="con">
+                        <a-select style="width:140px" v-model="order.coupon.coupon_id" @change="couponChangeHandle" >
+                            <a-select-option :value="0" >不使用优惠券</a-select-option>
+                            <a-select-option v-for="(val,key) in order.coupon.coupons" :key="key" :value="val.id" >{{val.money}}优惠券</a-select-option>
+                        </a-select>
+                    </div>
                 </div>
 
-                <div class="order_price">总商品金额：<span>￥{{order.order_price}}</span></div>
-                <div class="freight">运费：<span>￥{{freight}}</span></div>
-                <div class="discount">优惠：<span>-￥{{discount}}</span></div>
-                <div class="total">应付金额：<span>￥{{order.order_price + freight - discount}}</span></div>
-                <div :class="loading?'btn hide':'btn'" @click="create_order">{{loading?'加载中..':'创建订单'}}</div>
-                <div class="clear"></div>
+                <div class="order_price sum_block_item">  <div class="label">总商品金额：</div><div class="con"><span>￥{{order.order_price}}</span></div></div>
+                <div class="freight sum_block_item">  <div class="label">运费：</div><div class="con"><span>￥{{freight}}</span></div></div>
+                <div class="discount sum_block_item">  <div class="label">优惠：</div><div class="con"><span>-￥{{discount}}</span></div></div>
+               
+               
             </div>
+             <div class="clear"></div>
+             <div class="total-box clear">
+                    <div class="total sum_block_item">  <div class="label">应付金额：</div><div class="con"><span>￥{{order.order_price + freight - discount }}</span></div></div>
+                   <div class="clear"></div>
+                    <div class="nowaddress"  v-if="v.is_default == 1" v-for="(v,k) in address" :key="k">寄往：{{v.area_info+' '+v.address}} 收货人：{{v.receive_name +' '+ v.receive_tel}}</div>
+            </div>
+            <div :class="loading?'submitBtn hide':'submitBtn'" @click="create_order">{{loading?'加载中..':'创建订单'}}</div>
         </div>
         <!-- 预生成订单信息 E -->
     </div>
@@ -256,6 +265,10 @@ export default {
         clear: both;
         font-weight: bold;
         padding-bottom: 20px;
+        a{
+            float: right;
+            font-size: 14px;color: #4bb16f;
+        }
     }
     .store_list{
         margin-top: 20px;
@@ -278,6 +291,7 @@ export default {
             }
             .red{
                 color:#ca151e;
+                font-weight: bold;
             }
             dl{
                 &:after{
@@ -328,33 +342,79 @@ export default {
         }
     }
     .sum_block{
-        text-align: right;
-        .total{
-            line-height: 60px;
-            span{
-                font-size: 28px;
-                color: #ca151e;
-                margin-right: 16px;
-            }
+        width: 340px;
+        float: right;
+        padding: 20px;
+        .sum_block_item{
+            height:30px;line-height: 30px;
+            color: #666;
         }
-        .btn{
+        .label{
+            float:left;
+            width: 150px; text-align: right;
+        }
+        
+        .con{
+            float:left;
+            width: 150px;
+            text-align: right;
+        }
+       
+     
+    }
+     .total-box{
+              background-color: #f2f2f2;
+         padding: 10px 20px;
+        .total{
+            width: 300px;
+            float: right;
+            line-height: 40px;
+            span{
+                font-size: 24px;
+                color: #ca151e;
+                
+            }
+            .label{
+                float:left;
+                width: 150px; text-align: right;
+            }
+            
+            .con{
+                float:left;
+                width: 150px;
+                text-align: right;
+            }
+        
+         } 
+         .nowaddress{
+            width: 100%;
+            float: right;
+            line-height: 40px;
+            text-align: right;
+            color: #666;
+         } 
+        }
+       .submitBtn{
             background: #ca151e;
             color:#fff;
             border-radius: 3px;
-            width: 80px;
-            height: 30px;
-            line-height: 30px;
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
             display: block;
             float:right;
             cursor: pointer;
+            margin:20px 0;
             &.hide{
                 background: #ccc;
                 cursor: not-allowed;
                 color:#666;
             }
+            &:hover{
+                opacity: 0.8;
+            }
         }
-    }
     .goods_th{
         background: #f2f2f2;
         line-height: 40px;
@@ -369,6 +429,8 @@ export default {
                 outline: none;
                 border-radius: 4px;
                 padding:8px;
+                height: 100px;
+                resize:none
             }
         }
     }
@@ -426,13 +488,14 @@ export default {
                     color:#333;
                 }
                 &.red{
-                    border-color:#ca151e;
+                    border-color:#1c8d44;
                     .cmarker{
-                        color:#ca151e;
+                        color:#4bb16f;
                     }
                 }
             }
         }
     }
+ 
 }
 </style>

@@ -99,7 +99,7 @@
                             <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
                             <dd class="product_subtitle">{{v.goods_subname||'-'}}</dd>
                             <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
-                            <dd class="product_price">￥{{v.goods_price}}</dd>
+                            <dd class="product_price">￥{{v.goods_price}}<span v-if="v.goods_market_price != '0.00'">{{v.goods_market_price}}元</span></dd>
                             </router-link>
                         </dl>
                     </div>

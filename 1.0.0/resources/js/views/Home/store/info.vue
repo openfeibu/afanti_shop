@@ -116,7 +116,7 @@
                                     <dt><img v-lazy="v.goods_master_image" :alt="v.goods_name" /></dt>
                                     <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
                                     <dd class="product_subtitle">{{v.goods_subname||'-'}}</dd>
-                                    <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}元</span></dd>
+                                    <dd class="product_price">￥{{v.goods_price}}<span v-if="v.goods_market_price != '0.00'">{{v.goods_market_price}}元</span></dd>
                                 </dl>
                             </div>
                         </router-link></li>

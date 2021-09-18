@@ -32,7 +32,7 @@
                                     <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
                                     <!-- <dd class="product_subtitle">{{v.goods_subname}}</dd> -->
                                     <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
-                                    <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}元</span></dd>
+                                    <dd class="product_price">￥{{v.goods_price}}<span v-if="v.goods_market_price != '0.00'">{{v.goods_market_price}}元</span></dd>
                                     <dd class="product_buy">立即抢购</dd>
                                 </dl>
                             </li>
@@ -89,9 +89,9 @@
                                     <dl>
                                         <dt><img v-lazy="vo.goods_master_image||''" :alt="vo.goods_name" /></dt>
                                         <dd class="product_title" :title="vo.goods_name">{{vo.goods_name}}</dd>
-                                        <dd class="product_subtitle">{{vo.goods_subname}}</dd>
+                                        <dd class="product_subtitle">{{vo.goods_subname || '-'}}</dd>
                                         <dd class="product_store_name"><span>{{vo.store_name}}</span></dd>
-                                        <dd class="product_price">￥{{vo.goods_price}}<span>{{vo.goods_market_price}}元</span></dd>
+                                        <dd class="product_price">￥{{vo.goods_price}}<span v-if="vo.goods_market_price != '0.00'">{{vo.goods_market_price}}元</span></dd>
                                     </dl>
                                 </div>
                             </li>

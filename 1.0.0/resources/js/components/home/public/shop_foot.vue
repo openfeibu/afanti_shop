@@ -10,10 +10,41 @@
             </ul>
             <div class="footer-info clear">
                 <div class="footer-info-left">
-                    <div class="logo" style="background:url("{{common.common.logo}}")"></div>
+                    <div class="logo" :style="{background:'url(' + common.common.logo + ') no-repeat center/100% auto'}" ></div>
                     <div class="title"> {{common.common.title}}</div>
                     <div class="des"> {{common.common.description}}</div>
-                    <div class="email">{{common.common.email}}</div>
+                    <div class="email">邮箱：{{common.common.email}}</div>
+                </div>
+                <div class="footer-info-right">
+                    <dl class="fore1">
+                        <dt>购物指南</dt>
+                        <dd><router-link to="">购物流程</router-link></dd>
+                        <dd><router-link to="">会员介绍</router-link></dd>
+                        <dd><router-link to="">常见问题</router-link></dd>
+                        <dd><router-link to="">联系客服</router-link></dd>
+                    </dl>
+                    <dl class="fore1">
+                        <dt>支付方式</dt>
+                        <dd><router-link to="">微信支付</router-link></dd>
+                        <dd><router-link to="">支付宝支付</router-link></dd>
+                        
+                    </dl>
+                    <dl class="fore1">
+                        <dt>售后服务</dt>
+                        <dd><router-link to="">售后政策</router-link></dd>
+                        <dd><router-link to="">退款说明</router-link></dd>
+                        <dd><router-link to="">退换货</router-link></dd>
+                        <dd><router-link to="">取消订单</router-link></dd>
+                    </dl>
+                    <dl class="fore1">
+                        <dt>购物指南</dt>
+                        <dd><router-link to="">购物流程</router-link></dd>
+                        <dd><router-link to="">会员介绍</router-link></dd>
+                        <dd><router-link to="">生活旅行/团购</router-link></dd>
+                        <dd><router-link to="">常见问题</router-link></dd>
+                        <dd><router-link to="">大家电</router-link></dd>
+                        <dd><router-link to="">联系客服</router-link></dd>
+                    </dl>
                 </div>
             </div>
             <div class="foot_copyright">
@@ -54,7 +85,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .footerbg{
-     background: #4bb16f
+     background: #fbfbfb
 }
 .shop_foot{
    
@@ -80,11 +111,43 @@ export default {
         line-height: 28px;
         padding-bottom: 10px;
     }
+     .footer-info{border-top: 1px solid #eee;border-bottom: 1px solid #eee;height: 300px;}
     .footer-info-left{
         width: 300px;
         float: left;
-        .logo{width: 200px;
+        text-align: left;
+        .logo{
+            width: 200px;
+            height: 120px;
         img{width: 100%;}}
+        .title{
+            font-size: 20px;color: #1c8d44;
+            margin-bottom: 10px;
+        }
+        .des{
+            font-size: 14px;color: #666;
+            height: 70px;
+            overflow: hidden;
+        }
+        .email{
+            font-size: 14px;color: #666;
+        }
+    }
+    .footer-info-right{float: right;text-align: left;margin:50px;
+        dl{
+            float:left;width: 200px;
+            dt{
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            dd{
+                font-size: 14px;color: #999;
+                line-height: 24px;
+                a{
+                    color:#999
+                }
+            }
+        }
     }
 }
 </style>

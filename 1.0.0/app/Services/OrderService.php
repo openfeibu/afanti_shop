@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Http\Resources\Home\OrderResource\CreateOrderAfterCollection;
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\CollectiveActive;
 use App\Models\CouponLog;
 use App\Models\Freight;
 use App\Models\Goods;
@@ -314,6 +315,22 @@ class OrderService extends BaseService{
         $order_list = $order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->where('order_status',1)->get();
         if($order_list->isEmpty()){
             return $this->format_error(__('orders.order_pay'));
+        }
+        $collective_orders =  $order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->where('order_type','group')->get();
+
+        if($collective_orders)
+        {
+            foreach ($collective_orders as $key => $order)
+            {
+                if($order['collective_active_id'] > 0) {
+                    $collective_active = CollectiveActive::where('id', $order['collective_active_id'])->first();
+                    // 验证当前拼单是否允许加入新成员
+                    if (!$collective_active->checkAllowJoin()) {
+
+                        return $this->format_error($collective_active->error);
+                    }
+                }
+            }
         }
 
         // 十秒钟不能重复支付 设计订单支付号 当前时间到秒的十位+用户ID+订单ID号
@@ -738,7 +755,7 @@ class OrderService extends BaseService{
         return $this->format($order_info);
     }
 
-    // 获取订单状态 
+    // 获取订单状态
     public function getOrderStatusCn($order_info){
         $cn = '未知订单';
         switch($order_info['order_status']){

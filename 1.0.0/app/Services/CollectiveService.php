@@ -27,7 +27,7 @@ class CollectiveService extends BaseService{
     // 根据商品ID获取当前的正在操作的团
     public function getCollectiveActiveByGoodsId($goods_id){
         $collective_active_model = new CollectiveActive();
-        $list = $collective_active_model->where('goods_id',$goods_id)->where('status','un-collect')->where('end_time','>',date('Y-m-d H:i:s'))->with('user')->get();
+        $list = $collective_active_model->where('goods_id',$goods_id)->whereIn('status',['un-collect','collecting'])->where('end_time','>',date('Y-m-d H:i:s'))->with('user')->get();
         return $this->success(new CollectiveActiveGoodsCollection( $list));
     }
 
@@ -78,8 +78,8 @@ class CollectiveService extends BaseService{
 
     // 根据ID 和订单ID创建日志 collective_id 是日志ID collective_resp 团信息 order_goods 订单商品信息
     public function saveCollectiveActive($oid_arr){
-        try{
-            DB::beginTransaction();
+
+
             $order = Order::whereIn('id',$oid_arr)->first();
             $order_goods = OrderGoods::where('order_id',$order->id)->first();
 
@@ -92,7 +92,7 @@ class CollectiveService extends BaseService{
                 $collective_active = CollectiveActive::where('id',$order['collective_active_id'])->first();
                 $collective_active_id = $collective_active['id'];
                 // 验证当前拼单是否允许加入新成员
-                if (!$this->checkAllowJoin($collective_active)) {
+                if (!$collective_active->checkAllowJoin()) {
                     return false;
                 }
                 // 新增拼单成员记录
@@ -132,55 +132,9 @@ class CollectiveService extends BaseService{
                 ]);
 
             }
-            /*
-            if($collective_id>0){
-                $collective_log_model = new CollectiveLog();
-                $cli = $collective_log_model->where('id',$collective_id)->withCount('orders')->first();
-                if($cli->orders_count>=$cli->need){ // 满了
-                    throw new \Exception(__('markets.collective_is_full'));
-                }
-                if($cli->orders_count+1 == $cli->need){
-                    $collective_log_model->status=1;
-                    $collective_log_model->save();
-                }
-            }
-            if($collective_id<0){
-                $collective_log_model = new CollectiveLog();
-                $data = [
-                    'user_id' => $order_goods['user_id'],
-                    'store_id' => $order_goods['store_id'],
-                    'goods_id' => $order_goods['goods_id'],
-                    'collective_id' => $collective_resp['data']['id'],
-                    'discount' => $collective_resp['data']['discount'],
-                    'need' => $collective_resp['data']['need'],
-                    'status' => 2,
-                ];
-                $collective_log_info = $collective_log_model->create($data);
-                $collective_id = $collective_log_info->id;
-            }
-            */
-            DB::commit();
             return $collective_active_id;
-        }catch(\Exception $e){
-            DB::rollBack();
-            throw new \Exception($e->getMessage());
-        }
+
 
     }
-    public function checkAllowJoin($collective_active)
-    {
-        if (!in_array($collective_active['status'], ['un-collect','collecting'])) {
-            $error = '当前拼单已结束';
-            return false;
-        }
-        if (date('Y-m-d H:i:s') > $collective_active['end_time']) {
-            $error = '当前拼单已结束';
-            return false;
-        }
-        if ($collective_active['actual_people'] >= $collective_active['people']) {
-            $error = '当前拼单人数已满';
-            return false;
-        }
-        return true;
-    }
+
 }

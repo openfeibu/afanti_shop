@@ -71,39 +71,45 @@ class PaySuccessService extends BaseService{
 
     public function onPaySuccess($payment_name,$order_pay)
     {
-        DB::beginTransaction();
-        $order_model = new Order();
-        $oid_arr = explode(',',$order_pay->order_ids);
-        $rs = $order_model->whereIn('id',$oid_arr)->update([
-            'order_status'  =>  2,
-            'pay_time'      =>  now(),
-            'payment_name'  =>  $payment_name,
-        ]);
+        try {
+            DB::beginTransaction();
+            $order_model = new Order();
+            $oid_arr = explode(',', $order_pay->order_ids);
+            $rs = $order_model->whereIn('id', $oid_arr)->update([
+                'order_status' => 2,
+                'pay_time' => now(),
+                'payment_name' => $payment_name,
+            ]);
+            // 订单支付表修改状态
+            $order_pay->payment_name = $payment_name;
+            $order_pay->pay_status = 1;
+            $order_pay->save();
 
-        // 订单支付表修改状态
-        $order_pay->payment_name = $payment_name;
-        $order_pay->pay_status = 1;
-        $order_pay->save();
+            // 订单送积分
+            $config_service = new ConfigService();
+            $config_service->giveIntegral('order');
 
-        // 订单送积分
-        $config_service = new ConfigService();
-        $config_service->giveIntegral('order');
+            // 建立分销信息
+            $distribution_service = new DistributionService();
+            $distribution_service->addDisLog($oid_arr);
 
-        // 建立分销信息
-        $distribution_service = new DistributionService();
-        $distribution_service->addDisLog($oid_arr);
-
-        // 金额日志 用户账户变更
-        $ml_service = new MoneyLogService();
-        $ml_info = $ml_service->editMoney(__('users.money_log_order'),$order_pay->user_id,-$order_pay->total_price);
-        if(!$ml_info['status']){
-            return $this->format_error($ml_info['msg']);
-            //throw new \Exception($ml_info['msg']);
+            // 金额日志 用户账户变更
+            $ml_service = new MoneyLogService();
+            $ml_info = $ml_service->editMoney(__('users.money_log_order'), $order_pay->user_id, -$order_pay->total_price);
+            if (!$ml_info['status']) {
+                return $this->format_error($ml_info['msg']);
+                //throw new \Exception($ml_info['msg']);
+            }
+            $collective_service = new CollectiveService();
+            $collective_service->saveCollectiveActive($oid_arr);
+            DB::commit();
+            return true;
+        }catch(\Exception $e){
+            DB::rollBack();
+            Log::channel('qwlog')->debug($e->getMessage());
+            return $this->format_error(__('orders.payment_failed'));
         }
-        $collective_service = new CollectiveService();
-        $collective_service->saveCollectiveActive($oid_arr);
-        DB::commit();
-        return true;
+
     }
 
 }

@@ -20,5 +20,21 @@ class CollectiveActive extends Model
         return $this->hasOne('App\Models\Order','collective_id','id');
     }
 
+    public function checkAllowJoin()
+    {
+        if (!in_array($this['status'], ['un-collect','collecting'])) {
+            $this->error = '当前拼单已结束';
+            return false;
+        }
+        if (date('Y-m-d H:i:s') > $this['end_time']) {
+            $this->error = '当前拼单已结束';
+            return false;
+        }
+        if ($this['actual_people'] >= $this['people']) {
+            $this->error = '当前拼单人数已满';
+            return false;
+        }
+        return true;
+    }
 }
 

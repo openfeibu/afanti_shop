@@ -270,7 +270,8 @@ export default {
             this.list.forEach(item=>{
                 item.cart_list.forEach(item2=>{
                     all++;
-                    if(item2.checked){
+                 
+                    if(item2.checked && item2.goods_status == 1){
                         this.allPrice += item2.buy_num*item2.goods_price;
                         allCount++;
                     }
@@ -291,13 +292,16 @@ export default {
         },
         // 立即购买
         buy(){
+            if(this.allCount == 0){
+                return false
+            }
             let params = {
                 order:[],
                 ifcart:1, // 是否购物车
             };
             this.list.forEach(item=>{
                 item.cart_list.forEach(item2=>{
-                    if(item2.checked){
+                    if(item2.checked && item2.goods_status == 1){
                         params.order.push(
                             {
                                 goods_id:item2.goods_id, // 商品ID
@@ -309,6 +313,7 @@ export default {
                     }
                 })
             })
+       
             this.cart_count();
             let str = window.btoa(JSON.stringify(params)); 
             this.$router.push("/order/create_order/"+str);
@@ -321,6 +326,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.create_order_1{
+    padding: 0 0 50px 0;
+}
 .goods_list{
  
     .goods_item{

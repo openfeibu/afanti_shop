@@ -1,5 +1,5 @@
 <template>
-    <div class="create_order_1 w1200">
+    <div class="create_order_1 w1200 clear">
         <div class="step_bar">
             <div class="step">
                 <div class="item check"><a-icon type="shopping-cart" />我的购物车</div>
@@ -256,6 +256,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.create_order_1{
+    padding:0 0 50px 0
+}
 .step_bar{
     margin:40px 0;
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use App\Models\CollectiveActiveUser;
+use App\Models\Order;
 use App\Models\User;
 use App\Services\AdvService;
 use App\Services\GoodsClassService;
@@ -25,9 +27,14 @@ class IndexController extends Controller
     }
     public function test(UserService $user_service)
     {
+        /*
         $user_model = User::find(10);
         $user_model->pay_password = Hash::make("123456");
         $user_model->save();
+        */
+        $collective_active_user_id = 1;
+        $data = Order::find(34);
+        var_dump($data->user);exit;
         echo "success";
     }
 }

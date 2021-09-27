@@ -27,7 +27,7 @@ class GoodsSearchCollection extends ResourceCollection
                     $goods_price = $item->goods_sku['goods_price'];
                     $goods_market_price = $item->goods_sku['goods_market_price'];
                 }
-                
+
                 // 判断是否存在sku
                 if(isset($item->goods_sku)){
                     $goods_price = $item->goods_sku['goods_price'];

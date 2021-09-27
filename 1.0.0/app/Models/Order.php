@@ -17,12 +17,12 @@ class Order extends Model
 
     // 获取店铺信息
     public function store(){
-        return $this->hasOne('App\Models\Store','id','store_id');
+        return $this->belongsTo('App\Models\Store','store_id','id');
     }
 
     // 获取店铺信息
     public function user(){
-        return $this->hasOne('App\Models\User','id','user_id');
+        return $this->belongsTo('App\Models\User','user_id','id');
     }
 
     // 获取售后
@@ -34,4 +34,9 @@ class Order extends Model
     public function distribution(){
         return $this->hasMany('App\Models\DistributionLog','order_id','id');
     }
+
+    public function collective_active_user(){
+        return $this->hasOne('App\Models\CollectiveActiveUser','order_id','id');
+    }
+
 }

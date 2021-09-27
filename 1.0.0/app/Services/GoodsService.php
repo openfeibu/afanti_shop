@@ -373,17 +373,22 @@ class GoodsService extends BaseService{
                 if(isset($params_array['brand_id']) && !empty($params_array['brand_id'])){
                     $goods_model = $goods_model->where('brand_id',$params_array['brand_id']);
                 }
-    
-                // 栏目
-                if(isset($params_array['class_id']) && !empty($params_array['class_id'])){
-                    if(is_array($params_array['class_id']) ){
-                        $goods_model = $goods_model->whereIn('class_id',$params_array['class_id']);
-                    }else{
-                        $goods_model = $goods_model->where('class_id',$params_array['class_id']);
-                    }
-                    
-                }
 
+                // 栏目
+//                if(isset($params_array['class_id']) && !empty($params_array['class_id'])){
+//                    if(is_array($params_array['class_id']) ){
+//                        $goods_model = $goods_model->whereIn('class_id',$params_array['class_id']);
+//                    }else{
+//                        $goods_model = $goods_model->where('class_id',$params_array['class_id']);
+//                    }
+//                }
+                if(isset($params_array['pid']) && !empty($params_array['pid'])){
+                    if(is_array($params_array['pid']) ){
+                        $goods_model = $goods_model->whereIn('class_id',$params_array['pid']);
+                    }else{
+                        $goods_model = $goods_model->where('class_id',$params_array['pid']);
+                    }
+                }
                 // 商家
                 if(isset($params_array['store_id']) && !empty($params_array['store_id'])){
                     $goods_model = $goods_model->where('store_id',$params_array['store_id']);

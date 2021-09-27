@@ -165,13 +165,13 @@ class OrderService extends BaseService{
             }
 
             // 判断是否是拼团 如果是拼团减去他的金额
-            $collective_id = $v['goods_list'][0]['collective_id']??0;
-            if($collective_id != 0){
+            $collective_active_id = $v['goods_list'][0]['collective_active_id']??0;
+            if($collective_active_id != 0){
                 $collective_resp = $collective_service->getCollectiveInfoByGoodsId($v['goods_list'][0]['id']);
                 if($collective_resp['status']){
                     $coupon_money += $order_price*($collective_resp['data']['discount']/100); // 得出拼团减去的钱
                 }
-                $collective_id = $collective_service->createCollectiveLog($collective_id,$collective_resp,$order_goods_data);
+                //$collective_id = $collective_service->createCollectiveLog($collective_id,$collective_resp,$order_goods_data); //付款再生成团购
             }
 
             $freight_money = $this->sumFreight( $create_order_data['freight_id'],$total_weight,$address_info['province_id']); // 直接计算运费，如果多个不同的商品取第一个商品的运费
@@ -186,7 +186,8 @@ class OrderService extends BaseService{
             $order_info->freight_money = $freight_money; // 运费
             $order_info->coupon_money = $coupon_money; // 优惠金额修改
             $order_info->coupon_id = $order_data['coupon_id']; // 优惠券ID修改 ，以免非法ID传入
-            $order_info->collective_id = $collective_id; // 团购ID修改
+            $order_info->collective_active_id = $collective_active_id; // 团购活动ID
+            $order_info->order_type = $collective_active_id ? 'group' : 'self'; // 团购，直接下单
             $order_info->save(); // 保存入数据库
 
             // 执行成功则删除购物车
@@ -561,11 +562,11 @@ class OrderService extends BaseService{
             $create_order_data['order_name'] = $create_order_data['order_name'] ?? $data['goods_name'];
             $create_order_data['freight_id'] = isset($create_order_data['freight_id']) ? $create_order_data['freight_id'] : $data['freight_id'];
             // 判断是否是团购
-            $data['collective_id'] = 0;
-            $create_order_data['collective_id'] = 0;
-            if(isset($v['collective_id'])){
-                $create_order_data['collective_id'] = $v['collective_id'];
-                $data['collective_id'] = $v['collective_id'];
+            $data['collective_active_id'] = 0;
+            $create_order_data['collective_active_id'] = 0;
+            if(isset($v['collective_active_id'])){
+                $create_order_data['collective_active_id'] = $v['collective_active_id'];
+                $data['collective_active_id'] = $v['collective_active_id'];
             }
 
             $list[$data['store']['id']]['goods_list'][] = $data;
@@ -618,7 +619,7 @@ class OrderService extends BaseService{
         }
 
         // 判断是否是拼团 如果是拼团减去他的金额
-        if($create_order_data['collective_id'] != 0){
+        if($create_order_data['collective_active_id'] != 0){
             $collective_resp = $collective_service->getCollectiveInfoByGoodsId($first_goods_id);
             if($collective_resp['status']){
                 $discount +=  $create_order_data['order_price']*($collective_resp['data']['discount']/100); // 得出拼团减去的钱
@@ -675,9 +676,9 @@ class OrderService extends BaseService{
         }
 
         // 拼团订单ID查询
-        $collective_id = request()->collective_id;
-        if(!empty($collective_id)){
-            $order_model = $order_model->where('collective_id',$collective_id);
+        $collective_active_id = request()->collective_active_id;
+        if(!empty($collective_active_id)){
+            $order_model = $order_model->where('collective_active_id',$collective_active_id);
         }
 
         // 用户ID

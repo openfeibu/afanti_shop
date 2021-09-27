@@ -1,8 +1,11 @@
 <?php
 namespace App\Services\Order;
 
+use App\Models\CollectiveActive;
 use App\Models\Order;
+use App\Models\OrderGoods;
 use App\Models\OrderPay;
+use App\Services\CollectiveService;
 use App\Services\ConfigService;
 use App\Services\DistributionService;
 use App\Services\MoneyLogService;
@@ -52,24 +55,12 @@ class PaySuccessService extends BaseService{
         if($lastWord == 'R'){
             $isRecharge = true;
         }
-        DB::beginTransaction();
+
         $order_pay->trade_no = $trade_no;
         $order_pay->pay_time = time();
 
-        // 如果不是充值则取修改订单状态
-        if($isRecharge){
-            // 金额日志 用户账户变更
-            $ml_service = new MoneyLogService();
-            $ml_info = $ml_service->editMoney(__('users.money_log_recharge'),$order_pay->user_id,$order_pay->total_price);
-            if(!$ml_info['status']){
-                throw new \Exception($ml_info['msg']);
-            }
-            $rs = true;
-        }else{
-            $rs = $this->onPaySuccess($payment_name,$order_pay);
+        $rs = $this->onPaySuccess($payment_name,$order_pay);
 
-        }
-        DB::commit();
         return $rs;
     }
     /**
@@ -80,7 +71,7 @@ class PaySuccessService extends BaseService{
 
     public function onPaySuccess($payment_name,$order_pay)
     {
-
+        DB::beginTransaction();
         $order_model = new Order();
         $oid_arr = explode(',',$order_pay->order_ids);
         $rs = $order_model->whereIn('id',$oid_arr)->update([
@@ -109,7 +100,10 @@ class PaySuccessService extends BaseService{
             return $this->format_error($ml_info['msg']);
             //throw new \Exception($ml_info['msg']);
         }
-
-        return $rs;
+        $collective_service = new CollectiveService();
+        $collective_service->saveCollectiveActive($oid_arr);
+        DB::commit();
+        return true;
     }
+
 }

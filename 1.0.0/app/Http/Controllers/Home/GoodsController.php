@@ -44,7 +44,7 @@ class GoodsController extends Controller
             $goods_info['data']['seckills'] = $seckill_info['status']?$seckill_info['data']:false; // 秒杀
             $collective_info = $this->collective_service->getCollectiveInfoByGoodsId($id);
             $goods_info['data']['collectives'] = $collective_info['status']?$collective_info['data']:false; // 团购
-            $goods_info['data']['collective_list'] = $this->collective_service->getCollectiveLogByGoodsId($id)['data']; // 正在团的
+            $goods_info['data']['collective_list'] = $this->collective_service->getCollectiveActiveByGoodsId($id)['data']; // 正在团的
             return $this->success($goods_info['data']);
         }
         return $this->error($goods_info['msg']);

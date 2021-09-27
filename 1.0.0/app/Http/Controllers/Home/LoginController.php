@@ -24,7 +24,7 @@ class LoginController extends Controller
     // 检测是否登陆
     public function check_login(UserService $user_service){
         $info = $user_service->checkLogin('user');
-        return $info['status']?$this->success($info['data']):$this->error($info['msg']);
+        return $info['status']?$this->success($info['data']):$this->auth_fail($info['msg']);
     }
 
     // 注册

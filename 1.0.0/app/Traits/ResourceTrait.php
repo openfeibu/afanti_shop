@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\DB;
 trait ResourceTrait{
 
     // service 返回格式化
-    protected function format($data=[],$msg='ok'){
-        return ['status'=>true,'data'=>$data,'msg'=>$msg];
+    protected function format($data=[],$msg='ok',$code=200){
+        return ['status'=>true,'data'=>$data,'msg'=>$msg,'code'=>$code];
     }
-    protected function format_error($msg='error',$data=[]){
-        return ['status'=>false,'data'=>$data,'msg'=>$msg];
+    protected function format_error($msg='error',$data=[],$code=500){
+        return ['status'=>false,'data'=>$data,'msg'=>$msg,'code'=>$code];
     }
 
 
@@ -25,6 +25,11 @@ trait ResourceTrait{
     // 失败返回数据
     protected function error($msg="fail",$data=[]){
         return ['code'=>500,'msg'=>$msg,'data'=>$data];
+    }
+
+    // 失败返回数据
+    protected function auth_fail($msg="fail",$data=[]){
+        return ['code'=>401,'msg'=>$msg,'data'=>$data];
     }
 
     // 自定义返回数据

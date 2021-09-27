@@ -8,7 +8,7 @@ return [
     'error'                              =>  '非法订单.',
     'create_success'                     =>  '创建订单成功.',
 
-    'stock_error'                        =>  '创建订单失败,库存不足.',
+    'stock_error'                        =>  '有产品库存信息发生变化，请返回购物车修改.',
     'no_address'                         =>  '没有选择收货地址.',
 
     'order_pay'                          =>  '订单已经支付.',

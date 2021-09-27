@@ -213,7 +213,7 @@ class CartService extends BaseService{
 
             if($cart_info->buy_num > $goods_stock)
             {
-                return $this->format_error(__('carts.under_stock',['number' => $goods_stock])); // 库存不足
+                return $this->format_error(__('carts.under_stock',['number' => $goods_stock]),[],8012); // 库存不足
             }
 
             $cart_info->save();

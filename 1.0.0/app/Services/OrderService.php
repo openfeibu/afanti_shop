@@ -33,7 +33,7 @@ class OrderService extends BaseService{
         $params = $check['data'];
         $rs = $this->createOrderFormat($params);
 
-        return $rs['status']?$this->format($rs['data']):$this->format_error($rs['msg']);
+        return $rs['status']?$this->format($rs['data']):$this->format_error($rs['msg'],$rs['data'],$rs['code']);
     }
 
     // 创建订单
@@ -326,7 +326,6 @@ class OrderService extends BaseService{
                     $collective_active = CollectiveActive::where('id', $order['collective_active_id'])->first();
                     // 验证当前拼单是否允许加入新成员
                     if (!$collective_active->checkAllowJoin()) {
-
                         return $this->format_error($collective_active->error);
                     }
                 }
@@ -596,7 +595,7 @@ class OrderService extends BaseService{
             $create_order_data['order_price'] += $data['total'];
             // 判断是否库存足够
             if($v['buy_num']>$data['goods_stock']){
-                return $this->format_error(__('orders.stock_error'));
+                return $this->format_error(__('orders.stock_error'),[],8012);
             }
 
             // 判断是否是购物车

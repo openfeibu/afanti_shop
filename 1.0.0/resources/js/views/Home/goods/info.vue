@@ -84,8 +84,8 @@
                             <div class="tuan_item" v-for="(v,k) in collective_list" :key="k">
                                 <img v-lazy="v.avatar||require('@/asset/user/user_default.png')">
                                 <div class="nickname">{{v.nickname}}</div>
-                                <div class="btn" @click="collective_id=v.id;buy()">立即参团</div>
-                                <div class="orders_count">已经参团 {{v.orders_count}} / {{v.need}} 人</div>
+                                <div class="btn" @click="collective_active_id=v.id;buy()">立即参团</div>
+                                <div class="orders_count">已经参团 {{v.actual_people}} / {{v.people}} 人</div>
                             </div>
                         </a-carousel>
                     </div>
@@ -121,7 +121,7 @@
                         <div class="goods_info_buy" style="background:#fe0851" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
                     </template>
                     <template v-else-if="collectives">
-                        <div class="goods_info_buy" style="background:#67c23a"  @click="collective_id=-1;buy()"><a-icon type="team" />我要开团</div>
+                        <div class="goods_info_buy" style="background:#67c23a"  @click="collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
                         <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
                         <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
                     </template>
@@ -298,7 +298,7 @@ export default {
           seckills:false, // 秒杀
           collectives:false, // 拼团
           collective_list:[], // 正在进行的团
-          collective_id:0,
+          collective_active_id:0,
           isLoading:true,
           visible: false,
           modal: false,
@@ -405,14 +405,14 @@ export default {
                         goods_id:this.goods_info.id, // 商品ID
                         sku_id:this.sku_id, // SKUid 没有则为0
                         buy_num:this.buy_num, // 购买数量
-                        collective_id:this.collective_id, // 拼团ID 非必传
+                        collective_active_id:this.collective_active_id, // 拼团ID 非必传
                     },
                 ],
                 ifcart:0, // 是否购物车
             };
 
-            // 恢复 collective_id
-            this.collective_id = 0
+            // 恢复 collective_active_id
+            this.collective_active_id = 0
 
             let str = window.btoa(JSON.stringify(params)); 
             this.$router.push("/order/create_order/"+str);

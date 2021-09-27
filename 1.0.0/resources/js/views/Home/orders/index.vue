@@ -200,7 +200,7 @@ export default {
                     this.order = res.data;
                     this.get_address();
                     this.couponChangeHandle();
-                }else{
+                }else if(res.code == 8012){
                     // this.$message.destroy();
                     console.log(that.$router.history.matched)
                     this.modal =  this.$error({

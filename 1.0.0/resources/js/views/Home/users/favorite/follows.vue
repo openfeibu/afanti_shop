@@ -2,7 +2,7 @@
     <div class="favorite">
         <div class="user_main">
             <div class="block_title">
-                <span><div class="btn" @click="$router.push('/user/favorite')">收藏商品</div></span>
+                <!-- <span><div class="btn" @click="$router.push('/user/favorite')">收藏商品</div></span> -->
                 关注展馆
             </div>
             <div class="x20"></div>

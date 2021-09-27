@@ -46,6 +46,7 @@ a{
     border-radius: 3px;
 }
 a:hover{
-    border-color:#ca151e;
+    border-color:#4bb16f;
+    color:#4bb16f;
 }
 </style>

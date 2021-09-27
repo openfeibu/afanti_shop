@@ -9,7 +9,7 @@
             </div>
             <div class="shop_top_seach float_left">
                 <ul>
-                    <li><input class="search_input" v-model="keywords" type="text" placeholder="手机 笔记本电脑 衣服"></li>
+                    <li><input class="search_input" v-model="keywords" type="text" placeholder="输入商品名称"></li>
                     <li><button class="search_button" type="button" @click="search()"><a-icon type="search" /></button></li>
                     <li>
                         <div class="index_my_car">
@@ -41,6 +41,9 @@
                         </li>
                         <li>
                             <router-link to="/collective">拼团专区</router-link>
+                        </li>
+                        <li>
+                            <router-link to="/bargain">砍价专区</router-link>
                         </li>
                         <li>
                             <router-link to="/coupon">优惠券</router-link>

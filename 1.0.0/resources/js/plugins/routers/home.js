@@ -151,6 +151,12 @@ export default [
                 name: 'home_collective',
                 component: () =>
                     import ('@/views/Home/collectives/index')
+            }, // 砍价页面
+            {
+                path: '/bargain',
+                name: 'home_bargain',
+                component: () =>
+                    import ('@/views/Home/bargain/index')
             }, // 积分商城首页
 
             // 秒杀页面
@@ -245,14 +251,7 @@ export default [
                         component: () =>
                             import ('@/views/Home/users/order/comment')
                     }, // 用户添加评论
-
-                    // 积分订单
-                    {
-                        path: '/user/integral_order',
-                        name: 'home_user_integral_order',
-                        component: () =>
-                            import ('@/views/Home/users/integral_order/index')
-                    }, // 用户订单
+                    // 用户订单
 
                     // 申请售后
                     {
@@ -312,19 +311,7 @@ export default [
                             import ('@/views/Home/users/money_log/integral')
                     }, // 用户积分日志
 
-                    // 提现
-                    {
-                        path: '/user/cash',
-                        name: 'home_user_cash',
-                        component: () =>
-                            import ('@/views/Home/users/cash/index')
-                    }, // 提现列表
-                    {
-                        path: '/user/cash/form',
-                        name: 'home_user_cash_form',
-                        component: () =>
-                            import ('@/views/Home/users/cash/form')
-                    }, // 提现列表
+
 
                     // 帮助中心
                     {
@@ -332,27 +319,8 @@ export default [
                         name: 'home_user_article_form',
                         component: () =>
                             import ('@/views/Home/users/article/form')
-                    }, // 提现列表
-
-                    // 分销日志
-                    {
-                        path: "/user/distribution_logs",
-                        name: "home_user_distribution_logs",
-                        component: () =>
-                            import ("@/views/Home/users/distribution_log/index")
                     },
-                    {
-                        path: "/user/distribution_users",
-                        name: "home_user_distribution_users",
-                        component: () =>
-                            import ("@/views/Home/users/distribution_log/user")
-                    }, // 分销会员
-                    {
-                        path: "/user/distribution",
-                        name: "home_user_distribution_link",
-                        component: () =>
-                            import ("@/views/Home/users/distribution_log/link")
-                    }, // 分销信息
+
 
                     {
                         path: "/user/coupon",

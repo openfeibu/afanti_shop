@@ -6,7 +6,7 @@
                 <div class="user_info_block">
                     <dl>
                         <dt><img :src="user_info.avatar||require('@/asset/user/user_default.png')" alt=""></dt>
-                        <dd>{{user_info.nickname||'加载中...'}}</dd>
+                        <dd style="min-width:100px">{{user_info.nickname||'加载中...'}}</dd>
                         <dd class="edit_user_info"><router-link to="/user/user_info">编辑信息</router-link></dd>
                     </dl>
                     <div class="user_stepbar">
@@ -16,7 +16,7 @@
                         <span>账户安全：</span>
                         <span class="safe_icon">
                             <a-font :class="user_info.phone!=''?'success':''" type="iconshouji"></a-font>
-                            <a-font :class="user_info.user_check?'success':''" type="iconnamecard"></a-font>
+                            <!-- <a-font :class="user_info.user_check?'success':''" type="iconnamecard"></a-font> -->
                         </span>
                     </div>
                 </div>
@@ -60,40 +60,15 @@ export default {
                     name:'会员中心',
                     icon:'iconchengyuan',
                     children:[
-                        {name:'个人中心',url:'/user'},
                         {name:'用户资料',url:'/user/user_info'},
                         {name:'账户安全',url:'/user/safe'},
                         {name:'账号绑定',url:'/user/oauth'},
-                        {name:'资金提现',url:'/user/cash'},
-                        {name:'收藏/关注',url:'/user/favorite'},
+                        {name:'收藏商品',url:'/user/favorite'},
+                        {name:'关注展馆',url:'/user/follows'},
                         {name:'我的优惠券',url:'/user/coupon'},
                     ],
                 },
-                {
-                    name:'积分商城',
-                    icon:'iconjifen',
-                    children:[
-                        {name:'积分订单',url:'/user/integral_order'},
-                    ],
-                },
-                {
-                    name:'资产记录',
-                    icon:'iconyue',
-                    children:[
-                        {name:'平台余额',url:'/user/money'},
-                        {name:'冻结资金',url:'/user/frozen_money'},
-                        {name:'平台积分',url:'/user/integral'},
-                    ],
-                },
-                {
-                    name:'分销分佣',
-                    icon:'iconVIP1',
-                    children:[
-                        {name:'分销信息',url:'/user/distribution'},
-                        {name:'分销会员',url:'/user/distribution_users'},
-                        {name:'分销佣金',url:'/user/distribution_logs'},
-                    ],
-                },
+               
                 {
                     name:'帮助中心',
                     icon:'iconbangzhu',
@@ -147,8 +122,12 @@ export default {
                 margin-left: 55px;
                 cursor: pointer;
                 color:#666;
-                &:hover{
-                    color:#ca151e;
+                .router-link-active{
+                    color: #4bb16f;
+                    font-weight: bold;
+                }
+                a:hover{
+                    color:#4bb16f;
                 }
             }
             &:last-child{
@@ -159,7 +138,7 @@ export default {
             font-size: 16px;
             margin-bottom: 10px;
             i{
-                color:#ca151e;
+                color:#4bb16f;
                 margin:0 6px 0 24px;
                 font-size: 18px;
                 font-weight: bold;
@@ -208,13 +187,13 @@ export default {
                 float: left;
                 margin-top: 10px;
                 &.edit_user_info{
-                    border: 1px solid #ca151e;
+                    border: 1px solid #4bb16f;
                     line-height: 20px;
                     text-align: center;
                     padding: 0 15px;
                     margin-top: 5px;
                     a{
-                        color: #ca151e;
+                        color: #1e8d44;
                     }
                 }
             }

@@ -1,24 +1,5 @@
 <template>
     <div class="user_default2">
-        <div class="user_info_balance">
-            <dl class="item1">
-                <dt><a-font type="iconyue"></a-font></dt>
-                <dd class="title">账号余额</dd>
-                <dd>{{user_info.money||'0.00'}} 元</dd>
-            </dl>
-            <dl class="item2">
-                <dt><a-font type="iconjifen"></a-font></dt>
-                <dd class="title">账号积分</dd>
-                <dd>{{user_info.integral||'0.00'}} 积分</dd>
-            </dl>
-            <dl class="item3">
-                <dt><a-font type="iconyue"></a-font></dt>
-                <dd class="title">冻结资金</dd>
-                <dd>{{user_info.frozen_money||'0.00'}} 元</dd>
-            </dl>
-            <div class="clear"></div>
-        </div>
-
 
         <div class="order_status_block">
             <ul>

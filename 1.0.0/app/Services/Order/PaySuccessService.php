@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Order;
 
+use App\Exceptions\OutputServerMessageException;
 use App\Models\CollectiveActive;
 use App\Models\Order;
 use App\Models\OrderGoods;
@@ -29,14 +30,14 @@ class PaySuccessService extends BaseService{
     {
         $pay_password = request()->pay_password;
         if(empty($pay_password)){
-            return $this->format_error(__('orders.pay_password_error'));
+            throw new OutputServerMessageException(__('orders.pay_password_error'));
         }
         $user_info = auth('user')->user();
         if(!Hash::check($pay_password , $user_info->pay_password)){
-            return $this->format_error(__('orders.pay_password_error'));
+            throw new OutputServerMessageException(__('orders.pay_password_error'));
         }
         if($order_pay->total_price>$user_info->money){
-            return $this->format_error(__('orders.balance_insufficient'));
+            throw new OutputServerMessageException(__('orders.balance_insufficient'));
         }
 
         $order_pay->order_balance = $order_pay->total_price;
@@ -97,7 +98,7 @@ class PaySuccessService extends BaseService{
             $ml_service = new MoneyLogService();
             $ml_info = $ml_service->editMoney(__('users.money_log_order'), $order_pay->user_id, -$order_pay->total_price);
             if (!$ml_info['status']) {
-                return $this->format_error($ml_info['msg']);
+                throw new OutputServerMessageException($ml_info['msg']);
                 //throw new \Exception($ml_info['msg']);
             }
             $collective_service = new CollectiveService();
@@ -107,7 +108,7 @@ class PaySuccessService extends BaseService{
         }catch(\Exception $e){
             DB::rollBack();
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('orders.payment_failed'));
+            throw new OutputServerMessageException(__('orders.payment_failed'));
         }
 
     }

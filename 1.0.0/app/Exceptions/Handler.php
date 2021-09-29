@@ -2,11 +2,14 @@
 
 namespace App\Exceptions;
 
+use App\Http\Response\ApiResponse;
+use App\Traits\ExceptionCustomHandlerTrait;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use ExceptionCustomHandlerTrait;
     /**
      * A list of the exception types that are not reported.
      *
@@ -50,6 +53,24 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        $response = $this->handle($request,$exception);
+        if ($response) {
+            return $response;
+        }
         return parent::render($request, $exception);
+    }
+    public function handle($request,$exception)
+    {
+        $responseJson = $this->custom_handle($exception);
+        if($responseJson)
+        {
+
+            if ($request->ajax() || $request->expectsJson())
+            {
+                return app(ApiResponse::class)->code($responseJson['code'])->status($responseJson['status'])->message($responseJson['message'])->json();
+            }else{
+                return response()->view('message.error',$responseJson);
+            }
+        }
     }
 }

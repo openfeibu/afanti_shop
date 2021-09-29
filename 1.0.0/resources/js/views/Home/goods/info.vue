@@ -584,7 +584,7 @@ export default {
         is_fav(id){
             this.$get(this.$api.homeFav+'/'+id,{is_type:0}).then(res=>{
                 if(res.code == 200){
-                    return this.isFav = true;
+                    return this.isFav = res.data ? true : false;
                 }else{
                     return this.isFav = false;
                 }

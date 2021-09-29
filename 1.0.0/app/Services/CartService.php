@@ -17,7 +17,7 @@ class CartService extends BaseService{
         // 获取当前用户user_id
         $user_service = new UserService;
         if(!$user_info = $user_service->getUserInfo()){
-            return $this->format_error(__('carts.add_error').'4'); // 获取用户失败
+            OutputServerMessageException(__('carts.add_error').'4'); // 获取用户失败
         }
         $this->autoUpdate($user_info['id']);
         $cart_list = $cart_model->where(['user_id'=>$user_info['id']])
@@ -64,7 +64,7 @@ class CartService extends BaseService{
         $user_service = new UserService;
  
         if(!$user_info = $user_service->getUserInfo()){
-            return $this->format_error(__('carts.add_error').'4'); // 获取用户失败
+            OutputServerMessageException(__('carts.add_error').'4'); // 获取用户失败
         }
         
         $cart_count = $cart_model->where(['user_id'=>$user_info['id']])
@@ -81,7 +81,7 @@ class CartService extends BaseService{
 
         // 判断是否非法上传
         if(empty($goods_id) || empty($buy_num)){
-            return $this->format_error(__('carts.add_error'));
+            OutputServerMessageException(__('carts.add_error'));
         }
 
         // 获取SKU信息
@@ -91,14 +91,14 @@ class CartService extends BaseService{
             $sku_info = $goods_sku_model->find($sku_id);
             if($sku_info->goods_id != $goods_id){
                 $sku_info = [];
-                return $this->format_error(__('carts.add_error').'2');
+                OutputServerMessageException(__('carts.add_error').'2');
             }
         }
 
         // 获取当前用户user_id
         $user_service = new UserService;
         if(!$user_info = $user_service->getUserInfo()){
-            return $this->format_error(__('carts.add_error').'4'); // 获取用户失败
+            OutputServerMessageException(__('carts.add_error').'4'); // 获取用户失败
         }
 
         // 获取商品店铺信息
@@ -111,7 +111,7 @@ class CartService extends BaseService{
 
 
         if(!empty(count($goods_info->goods_skus)) && $sku_id == 0){
-            return $this->format_error(__('carts.not_chose_sku')); // 未选择SKU
+            OutputServerMessageException(__('carts.not_chose_sku')); // 未选择SKU
         }
 
         // 判断购物车有没有同款商品
@@ -129,7 +129,7 @@ class CartService extends BaseService{
             if($total_buy_num > $goods_stock)
             {
                 $max_buy_num = empty($cart_info) ? $goods_stock : $goods_stock-$cart_info->buy_num;
-                return $this->format_error(__('carts.under_stock',['number' => $max_buy_num])); // 库存不足
+                OutputServerMessageException(__('carts.under_stock',['number' => $max_buy_num])); // 库存不足
             }
             if(empty($cart_info)){
                 // 加入购物车
@@ -147,7 +147,7 @@ class CartService extends BaseService{
             DB::commit(); // 事务提交
         }catch(\Exception $e){
             DB::rollBack(); // 事务回滚
-            return $this->format_error(__('carts.add_error').'3');
+            OutputServerMessageException(__('carts.add_error').'3');
         }
 
         return $this->format([],__('carts.add_success'));
@@ -162,7 +162,7 @@ class CartService extends BaseService{
         // 获取当前用户user_id
         $user_service = new UserService;
         if(!$user_info = $user_service->getUserInfo()){
-            return $this->format_error(__('carts.add_error').'4'); // 获取用户失败
+            OutputServerMessageException(__('carts.add_error').'4'); // 获取用户失败
         }
 
         // 判断购物车有没有同款商品
@@ -173,7 +173,7 @@ class CartService extends BaseService{
         ])->first();
 
         if(empty($cart_info)){
-            return $this->format_error(__('carts.add_error').'5'); // 获取购物车失败
+            OutputServerMessageException(__('carts.add_error').'5'); // 获取购物车失败
         }
 
         // 获取商品店铺信息
@@ -191,7 +191,7 @@ class CartService extends BaseService{
 
             if($buy_num > $goods_stock)
             {
-                return $this->format_error(__('carts.under_stock',['number' => $goods_stock])); // 未选择SKU
+                OutputServerMessageException(__('carts.under_stock',['number' => $goods_stock])); // 未选择SKU
             }
 
             $cart_info->buy_num = $buy_num;
@@ -213,7 +213,7 @@ class CartService extends BaseService{
 
             if($cart_info->buy_num > $goods_stock)
             {
-                return $this->format_error(__('carts.under_stock',['number' => $goods_stock]),[],8012); // 库存不足
+                OutputServerMessageException(__('carts.under_stock',['number' => $goods_stock]),[],8012); // 库存不足
             }
 
             $cart_info->save();

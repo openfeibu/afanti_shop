@@ -37,7 +37,7 @@ class StoreService extends BaseService{
             $list = $store_model->where('store_status',1)->paginate(request()->per_page??30);
             return $this->format(new StoreCollection($list) );
         }catch(\Exception $e){
-            return $this->format_error($e->getMessage());
+            OutputServerMessageException($e->getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ class StoreService extends BaseService{
         $store_model = new Store();
         $store_info = $store_model->where('user_id',auth($auth)->id())->first();
         if(empty($store_info)){
-            return $this->format_error(__('stores.store_not_defined'));
+            OutputServerMessageException(__('stores.store_not_defined'));
         }
         return $this->format(new StoreJoin($store_info));
         
@@ -56,7 +56,7 @@ class StoreService extends BaseService{
     public function getAuthStoreInfo($where=""){
         $store_info = $this->get_store(false,$where);
         if(empty($store_info)){
-            return $this->format_error(__('stores.store_not_defined'));
+            OutputServerMessageException(__('stores.store_not_defined'));
         }
 
         // 地址处理
@@ -76,7 +76,7 @@ class StoreService extends BaseService{
         }
         $store_info = $stores_model->find($store_id);
         if(empty($store_info)){
-            return $this->format_error(__('stores.store_not_defined'));
+            OutputServerMessageException(__('stores.store_not_defined'));
         }
         return $this->format($store_info);
     }
@@ -107,14 +107,14 @@ class StoreService extends BaseService{
         $store_classes = $store_classes_model->where('store_id',$store_id)->first();
 
         if(empty($store_classes['class_id']) || empty($store_classes['class_name'])){
-            return $this->format_error(__('goods.goods_classes_not_fond'));
+            OutputServerMessageException(__('goods.goods_classes_not_fond'));
         }
         
         try{
             $class_id = json_decode($store_classes['class_id'],true);
             $class_name = json_decode($store_classes['class_name'],true);
         }catch(\Exception $e){
-            return $this->format_error($e->getMessage());
+            OutputServerMessageException($e->getMessage());
         }
         
         $choseStoreClasses = [];
@@ -142,7 +142,7 @@ class StoreService extends BaseService{
         $store_model = new Store();
         $user_id = auth($auth)->id();
         if($store_model->where('user_id',$user_id)->exists()){
-            return $this->format_error(__('stores.store_defined'));
+            OutputServerMessageException(__('stores.store_defined'));
         }
         $store_model->user_id = $user_id;
         $store_model->store_verify = 1;
@@ -280,7 +280,7 @@ class StoreService extends BaseService{
             $store_model->save();
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('stores.store_edit_error'));
+            OutputServerMessageException(__('stores.store_edit_error'));
         }
 
         return $this->format([],__('base.success'));
@@ -315,7 +315,7 @@ class StoreService extends BaseService{
             $store_model->save();
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('stores.store_edit_error'));
+            OutputServerMessageException(__('stores.store_edit_error'));
         }
 
         return $this->format([],__('base.success'));

@@ -48,7 +48,7 @@ class SmsService extends BaseService{
     	
     	// 检测手机号码
     	if(!$this->check_phone($phone)){
-    		return $this->format_error(__('sms.phone_error'));
+    		OutputServerMessageException(__('sms.phone_error'));
     	}
     	
         $config_service = new ConfigService();
@@ -61,7 +61,7 @@ class SmsService extends BaseService{
 
         $sendBefore = $this->sendBefore($phone,$name);
         if(!$sendBefore['status']){
-            return $this->format_error($sendBefore['msg']);
+            OutputServerMessageException($sendBefore['msg']);
         }
 
         $rand = mt_rand(1000,9999);
@@ -90,7 +90,7 @@ class SmsService extends BaseService{
             $sms_log_model->error_msg = $error_msg;
             $sms_log_model->status = 0;
             $sms_log_model->save();
-            return $this->format_error(__('sms.send_error'));
+            OutputServerMessageException(__('sms.send_error'));
         }
         
 
@@ -100,7 +100,7 @@ class SmsService extends BaseService{
             $sms_log_model->error_msg = json_encode($rs);
             $sms_log_model->status = 0;
             $sms_log_model->save();
-            return $this->format_error(__('sms.send_error'));
+            OutputServerMessageException(__('sms.send_error'));
         }
         
     }
@@ -115,13 +115,13 @@ class SmsService extends BaseService{
             'status'    =>  1,
             'phone'   =>  $phone,
         ])->first())){
-            return $this->format_error(__('auth.sms_error'));
+            OutputServerMessageException(__('auth.sms_error'));
         }
 
         // 验证码失效 十分钟
         $ct = strtotime($smsInfo->created_at->format('Y-m-d H:i:s'));
         if(($ct+$failureTime)<time()){
-            return $this->format_error(__('auth.sms_invalid'));
+            OutputServerMessageException(__('auth.sms_invalid'));
         }
 
         return $this->format();
@@ -136,7 +136,7 @@ class SmsService extends BaseService{
         if(!empty($smsInfo)){
             $ct = strtotime($smsInfo->created_at->format('Y-m-d H:i:s'));
             if(($ct+20)<time()){
-                return $this->format_error(__('sms.re_send'));
+                OutputServerMessageException(__('sms.re_send'));
             }
         }
         
@@ -145,7 +145,7 @@ class SmsService extends BaseService{
         if($name == 'register'){
             $user_model = new User();
             if($user_model->where('phone',$phone)->exists()){
-                return $this->format_error(__('auth.user_exists'));
+                OutputServerMessageException(__('auth.user_exists'));
             }
         }
 
@@ -154,7 +154,7 @@ class SmsService extends BaseService{
         if($name == 'forget_password' || $name == 'edit_user'){
             $user_model = new User();
             if(!$user_model->where('phone',$phone)->exists()){
-                return $this->format_error(__('auth.user_not_exists'));
+                OutputServerMessageException(__('auth.user_not_exists'));
             }
         }
 

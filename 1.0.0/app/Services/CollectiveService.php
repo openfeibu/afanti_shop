@@ -19,7 +19,7 @@ class CollectiveService extends BaseService{
         $info = $collective_model->where('goods_id',$goods_id)->first();
 
         if(!$info){
-            return $this->format_error('collective empty');
+            OutputServerMessageException('collective empty');
         }
 
         return $this->format($info);

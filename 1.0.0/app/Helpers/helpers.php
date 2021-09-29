@@ -693,3 +693,10 @@ if(!function_exists('sensitive_address')) {
         return $str;
     }
 }
+//处理敏感字段
+if(!function_exists('OutputServerMessageException')) {
+    function OutputServerMessageException($error)
+    {
+        throw new \App\Exceptions\OutputServerMessageException($error);
+    }
+}

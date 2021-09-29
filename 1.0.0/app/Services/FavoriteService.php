@@ -34,7 +34,7 @@ class FavoriteService extends BaseService{
     // 添加收藏和关注
     public function addFav($out_id){
         if(!in_array(request()->is_type,[0,1])){
-            return $this->format_error(__('base.failed'));
+            OutputServerMessageException(__('base.failed'));
         }
 
         $user_service = new UserService;
@@ -58,7 +58,7 @@ class FavoriteService extends BaseService{
     // 删除
     public function delFav($out_id){
         if(!in_array(request()->is_type,[0,1])){
-            return $this->format_error(__('base.failed'));
+            OutputServerMessageException(__('base.failed'));
         }
 
         $user_service = new UserService;
@@ -72,7 +72,7 @@ class FavoriteService extends BaseService{
     // 判断是否有收藏
     public function isFav($out_id){
         if(!in_array(request()->is_type,[0,1])){
-            return $this->format_error(__('base.failed'));
+            OutputServerMessageException(__('base.failed'));
         }
 
         $user_service = new UserService;
@@ -85,9 +85,7 @@ class FavoriteService extends BaseService{
         }
 
         $fav_info = $fav_model->where(['user_id'=>$user_info['id'],'out_id'=>$out_id,'is_type'=>request()->is_type])->first();
-        if(empty($fav_info)){
-            return $this->format_error();
-        }
+
         return $this->format($fav_info);
     }
     

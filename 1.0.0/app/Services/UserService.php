@@ -16,11 +16,11 @@ class UserService extends BaseService{
     public function login($username='username',$auth='user'){
         $credentials = request([$username, 'password']);
         if (! $token = auth($auth)->attempt($credentials)) {
-            return $this->format_error(__('auth.error'));
+            OutputServerMessageException(__('auth.error'));
         }
 
         if(!$userInfo = $this->getUserInfo($auth)){
-            return $this->format_error(__('auth.user_error'));
+            OutputServerMessageException(__('auth.user_error'));
         }
 
         // 登陆成功修改时间和ip
@@ -96,11 +96,11 @@ class UserService extends BaseService{
             $user_info->save();
            
             if (! $token = auth($auth)->login($user_info)) {
-                return $this->format_error(__('auth.error'));
+                OutputServerMessageException(__('auth.error'));
             }
             
             if(!$userInfo = $this->getUserInfo($auth)){
-                return $this->format_error(__('auth.user_error'));
+                OutputServerMessageException(__('auth.user_error'));
             }
 
             // 登录送积分
@@ -116,7 +116,7 @@ class UserService extends BaseService{
             DB::commit();
             return $this->format($data);
         }catch(\Exception $e){
-            return $this->format_error($e->getMessage());
+            OutputServerMessageException($e->getMessage());
         }
         
         
@@ -129,7 +129,7 @@ class UserService extends BaseService{
         $uwInfo = $uw_model->where('unionid',$oauth['unionid'])->first();
         // 不存在则开始创建
         if($uwInfo){
-            return $this->format_error(__('users.bind_wechat_error'));
+            OutputServerMessageException(__('users.bind_wechat_error'));
         }
         // 插入第三方表
         $uw_model->create([
@@ -147,12 +147,12 @@ class UserService extends BaseService{
         $credentials = request([$username, 'password','re_password','code']);
         $user_model = new User();
         if($user_model->where($username,$credentials[$username])->exists()){
-            return $this->format_error(__('auth.user_exists'));
+            OutputServerMessageException(__('auth.user_exists'));
         }
         $sms_service = new SmsService();
         $smsRes = $sms_service->checkSms(request()->phone,request()->code);
         if(!$smsRes['status']){
-            return $this->format_error($smsRes['msg']);
+            OutputServerMessageException($smsRes['msg']);
         }
 
         $randNickName = $credentials[$username].'_'.mt_rand(100,999);
@@ -166,11 +166,11 @@ class UserService extends BaseService{
         $user_model->save();
         
         if (! $token = auth($auth)->login($user_model)) {
-            return $this->format_error(__('auth.error'));
+            OutputServerMessageException(__('auth.error'));
         }
         
         if(!$userInfo = $this->getUserInfo($auth)){
-            return $this->format_error(__('auth.user_error'));
+            OutputServerMessageException(__('auth.user_error'));
         }
 
         // 登录送积分
@@ -190,13 +190,13 @@ class UserService extends BaseService{
         $credentials = request([$username, 'password','re_password','code']);
         $user_model = new User();
         if(!$user_model->where($username,$credentials[$username])->exists()){
-            return $this->format_error(__('auth.user_not_exists'));
+            OutputServerMessageException(__('auth.user_not_exists'));
         }
 
         $sms_service = new SmsService();
         $smsRes = $sms_service->checkSms(request()->phone,request()->code);
         if(!$smsRes['status']){
-            return $this->format_error($smsRes['msg']);
+            OutputServerMessageException($smsRes['msg']);
         }
 
         $user_model = $user_model->where($username,$credentials[$username])->first();
@@ -206,11 +206,11 @@ class UserService extends BaseService{
         
         // $credentials2 = request([$username, 'password']);
         if (! $token = auth($auth)->login($user_model)) {
-            return $this->format_error(__('auth.error'));
+            OutputServerMessageException(__('auth.error'));
         }
         
         if(!$userInfo = $this->getUserInfo($auth)){
-            return $this->format_error(__('auth.user_error'));
+            OutputServerMessageException(__('auth.user_error'));
         }
 
         $data = [
@@ -239,23 +239,23 @@ class UserService extends BaseService{
 
         // 查看是否携带token
         if(!auth($auth)->parser()->setRequest(request())->hasToken()){
-            return $this->format_error(__('auth.no_token'));
+            OutputServerMessageException(__('auth.no_token'));
         }
 
         try{
             $id = auth($auth)->payload()->get('sub');
             if(!auth($auth)->byId($id)){ // 判断是否失效
-                return $this->format_error(__('auth.no_token'));
+                OutputServerMessageException(__('auth.no_token'));
             }
         }catch(\Exception $e){
-            return $this->format_error(__('auth.error_token'));
+            OutputServerMessageException(__('auth.error_token'));
         }
 
         if($seller){
             $stores_model = new Store();
             $store_info = $stores_model->select('id','store_name','store_logo')->where('user_id',auth($auth)->id())->first();
             if(!$store_info){
-                return $this->format_error(__('auth.error_token'));
+                OutputServerMessageException(__('auth.error_token'));
             }
             return $this->format($store_info);
         }
@@ -286,12 +286,12 @@ class UserService extends BaseService{
             try{
                 $oauth = json_decode(request()->oauth,true);
             }catch(\Exception $e){
-                return $this->format_error();
+                OutputServerMessageException("绑定失败");
             }
             
             $bindRes = $this->bindWechat($oauth);
             if(!$bindRes['status']){
-                return $this->format_error($bindRes['msg']);
+                OutputServerMessageException($bindRes['msg']);
             }
             return $this->format([]);
         }
@@ -328,13 +328,13 @@ class UserService extends BaseService{
                 }
 
                 if(!isset(request()->code) || empty(request()->code)){
-                    return $this->format_error(__('users.edit_code_error'));
+                    OutputServerMessageException(__('users.edit_code_error'));
                 }
 
                 $sms_service = new SmsService();
                 $smsRes = $sms_service->checkSms(request()->phone,request()->code);
                 if(!$smsRes['status']){
-                    return $this->format_error($smsRes['msg']);
+                    OutputServerMessageException($smsRes['msg']);
                 }
             }
             
@@ -343,7 +343,7 @@ class UserService extends BaseService{
             }
             if(isset(request()->pay_password) || !empty(request()->pay_password)){
                 if(strlen(request()->pay_password)!=6){
-                    return $this->format_error(__('users.pay_password_len'));
+                    OutputServerMessageException(__('users.pay_password_len'));
                 }
                 $user_model->pay_password = Hash::make(request()->pay_password);
             }
@@ -351,7 +351,7 @@ class UserService extends BaseService{
                 $sms_service = new SmsService();
                 $phone_check = $sms_service->check_phone(request()->phone);
                 if(!$phone_check){
-                    return $this->format_error(__('sms.phone_error'));
+                    OutputServerMessageException(__('sms.phone_error'));
                 }
                 $user_model->phone = request()->phone;
             }

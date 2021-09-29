@@ -14,7 +14,7 @@ class ArticleService extends BaseService{
         $article_model->where('ename',$ename)->increment('click_num');
 
         if(empty($info)){
-            return $this->format_error(__('admins.agreement_not_defined'));
+            OutputServerMessageException(__('admins.agreement_not_defined'));
         }
         return $this->format(new ArticleResource($info));
     }

@@ -39,7 +39,7 @@ class OrderCommentService extends BaseService{
             $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('user_id',$user_info['id'])->where('order_status',4)->get();
         }
         if(empty($order_list->count())){
-            return $this->format_error(__('orders.order_comment_error'));
+            OutputServerMessageException(__('orders.order_comment_error'));
         }
 
         $data = [];
@@ -85,7 +85,7 @@ class OrderCommentService extends BaseService{
         $order_model = new Order();
         $order_list = $order_model->with('order_goods')->whereIn('id',$ids)->get();
         if($order_list->isEmpty()){
-            return $this->format_error('order_list is empty obj systemAdd.');
+            OutputServerMessageException('order_list is empty obj systemAdd.');
         }
         $data = [];
         $score = 5.00;

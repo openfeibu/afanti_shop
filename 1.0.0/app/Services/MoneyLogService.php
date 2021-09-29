@@ -50,7 +50,7 @@ class MoneyLogService extends BaseService{
             return $this->format([]);
         }catch(\Exception $e){
             DB::rollBack();
-            return $this->format_error(__('users.money_log_error'));
+            OutputServerMessageException(__('users.money_log_error'));
         }
     }
 
@@ -92,7 +92,7 @@ class MoneyLogService extends BaseService{
         }catch(\Exception $e){
             DB::rollBack();
             dd($e->getMessage());
-            return $this->format_error(__('users.money_log_error'));
+            OutputServerMessageException(__('users.money_log_error'));
         }
     }
 

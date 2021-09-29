@@ -24,14 +24,14 @@ class IntegralOrderService extends BaseService{
         // 地址验证
         $address_resp = $order_service->checkAddress();
         if(!$address_resp['status']){
-            return $this->format_error($address_resp['msg']);
+            OutputServerMessageException($address_resp['msg']);
         }
         $address_info = $address_resp['data'];
 
         $user_service = new UserService;
         $user_info = $user_service->getUserInfo();
         if(empty($user_info)){
-            return $this->format_error(__('base.error').' - order_service');
+            OutputServerMessageException(__('base.error').' - order_service');
         }
 
         $goods_info = $igm->find($params['id']);
@@ -39,7 +39,7 @@ class IntegralOrderService extends BaseService{
         $total_price = $goods_info['goods_price']*$params['buy_num'];
 
         if($user_info['integral']<$total_price){
-            return $this->format_error(__('users.integral_not_enough'));
+            OutputServerMessageException(__('users.integral_not_enough'));
         }
 
         $make_rand = date('YmdHis').$user_info['id'].mt_rand(1000,9999); // 生成订单号
@@ -82,7 +82,7 @@ class IntegralOrderService extends BaseService{
             $resp_data['order_no'][] = $make_rand;
             return $this->format($resp_data);
         }catch(\Exception $e){
-            return $this->format_error($e->getMessage());
+            OutputServerMessageException($e->getMessage());
         }
 
     }

@@ -67,7 +67,7 @@ class GoodsService extends BaseService{
             DB::rollBack();
             Log::channel('qwlog')->debug('商品添加失败');
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('goods.add_error'));
+            OutputServerMessageException(__('goods.add_error'));
         }
         
     }
@@ -204,7 +204,7 @@ class GoodsService extends BaseService{
             DB::rollBack();
             Log::channel('qwlog')->debug('商品编辑失败');
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('goods.add_error'));
+            OutputServerMessageException(__('goods.add_error'));
         }
         
     }
@@ -279,17 +279,17 @@ class GoodsService extends BaseService{
         $goods_info = $goods_model->with('goods_brand')->where('id',$id)->first();
 
         if(empty($goods_info)){
-            return $this->format_error(__('goods.goods_not_found'));
+            OutputServerMessageException(__('goods.goods_not_found'));
         }
 
         $store_info = $store_service->getStoreInfo($goods_info['store_id']);
 
         if(!$store_info['status']){
-            return $this->format_error($store_info['msg']);
+            OutputServerMessageException($store_info['msg']);
         }
         
         if($store_info['data']['store_status']!=1 || $store_info['data']['store_verify']!=3){
-            return $this->format_error(__('stores.store_not_defined'));
+            OutputServerMessageException(__('stores.store_not_defined'));
         }
 
         $goods_info['goods_images'] = explode(',',$goods_info['goods_images']);
@@ -430,7 +430,7 @@ class GoodsService extends BaseService{
                         ->paginate(request()->per_page??30);
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('goods.search_error'));
+            OutputServerMessageException(__('goods.search_error'));
         }
         return $this->format(new GoodsSearchCollection($list));
 
@@ -470,7 +470,7 @@ class GoodsService extends BaseService{
                         ->paginate(request()->per_page??30);
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('goods.search_error'));
+            OutputServerMessageException(__('goods.search_error'));
         }
         return $this->format(new StoreGoodsListCollection($list));
     }

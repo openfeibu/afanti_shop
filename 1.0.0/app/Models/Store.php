@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use AhmedAliraqi\LaravelMediaUploader\Entities\Concerns\HasUploader;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Store extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, InteractsWithMedia, HasUploader;
     // 店铺评论关联
     public function comments(){
         return $this->hasMany('App\Models\OrderComment','store_id','id');

@@ -31,7 +31,7 @@ class KuaibaoService extends BaseService{
         $infos = $info->getContents();
         $kbInfo = json_decode($infos,true);
         if($kbInfo['code'] != 0){
-            return $this->format_error($kbInfo['msg']);
+            OutputServerMessageException($kbInfo['msg']);
         }
         $data = $kbInfo['data'][0]['data'];
         return $data;

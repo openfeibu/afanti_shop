@@ -17,6 +17,10 @@
                 <a-tab-pane :key="3" tab="幻灯片设置">
                     <pc-slide />
                 </a-tab-pane>
+                <a-tab-pane :key="4" tab="展馆视频">
+                    <store-video />
+                </a-tab-pane>
+
             </a-tabs>
             
             
@@ -28,9 +32,9 @@
 import baseInfo from "./base/index"
 import face from "./face/index"
 import pcSlide from "./slide/pc"
-
+import storeVideo from "./video/index"
 export default {
-    components: {baseInfo,face,pcSlide},
+    components: {baseInfo,face,pcSlide,storeVideo},
 };
 </script>
 <style lang="scss" scoped>

@@ -39,7 +39,7 @@ class GoodsController extends Controller
             $goods_info['data']['store_info'] = $this->store_service->getStoreInfoAndRate($goods_info['data']['store_id'],'id,store_name,store_description')['data'];
             $goods_info['data']['sale_list'] = $this->goods_service->getSaleSortGoods(['class_id'=>$goods_info['data']['class_id']])['data']; // 销售排名
             $goods_info['data']['coupons'] = $this->coupon_service->getCoupons()['data']; // 优惠券
-            $goods_info['data']['full_reductions'] = $this->full_reduction_service->getFullReductionByStoreId($goods_info['data']['store_id'])['data']; // 满减
+            $goods_info['data']['full_reductions'] = $this->full_reduction_service->getFullReduction($goods_info['data']['store_id'])['data']; // 满减
             $seckill_info = $this->seckill_service->getSeckillInfoByGoodsId($id);
             $goods_info['data']['seckills'] = $seckill_info['status']?$seckill_info['data']:false; // 秒杀
             $collective_info = $this->collective_service->getCollectiveInfoByGoodsId($id);

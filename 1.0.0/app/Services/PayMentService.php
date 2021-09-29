@@ -26,13 +26,13 @@ class PayMentService extends BaseService{
             }
         }catch(\Exception $e){
             Log::channel('qwlog')->debug(__('orders.payment_call_error').' - '.$payment_name.' - Payment 26 message:'.$e->getMessage());
-            return $this->format_error(__('orders.payment_call_error').' - Payment');
+            OutputServerMessageException(__('orders.payment_call_error').' - Payment');
         }
         
         // 如果商户号没传回来，肯定报错
         if(empty($out_trade_no)){
             Log::channel('qwlog')->debug(__('orders.payment_call_error').' - Payment 31');
-            return $this->format_error(__('orders.payment_call_error').' - Payment');
+            OutputServerMessageException(__('orders.payment_call_error').' - Payment');
         }
 
         // 获取回调的订单号判断是那种支付类型 首字母为支付方式 尾部为是否充值
@@ -86,7 +86,7 @@ class PayMentService extends BaseService{
      */
     public function pay($payment_name,$order_pay){
         if(empty($payment_name) || empty($order_pay)){
-            return $this->format_error(__('orders.error'));
+            OutputServerMessageException(__('orders.error'));
         }
         
         // 判断是否是余额支付
@@ -98,18 +98,18 @@ class PayMentService extends BaseService{
             // 获取支付配置
             $rs = $this->getPaymentConfig($payment_name);
             if(!$rs['status']){
-                return $this->format_error($rs['msg']);
+                OutputServerMessageException($rs['msg']);
             }
             // 根据订单支付数据查询订单名称
             $order_id = explode(',',$order_pay->order_ids)[0];
             if(empty($order_id)){
-                return $this->format_error(__('orders.error').' - 51');
+                OutputServerMessageException(__('orders.error').' - 51');
             }
 
             $order_model = new Order();
             $order_info = $order_model->select('order_name')->where('id',$order_id)->first();
             if(empty($order_info)){
-                return $this->format_error(__('orders.error').' - 59');
+                OutputServerMessageException(__('orders.error').' - 59');
             }
 
             // 订单支付表修改状态
@@ -184,7 +184,7 @@ class PayMentService extends BaseService{
             }
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($pay_order_info['out_trade_no'].':'.$e->getMessage());
-            return $this->format_error(__('orders.payment_failed'));
+            OutputServerMessageException(__('orders.payment_failed'));
         }
         
         return $this->format($rs);
@@ -196,7 +196,7 @@ class PayMentService extends BaseService{
         if($rs = Order::where('order_no',$out_trade_no)->where('order_status','>',1)->exists()){
             return $this->format($rs);
         }else{
-            return $this->format_error($rs);
+            OutputServerMessageException($rs);
         }
     }
 
@@ -208,7 +208,7 @@ class PayMentService extends BaseService{
         $payment_arr = explode('_',$payment_name);
         $config_info = $config_model->getFormatConfig($payment_arr[0].'_pay');
         if(empty($config_info)){
-            return $this->format_error(__('orders.empty_payment').' - payment_config');
+            OutputServerMessageException(__('orders.empty_payment').' - payment_config');
         }
 
         switch($payment_name){
@@ -315,7 +315,7 @@ class PayMentService extends BaseService{
         }catch(\Exception $e){
             DB::rollBack();
             Log::channel('qwlog')->debug($out_trade_no.':'.$e->getMessage());
-            return $this->format_error(__('orders.payment_failed').':'.$out_trade_no);
+            OutputServerMessageException(__('orders.payment_failed').':'.$out_trade_no);
         }
     }
 

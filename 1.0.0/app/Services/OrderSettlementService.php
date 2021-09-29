@@ -34,7 +34,7 @@ class OrderSettlementService extends BaseService{
 
         // 结算订单为空
         if($order_list->isEmpty()){
-            return $this->format_error(__('admins.order_settlement_empty'));
+            OutputServerMessageException(__('admins.order_settlement_empty'));
         }
 
         $distribution_order = []; // 分销订单ID
@@ -123,7 +123,7 @@ class OrderSettlementService extends BaseService{
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($e->getMessage());
             DB::rollBack();
-            return $this->format_error(__('admins.order_settlement_error'));
+            OutputServerMessageException(__('admins.order_settlement_error'));
         }
 
     }

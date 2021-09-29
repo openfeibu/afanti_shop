@@ -41,7 +41,7 @@ class AutoService extends BaseService{
         // 将订单状态为 1（未支付）时间在超过 配置时间的订单取消
         $order_list = $order_model->where('order_status',1)->where('created_at','<',Carbon::parse($this->config['cancel'].' days ago')->toDateTimeString())->get(); //update(['order_status'=>0,'updated_at'=>now()])
         if($order_list->isEmpty()){
-            return $this->format_error('order list is empty in autoService');
+            OutputServerMessageException('order list is empty in autoService');
         }
         $ids = [];
         foreach($order_list as $v){
@@ -70,7 +70,7 @@ class AutoService extends BaseService{
         // 将订单状态为 2 等待收货 3 确定收货 自动确认收货并评价
         $order_list = $order_model->select('id')->whereIn('order_status',[2,3])->where('pay_time','<',Carbon::parse($this->config['confirm'].' days ago')->toDateTimeString())->get();
         if($order_list->isEmpty()){
-            return $this->format_error('order list is empty in autoService');
+            OutputServerMessageException('order list is empty in autoService');
         }
         $ids = [];
         foreach($order_list as $v){$ids[] = $v['id'];}

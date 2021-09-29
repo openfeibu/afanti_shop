@@ -14,7 +14,8 @@ import { getSession, returnInfo, formatFloat } from '@/plugins/function' // 辅�
 import '@/plugins/css/home.css' // 首页样式
 import '@/plugins/css/style.css' // 公共样式
 import '@/plugins/css/fbCommon.css' // 公共样式
-
+import FileUploader from 'laravel-file-uploader';
+Vue.use(FileUploader);
 //引入封装通用加载组件库
 import Loading from "@/components/home/public/loading";
 Vue.use(Loading)

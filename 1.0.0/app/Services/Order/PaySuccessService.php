@@ -1,7 +1,6 @@
 <?php
 namespace App\Services\Order;
 
-use App\Exceptions\OutputServerMessageException;
 use App\Models\CollectiveActive;
 use App\Models\Order;
 use App\Models\OrderGoods;
@@ -30,14 +29,14 @@ class PaySuccessService extends BaseService{
     {
         $pay_password = request()->pay_password;
         if(empty($pay_password)){
-            throw new OutputServerMessageException(__('orders.pay_password_error'));
+            OutputServerMessageException(__('orders.pay_password_error'));
         }
         $user_info = auth('user')->user();
         if(!Hash::check($pay_password , $user_info->pay_password)){
-            throw new OutputServerMessageException(__('orders.pay_password_error'));
+            OutputServerMessageException(__('orders.pay_password_error'));
         }
         if($order_pay->total_price>$user_info->money){
-            throw new OutputServerMessageException(__('orders.balance_insufficient'));
+            OutputServerMessageException(__('orders.balance_insufficient'));
         }
 
         $order_pay->order_balance = $order_pay->total_price;

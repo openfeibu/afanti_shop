@@ -154,7 +154,7 @@ class DistributionService extends BaseService{
     public function getUser(){
         $user_service = new UserService;
         if(!$user_info = $user_service->getUserInfo()){
-            return $this->format_error(); 
+            return $this->format_error();
         }
         $user_model = new User;
         if(request()->lev==0){

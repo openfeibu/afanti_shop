@@ -19,20 +19,20 @@ class UploadService extends BaseService{
     public function uploadFile($path='',$filename=''){
         
         if(!request()->hasFile($this->fileName)){
-            return $this->format_error(__('upload.file_not_found'));
+            OutputServerMessageException(__('upload.file_not_found'));
         }
 
         // 获取上传来的文件
         $file = request()->file($this->fileName);
 
         if(!$file->isValid()){ //无效文件
-            return $this->format_error(__('upload.invalid_file'));
+            OutputServerMessageException(__('upload.invalid_file'));
         }
 
         $ext = strtolower($file->getClientOriginalExtension()); // 后缀
 
         if(!in_array($ext,$this->fileAllow)){
-            return $this->format_error(__('upload.not_allow').'['.implode(',',$this->fileAllow).']');
+            OutputServerMessageException(__('upload.not_allow').'['.implode(',',$this->fileAllow).']');
         }
 
         if(!empty($path)){
@@ -43,7 +43,7 @@ class UploadService extends BaseService{
         try{
             $config = $configService->getFormatConfig('alioss');
         }catch(\Exception $e){
-            return $this->format_error(__('upload.error_config_oss'));
+            OutputServerMessageException(__('upload.error_config_oss'));
         }
 
         $disk = 'public'; // 默认是本地
@@ -71,7 +71,7 @@ class UploadService extends BaseService{
     public function uploadPhoto($path='',$opt=[]){
 
         if(!request()->hasFile($this->fileName)){
-            return $this->format_error(__('upload.file_not_found'));
+            OutputServerMessageException(__('upload.file_not_found'));
         }
 
         // 获取上传来的文件
@@ -81,12 +81,12 @@ class UploadService extends BaseService{
         if(!isset($opt['many'])){ // many 存在则是多文件，这里if下是单文件
             // 判断是否传错了 单文件上传选择多文件
             if(is_array($file)){
-                return $this->format_error(__('upload.upload_type'));
+                OutputServerMessageException(__('upload.upload_type'));
             }
             try{
                 $rs = $this->photoHandle($file,$path,$opt);
             }catch(Exception $e){
-                return $this->format_error($e->getMessage());
+                OutputServerMessageException($e->getMessage());
             }
             
             return $this->format($rs,__('upload.upload_success'));
@@ -95,14 +95,14 @@ class UploadService extends BaseService{
 
         $fileList = []; // 多文件地址
         if(!is_array($file)){
-            return $this->format_error(__('upload.upload_type'));
+            OutputServerMessageException(__('upload.upload_type'));
         }
         try{
             foreach($file as $v){
                 $fileList[] = $this->photoHandle($v,$path,$opt);
             }
         }catch(Exception $e){
-            return $this->format_error($e->getMessage());
+            OutputServerMessageException($e->getMessage());
         }
         return $this->format($fileList,__('upload.upload_success'));
 

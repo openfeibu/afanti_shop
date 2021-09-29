@@ -8,7 +8,7 @@ class FreightService extends BaseService{
     public function edit(){
         $list = request()->info;
         if(empty($list)){
-            return $this->format_error(__('base.error'));
+            OutputServerMessageException(__('base.error'));
         }
         $freight_model = new Freight();
         foreach($list as $k=>$v){

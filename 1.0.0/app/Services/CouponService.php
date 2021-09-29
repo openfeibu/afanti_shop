@@ -15,7 +15,7 @@ class CouponService extends BaseService{
 
         $coupon_id = request()->id; // 获取优惠券ID
         if(empty($coupon_id)){
-            return $this->format_error(__('markets.coupon_error'));
+            OutputServerMessageException(__('markets.coupon_error'));
         } 
 
         try{
@@ -25,19 +25,19 @@ class CouponService extends BaseService{
 
             // 判断优惠券是否失效
             if(now()->gt($coupon_model->end_time)){
-                return $this->format_error(__('markets.coupon_invalid'));
+                OutputServerMessageException(__('markets.coupon_invalid'));
             }
 
             // 查看发放总数是否发完
             if($coupon_model->stock<=0){
-                return $this->format_error(__('markets.coupon_total_error'));
+                OutputServerMessageException(__('markets.coupon_total_error'));
             }
 
             $coupon_log_model = new CouponLog();
 
             // 先查看是否存在
             if($coupon_log_model->where('user_id',$user_info['id'])->where('coupon_id',$coupon_id)->exists()){
-                return $this->format_error(__('markets.coupon_exists'));
+                OutputServerMessageException(__('markets.coupon_exists'));
             }
             $coupon_log_model->user_id = $user_info['id'];
             $coupon_log_model->coupon_id = $coupon_id;
@@ -56,7 +56,7 @@ class CouponService extends BaseService{
             return $this->format(); 
         }catch(\Exception $e){
             DB::rollBack();
-            return $this->format_error($e->getMessage());
+            OutputServerMessageException($e->getMessage());
         }
 
         
@@ -74,7 +74,7 @@ class CouponService extends BaseService{
      */
     public function use_coupon($coupon_log_id=0,$order_id=0){
         if(empty($coupon_log_id)){
-            return $this->format_error('markets.coupon_error');
+            OutputServerMessageException('markets.coupon_error');
         } 
         $coupon_log_model = new CouponLog();
         $coupon_log_model = $coupon_log_model->find($coupon_log_id);
@@ -90,7 +90,7 @@ class CouponService extends BaseService{
         $list = $coupon_model->where('store_id',$store_id)->where('stock','>',0)->where('start_time','<',now())->where('end_time','>',now())->get();
 
         if($list->isEmpty()){
-            return $this->format_error('coupon_empty');
+            OutputServerMessageException('coupon_empty');
         }
 
         return $this->format(new CouponCollection($list));
@@ -101,7 +101,7 @@ class CouponService extends BaseService{
         $list = $coupon_model->where('stock','>',0)->where('start_time','<',now())->where('end_time','>',now())->get();
 
         if($list->isEmpty()){
-            return $this->format_error('coupon_empty');
+            OutputServerMessageException('coupon_empty');
         }
 
         return $this->format(new CouponCollection($list));

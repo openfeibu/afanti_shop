@@ -12,7 +12,7 @@ class UserCheckService extends BaseService{
         $user_info = $user_service->getUserInfo();
         $check_info = $uc_model->where('user_id',$user_info['id'])->first();
         if(empty($check_info)){
-            return $this->format_error(__('users.user_check_error'));
+            OutputServerMessageException(__('users.user_check_error'));
         }
 
         // 判断是否是用户获取还是后台获取
@@ -36,7 +36,7 @@ class UserCheckService extends BaseService{
                 !isset(request()->card_t) || empty(request()->card_t) || !isset(request()->card_b) || empty(request()->card_b) ||
                 !isset(request()->bank_name) || empty(request()->bank_name)
             ){
-                return $this->format_error(__('base.error'));
+                OutputServerMessageException(__('base.error'));
             }
         }
         $uc_model->user_id = $user_info['id'];

@@ -28,7 +28,7 @@ class IntegralGoodsService extends BaseService{
             $list = $ig_model->where('goods_status',1)
                         ->paginate(request()->per_page??30);
         }catch(\Exception $e){
-            return $this->format_error(__('goods.search_error'));
+            OutputServerMessageException(__('goods.search_error'));
         }
         return $this->format($list);
         // return $this->format(new GoodsSearchCollection($list));

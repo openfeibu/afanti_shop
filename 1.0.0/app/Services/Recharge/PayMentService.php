@@ -26,26 +26,26 @@ class PayMentService extends BaseService{
      */
     public function pay($payment_name,$order_pay){
         if(empty($payment_name) || empty($order_pay)){
-            return $this->format_error(__('orders.error'));
+            OutputServerMessageException(__('orders.error'));
         }
         // 判断是否是余额支付
         if($payment_name == 'money'){
             $pay_password = request()->pay_password;
             if(empty($pay_password)){
-                return $this->format_error(__('orders.pay_password_error'));
+                OutputServerMessageException(__('orders.pay_password_error'));
             }
             $user_info = auth('user')->user();
             if(!Hash::check($pay_password , $user_info->pay_password)){
-                return $this->format_error(__('orders.pay_password_error'));
+                OutputServerMessageException(__('orders.pay_password_error'));
             }
             if($order_pay->total_price>$user_info->money){
-                return $this->format_error(__('orders.balance_insufficient'));
+                OutputServerMessageException(__('orders.balance_insufficient'));
             }
             // 金额日志 用户账户变更
             $ml_service = new MoneyLogService();
             $ml_info = $ml_service->editMoney(__('users.money_log_order'),$order_pay->user_id,-$order_pay->total_price);
             if(!$ml_info['status']){
-                return $this->format_error($ml_info['msg']);
+                OutputServerMessageException($ml_info['msg']);
             }else{
                 $order_model = new Order();
                 $oid_arr = explode(',',$order_pay->order_ids);
@@ -78,7 +78,7 @@ class PayMentService extends BaseService{
             // 获取支付配置
             $rs = $this->getPaymentConfig($payment_name);
             if(!$rs['status']){
-                return $this->format_error($rs['msg']);
+                OutputServerMessageException($rs['msg']);
             }
 
 

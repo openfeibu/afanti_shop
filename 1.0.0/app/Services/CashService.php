@@ -37,7 +37,7 @@ class CashService extends BaseService{
 
         // 金额不能小于100
         if($money<100){
-            return $this->format_error(__('users.cash_money_gt100'));
+            OutputServerMessageException(__('users.cash_money_gt100'));
         }
         
         $ml_service = new MoneyLogService();
@@ -48,12 +48,12 @@ class CashService extends BaseService{
             $uc_model = new UserCheck();
 
             if($money>$user_info['money']){
-                return $this->format_error(__('users.cash_money_insufficient'));
+                OutputServerMessageException(__('users.cash_money_insufficient'));
             }
 
             $uc_info = $uc_model->where('user_id',$user_info['id'])->first();
             if(!$uc_info){
-                return $this->format_error(__('base.error'));
+                OutputServerMessageException(__('base.error'));
             }
             $cash_model->user_id = $user_info['id'];
             $cash_model->money = $money;
@@ -77,7 +77,7 @@ class CashService extends BaseService{
             $cash_model->bank_name = request()->bank_name;
 
             if($money>$store_info['store_money']){
-                return $this->format_error(__('users.cash_money_insufficient'));
+                OutputServerMessageException(__('users.cash_money_insufficient'));
             }
 
             // 资金冻结处理
@@ -97,7 +97,7 @@ class CashService extends BaseService{
         
         $cash_info = $cash_model->where('id',$id)->first();
         if(!$cash_info){
-            return $this->format_error(__('base.error'));
+            OutputServerMessageException(__('base.error'));
         }
         $cash_info->cash_status = $cash_status;
         $cash_info->refuse_info = $refuse_info;

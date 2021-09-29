@@ -27,7 +27,7 @@ class OrderService extends BaseService{
     public function createOrderBefore(){
         $check = $this->base64Check();
         if(!$check['status']){
-            return $this->format_error($check['msg']);
+            OutputServerMessageException($check['msg']);
         }
 
         $params = $check['data'];
@@ -40,34 +40,34 @@ class OrderService extends BaseService{
     public function createOrder(){
         $check = $this->base64Check();
         if(!$check['status']){
-            return $this->format_error($check['msg']);
+            OutputServerMessageException($check['msg']);
         }
 
         $params = $check['data'];
         $rs = $this->createOrderFormat($params);
 
         if(!$rs['status']){
-            return $this->format_error($rs['msg']);
+            OutputServerMessageException($rs['msg']);
         }
         $create_order_data = $rs['data'];
 
         // 优惠券的处理
         if(!isset(request()->coupon_id)){
-            return $this->format_error('coupon_id empty');
+            OutputServerMessageException('coupon_id empty');
         }
         $coupon_id = request()->coupon_id;
 
         // 地址验证
         $address_resp = $this->checkAddress();
         if(!$address_resp['status']){
-            return $this->format_error($address_resp['msg']);
+            OutputServerMessageException($address_resp['msg']);
         }
         $address_info = $address_resp['data'];
 
         $user_service = new UserService;
         $user_info = $user_service->getUserInfo();
         if(empty($user_info)){
-            return $this->format_error(__('base.error').' - order_service');
+            OutputServerMessageException(__('base.error').' - order_service');
         }
 
         // 实例化订单表
@@ -198,7 +198,7 @@ class OrderService extends BaseService{
         }catch(\Exception $e){
             Log::channel('qwlog')->debug('createOrder:'.json_encode($e->getMessage()));
             DB::rollBack();
-            return $this->format_error(__('orders.error'));
+            OutputServerMessageException(__('orders.error'));
         }
 
 
@@ -221,7 +221,7 @@ class OrderService extends BaseService{
     public function createOrderAfter(){
         $check = $this->base64Check();
         if(!$check['status']){
-            return $this->format_error($check['msg']);
+            OutputServerMessageException($check['msg']);
         }
         $params = $check['data'];
         $order_model = new Order;
@@ -288,12 +288,12 @@ class OrderService extends BaseService{
 
         // 检查支付方式是否传过来
         if(empty($payment_name)){
-            return $this->format_error(__('orders.empty_payment'));
+            OutputServerMessageException(__('orders.empty_payment'));
         }
 
         // 判断订单号是否为空
         if(empty($order_id)){
-            return $this->format_error(__('orders.error').' - pay');
+            OutputServerMessageException(__('orders.error').' - pay');
         }
         $order_arr = explode(',',$order_id); // 转化为数组
         $order_str = implode('',$order_arr); // 转化为字符串生成支付订单号
@@ -302,19 +302,19 @@ class OrderService extends BaseService{
         $user_service = new UserService();
         $user_info = $user_service->getUserInfo();
         if(empty($user_info)){
-            return $this->format_error(__('user.no_token'));
+            OutputServerMessageException(__('user.no_token'));
         }
 
         // 判断是否订单是该用户的并且订单是否有支付成功过
         $order_model = new Order();
         // 判断是否存在 指定订单
         if(!$order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->exists()){
-            return $this->format_error(__('orders.error').' - pay2');
+            OutputServerMessageException(__('orders.error').' - pay2');
         }
         // 判断是否已经支付过了
         $order_list = $order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->where('order_status',1)->get();
         if($order_list->isEmpty()){
-            return $this->format_error(__('orders.order_pay'));
+            OutputServerMessageException(__('orders.order_pay'));
         }
         $collective_orders =  $order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->where('order_type','group')->get();
 
@@ -326,7 +326,7 @@ class OrderService extends BaseService{
                     $collective_active = CollectiveActive::where('id', $order['collective_active_id'])->first();
                     // 验证当前拼单是否允许加入新成员
                     if (!$collective_active->checkAllowJoin()) {
-                        return $this->format_error($collective_active->error);
+                        OutputServerMessageException($collective_active->error);
                     }
                 }
             }
@@ -339,7 +339,7 @@ class OrderService extends BaseService{
 
         // 创建支付订单失败
         if(!$rs['status']){
-            return $this->format_error($rs['msg']);
+            OutputServerMessageException($rs['msg']);
         }
 
         // 获取支付信息,调取第三方支付
@@ -377,7 +377,7 @@ class OrderService extends BaseService{
             $order_pay_info = $order_pay_model->create($create_data);
         }catch(\Exception $e){
             Log::channel('qwlog')->debug($e->getMessage());
-            return $this->format_error(__('orders.payment_failed'));
+            OutputServerMessageException(__('orders.payment_failed'));
         }
 
         return $this->format($order_pay_info);
@@ -401,24 +401,24 @@ class OrderService extends BaseService{
             $user_service = new UserService;
             $user_info = $user_service->getUserInfo();
             if(empty($user_info)){
-                return $this->format_error(__('users.no_token'));
+                OutputServerMessageException(__('users.no_token'));
             }
             // 用户不允许随意操作状态，只能修改 取消订单和确定订单
             if($order_status !=0 && $order_status !=4){
-                return $this->format_error(__('base.error'));
+                OutputServerMessageException(__('base.error'));
             }
             $order_model = $order_model->where('user_id',$user_info['id']);
         }
         $order_model = $order_model->first();
 
         if(empty($order_model)){
-            return $this->format_error(__('users.error_token'));
+            OutputServerMessageException(__('users.error_token'));
         }
 
         switch($order_status){
             case 0: // 取消订单
                 if($order_model->order_status != 1){ // 只有待支付的订单能取消
-                    return $this->format_error(__('base.error').' - 0');
+                    OutputServerMessageException(__('base.error').' - 0');
                 }
                 $og_model = new OrderGoods();
                 $og_list = $og_model->select('goods_id','sku_id','buy_num')->where('order_id',$order_id)->get();
@@ -437,7 +437,7 @@ class OrderService extends BaseService{
                 break;
             case 3: // 确认收货
                 if(empty($order_model->delivery_no) || empty($order_model->delivery_code)){ // 只有待支付的订单能取消
-                    return $this->format_error(__('base.error').' - 3');
+                    OutputServerMessageException(__('base.error').' - 3');
                 }
                 break;
             case 4: // 等待评论
@@ -456,14 +456,14 @@ class OrderService extends BaseService{
     public function checkAddress(){
         $id = request()->address_id??0;
         if(empty($id)){
-            return $this->format_error(__('orders.no_address'));
+            OutputServerMessageException(__('orders.no_address'));
         }
 
         $address_model = new Address();
         $address_info = $address_model->find($id);
 
         if(empty($address_info)){
-            return $this->format_error(__('orders.no_address').'2');
+            OutputServerMessageException(__('orders.no_address').'2');
         }
 
         return $this->format($address_info);
@@ -539,7 +539,7 @@ class OrderService extends BaseService{
 
         $user_service = new UserService();
         if(!$user_info = $user_service->getUserInfo()){
-            return $this->format_error(__('auth.no_token'));
+            OutputServerMessageException(__('auth.no_token'));
         }
 
         $list = $order_data = [];
@@ -556,7 +556,7 @@ class OrderService extends BaseService{
             }])->select('id','store_id','goods_name','goods_master_image','goods_price','goods_stock','goods_weight','freight_id','goods_status')->where('id',$v['goods_id'])->first();
             if(!$data or $data['goods_status'] != 1)
             {
-                return $this->format_error(__('orders.goods_failure'));
+                OutputServerMessageException(__('orders.goods_failure'));
             }
             $first_goods_id = $first_goods_id ? $first_goods_id : $v['goods_id'];
             $data['sku_name'] = '-';
@@ -595,7 +595,7 @@ class OrderService extends BaseService{
             $create_order_data['order_price'] += $data['total'];
             // 判断是否库存足够
             if($v['buy_num']>$data['goods_stock']){
-                return $this->format_error(__('orders.stock_error'),[],8012);
+                OutputServerMessageException(__('orders.stock_error'),[],8012);
             }
 
             // 判断是否是购物车
@@ -655,14 +655,14 @@ class OrderService extends BaseService{
 
         // 如果为空
         if(empty($base64)){
-            return $this->format_error(__('orders.error'));
+            OutputServerMessageException(__('orders.error'));
         }
 
         // 判断是否能解析
         try{
             $params = json_decode(base64_decode($base64),true);
         }catch(\Exception $e){
-            return $this->format_error(__('orders.error').'2');
+            OutputServerMessageException(__('orders.error').'2');
         }
         return $this->format($params);
     }

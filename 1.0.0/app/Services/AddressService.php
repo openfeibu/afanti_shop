@@ -57,7 +57,7 @@ class AddressService extends BaseService{
         $address_model = new Address();
         $address_info = $address_model->where('user_id',$user_info['id'])->where('id',$id)->first();
         if(empty($address_info)){
-            return $this->format_error(__('users.address_error'));
+            OutputServerMessageException(__('users.address_error'));
         }
         
         $address_info->receive_name = request()->receive_name??'';
@@ -97,7 +97,7 @@ class AddressService extends BaseService{
         $address_model = new Address();
         $address_info = $address_model->where('user_id',$user_info['id'])->where('id',$id)->first();
         if(empty($address_info)){
-            return $this->format_error(__('users.address_error'));
+            OutputServerMessageException(__('users.address_error'));
         }
 
         $address_model->where('user_id',$user_info['id'])->where('is_default',1)->update(['is_default'=>0]);

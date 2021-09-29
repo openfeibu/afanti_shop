@@ -19,11 +19,11 @@ class RefundService extends BaseService{
         $order_model = new Order();
         $order_info = $order_model->where('user_id',$user_info['id'])->where('id',$order_id)->first();
         if(!$order_info && $order_info->order_status!=6 && $order_info->order_status !=4){
-            return $this->format_error(__('base.error'));
+            OutputServerMessageException(__('base.error'));
         }
         
         if($refund_model->where('user_id',$user_info['id'])->where('order_id',$order_id)->exists()){
-            return $this->format_error(__('orders.order_refund_handle'));
+            OutputServerMessageException(__('orders.order_refund_handle'));
         }
         
         $refund_model->user_id = $user_info['id'];
@@ -57,13 +57,13 @@ class RefundService extends BaseService{
         $refund_info = $refund_model->where('order_id',$id)->first();
         
         if(!$refund_info){
-            return $this->format_error(__('base.error'));
+            OutputServerMessageException(__('base.error'));
         }
 
         if(isset(request()->refund_verify) && $auth =='seller'){
             $refund_verify = request()->refund_verify;
             if($refund_info->refund_verify!=0){
-                return $this->format_error(__('base.error').'- rep');
+                OutputServerMessageException(__('base.error').'- rep');
             }
 
             // 拒绝还是同意
@@ -146,7 +146,7 @@ class RefundService extends BaseService{
         }
         $refund_info = $refund_model->where('order_id',$order_id)->first();
         if(!$refund_info){
-            return $this->format_error(__('base.error'));
+            OutputServerMessageException(__('base.error'));
         }
         return $this->format($refund_info);
     }

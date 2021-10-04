@@ -126,6 +126,10 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::get('collectives/goods/get_collective_goods','CollectiveController@get_collective_goods'); // 获取商品列表
         Route::apiResource('collective_logs','CollectiveLogController')->only(['index']); // 拼团日志
 
+        // 砍价
+        Route::apiResource('bargains','BargainController');
+        Route::get('bargains/goods/get_bargain_goods','BargainController@get_bargain_goods'); // 获取商品列表
+
         // 结算日志
         Route::apiResource('order_settlements','OrderSettlementController')->except(['update','destroy']);
 
@@ -307,6 +311,9 @@ Route::namespace('Home')->group(function(){
     Route::get('/seckills','SeckillController@index'); // 首页数据
 
     Route::get('/coupons','CouponController@index'); // 优惠券列表
+
+    // 秒杀页面
+    Route::get('/bargains','BargainController@index'); // 首页数据
 
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车

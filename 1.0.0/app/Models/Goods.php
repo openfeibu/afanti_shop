@@ -57,4 +57,8 @@ class Goods extends Model
     public function collective(){
         return $this->hasOne('App\Models\Collective','goods_id','id')->withTrashed();
     }
+    // 获取砍价
+    public function bargain(){
+        return $this->hasOne('App\Models\Bargain','goods_id','id');
+    }
 }

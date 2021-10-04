@@ -17,6 +17,7 @@ class ApiResponse extends Response
      */
     protected $message = null;
 
+    protected $errors = [];
     /**
      * @var Response status for the response.
      */
@@ -49,6 +50,7 @@ class ApiResponse extends Response
             'status' => $this->getStatus(),
             'code' => $this->getCode(),
             'data' => $this->getData(),
+            'errors' => $this->getErrors(),
         ], $this->http_code);
     }
 
@@ -134,6 +136,25 @@ class ApiResponse extends Response
         $this->code = '0';
         $this->status = 'success';
         $this->message = $message;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @param mixed $message
+     *
+     * @return self
+     */
+    public function errors($errors)
+    {
+        $this->errors = $errors;
+
         return $this;
     }
     public function error()

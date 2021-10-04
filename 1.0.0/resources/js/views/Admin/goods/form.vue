@@ -163,6 +163,7 @@
             return {
                 info:{
                     goods_images:[],
+                    goods_status:1,
                 },
                 list:[],
                 categoryList:[],
@@ -197,7 +198,7 @@
                 let api = this.$apiHandle(this.$api.adminGoods,this.id);
                 this.info.classInfo = this.classInfo; // 获取商品栏目
                 this.info.skuList = this.skuList; // 获取商品SKU
-                this.info.goods_status = this.info.goods_status?1:0;
+                //this.info.goods_status = this.info.goods_status?1:0;
                 if(api.status && !this.copy){
                     this.$put(api.url,this.info).then(res=>{
                         if(res.code == 200){
@@ -224,7 +225,7 @@
                 this.$get(this.$api.adminGoods+'/'+this.id).then(res=>{
                     this.goodsAttr = res.data.attrList||[];
                     this.skuList = res.data.skuList||[];
-                    res.data.goods_status = res.data.goods_status==0?false:true;
+                    //res.data.goods_status = res.data.goods_status==0?false:true;
                     this.info = res.data;
                     this.check_platform(false);
                     this.$forceUpdate();

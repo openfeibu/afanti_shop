@@ -146,5 +146,9 @@ export default [
         {path:"/Admin/collectives",name:"admin_collectives",component:()=>import("@/views/Admin/collectives/index")},
         {path:"/Admin/collectives/form/:id?",name:"admin_collectives_form",component:()=>import("@/views/Admin/collectives/form")},
         {path:"/Admin/collective_logs/:collective_id",name:"admin_collective_logs",component:()=>import("@/views/Admin/collective_logs/index")},
+
+        // 秒杀
+        {path:"/Admin/bargains",name:"admin_bargains",component:()=>import("@/views/Admin/bargains/index")},
+        {path:"/Admin/bargains/form/:id?",name:"admin_bargains_form",component:()=>import("@/views/Admin/bargains/form")},
     ]},
 ];

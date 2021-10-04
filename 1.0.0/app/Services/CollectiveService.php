@@ -18,10 +18,6 @@ class CollectiveService extends BaseService{
         $collective_model = new Collective();
         $info = $collective_model->where('goods_id',$goods_id)->first();
 
-        if(!$info){
-            OutputServerMessageException('collective empty');
-        }
-
         return $this->format($info);
     }
     // 根据商品ID获取当前的正在操作的团

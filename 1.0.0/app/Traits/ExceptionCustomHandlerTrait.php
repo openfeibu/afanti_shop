@@ -52,10 +52,19 @@ trait ExceptionCustomHandlerTrait
                     'message' => '页面Token 失效，请重新进入',
                 ];
                 break;
+            case ($exception instanceof \Illuminate\Validation\ValidationException):
+                $responseJson = [
+                    'code' => 422,
+                    'status' => 'error',
+                    'message' => $exception->validator->errors()->first(),
+                    'errors' => $exception->validator->getMessageBag(),
+                ];
+                break;
             default:
                 return false;
                 break;
         }
+
         return $responseJson;
     }
 }

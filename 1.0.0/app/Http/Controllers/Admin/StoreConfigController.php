@@ -75,7 +75,11 @@ class StoreConfigController extends Controller
                 $store_model->store_slide = empty($request->store_slide)?'':implode(',',$request->store_slide);
             }
         }
-
+        if($request->edit_type == 'store_video'){
+            if(isset($request->store_video)){
+                $store_model->store_video = empty($request->store_video)?'':$request->store_video;
+            }
+        }
         // 手机幻灯片
         if($request->edit_type == 'mobile_slide'){
             if(isset($request->store_mobile_slide)){

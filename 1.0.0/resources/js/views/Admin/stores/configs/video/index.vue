@@ -2,11 +2,13 @@
     <a-form-model :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }">
         <a-form-model-item label="展馆视频">
             <file-uploader
-                    :unlimited="true"
-                    collection="avatars"
+                    :media="$info.store_video"
+                    :unlimited="false"
+                    collection="store_video"
                     :tokens="$getSession('token_type')"
-                    notes="Supported types: mp4"
-                    accept="video/mp4,video/mpeg,video/x-msvideo,video/quicktime,video/vnd.mpegurl"
+                    notes="格式要求: mp4"
+                    accept="video/*"
+                    @complete="handleComplete(data)"
             >
 
             </file-uploader>
@@ -27,16 +29,28 @@
         data() {
             return {
                 info:{},
+                media:'',
                 loading:false,
             };
         },
         watch: {},
         computed: {},
         methods: {
+            handleSubmit(){
+                this.info.edit_type = 'store_video';
+                this.$put(this.$api.adminStoreConfigs,this.info).then(res=>{
+                    this.get_info();
+                    return this.$returnInfo(res);
+                })
+            },
             get_info(){
                 this.$get(this.$api.adminStoreConfigs,{'id':this.$route.query.id}).then(res=>{
                     this.info = res.data;
                 })
+            },
+            handleComplete(data)
+            {
+                console.log(data)
             }
         },
         created() {

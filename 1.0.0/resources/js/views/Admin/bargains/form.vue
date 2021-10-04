@@ -2,14 +2,11 @@
     <div class="qingwu">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
-            拼团编辑
+            砍价编辑
         </div>
         <div class="unline underm"></div>
         <div class="admin_form">
             <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 14 }">
-                <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
-                    <a-alert message="温馨提示：折扣作用全SKU." type="info" show-icon />
-                </a-form-model-item>
                 <a-form-model-item label="选择商品" :rules="{ required: true}">
                     <div class="goods_list chose" v-if="!$isEmpty(info.goods_info.id)">
                         <dl>
@@ -31,15 +28,49 @@
                         <a-pagination v-model="params.page" :page-size.sync="params.per_page" :total="total" @change="onChange" show-less-items />
                     </div>
                 </a-form-model-item>
-                <a-form-model-item label="折扣率" :rules="{ required: true}">
-                    <a-input type="number" v-model="info.discount" placeholder="不能超过 100" suffix="%"></a-input>
-                </a-form-model-item>
-                <a-form-model-item label="成团人数" :rules="{ required: true}">
-                    <a-input type="number" v-model="info.need"  suffix="人"></a-input>
+
+
+                <a-form-model-item label="截止时间" :rules="{ required: true}">
+                    <a-range-picker v-model="info.times"  />
                 </a-form-model-item>
 
-                <a-form-model-item label="成团有效时长" :rules="{ required: true}">
-                    <a-input type="number" v-model="info.group_time" suffix="小时"></a-input>
+                <a-form-model-item label="砍价有效期" :rules="{ required: true}" extra="自用户发起砍价到砍价截止的时间，单位：小时">
+                    <a-input type="number" v-model="info.expiryt_time" suffix="小时"></a-input>
+                </a-form-model-item>
+
+                <a-form-model-item label="砍价底价" :rules="{ required: true}">
+                    <a-input v-model="info.floor_price" type="number" suffix="￥"/>
+                </a-form-model-item>
+
+                <a-form-model-item label="帮砍人数" :rules="{ required: true}"  extra="每个砍价订单的帮砍人数，达到该人数才可砍至底价">
+                    <a-input type="number" v-model="info.peoples"  suffix="人"></a-input>
+                </a-form-model-item>
+
+
+                <a-form-model-item label="可自砍一刀" :rules="{ required: true}" extra="砍价发起人自己砍一刀">
+                    <a-radio-group name="is_self_cut"  v-model="info.is_self_cut">
+                        <a-radio :value="1">
+                            允许
+                        </a-radio>
+                        <a-radio :value="0">
+                            不允许
+                        </a-radio>
+                    </a-radio-group>
+                </a-form-model-item>
+
+                <a-form-model-item label="必须底价购买 " :rules="{ required: true}" extra="只有砍到底价才可以购买">
+                    <a-radio-group name="is_floor_buy" v-model="info.is_floor_buy">
+                        <a-radio :value="1">
+                            是
+                        </a-radio>
+                        <a-radio :value="0">
+                            否
+                        </a-radio>
+                    </a-radio-group>
+                </a-form-model-item>
+
+                <a-form-model-item label="活动状态">
+                    <a-switch  v-model="info.status" />
                 </a-form-model-item>
 
                 <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
@@ -67,7 +98,10 @@ export default {
           info:{
               goods_id:0,
               goods_info:{},
-              group_time:24,
+              expiryt_time: 1,
+              is_self_cut: 1,
+              is_floor_buy: 0,
+              status: 1,
           },
           id:0,
       };
@@ -77,15 +111,9 @@ export default {
     methods: {
         handleSubmit(){
 
-            if(this.$isEmpty(this.info.discount) && this.info.discount<100 && this.info.discount>0){
-                return this.$message.error('折扣填写错误');
-            }
-
-            if(this.$isEmpty(this.info.need)){
-                return this.$message.error('成团人数');
-            }
-
-            let api = this.$apiHandle(this.$api.adminCollectives,this.id);
+            this.info.times[0] = moment(this.info.times[0]).format('YYYY-MM-DD hh:mm:ss')
+            this.info.times[1] = moment(this.info.times[1]).format('YYYY-MM-DD hh:mm:ss')
+            let api = this.$apiHandle(this.$api.adminBargains,this.id);
             if(api.status){
                 this.$put(api.url,this.info).then(res=>{
                     if(res.code == 200){
@@ -109,7 +137,7 @@ export default {
             
         },
         get_info(){
-            this.$get(this.$api.adminCollectives+'/'+this.id).then(res=>{
+            this.$get(this.$api.adminBargains+'/'+this.id).then(res=>{
                 this.info = res.data;
             })
         },
@@ -130,7 +158,7 @@ export default {
             this.get_goods();
         },
         get_goods(){
-            this.$get(this.$api.adminCollectives+'/goods/get_collective_goods',this.params).then(res=>{
+            this.$get(this.$api.adminBargains+'/goods/get_bargain_goods',this.params).then(res=>{
                 this.total = res.data.total;
                 this.goods = res.data.data;
             })

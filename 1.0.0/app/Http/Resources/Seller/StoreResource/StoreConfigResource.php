@@ -18,6 +18,7 @@ class StoreConfigResource extends JsonResource
             'id'                        => $this->id,
             'store_name'                =>  $this->store_name,
             'store_logo'                =>  $this->store_logo,
+            'store_video'                =>  $this->store_video,
             'store_face_image'          =>  $this->store_face_image,
             'store_mobile'              =>  $this->store_mobile,
             'store_description'         =>  $this->store_description,

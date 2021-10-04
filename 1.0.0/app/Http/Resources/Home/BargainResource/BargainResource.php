@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Seller\CollectiveResource;
+namespace App\Http\Resources\Home\BargainResource;
 
 use App\Traits\HelperTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CollectiveResource extends JsonResource
+class BargainResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,16 @@ class CollectiveResource extends JsonResource
     {
         return [
             'id'                    =>  $this->id,
+            'start_time'              =>  $this->start_time,
+            'end_time'                  =>  $this->end_time,
+            'times'                     =>  [$this->start_time,$this->end_time],
+            'expiryt_time'            =>  $this->expiryt_time,
             'goods_id'              =>  $this->goods_id,
-            'discount'              =>  $this->discount,
-            'need'                  =>  $this->need,
-            'group_time'            =>  $this->group_time,
+            'floor_price' => $this->floor_price,
+            'peoples' => $this->peoples,
+            'is_self_cut' => $this->is_self_cut,
+            'is_floor_buy' => $this->is_floor_buy,
+            'status' => $this->status,
             'goods_info'            =>  [
                                             'id'                        =>  $this->goods->id,
                                             'goods_name'                =>  $this->goods->goods_name,

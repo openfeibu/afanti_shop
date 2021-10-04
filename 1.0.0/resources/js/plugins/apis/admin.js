@@ -99,7 +99,10 @@ export default
     // 拼团
     'adminCollectives' : baseUrl + 'Admin/collectives',
     'adminCollectiveLogs' : baseUrl + 'Admin/collective_logs',
-    
+
+    // 砍价
+    'adminBargains' : baseUrl + 'Admin/bargains',
+
     // 结算日志
     'adminOrderSettlements' : baseUrl + 'Admin/order_settlements',
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Seller\CollectiveResource;
+namespace App\Http\Resources\Home\BargainResource;
 
 use App\Traits\HelperTrait;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CollectiveCollection extends ResourceCollection
+class BargainCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -20,10 +20,15 @@ class CollectiveCollection extends ResourceCollection
             'data'=>$this->collection->map(function($item){
                 return [
                     'id'                    =>  $item->id,
-                    'discount'              =>  $item->discount,
-                    'need'                  =>  $item->need,
-                    'group_time'            =>  $item->group_time,
+                    'start_time'              =>  $item->start_time,
+                    'end_time'                  =>  $item->end_time,
+                    'expiryt_time'            =>  $item->expiryt_time,
                     'goods_id'              =>  $item->goods_id,
+                    'floor_price' => $item->floor_price,
+                    'peoples' => $item->peoples,
+                    'is_self_cut' => $item->is_self_cut,
+                    'is_floor_buy' => $item->is_floor_buy,
+                    'status' => $item->status,
                     'created_at'            =>  $item->created_at->format('Y-m-d H:i:s'),
                     'updated_at'            =>  $item->updated_at->format('Y-m-d H:i:s'),
                     'goods'                 =>  [

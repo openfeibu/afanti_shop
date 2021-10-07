@@ -98,9 +98,9 @@ export default {
           info:{
               goods_id:0,
               goods_info:{},
-              expiryt_time: 1,
+              expiry_time: 1,
               is_self_cut: 1,
-              is_floor_buy: 0,
+              is_floor_buy: 1,
               status: 1,
           },
           id:0,

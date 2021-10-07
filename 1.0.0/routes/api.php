@@ -312,8 +312,8 @@ Route::namespace('Home')->group(function(){
 
     Route::get('/coupons','CouponController@index'); // 优惠券列表
 
-    // 秒杀页面
-    Route::get('/bargains','BargainController@index'); // 首页数据
+
+    Route::get('/bargains','BargainController@index'); // 砍价列表
 
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车
@@ -372,6 +372,10 @@ Route::namespace('Home')->group(function(){
         // 积分订单
         Route::get('/integral_order','IntegralController@get_orders'); // 获取积分订单列表
         Route::get('/integral_order/get_order_info/{id}','IntegralController@get_order_info'); // 查看积分订单信息
+
+        //砍价
+        Route::post('/bargain_tasks/partake','BargainTaskController@partake'); //生成砍价
+        Route::post('/bargain_tasks/help_cut/{bargain_task_id}','BargainTaskController@helpCut'); //生成砍价
 
         // 评论管理
         Route::apiResource('order_comments','OrderCommentController')->except(['destroy']);

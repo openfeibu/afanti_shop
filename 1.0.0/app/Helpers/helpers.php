@@ -693,10 +693,79 @@ if(!function_exists('sensitive_address')) {
         return $str;
     }
 }
-//处理敏感字段
 if(!function_exists('OutputServerMessageException')) {
     function OutputServerMessageException($error)
     {
         throw new \App\Exceptions\OutputServerMessageException($error);
     }
+}
+
+if(!function_exists('formatBankCardNo')) {
+    /**
+     * 对银行卡号进行掩码处理
+     * 掩码规则头4位,末尾余数位不变，中间4的整数倍字符用星号替换，并且用每隔4位空格隔开
+     * @param  string $bankCardNo 银行卡号
+     * @return string             掩码后的银行卡号
+     */
+    function formatBankCardNo($bankCardNo){
+        $tool_service = new \App\Services\ToolService();
+        return $tool_service->formatBankCardNo($bankCardNo);
+    }
+}
+
+if(!function_exists('formatMobile')) {
+    /**
+     * 对手机号进行掩码处理
+     * 手机号掩码的规则是末尾4位，开头余数位不变，中间4的整数倍字符用星号替换
+     * @param string $mobile 手机号
+     * @return string
+     */
+    function formatMobile($mobile){
+        $tool_service = new \App\Services\ToolService();
+        return $tool_service->formatMobile($mobile);
+    }
+}
+
+if(!function_exists('formatTrueName')) {
+    /**
+     * 姓名第一个字掩码
+     * @param string $true_name 真实姓名
+     * @return string
+     */
+    function formatTrueName($true_name){
+        $tool_service = new \App\Services\ToolService();
+        return $tool_service->formatTrueName($true_name);
+    }
+}
+
+if(!function_exists('formatTrueName2')) {
+    /**
+     * 只显示最后一个字符
+     * @param string $true_name 真实姓名
+     * @return string
+     */
+    function formatTrueName2($true_name){
+        $tool_service = new \App\Services\ToolService();
+        return $tool_service->formatTrueName2($true_name);
+
+    }
+}
+
+if(!function_exists('formatIdCard')) {
+    /**
+     * 对身份证进行掩码
+     * 掩码规则是显示头两位和末尾1位，中间星号
+     * @param string $id_card 身份证号
+     * @return string
+     */
+    function formatIdCard($id_card){
+        $tool_service = new \App\Services\ToolService();
+        return $tool_service->formatIdCard($id_card);
+    }
+}
+
+
+function bcequal($leftOperand, $rightOperand, $scale = 2)
+{
+    return bccomp($leftOperand, $rightOperand, $scale) === 0;
 }

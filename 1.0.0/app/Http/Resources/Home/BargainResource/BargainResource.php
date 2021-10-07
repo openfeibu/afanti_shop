@@ -21,7 +21,7 @@ class BargainResource extends JsonResource
             'start_time'              =>  $this->start_time,
             'end_time'                  =>  $this->end_time,
             'times'                     =>  [$this->start_time,$this->end_time],
-            'expiryt_time'            =>  $this->expiryt_time,
+            'expiry_time'            =>  $this->expiry_time,
             'goods_id'              =>  $this->goods_id,
             'floor_price' => $this->floor_price,
             'peoples' => $this->peoples,

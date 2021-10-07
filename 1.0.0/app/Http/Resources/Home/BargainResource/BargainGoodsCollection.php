@@ -35,7 +35,8 @@ class BargainGoodsCollection extends ResourceCollection
                     'goods_master_image'    =>  $this->thumb($item->goods_master_image,300),
                     'store_id'              =>  $item->store_id,
                     'store_name'            =>  $item->store->store_name,
-                    'floor_price'           => $item->bargain->floor_price
+                    'floor_price'           => $item->bargain->floor_price,
+                    'active_sales' => $item->bargain->active_sales,
                 ];
             }),
             'total'=>$this->total(), // 数据总数

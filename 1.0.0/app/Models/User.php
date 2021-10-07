@@ -22,4 +22,12 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(){
         return [];
     }
+    public static function getAuthUserInfo()
+    {
+        try{
+            return auth('user')->user();
+        }catch(\Exception $e){
+            return false;
+        }
+    }
 }

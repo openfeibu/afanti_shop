@@ -52,6 +52,7 @@ class GoodsController extends Controller
 
             $goods_info['data']['bargain'] = $this->bargain_service->getBargainInfoByGoodsId($id)['data'];// 秒杀
             $goods_info['data']['bargain_task_id'] = $goods_info['data']['bargain'] ? $this->bargain_service->getWhetherPartake($goods_info['data']['bargain']['id'], $user_info) : 0;
+            $goods_info['data']['is_partake'] = $goods_info['data']['bargain_task_id'] > 0;
             $collective_info = $this->collective_service->getCollectiveInfoByGoodsId($id);
             $goods_info['data']['collectives'] = $collective_info['status']?$collective_info['data']:false; // 团购
             $goods_info['data']['collective_list'] = $this->collective_service->getCollectiveActiveByGoodsId($id)['data']; // 正在团的

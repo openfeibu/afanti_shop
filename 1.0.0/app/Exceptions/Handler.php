@@ -65,16 +65,16 @@ class Handler extends ExceptionHandler
         if($responseJson)
         {
 
-            if ($request->ajax() || $request->expectsJson())
-            {
+//            if ($request->ajax() || $request->expectsJson())
+//            {
                 return app(ApiResponse::class)
                     ->code($responseJson['code'])
                     ->status($responseJson['status'])->message($responseJson['message'])
                     ->errors($responseJson['errors'] ?? [])
                     ->json();
-            }else{
-                return response()->view('message.error',$responseJson);
-            }
+//            }else{
+//                return response()->view('message.error',$responseJson);
+//            }
         }
     }
 }

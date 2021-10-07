@@ -22,7 +22,7 @@ class BargainCollection extends ResourceCollection
                     'id'                    =>  $item->id,
                     'start_time'              =>  $item->start_time,
                     'end_time'                  =>  $item->end_time,
-                    'expiryt_time'            =>  $item->expiryt_time,
+                    'expiry_time'            =>  $item->expiry_time,
                     'goods_id'              =>  $item->goods_id,
                     'floor_price' => $item->floor_price,
                     'peoples' => $item->peoples,

@@ -36,7 +36,7 @@ class BargainController extends Controller
         $goods_id = intval($request->goods_id);
         $goods = Goods::find($goods_id);
         $bargain_model->goods_id = $goods_id;
-        $bargain_model->expiryt_time = intval($request->expiryt_time);
+        $bargain_model->expiry_time = intval($request->expiry_time);
         $bargain_model->floor_price = $request->floor_price;
         $bargain_model->peoples = intval($request->peoples);
         $bargain_model->is_self_cut = abs(request()->is_self_cut)??0;
@@ -52,6 +52,7 @@ class BargainController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  Bargain $bargain_model
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -74,7 +75,7 @@ class BargainController extends Controller
         $bargain_model = $bargain_model->find($id);
         $bargain_model->goods_id = $goods_id;
         $goods = Goods::find($goods_id);
-        $bargain_model->expiryt_time = intval($request->expiryt_time);
+        $bargain_model->expiry_time = intval($request->expiry_time);
         $bargain_model->floor_price = $request->floor_price;
         $bargain_model->peoples = intval($request->peoples);
         $bargain_model->is_self_cut = abs(request()->is_self_cut)??0;

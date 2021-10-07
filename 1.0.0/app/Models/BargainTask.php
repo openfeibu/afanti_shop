@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BargainTask extends Model
 {
-    public function bargain(){
-        return $this->belongsTo("App\Models\Bargain",'bargain','id');
-    }
+    protected $guarded = [];
 
+    public function bargain(){
+        return $this->belongsTo("App\Models\Bargain",'bargain_id','id');
+    }
+    public function goods()
+    {
+        return $this->belongsTo("App\Models\Goods",'goods_id','id');
+    }
     /**
      * 获取用户是否正在参与改砍价活动，如果已参与则返回$bargain_task_id
      * @param $bargain_id
@@ -26,4 +31,37 @@ class BargainTask extends Model
             ->value('id');
         return $bargain_task_id ?: 0;
     }
+    public static function detail($id)
+    {
+        $bargain_task = self::with(['user'=>function($q){
+            return $q->select('id','username');
+        }])->where('id',$id)->first();
+        // 标识砍价任务过期
+        if (!empty($bargain_task) && $bargain_task['status'] == 1 && $bargain_task->end_time <= now()) {
+            $bargain_task->status = 0;
+            $bargain_task->save();
+        }
+        return $bargain_task;
+    }
+
+    /**
+     * 获取器：砍价金额区间
+     * @param $value
+     * @return mixed
+     */
+    public function getSectionAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+
+    /**
+     * 修改器：砍价金额区间
+     * @param $value
+     * @return string
+     */
+    public function setSectionAttribute($value)
+    {
+        $this->attributes['section'] = json_encode($value);
+    }
+
 }

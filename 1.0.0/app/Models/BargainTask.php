@@ -16,6 +16,10 @@ class BargainTask extends Model
     {
         return $this->belongsTo("App\Models\Goods",'goods_id','id');
     }
+    public function user()
+    {
+        return $this->belongsTo("App\Models\User",'user_id','id');
+    }
     /**
      * 获取用户是否正在参与改砍价活动，如果已参与则返回$bargain_task_id
      * @param $bargain_id
@@ -34,8 +38,8 @@ class BargainTask extends Model
     public static function detail($id)
     {
         $bargain_task = self::with(['user'=>function($q){
-            return $q->select('id','username');
-        }])->where('id',$id)->first();
+            return $q->select('id','username','avatar');
+        }])->where('id',$id)->first(['id','bargain_id','user_id','goods_id','goods_sku_id','goods_price','floor_price','peoples','cut_people','cut_money','actual_price','actual_price','end_time','status']);
         // 标识砍价任务过期
         if (!empty($bargain_task) && $bargain_task['status'] == 1 && $bargain_task->end_time <= now()) {
             $bargain_task->status = 0;

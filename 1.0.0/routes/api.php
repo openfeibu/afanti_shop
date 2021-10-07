@@ -376,6 +376,7 @@ Route::namespace('Home')->group(function(){
         //砍价
         Route::post('/bargain_tasks/partake','BargainTaskController@partake'); //生成砍价
         Route::post('/bargain_tasks/help_cut/{bargain_task_id}','BargainTaskController@helpCut'); //生成砍价
+        Route::get('/bargain_tasks/{id}','BargainTaskController@show'); //砍价任务详情
 
         // 评论管理
         Route::apiResource('order_comments','OrderCommentController')->except(['destroy']);

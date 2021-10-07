@@ -27,13 +27,15 @@ class BargainTaskHelp extends Model
     public static function getListByBargainTaskId($bargain_task_id)
     {
         // 获取列表数据
-        $helps = self::with(['user'])
+        $helps = self::with(['user'=>function($q){
+                return $q->select('id','username','avatar');
+            }])
             ->where('bargain_task_id', $bargain_task_id)
             ->orderBy('created_at','desc')
             ->get();
         // 隐藏会员昵称
         foreach ($helps as $key => $help) {
-            $help->user->nickname = formatTrueName2($help->user->nickname);
+            $help->user->username = formatTrueName2($help->user->username);
         }
         return $helps;
     }

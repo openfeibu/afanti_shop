@@ -20,9 +20,10 @@ class BargainTaskService extends BaseService{
         if (empty($bargain_task)) {
             OutputServerMessageException('砍价任务不存在');
         }
-        $bargain = $bargain_task->bargain;
-        $goods = $bargain_task->goods;
-        $goods['goods_sku'] = GoodsSku::select('id','sku_name','goods_price','goods_stock','goods_weight')->where('goods_id',$bargain_task['goods_id'])->where('id',$bargain_task['sku_id'])->first();
+        $bargain = $bargain_task->bargain()->first(['id','goods_id','floor_price','is_self_cut','is_floor_buy','status']);
+        $goods = $bargain_task->goods()->first(['id','goods_price','goods_market_price','goods_subname','goods_master_image','goods_images']);
+        $goods['goods_images'] =  explode(',',$goods['goods_images']);
+        $goods['goods_sku'] = GoodsSku::select('id','sku_name','goods_price','goods_market_price','goods_stock','goods_weight')->where('goods_id',$bargain_task['goods_id'])->where('id',$bargain_task['goods_sku_id'])->first();
         // 好友助力榜
         $bargain_task_help_list = BargainTaskHelp::getListByBargainTaskId($id);
         // 当前是否为发起人
@@ -30,7 +31,7 @@ class BargainTaskService extends BaseService{
         // 当前是否已砍
         $is_cut = $this->isCut($bargain_task_help_list, $user);
 
-        return compact('bargain_task','bargain','bargain_task_help_list','goods','is_creator','is_cut');
+        return compact('bargain_task','bargain','goods','bargain_task_help_list','is_creator','is_cut');
     }
     /**
      * 新增砍价任务

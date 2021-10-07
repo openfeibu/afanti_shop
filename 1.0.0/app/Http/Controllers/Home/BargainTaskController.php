@@ -44,7 +44,7 @@ class BargainTaskController extends Controller
         }
         // 创建砍价任务
         $bargain_task = $this->bargain_task_service->partake($bargain_id,$goods_sku_id);
-        return $this->success(['bargain_task_id' => $bargain_task['id']]);
+        return $this->success(['bargain_task_id' => $bargain_task['id']],"参与砍价成功");
     }
 
     /**

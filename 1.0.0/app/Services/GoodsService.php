@@ -120,7 +120,7 @@ class GoodsService extends BaseService{
             $goods_model->goods_weight = abs(request()->goods_weight??0);
         }
         // 商品库存
-        if(isset(request()->goods_stock) && !empty(request()->goods_stock)){
+        if(isset(request()->goods_stock)){
             $goods_model->goods_stock = abs(request()->goods_stock??0);
         }
         // 商品内容详情

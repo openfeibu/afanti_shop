@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits;
 
+use App\Exceptions\OutOfStockException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 trait ExceptionCustomHandlerTrait
@@ -58,6 +59,13 @@ trait ExceptionCustomHandlerTrait
                     'status' => 'error',
                     'message' => $exception->validator->errors()->first(),
                     'errors' => $exception->validator->getMessageBag(),
+                ];
+                break;
+            case ($exception instanceof OutOfStockException):
+                $responseJson = [
+                    'code' => $exception->getStatusCode(),
+                    'status' => 'error',
+                    'message' => $exception->getMessage(),
                 ];
                 break;
             default:

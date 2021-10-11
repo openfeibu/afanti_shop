@@ -18,6 +18,6 @@ class FullReductionService extends BaseService{
         $fr_model = new FullReduction();
         $info = $fr_model->where('start_time','<',now())->where('end_time','>',now())->where('use_money','<=',$total_price)->orderBy('use_money','asc')->first();
 
-        return $this->format($info);
+        return $info;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\OutOfStockException;
 use App\Http\Resources\Home\OrderResource\CreateOrderAfterCollection;
 use App\Models\Address;
 use App\Models\Cart;
@@ -31,9 +32,21 @@ class OrderService extends BaseService{
         }
 
         $params = $check['data'];
-        $rs = $this->createOrderFormat($params);
 
-        return $rs['status']?$this->format($rs['data']):$this->format_error($rs['msg'],$rs['data'],$rs['code']);
+        $user_service = new UserService();
+        if(!$user_info = $user_service->getUserInfo()){
+            OutputServerMessageException(__('auth.no_token'));
+        }
+
+        $checkout_service = new CheckoutService();
+        // 提交订单，不默认使用
+        $checkout_service->setCheckoutRule([
+            'is_default_coupon' => true,
+        ]);
+        $params = $checkout_service->setParams($params);
+        $store_goods_list = $this->getCheckoutOrderGoodsList($params);
+        $create_order_data = $checkout_service->onCheckout($user_info, $store_goods_list);
+        return $this->format($create_order_data);
     }
 
     // 创建订单
@@ -42,20 +55,25 @@ class OrderService extends BaseService{
         if(!$check['status']){
             OutputServerMessageException($check['msg']);
         }
+        $user_service = new UserService;
+        $user_info = $user_service->getUserInfo();
+        if(empty($user_info)){
+            OutputServerMessageException(__('base.error').' - order_service');
+        }
 
         $params = $check['data'];
-        $rs = $this->createOrderFormat($params);
+        $car_ids = array_column($params['order'],'cart_id');
+        $checkout_service = new CheckoutService();
 
-        if(!$rs['status']){
-            OutputServerMessageException($rs['msg']);
-        }
-        $create_order_data = $rs['data'];
+        $params = $checkout_service->setParams($params);
+        $store_goods_list = $this->getCheckoutOrderGoodsList($params);
+        $create_order_data = $checkout_service->onCheckout($user_info, $store_goods_list);
 
         // 优惠券的处理
-        if(!isset(request()->coupon_id)){
-            OutputServerMessageException('coupon_id empty');
-        }
-        $coupon_id = request()->coupon_id;
+//        if(!isset(request()->coupon_id)){
+//            OutputServerMessageException('coupon_id empty');
+//        }
+        $coupon_id = request()->coupon_id ?? 0;
 
         // 地址验证
         $address_resp = $this->checkAddress();
@@ -63,12 +81,6 @@ class OrderService extends BaseService{
             OutputServerMessageException($address_resp['msg']);
         }
         $address_info = $address_resp['data'];
-
-        $user_service = new UserService;
-        $user_info = $user_service->getUserInfo();
-        if(empty($user_info)){
-            OutputServerMessageException(__('base.error').' - order_service');
-        }
 
         // 实例化订单表
         $order_model = new Order();
@@ -113,20 +125,20 @@ class OrderService extends BaseService{
                         'order_id'      =>$order_info->id, // 订单ID
                         'user_id'       =>$order_data['user_id'], // 用户ID
                         'store_id'      =>$vo['store_id'], // 店铺ID
-                        'sku_id'        =>$vo['sku_id'], // skuid
+                        'sku_id'        =>$vo['sku_id'] ?: 0, // skuid
                         'goods_id'      =>$vo['id'], // 商品id
                         'goods_name'    =>$vo['goods_name'], // 商品名称
                         'goods_image'   =>$vo['goods_master_image'], // 商品图片
-                        'sku_name'      =>$vo['sku_name'], // sku名称
+                        'sku_name'      =>$vo['sku_name'] ?: '', // sku名称
                         'buy_num'       =>$vo['buy_num'], // 购买数量
                         'goods_price'   =>$vo['goods_price'], // 商品价格
-                        'total_price'   =>$vo['total'], // 总价格
+                        'total_price'   =>$vo['total_price'], // 总价格
                         'total_weight'  =>$vo['total_weight'], // 总重量
                     ];
 
                     // 秒杀
                     $seckill_info = $seckill_service->getSeckillInfoByGoodsId($order_goods_data['goods_id']);
-                    if($seckill_info['status']){
+                    if($seckill_info){
                         $coupon_money += $order_goods_data['total_price']*($seckill_info['data']['discount']/100);
                     }
 
@@ -161,12 +173,12 @@ class OrderService extends BaseService{
 
             // 满减
             $full_reduction_resp = $full_reduction_service->getFullReductionInfo($order_price);
-            if($full_reduction_resp['status']){
-                $coupon_money += $full_reduction_resp['data']['money'];
+            if($full_reduction_resp){
+                $coupon_money += $full_reduction_resp['money'];
             }
 
             // 判断是否是拼团 如果是拼团减去他的金额
-            $collective_active_id = $v['goods_list'][0]['collective_active_id']??0;
+            $collective_active_id = $create_order_data['collective_active_id'];
             if($collective_active_id != 0){
                 $collective_resp = $collective_service->getCollectiveInfoByGoodsId($v['goods_list'][0]['id']);
                 if($collective_resp['status']){
@@ -187,12 +199,12 @@ class OrderService extends BaseService{
             $order_info->freight_money = $freight_money; // 运费
             $order_info->coupon_money = $coupon_money; // 优惠金额修改
             $order_info->coupon_id = $order_data['coupon_id']; // 优惠券ID修改 ，以免非法ID传入
-            $order_info->collective_active_id = $collective_active_id; // 团购活动ID
+            $order_info->collective_active_id = $collective_active_id ?: 0; // 团购活动ID
             $order_info->order_type = $collective_active_id ? 'group' : 'self'; // 团购，直接下单
             $order_info->save(); // 保存入数据库
 
             // 执行成功则删除购物车
-            $this->delCart();
+            $this->delCart($car_ids);
             DB::commit();
             return $this->format($resp_data);
         }catch(\Exception $e){
@@ -205,11 +217,11 @@ class OrderService extends BaseService{
     }
 
     // 如果是购物车订单，则删除购物车
-    private function delCart(){
-        if(!empty($this->cartId)){
+    private function delCart($car_ids){
+        if(count($car_ids) > 0){
             $cart_model = new Cart();
             try{
-                $cart_model->whereIn('id',$this->cartId)->delete();
+                $cart_model->whereIn('id',$car_ids)->delete();
             }catch(\Exception $e){
                 throw new \Exception(__('orders.order_cart_del_error'));
             }
@@ -532,120 +544,59 @@ class OrderService extends BaseService{
 
     }
 
+    public function getCheckoutOrderGoodsList($params)
+    {
+        foreach($params['order'] as $v){
+            $goods = Goods::select('id','store_id','goods_name','goods_master_image','goods_price','goods_stock','goods_weight','freight_id','goods_status')->where('id',$v['goods_id'])->first();
+            $store = $goods->store()->first(['id','store_name','store_logo']);
+            if(!$goods or $goods['goods_status'] != 1)
+            {
+                throw new OutOfStockException(__('orders.goods_failure'));
+            }
+            // 判断是否库存足够
+            if($v['buy_num']>$goods['goods_stock']){
+                throw new OutOfStockException(__('orders.stock_error'));
+            }
+            if($v['sku_id']>0){
+                $goods_sku = GoodsSku::select('id','sku_name','goods_price','goods_stock','goods_weight')->where('goods_id',$v['goods_id'])->where('id',$v['sku_id'])->first();
+                $goods['sku_name'] = $goods_sku['sku_name'];
+                $goods['goods_price'] = $goods_sku['goods_price'];
+                $goods['goods_stock'] = $goods_sku['goods_stock'];
+                $goods['goods_weight'] = $goods_sku['goods_weight'];
+            }
+            $goods['goods_master_image'] = $this->thumb($goods['goods_master_image'],150);
+            $goods['total_price'] = round($v['buy_num']*$goods['goods_price'],2);
+            $goods['total_weight'] = round($v['buy_num']*$goods['goods_weight'],2);
+            $goods['buy_num'] = $v['buy_num'];
+
+            $store_goods_list[$store['id']]['goods_list'][] = $goods;
+            $store_goods_list[$store['id']]['store_info'] = $store;
+            if(empty($store_goods_list[$store['id']]['store_total_price'])){
+                $store_goods_list[$store['id']]['store_total_price'] = 0;
+            }
+            $store_goods_list[$store['id']]['store_total_price'] += $goods['total_price'];
+
+        }
+        return $store_goods_list;
+    }
     // 根据订单ID获取商品数据并格式化
     public function createOrderFormat($params){
-        $goods_model = new Goods();
-        $goods_sku_model = new GoodsSku();
 
         $user_service = new UserService();
         if(!$user_info = $user_service->getUserInfo()){
             OutputServerMessageException(__('auth.no_token'));
         }
 
-        $list = $order_data = [];
-        $this->cartId = []; // 购物车ID 初始化
-        $create_order_data['total'] = $create_order_data['order_price'] = 0;
-        $total_weight = 0;
-        $discount = 0; //满减+拼团，不含优惠券，优惠卷需要根据用户选择
-        $first_goods_id = 0;
+        $checkout_service = new CheckoutService();
+//        // 砍价商品不参与 等级折扣和优惠券折扣
+//        $checkout_service->setCheckoutRule([
+//            'is_default_coupon' => false,
+//        ]);
+        $params = $checkout_service->setParams($params);
+        $store_goods_list = $this->getCheckoutOrderGoodsList($params);
+        $orderInfo = $checkout_service->onCheckout($user_info, $store_goods_list);
 
-        foreach($params['order'] as $v){
-            $data = [];
-            $data = $goods_model->with(['store'=>function($q){
-                return $q->select('id','store_name','store_logo');
-            }])->select('id','store_id','goods_name','goods_master_image','goods_price','goods_stock','goods_weight','freight_id','goods_status')->where('id',$v['goods_id'])->first();
-            if(!$data or $data['goods_status'] != 1)
-            {
-                OutputServerMessageException(__('orders.goods_failure'));
-            }
-            $first_goods_id = $first_goods_id ? $first_goods_id : $v['goods_id'];
-            $data['sku_name'] = '-';
-            $data['buy_num'] = abs(intval($v['buy_num']));
-            $data['sku_id'] = $v['sku_id'];
-            if($v['sku_id']>0){
-                $goods_sku = $goods_sku_model->select('id','sku_name','goods_price','goods_stock','goods_weight')->where('goods_id',$v['goods_id'])->where('id',$v['sku_id'])->first();
-                $data['sku_name'] = $goods_sku['sku_name'];
-                $data['goods_price'] = $goods_sku['goods_price'];
-                $data['goods_stock'] = $goods_sku['goods_stock'];
-                $data['goods_weight'] = $goods_sku['goods_weight'];
-            }
-
-            $data['goods_master_image'] = $this->thumb($data['goods_master_image'],150);
-            $data['total'] = round($v['buy_num']*$data['goods_price'],2);
-            $data['total_weight'] = round($v['buy_num']*$data['goods_weight'],2);
-
-            $create_order_data['order_image'] = $create_order_data['order_image'] ?? $data['goods_master_image'];
-            $create_order_data['order_name'] = $create_order_data['order_name'] ?? $data['goods_name'];
-            $create_order_data['freight_id'] = isset($create_order_data['freight_id']) ? $create_order_data['freight_id'] : $data['freight_id'];
-            // 判断是否是团购
-            $data['collective_active_id'] = 0;
-            $create_order_data['collective_active_id'] = 0;
-            if(isset($v['collective_active_id'])){
-                $create_order_data['collective_active_id'] = $v['collective_active_id'];
-                $data['collective_active_id'] = $v['collective_active_id'];
-            }
-
-            $list[$data['store']['id']]['goods_list'][] = $data;
-            $list[$data['store']['id']]['store_info'] = $data['store'];
-
-            if(empty($list[$data['store']['id']]['store_total_price'])){
-                $list[$data['store']['id']]['store_total_price'] = 0;
-            }
-            $list[$data['store']['id']]['store_total_price'] += $data['total'];
-            $create_order_data['order_price'] += $data['total'];
-            // 判断是否库存足够
-            if($v['buy_num']>$data['goods_stock']){
-                OutputServerMessageException(__('orders.stock_error'),[],8012);
-            }
-
-            // 判断是否是购物车
-            if(!empty($params['ifcart'])){
-                $this->cartId[] = $v['cart_id'];
-            }
-            $total_weight += $data['total_weight'];
-        }
-
-        $list = array_merge($list,[]);
-        $create_order_data['list'] = $list;
-
-
-        // 循环查看是否存在优惠券
-        $coupon_log_model = new CouponLog();
-        $coupon_list = $coupon_log_model->select('id','money','name')->where('user_id',$user_info['id'])
-            ->where('use_money','<=',$create_order_data['order_price'])
-            ->where('status',0)
-            ->get();
-        $create_order_data['coupon']['is_coupon'] = true;
-        if($coupon_list->isEmpty()){
-            $create_order_data['coupon']['is_coupon'] = false;
-        }
-        $create_order_data['coupon']['coupons'] = $coupon_list;
-        if($create_order_data['coupon']['is_coupon']){
-            $create_order_data['coupon']['coupon_id'] = $coupon_list[0]['id'];
-        }else{
-            $create_order_data['coupon']['coupon_id'] = 0;
-        }
-
-        $full_reduction_service = new FullReductionService();
-        $collective_service = new CollectiveService();
-        // 满减
-        $full_reduction_resp = $full_reduction_service->getFullReductionInfo($create_order_data['order_price']);
-        if($full_reduction_resp['status']){
-            $discount += $full_reduction_resp['data']['money'];
-        }
-
-        // 判断是否是拼团 如果是拼团减去他的金额
-        if($create_order_data['collective_active_id'] != 0){
-            $collective_resp = $collective_service->getCollectiveInfoByGoodsId($first_goods_id);
-            if($collective_resp['status']){
-                $discount +=  $create_order_data['order_price']*($collective_resp['data']['discount']/100); // 得出拼团减去的钱
-            }
-        }
-
-        $create_order_data['total_weight'] = $total_weight;
-        $create_order_data['discount'] = $discount;
-
-        return $this->format($create_order_data);
+        return $this->format($orderInfo);
 
     }
 
@@ -806,5 +757,15 @@ class OrderService extends BaseService{
         }
         return $cn;
     }
+    /**
+     * 订单结算提交的参数
+     * @param array $define
+     * @return array
+     */
+    private function getParam($define = [])
+    {
+        return array_merge($define, $this->request->param());
+    }
+
 
 }

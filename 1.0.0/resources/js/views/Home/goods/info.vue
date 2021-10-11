@@ -121,7 +121,7 @@
                         <div class="goods_info_buy" style="background:#fe0851" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
                     </template>
                     <template v-else-if="collectives">
-                        <div class="goods_info_buy" style="background:#67c23a"  @click="collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
+                        <div class="goods_info_buy" style="background:#67c23a"  @click="is_collective=1;collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
                         <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
                         <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
                     </template>
@@ -299,6 +299,7 @@ export default {
           collectives:false, // 拼团
           collective_list:[], // 正在进行的团
           collective_active_id:0,
+          is_collective:0,
           isLoading:true,
           visible: false,
           modal: false,
@@ -405,10 +406,11 @@ export default {
                         goods_id:this.goods_info.id, // 商品ID
                         sku_id:this.sku_id, // SKUid 没有则为0
                         buy_num:this.buy_num, // 购买数量
-                        collective_active_id:this.collective_active_id, // 拼团ID 非必传
+                        collective_active_id:this.collective_active_id, // 拼团ID
                     },
                 ],
                 ifcart:0, // 是否购物车
+                is_collective: this.is_collective,
             };
 
             // 恢复 collective_active_id

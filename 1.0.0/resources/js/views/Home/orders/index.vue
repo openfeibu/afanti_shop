@@ -72,7 +72,7 @@
                                         <a-col :span="4"><div class="goods_info_th">{{vo.goods_price}}</div></a-col>
                                         <a-col :span="2"><div class="goods_info_th">{{vo.buy_num}}</div></a-col>
                                         <a-col :span="2"><div class="goods_info_th">-</div></a-col>
-                                        <a-col :span="2"><div class="goods_info_th red">￥{{vo.total}}</div></a-col>
+                                        <a-col :span="2"><div class="goods_info_th red">￥{{vo.total_price}}</div></a-col>
                                     </a-row>
                                 </li>
                             </ul>
@@ -102,13 +102,13 @@
 
                 <div class="order_price sum_block_item">  <div class="label">总商品金额：</div><div class="con"><span>￥{{order.order_price}}</span></div></div>
                 <div class="freight sum_block_item">  <div class="label">运费：</div><div class="con"><span>￥{{freight}}</span></div></div>
-                <div class="discount sum_block_item">  <div class="label">优惠：</div><div class="con"><span>-￥{{discount}}</span></div></div>
+                <div class="discount sum_block_item">  <div class="label">优惠：</div><div class="con"><span>-￥{{total_discount}}</span></div></div>
                
                
             </div>
              <div class="clear"></div>
              <div class="total-box clear">
-                    <div class="total sum_block_item">  <div class="label">应付金额：</div><div class="con"><span>￥{{order.order_price + freight - discount }}</span></div></div>
+                    <div class="total sum_block_item">  <div class="label">应付金额：</div><div class="con"><span>￥{{order.order_price + freight - total_discount }}</span></div></div>
                    <div class="clear"></div>
                     <div class="nowaddress"  v-if="v.is_default == 1" v-for="(v,k) in address" :key="k">寄往：{{v.area_info+' '+v.address}} 收货人：{{v.receive_name +' '+ v.receive_tel}}</div>
             </div>
@@ -132,7 +132,7 @@ export default {
           remark:'',
           loading:false,
           freight: 0,
-          discount: 0,
+          total_discount: 0,
           province_id:0,
           modal:null
       };
@@ -187,9 +187,9 @@ export default {
             })
             if(this.order.coupon.coupon_id)
             {
-                this.discount = this.$formatFloat(this.order.discount)+this.$formatFloat(hh[0].money);
+                this.total_discount = this.$formatFloat(this.order.total_discount)+this.$formatFloat(hh[0].money);
             }else{
-                this.discount = this.$formatFloat(this.order.discount);
+                this.total_discount = this.$formatFloat(this.order.total_discount);
             }
         },
         // 订单建立前预览商品信息

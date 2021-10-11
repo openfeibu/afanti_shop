@@ -11,7 +11,7 @@ class SeckillService extends BaseService{
         $seckill_model = new Seckill();
         $info = $seckill_model->select('discount','start_time','end_time')->where('goods_id',$goods_id)->where('start_time','<=',now())->where('end_time','>=',now())->first();
 
-        return $this->format($info);
+        return $info;
     }
 
     // 获取首页秒杀产品

@@ -48,7 +48,7 @@ class GoodsController extends Controller
             $goods_info['data']['coupons'] = $this->coupon_service->getCoupons()['data']; // 优惠券
             $goods_info['data']['full_reductions'] = $this->full_reduction_service->getFullReduction($goods_info['data']['store_id'])['data']; // 满减
             $seckill_info = $this->seckill_service->getSeckillInfoByGoodsId($id);
-            $goods_info['data']['seckills'] = $seckill_info['status']?$seckill_info['data']:false; // 秒杀
+            $goods_info['data']['seckills'] = $seckill_info ? : false; // 秒杀
 
             $goods_info['data']['bargain'] = $this->bargain_service->getBargainInfoByGoodsId($id)['data'];// 秒杀
             $goods_info['data']['bargain_task_id'] = $goods_info['data']['bargain'] ? $this->bargain_service->getWhetherPartake($goods_info['data']['bargain']['id'], $user_info) : 0;

@@ -118,6 +118,8 @@ class CollectiveService extends BaseService{
                 ];
                 $collective_active = CollectiveActive::create($data);
                 $collective_active_id = $collective_active->id;
+                $order->collective_active_id = $collective_active->id;
+                $order->save();
                 // 新增拼单成员记录
                 CollectiveActiveUser::create([
                     'collective_active_id' => $collective_active_id,

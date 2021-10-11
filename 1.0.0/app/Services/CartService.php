@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\OutOfStockException;
 use App\Http\Resources\Home\CartResource\CartCollection;
 use App\Models\Cart;
 use App\Models\Goods;

@@ -764,8 +764,102 @@ if(!function_exists('formatIdCard')) {
     }
 }
 
+if(!function_exists('bcequal')) {
+    function bcequal($leftOperand, $rightOperand, $scale = 2)
+    {
+        return bccomp($leftOperand, $rightOperand, $scale) === 0;
+    }
+}
 
-function bcequal($leftOperand, $rightOperand, $scale = 2)
-{
-    return bccomp($leftOperand, $rightOperand, $scale) === 0;
+if(!function_exists('getArrayItemByColumn')) {
+    function getArrayItemByColumn($array, $column, $value)
+    {
+        foreach ($array as $item) {
+            if ($item[$column] == $value) {
+                return $item;
+            }
+        }
+        return false;
+    }
+}
+
+/**
+ * 获取数组中指定的列
+ * @param $source
+ * @param $columns
+ * @return array
+ */
+if(!function_exists('getArrayColumns')) {
+    function getArrayColumns($source, $columns)
+    {
+        $columnArr = [];
+        foreach ($source as $item) {
+            $temp = [];
+            foreach ($columns as $index) {
+                $temp[$index] = $item[$index];
+            }
+            $columnArr[] = $temp;
+        }
+        return $columnArr;
+    }
+}
+/**
+ * 获取二维数组中指定的列
+ * @param $source
+ * @param $columns
+ * @return array
+ */
+if(!function_exists('getArray2Columns')) {
+    function getArray2Columns($source, $columns)
+    {
+
+        $columnArr = [];
+        foreach ($source as $item) {
+            $columnArr[] = getArrayColumns($item,$columns);
+        }
+        return $columnArr;
+    }
+}
+if(!function_exists('getArrayColumnSum')) {
+    function getArrayColumnSum($array, $column)
+    {
+        $sum = 0;
+        foreach ($array as $item) {
+            $sum += $item[$column] * 100;
+        }
+        return $sum / 100;
+    }
+}
+/**
+ * 二维数组排序
+ * @param $arr
+ * @param $keys
+ * @param bool $desc
+ * @return mixed
+ */
+if(!function_exists('array_sort')) {
+    function array_sort($arr, $keys, $desc = false)
+    {
+        $key_value = $new_array = array();
+        foreach ($arr as $k => $v) {
+            $key_value[$k] = $v[$keys];
+        }
+        if ($desc) {
+            arsort($key_value);
+        } else {
+            asort($key_value);
+        }
+        reset($key_value);
+        foreach ($key_value as $k => $v) {
+            $new_array[$k] = $arr[$k];
+        }
+        return $new_array;
+    }
+}
+if(!function_exists('number2')) {
+    function number2($number, $isMinimum = false, $minimum = 0.01)
+    {
+        $isMinimum && $number = max($minimum, $number);
+        return sprintf('%.2f', $number);
+    }
 }

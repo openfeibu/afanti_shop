@@ -1,11 +1,13 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\OutOfStockException;
 use App\Http\Resources\Home\BargainResource\BargainGoodsCollection;
 use App\Http\Resources\Home\BargainResource\BargainGoodsIndexCollection;
 use App\Models\Bargain;
 use App\Models\BargainTask;
 use App\Models\Goods;
+use App\Models\GoodsSku;
 
 class BargainService extends BaseService{
     public function getBargains()
@@ -56,4 +58,6 @@ class BargainService extends BaseService{
         }
         return BargainTask::getHandByUser($bargain_id, $user['id']);
     }
+
+
 }

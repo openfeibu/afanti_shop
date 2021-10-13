@@ -30,6 +30,12 @@ return [
     'order_refund_handle'                =>  '该订单已经申请过售后.',
     'order_refund_success'               =>  '申请成功等待管理员审核.',
 
-    'goods_failure' => '部分产品已下架.'
-    
+    'goods_failure' => '部分产品已下架.',
+
+    'order_source_desc' => [
+        'common' => '普通下单',
+        'seckill' => '秒杀',
+        'collective' => '拼团',
+        'bargain' => '砍价',
+    ],
 ];

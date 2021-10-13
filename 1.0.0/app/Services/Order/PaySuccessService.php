@@ -1,6 +1,8 @@
 <?php
 namespace App\Services\Order;
 
+use App\Models\Bargain;
+use App\Models\BargainTask;
 use App\Models\CollectiveActive;
 use App\Models\Order;
 use App\Models\OrderGoods;
@@ -97,17 +99,43 @@ class PaySuccessService extends BaseService{
             $ml_service = new MoneyLogService();
             $ml_info = $ml_service->editMoney(__('users.money_log_order'), $order_pay->user_id, -$order_pay->total_price);
             if (!$ml_info['status']) {
-                throw new OutputServerMessageException($ml_info['msg']);
-                //throw new \Exception($ml_info['msg']);
+                OutputServerMessageException($ml_info['msg']);
             }
-            $collective_service = new CollectiveService();
-            $collective_service->saveCollectiveActive($oid_arr);
+            foreach ($oid_arr as $oid)
+            {
+                $order = Order::whereIn('id',$oid_arr)->first();
+                switch ($order['order_source'])
+                {
+                    case 'collective':
+                        $collective_service = new CollectiveService();
+                        $collective_service->saveCollectiveActive($order);
+                        break;
+                    case 'bargain':
+                        $task = BargainTask::detail($order['order_source_id']);
+                        if (empty($task)) {
+                            OutputServerMessageException('未找到砍价任务信息');
+                        }
+                        $task->setIsBuy();
+                        $bargain = Bargain::find($task['bargain_id']);
+                        if (empty($bargain)) {
+                            OutputServerMessageException('未找到砍价活动信息');
+                        }
+                        // 累计活动销量
+                        $bargain->increment('actual_sales');
+
+                        break;
+                    case 'seckill':
+                        break;
+                }
+            }
+
+
             DB::commit();
             return true;
         }catch(\Exception $e){
             DB::rollBack();
             Log::channel('qwlog')->debug($e->getMessage());
-            throw new OutputServerMessageException(__('orders.payment_failed'));
+            OutputServerMessageException(__('orders.payment_failed'));
         }
 
     }

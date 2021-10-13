@@ -278,6 +278,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
  // 放大镜组件 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -464,6 +466,18 @@ __webpack_require__.r(__webpack_exports__);
       }; // 恢复 collective_active_id
 
       this.collective_active_id = 0;
+      var str = window.btoa(JSON.stringify(params));
+      this.$router.push("/order/create_order/" + str);
+    },
+    // 立即购买
+    bargain_buy: function bargain_buy() {
+      var params = {
+        order: [],
+        bargain_task_id: 17,
+        ifcart: 0,
+        // 是否购物车，
+        order_source: 'bargain'
+      };
       var str = window.btoa(JSON.stringify(params));
       this.$router.push("/order/create_order/" + str);
     },
@@ -1384,6 +1398,23 @@ var render = function() {
                       [
                         _c("a-font", { attrs: { type: "icongouwuche1" } }),
                         _vm._v("加入购物车")
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "goods_info_buy",
+                        on: {
+                          click: function($event) {
+                            return _vm.bargain_buy()
+                          }
+                        }
+                      },
+                      [
+                        _c("a-font", { attrs: { type: "iconchanpin1" } }),
+                        _vm._v("砍价")
                       ],
                       1
                     )

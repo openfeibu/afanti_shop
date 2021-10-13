@@ -102,9 +102,8 @@
 
                 <div class="order_price sum_block_item">  <div class="label">总商品金额：</div><div class="con"><span>￥{{order.order_price}}</span></div></div>
                 <div class="freight sum_block_item">  <div class="label">运费：</div><div class="con"><span>￥{{freight}}</span></div></div>
-                <div class="discount sum_block_item">  <div class="label">优惠：</div><div class="con"><span>-￥{{total_discount}}</span></div></div>
-               
-               
+                <div class="discount sum_block_item">  <div class="label">总优惠：</div><div class="con"><span>-￥{{total_discount}}</span></div></div>
+
             </div>
              <div class="clear"></div>
              <div class="total-box clear">
@@ -133,6 +132,7 @@ export default {
           loading:false,
           freight: 0,
           total_discount: 0,
+          discount: 0,
           province_id:0,
           modal:null
       };
@@ -187,9 +187,9 @@ export default {
             })
             if(this.order.coupon.coupon_id)
             {
-                this.total_discount = this.$formatFloat(this.order.total_discount)+this.$formatFloat(hh[0].money);
+                this.total_discount = this.$formatFloat(this.order.discount)+this.$formatFloat(hh[0].money);
             }else{
-                this.total_discount = this.$formatFloat(this.order.total_discount);
+                this.total_discount = this.$formatFloat(this.order.discount);
             }
         },
         // 订单建立前预览商品信息

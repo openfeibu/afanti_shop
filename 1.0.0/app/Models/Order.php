@@ -10,6 +10,7 @@ class Order extends Model
     use SoftDeletes;
     protected $guarded = [];
     protected $dates = ['pay_time'];
+    public $appends = ['order_source_desc'];
 
     public function order_goods(){
         return $this->hasMany('App\Models\OrderGoods','order_id','id');
@@ -39,4 +40,8 @@ class Order extends Model
         return $this->hasOne('App\Models\CollectiveActiveUser','order_id','id');
     }
 
+    public function getOrderSourceDescAttribute()
+    {
+        return isset($this->attributes['order_source']) ? trans('orders.order_source.'.$this->attributes['order_source']) : '';
+    }
 }

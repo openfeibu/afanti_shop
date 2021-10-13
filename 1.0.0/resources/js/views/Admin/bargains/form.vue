@@ -35,7 +35,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item label="砍价有效期" :rules="{ required: true}" extra="自用户发起砍价到砍价截止的时间，单位：小时">
-                    <a-input type="number" v-model="info.expiryt_time" suffix="小时"></a-input>
+                    <a-input type="number" v-model="info.expiry_time" suffix="小时"></a-input>
                 </a-form-model-item>
 
                 <a-form-model-item label="砍价底价" :rules="{ required: true}">
@@ -57,7 +57,7 @@
                         </a-radio>
                     </a-radio-group>
                 </a-form-model-item>
-
+                <!--
                 <a-form-model-item label="必须底价购买 " :rules="{ required: true}" extra="只有砍到底价才可以购买">
                     <a-radio-group name="is_floor_buy" v-model="info.is_floor_buy">
                         <a-radio :value="1">
@@ -68,7 +68,7 @@
                         </a-radio>
                     </a-radio-group>
                 </a-form-model-item>
-
+                -->
                 <a-form-model-item label="活动状态">
                     <a-switch  v-model="info.status" />
                 </a-form-model-item>
@@ -98,7 +98,7 @@ export default {
           info:{
               goods_id:0,
               goods_info:{},
-              expiry_time: 1,
+              expiry_time: 24,
               is_self_cut: 1,
               is_floor_buy: 1,
               status: 1,

@@ -39,7 +39,7 @@ class BargainTask extends Model
     {
         $bargain_task = self::with(['user'=>function($q){
             return $q->select('id','username','avatar');
-        }])->where('id',$id)->first(['id','bargain_id','user_id','goods_id','goods_sku_id','goods_price','floor_price','peoples','cut_people','cut_money','actual_price','actual_price','end_time','status']);
+        }])->where('id',$id)->first(['id','bargain_id','user_id','goods_id','goods_sku_id','goods_price','is_floor','floor_price','peoples','cut_people','cut_money','actual_price','actual_price','end_time','status']);
         // 标识砍价任务过期
         if (!empty($bargain_task) && $bargain_task['status'] == 1 && $bargain_task->end_time <= now()) {
             $bargain_task->status = 0;
@@ -66,6 +66,19 @@ class BargainTask extends Model
     public function setSectionAttribute($value)
     {
         $this->attributes['section'] = json_encode($value);
+    }
+
+    public function setBargainTaskEnd()
+    {
+        return $this->update(['status' => 0]);
+    }
+    /**
+     * 砍价任务标记为已购买
+     * @return false|int
+     */
+    public function setIsBuy()
+    {
+        return $this->update(['is_buy' => 1]);
     }
 
 }

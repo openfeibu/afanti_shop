@@ -73,64 +73,61 @@ class CollectiveService extends BaseService{
     }
 
     // 根据ID 和订单ID创建日志 collective_id 是日志ID collective_resp 团信息 order_goods 订单商品信息
-    public function saveCollectiveActive($oid_arr){
+    public function saveCollectiveActive($order){
 
-
-            $order = Order::whereIn('id',$oid_arr)->first();
-            $order_goods = OrderGoods::where('order_id',$order->id)->first();
-
-            // 新增/更新拼单记录
-            if ($order['order_type'] != 'group') {
+        $order_goods = OrderGoods::where('order_id',$order['id'])->first();
+        // 新增/更新拼单记录
+        if ($order['order_source'] != 'collective') {
+            return false;
+        }
+        if($order['collective_active_id'] > 0)
+        {
+            $collective_active = CollectiveActive::where('id',$order['collective_active_id'])->first();
+            $collective_active_id = $collective_active['id'];
+            // 验证当前拼单是否允许加入新成员
+            if (!$collective_active->checkAllowJoin()) {
                 return false;
             }
-            if($order['collective_active_id'] > 0)
-            {
-                $collective_active = CollectiveActive::where('id',$order['collective_active_id'])->first();
-                $collective_active_id = $collective_active['id'];
-                // 验证当前拼单是否允许加入新成员
-                if (!$collective_active->checkAllowJoin()) {
-                    return false;
-                }
-                // 新增拼单成员记录
-                CollectiveActiveUser::create([
-                    'collective_active_id' => $collective_active['id'],
-                    'order_id' => $order['id'],
-                    'user_id' => $order['user_id'],
-                    'store_id' => $order_goods['store_id'],
-                    'is_creator' => 0,
-                ]);
-                $collective_active->actual_people += 1;
-                $status = $collective_active->actual_people >= $collective_active->people ? 'collected' : 'collecting';
-                $collective_active->status = $status;
-                $collective_active->save();
-            }else{
-                $collective_resp = $this->getCollectiveInfoByGoodsId($order_goods['goods_id']);
-                $data = [
-                    'creator_id' => $order_goods['user_id'],
-                    'store_id' => $order_goods['store_id'],
-                    'goods_id' => $order_goods['goods_id'],
-                    'collective_id' => $collective_resp['data']['id'],
-                    'discount' => $collective_resp['data']['discount'],
-                    'people' => $collective_resp['data']['need'],
-                    'actual_people' => 1,
-                    'status' => 'un-collect',
-                    'end_time' => date('Y-m-d H:i:s',time() + ($collective_resp['data']['group_time'] * 60 * 60))
-                ];
-                $collective_active = CollectiveActive::create($data);
-                $collective_active_id = $collective_active->id;
-                $order->collective_active_id = $collective_active->id;
-                $order->save();
-                // 新增拼单成员记录
-                CollectiveActiveUser::create([
-                    'collective_active_id' => $collective_active_id,
-                    'order_id' => $order['id'],
-                    'user_id' => $order_goods['user_id'],
-                    'store_id' => $order_goods['store_id'],
-                    'is_creator' => 1,
-                ]);
+            // 新增拼单成员记录
+            CollectiveActiveUser::create([
+                'collective_active_id' => $collective_active['id'],
+                'order_id' => $order['id'],
+                'user_id' => $order['user_id'],
+                'store_id' => $order_goods['store_id'],
+                'is_creator' => 0,
+            ]);
+            $collective_active->actual_people += 1;
+            $status = $collective_active->actual_people >= $collective_active->people ? 'collected' : 'collecting';
+            $collective_active->status = $status;
+            $collective_active->save();
+        }else{
+            $collective_resp = $this->getCollectiveInfoByGoodsId($order_goods['goods_id']);
+            $data = [
+                'creator_id' => $order_goods['user_id'],
+                'store_id' => $order_goods['store_id'],
+                'goods_id' => $order_goods['goods_id'],
+                'collective_id' => $collective_resp['data']['id'],
+                'discount' => $collective_resp['data']['discount'],
+                'people' => $collective_resp['data']['need'],
+                'actual_people' => 1,
+                'status' => 'un-collect',
+                'end_time' => date('Y-m-d H:i:s',time() + ($collective_resp['data']['group_time'] * 60 * 60))
+            ];
+            $collective_active = CollectiveActive::create($data);
+            $collective_active_id = $collective_active->id;
+            $order->collective_active_id = $collective_active->id;
+            $order->save();
+            // 新增拼单成员记录
+            CollectiveActiveUser::create([
+                'collective_active_id' => $collective_active_id,
+                'order_id' => $order['id'],
+                'user_id' => $order_goods['user_id'],
+                'store_id' => $order_goods['store_id'],
+                'is_creator' => 1,
+            ]);
 
-            }
-            return $collective_active_id;
+        }
+        return $collective_active_id;
 
 
     }

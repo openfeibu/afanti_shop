@@ -109,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
       info: {
         goods_id: 0,
         goods_info: {},
-        expiry_time: 1,
+        expiry_time: 24,
         is_self_cut: 1,
         is_floor_buy: 1,
         status: 1
@@ -462,11 +462,11 @@ var render = function() {
                 _c("a-input", {
                   attrs: { type: "number", suffix: "小时" },
                   model: {
-                    value: _vm.info.expiryt_time,
+                    value: _vm.info.expiry_time,
                     callback: function($$v) {
-                      _vm.$set(_vm.info, "expiryt_time", $$v)
+                      _vm.$set(_vm.info, "expiry_time", $$v)
                     },
-                    expression: "info.expiryt_time"
+                    expression: "info.expiry_time"
                   }
                 })
               ],
@@ -547,47 +547,6 @@ var render = function() {
                     _c("a-radio", { attrs: { value: 0 } }, [
                       _vm._v(
                         "\n                        不允许\n                    "
-                      )
-                    ])
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "a-form-model-item",
-              {
-                attrs: {
-                  label: "必须底价购买 ",
-                  rules: { required: true },
-                  extra: "只有砍到底价才可以购买"
-                }
-              },
-              [
-                _c(
-                  "a-radio-group",
-                  {
-                    attrs: { name: "is_floor_buy" },
-                    model: {
-                      value: _vm.info.is_floor_buy,
-                      callback: function($$v) {
-                        _vm.$set(_vm.info, "is_floor_buy", $$v)
-                      },
-                      expression: "info.is_floor_buy"
-                    }
-                  },
-                  [
-                    _c("a-radio", { attrs: { value: 1 } }, [
-                      _vm._v(
-                        "\n                        是\n                    "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("a-radio", { attrs: { value: 0 } }, [
-                      _vm._v(
-                        "\n                        否\n                    "
                       )
                     ])
                   ],

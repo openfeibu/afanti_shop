@@ -137,7 +137,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
   props: {},
@@ -151,6 +150,7 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       freight: 0,
       total_discount: 0,
+      discount: 0,
       province_id: 0,
       modal: null
     };
@@ -221,9 +221,9 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       if (this.order.coupon.coupon_id) {
-        this.total_discount = this.$formatFloat(this.order.total_discount) + this.$formatFloat(hh[0].money);
+        this.total_discount = this.$formatFloat(this.order.discount) + this.$formatFloat(hh[0].money);
       } else {
-        this.total_discount = this.$formatFloat(this.order.total_discount);
+        this.total_discount = this.$formatFloat(this.order.discount);
       }
     },
     // 订单建立前预览商品信息
@@ -694,7 +694,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "discount sum_block_item" }, [
-          _c("div", { staticClass: "label" }, [_vm._v("优惠：")]),
+          _c("div", { staticClass: "label" }, [_vm._v("总优惠：")]),
           _c("div", { staticClass: "con" }, [
             _c("span", [_vm._v("-￥" + _vm._s(_vm.total_discount))])
           ])

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\OutOfStockException;
 use App\Http\Resources\Home\BargainResource\BargainGoodsCollection;
 use App\Http\Resources\Home\BargainResource\BargainGoodsIndexCollection;
 use App\Models\Bargain;
@@ -9,10 +10,12 @@ use App\Models\BargainTaskHelp;
 use App\Models\Goods;
 use App\Models\GoodsSku;
 use App\Models\User;
+use App\Traits\HelperTrait;
 use DB, Log;
 
 class BargainTaskService extends BaseService{
 
+    use HelperTrait;
 
     public function getTaskDetail($id, $user = false)
     {
@@ -225,4 +228,57 @@ class BargainTaskService extends BaseService{
         }
         return false;
     }
+
+
+    /**
+     * 获取砍价任务的商品列表（用于订单结算）
+     * @param $bargain_task_id
+     * @return array|bool
+     */
+    public function getBargainTaskGoods($bargain_task_id)
+    {
+        // 砍价任务详情
+        $task = BargainTask::detail($bargain_task_id);
+        if (empty($task) || !$task['status']) {
+            OutputServerMessageException("砍价任务不存在或已结束");
+        }
+        if ($task['is_buy']) {
+            OutputServerMessageException("该砍价商品已购买");
+        }
+        if(!$task['is_floor'])
+        {
+            OutputServerMessageException("未砍到最低价，请继续邀请好友砍价");
+        }
+        // 砍价商品详情
+        $goods = Goods::select('id','store_id','goods_name','goods_master_image','goods_price','goods_stock','goods_weight','freight_id','goods_status')->where('id',$task['goods_id'])->first();
+        $store = $goods->store()->first(['id','store_name','store_logo']);
+        if(!$goods or $goods['goods_status'] != 1)
+        {
+            throw new OutOfStockException(__('orders.goods_failure'));
+        }
+        // 判断是否库存足够
+        if($goods['goods_stock'] < 1){
+            throw new OutOfStockException(__('orders.stock_error'));
+        }
+        if($task['goods_sku_id']>0){
+            $goods_sku = GoodsSku::select('id','sku_name','goods_price','goods_stock','goods_weight')->where('goods_id',$task['goods_id'])->where('id',$task['goods_sku_id'])->first();
+            $goods['sku_name'] = $goods_sku['sku_name'];
+            $goods['goods_price'] = $goods_sku['goods_price'];
+            $goods['goods_stock'] = $goods_sku['goods_stock'];
+            $goods['goods_weight'] = $goods_sku['goods_weight'];
+        }
+        $goods['goods_master_image'] = $this->thumb($goods['goods_master_image'],150);
+        $goods['original_price'] = $goods['goods_price'];
+        $goods['goods_price'] =  $task['actual_price'];
+        $goods['total_price'] =  $task['actual_price'];
+        $goods['total_weight'] = $goods['goods_weight'];
+        $goods['buy_num'] = 1;
+        $goods['coupon_money'] = 0;
+        $goods['full_reduction_money'] = 0;
+        $store_goods_list[$store['id']]['goods_list'][] = $goods;
+        $store_goods_list[$store['id']]['store_info'] = $store;
+
+        return $store_goods_list;
+    }
+
 }

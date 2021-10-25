@@ -64,6 +64,15 @@
             'reference' => '233c10688f4c1a6e66ed2ef123038b1363d1bedc',
             'dev_requirement' => true,
         ),
+        'bensampo/laravel-enum' => array(
+            'pretty_version' => 'v2.2.0',
+            'version' => '2.2.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../bensampo/laravel-enum',
+            'aliases' => array(),
+            'reference' => 'd48fc31b34303b1c959a2113646868beb07f447e',
+            'dev_requirement' => false,
+        ),
         'brick/math' => array(
             'pretty_version' => '0.8.15',
             'version' => '0.8.15.0',
@@ -274,6 +283,15 @@
             'reference' => '776503d3a8e85d4f9a1148614f95b7a608b046ad',
             'dev_requirement' => true,
         ),
+        'hanneskod/classtools' => array(
+            'pretty_version' => '1.2.1',
+            'version' => '1.2.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../hanneskod/classtools',
+            'aliases' => array(),
+            'reference' => 'd365ddac0e602027c0471ea292f4ba2afcb49394',
+            'dev_requirement' => false,
+        ),
         'illuminate/auth' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -471,6 +489,33 @@
             'replaced' => array(
                 0 => '*',
             ),
+        ),
+        'laminas/laminas-code' => array(
+            'pretty_version' => '3.5.1',
+            'version' => '3.5.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laminas/laminas-code',
+            'aliases' => array(),
+            'reference' => 'b549b70c0bb6e935d497f84f750c82653326ac77',
+            'dev_requirement' => false,
+        ),
+        'laminas/laminas-eventmanager' => array(
+            'pretty_version' => '3.4.0',
+            'version' => '3.4.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laminas/laminas-eventmanager',
+            'aliases' => array(),
+            'reference' => 'a93fd278c97b2d41ebbce5ba048a24e3e6f580ba',
+            'dev_requirement' => false,
+        ),
+        'laminas/laminas-zendframework-bridge' => array(
+            'pretty_version' => '1.4.0',
+            'version' => '1.4.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laminas/laminas-zendframework-bridge',
+            'aliases' => array(),
+            'reference' => 'bf180a382393e7db5c1e8d0f2ec0c4af9c724baf',
+            'dev_requirement' => false,
         ),
         'laraeast/laravel-bootstrap-forms' => array(
             'pretty_version' => 'v5.2.1',
@@ -1519,6 +1564,12 @@
             'aliases' => array(),
             'reference' => 'c6bfcf6509288ab89fb9d1888e5154fe49869caf',
             'dev_requirement' => false,
+        ),
+        'zendframework/zend-code' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '^3.4.1',
+            ),
         ),
     ),
 );

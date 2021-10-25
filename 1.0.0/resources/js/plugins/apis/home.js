@@ -48,13 +48,16 @@ export default
     'homeAddress' : baseUrl + 'addresses',
 
     // 订单处理
-    'homeOrder' : baseUrl + 'order',
+    'homeOrder' : baseUrl + 'orders',
 
     // 订单评论
     'homeOrderComments' : baseUrl + 'order_comments',
 
     // 订单售后
     'homeRefunds' : baseUrl + 'refunds',
+
+    // 订单售后
+    'homeOrderRefunds' : baseUrl + 'order_refunds',
 
     // 用户中心
     'homeUser' : baseUrl + 'users',

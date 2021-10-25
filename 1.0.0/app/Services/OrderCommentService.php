@@ -30,13 +30,13 @@ class OrderCommentService extends BaseService{
         
         if(!empty($ids)){
             $idArray = $ids;
-            $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('order_status',4)->get();
+            $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('is_comment',0)->get();
         }else{
             $user_info = $user_service->getUserInfo();
             $idArray = array_filter(explode(',',request()->order_id),function($item){
                 return is_numeric($item);
             });
-            $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('user_id',$user_info['id'])->where('order_status',4)->get();
+            $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('user_id',$user_info['id'])->where('is_comment',0)->get();
         }
         if(empty($order_list->count())){
             OutputServerMessageException(__('orders.order_comment_error'));
@@ -72,9 +72,9 @@ class OrderCommentService extends BaseService{
         }
 
         if(!empty($ids)){
-            $order_model->whereIn('id',$idArray)->update(['order_status'=>6,'comment_time'=>now()]);
+            $order_model->whereIn('id',$idArray)->update(['is_comment'=>1,'comment_time'=>now()]);
         }else{
-            $order_model->whereIn('id',$idArray)->where('user_id',$user_info['id'])->update(['order_status'=>6,'comment_time'=>now()]);
+            $order_model->whereIn('id',$idArray)->where('user_id',$user_info['id'])->update(['is_comment'=>1,'comment_time'=>now()]);
         }
         $rs = OrderComment::insert($data);
         return $this->format($rs,__('orders.order_comment_success'));
@@ -129,6 +129,13 @@ class OrderCommentService extends BaseService{
         if($auth == 'seller'){
             $store_id = $this->get_store(true);
             $oc_model = OrderComment::where('id',$id)->where('store_id',$store_id)->first();
+            $oc_model->reply = request()->reply??'';
+            $oc_model->reply_time = now();
+            $oc_model->save();
+            return $this->format([],__('orders.order_comment_success'));
+        }
+        if($auth == 'admin'){
+            $oc_model = OrderComment::where('id',$id)->first();
             $oc_model->reply = request()->reply??'';
             $oc_model->reply_time = now();
             $oc_model->save();

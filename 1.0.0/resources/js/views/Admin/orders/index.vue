@@ -30,6 +30,10 @@
                 </span>
                 <span slot="action" slot-scope="rows">
                     <a-button icon="read" @click="$router.push('/Admin/orders/form/'+rows.id)">查看详情</a-button>
+                    <a-button icon="read" v-if="rows.pay_status==20 && rows.delivery_status==10 && rows.order_status!=20 && rows.order_status!=21" @click="$router.push('/Admin/orders/form/'+rows.id+'/#delivery')">去发货</a-button>
+                    <a-button icon="read" v-if="rows.order_status==21" @click="$router.push('/Admin/orders/form/'+rows.id+'/#cancel')">去审核</a-button>
+
+
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">

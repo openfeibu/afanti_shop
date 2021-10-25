@@ -184,104 +184,95 @@ class CheckoutService extends BaseService{
         }
         $address_info = $address_resp['data'];
 
-        // 循环生成订单 多个商家则生成多个订单
-        try{
-            DB::beginTransaction();
-            $resp_data = [];
-            $make_rand = date('YmdHis').$this->user['id'].mt_rand(1000,9999); // 生成订单号
 
-            $order_data = [
-                'order_no'                  =>  $make_rand, // 订单号
-                'user_id'                   =>  $this->user['id'], // 用户ID
-                'order_name'                =>  $create_order_data['order_name'], // 商品ID
-                'order_image'               =>  $create_order_data['order_image'], // 商品图片
-                'receive_name'              =>  $address_info['receive_name'], // 收件人姓名
-                'receive_tel'               =>  $address_info['receive_tel'], // 收件人电话
-                'receive_area'              =>  $address_info['area_info'], // 收件人地区
-                'receive_address'           =>  $address_info['address'], // 详细地址
-                'coupon_id'                 =>  isset($create_order_data['coupon']['coupon_id'])?intval(abs($create_order_data['coupon']['coupon_id'])):0, // 优惠券ID
-                'remark'                    =>  request()->remark??'', // 备注
-            ];
+        $resp_data = [];
+        $make_rand = date('YmdHis').$this->user['id'].mt_rand(1000,9999); // 生成订单号
 
-            $order_info = $order_model->create($order_data); // 订单数据插入数据库
+        $order_data = [
+            'order_no'                  =>  $make_rand, // 订单号
+            'user_id'                   =>  $this->user['id'], // 用户ID
+            'order_name'                =>  $create_order_data['order_name'], // 商品ID
+            'order_image'               =>  $create_order_data['order_image'], // 商品图片
+            'receive_name'              =>  $address_info['receive_name'], // 收件人姓名
+            'receive_tel'               =>  $address_info['receive_tel'], // 收件人电话
+            'receive_area'              =>  $address_info['area_info'], // 收件人地区
+            'receive_address'           =>  $address_info['address'], // 详细地址
+            'coupon_id'                 =>  isset($create_order_data['coupon']['coupon_id'])?intval(abs($create_order_data['coupon']['coupon_id'])):0, // 优惠券ID
+            'remark'                    =>  request()->remark??'', // 备注
+        ];
 
-            // 初始化其他费用
-            $total_price = 0 ; // 总金额
-            $order_price = 0 ; // 订单总金额
-            $total_weight = 0; // 总重量
-            $freight_money = 0; // 运费
-            $coupon_money = 0; // 优惠券 金额
+        $order_info = $order_model->create($order_data); // 订单数据插入数据库
 
-            foreach($create_order_data['list'] as $k=>$v){
-                // 循环将订单商品插入
-                foreach($v['goods_list'] as $vo){
-                    $order_goods_data = [
-                        'order_id'      =>$order_info->id, // 订单ID
-                        'user_id'       =>$order_data['user_id'], // 用户ID
-                        'store_id'      =>$vo['store_id'], // 店铺ID
-                        'sku_id'        =>$vo['sku_id'] ?: 0, // skuid
-                        'goods_id'      =>$vo['id'], // 商品id
-                        'goods_name'    =>$vo['goods_name'], // 商品名称
-                        'goods_image'   =>$vo['goods_master_image'], // 商品图片
-                        'sku_name'      =>$vo['sku_name'] ?: '', // sku名称
-                        'buy_num'       =>$vo['buy_num'], // 购买数量
-                        'goods_price'   =>$vo['goods_price'], // 商品价格
-                        'original_price'   =>$vo['original_price'], // 商品原价
-                        'total_price'   =>$vo['total_price'], // 总价格
-                        'total_pay_price'   =>$vo['total_pay_price'], // 商品应付价格
-                        'total_weight'  =>$vo['total_weight'], // 总重量
-                        'coupon_money'   => $vo['coupon_money'], // 优惠券
-                        'full_reduction_money'   =>$vo['full_reduction_money'], // 满减
-                    ];
+        // 初始化其他费用
+        $total_price = 0 ; // 总金额
+        $order_price = 0 ; // 订单总金额
+        $total_weight = 0; // 总重量
+        $freight_money = 0; // 运费
+        $coupon_money = 0; // 优惠券 金额
 
-                    /*
-                    // 秒杀
-                    $seckill_info = $seckill_service->getSeckillInfoByGoodsId($order_goods_data['goods_id']);
-                    if($seckill_info){
-                        $coupon_money += $order_goods_data['total_price']*($seckill_info['data']['discount']/100);
-                    }
-                    */
+        foreach($create_order_data['list'] as $k=>$v){
+            // 循环将订单商品插入
+            foreach($v['goods_list'] as $vo){
+                $order_goods_data = [
+                    'order_id'      =>$order_info->id, // 订单ID
+                    'user_id'       =>$order_data['user_id'], // 用户ID
+                    'store_id'      =>$vo['store_id'], // 店铺ID
+                    'sku_id'        =>$vo['sku_id'] ?: 0, // skuid
+                    'goods_id'      =>$vo['id'], // 商品id
+                    'goods_name'    =>$vo['goods_name'], // 商品名称
+                    'goods_image'   =>$vo['goods_master_image'], // 商品图片
+                    'sku_name'      =>$vo['sku_name'] ?: '', // sku名称
+                    'buy_num'       =>$vo['buy_num'], // 购买数量
+                    'goods_price'   =>$vo['goods_price'], // 商品价格
+                    'original_price'   =>$vo['original_price'], // 商品原价
+                    'total_price'   =>$vo['total_price'], // 总价格
+                    'total_pay_price'   =>$vo['total_pay_price'], // 商品应付价格
+                    'total_weight'  =>$vo['total_weight'], // 总重量
+                    'coupon_money'   => $vo['coupon_money'], // 优惠券
+                    'full_reduction_money'   =>$vo['full_reduction_money'], // 满减
+                ];
 
-                    $order_goods_model->create($order_goods_data); // 插入订单商品表
-
-                    // 开始减去库存
-                    $order_service->orderStock($order_goods_data['goods_id'],$order_goods_data['sku_id'],$order_goods_data['buy_num']);
-
-                    // 将商品总总量加起来
-                    $total_weight += $order_goods_data['total_weight'];
-
+                /*
+                // 秒杀
+                $seckill_info = $seckill_service->getSeckillInfoByGoodsId($order_goods_data['goods_id']);
+                if($seckill_info){
+                    $coupon_money += $order_goods_data['total_price']*($seckill_info['data']['discount']/100);
                 }
+                */
+
+                $order_goods_model->create($order_goods_data); // 插入订单商品表
+
+                // 开始减去库存
+                $order_service->orderStock($order_goods_data['goods_id'],$order_goods_data['sku_id'],$order_goods_data['buy_num']);
+
+                // 将商品总总量加起来
+                $total_weight += $order_goods_data['total_weight'];
+
             }
-            $this->useCoupon($order_data['coupon_id'], $order_info->id);
-
-            $freight_money = $order_service->sumFreight( $create_order_data['freight_id'],$total_weight,$address_info['province_id']); // 直接计算运费，如果多个不同的商品取第一个商品的运费
-
-            // 订单总金额做修改，然后保存
-            $total_price = $create_order_data['order_price']+$freight_money-$create_order_data['total_discount']; // 暂时总金额等于[订单金额+运费-优惠金额]
-
-            $resp_data['order_id'][] = $order_info->id;
-            $resp_data['order_no'][] = $make_rand;
-            $order_info->total_price = round($total_price,2);
-            $order_info->order_price = $create_order_data['order_price'];
-            $order_info->freight_money = $freight_money; // 运费
-            $order_info->coupon_money = $create_order_data['coupon_money']; // 优惠金额修改
-            $order_info->full_reduction_money = $create_order_data['full_reduction_money']; // 优惠金额修改
-            $order_info->total_discount = $create_order_data['total_discount']; // 优惠金额修改
-            $order_info->coupon_id = $order_data['coupon_id']; // 优惠券ID修改 ，以免非法ID传入
-            $order_info->collective_active_id = $create_order_data['collective_active_id'] ?: 0; // 团购活动ID
-            $order_info->order_source = $this->order_source['source']; //普通下单，团购，秒杀，砍价
-            $order_info->order_source_id = $this->order_source['source_id'];
-            $order_info->save(); // 保存入数据库
-
-            // 执行成功则删除购物车
-
-            DB::commit();
-            return $this->format($resp_data);
-        }catch(\Exception $e){
-            Log::channel('qwlog')->debug('createOrder:'.json_encode($e->getMessage()));
-            DB::rollBack();
-            OutputServerMessageException(__('orders.error'));
         }
+        $this->useCoupon($order_data['coupon_id'], $order_info->id);
+
+        $freight_money = $order_service->sumFreight( $create_order_data['freight_id'],$total_weight,$address_info['province_id']); // 直接计算运费，如果多个不同的商品取第一个商品的运费
+
+        // 订单总金额做修改，然后保存
+        $total_price = $create_order_data['order_price']+$freight_money-$create_order_data['total_discount']; // 暂时总金额等于[订单金额+运费-优惠金额]
+
+        $resp_data['order_id'][] = $order_info->id;
+        $resp_data['order_no'][] = $make_rand;
+        $order_info->total_price = round($total_price,2);
+        $order_info->order_price = $create_order_data['order_price'];
+        $order_info->freight_money = $freight_money; // 运费
+        $order_info->coupon_money = $create_order_data['coupon_money']; // 优惠金额修改
+        $order_info->full_reduction_money = $create_order_data['full_reduction_money']; // 优惠金额修改
+        $order_info->total_discount = $create_order_data['total_discount']; // 优惠金额修改
+        $order_info->coupon_id = $order_data['coupon_id']; // 优惠券ID修改 ，以免非法ID传入
+        $order_info->collective_active_id = $create_order_data['collective_active_id'] ?: 0; // 团购活动ID
+        $order_info->order_source = $this->order_source['source']; //普通下单，团购，秒杀，砍价
+        $order_info->order_source_id = $this->order_source['source_id'];
+        $order_info->save(); // 保存入数据库
+
+        return $this->format($resp_data);
+
     }
 
     // 地址验证

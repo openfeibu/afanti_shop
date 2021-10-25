@@ -15,4 +15,7 @@ class OrderGoods extends Model
     public function user(){
         return $this->hasOne("App\Models\User","id",'user_id');
     }
+    public function order_refund(){
+        return $this->hasOne("App\Models\OrderRefund","order_goods_id",'id');
+    }
 }

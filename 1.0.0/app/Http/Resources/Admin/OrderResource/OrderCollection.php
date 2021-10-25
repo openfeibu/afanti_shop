@@ -27,12 +27,16 @@ class OrderCollection extends ResourceCollection
                     'buyer_name'            =>  $item->user->username??'',
                     'order_status'          =>  $item->order_status,
                     'order_status_cn'       =>  $order_service->getOrderStatusCn($item),
-     
-             
-                    'pay_time'              =>  $item->pay_time,
+                    'pay_status'         =>  $item->pay_status,
+                    'delivery_status'         =>  $item->delivery_status,
+                    'receipt_status'         =>  $item->receipt_status,
+                    'pay_time'              =>  $item->pay_time ? $item->pay_time->format('Y-m-d H:i:s') : '',
                     'delivery_time'         =>  $item->delivery_time,
                     'receipt_time'          =>  $item->receipt_time,
                     'comment_time'          =>  $item->comment_time,
+                    'is_comment'          =>  $item->is_comment,
+                    'delivery_code' => $item->delivery_code,
+                    'delivery_company' => $item->delivery_company,
                     'created_at'            =>  $item->created_at->format('Y-m-d H:i:s'),
                     'updated_at'            =>  $item->updated_at->format('Y-m-d H:i:s'),
                 ];

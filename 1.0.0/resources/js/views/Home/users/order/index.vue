@@ -39,16 +39,21 @@
                             </router-link></li>
                         </ul>
                     </div>
-
-                    <div class="order_item_btn" v-show="v.order_status!=6 || v.order_status !=0">
-                        <div class="default_btn" v-if="v.order_status==1" @click="edit_order_status(v.id)">取消订单</div>
-                        <div class="success_btn" v-if="v.order_status==1" @click="pay_order(v.id)">立即支付</div>
-                        <div class="default_btn" v-if="v.order_status>2 " @click="get_order_info(v.id)">查看物流</div>
-                        <div class="error_btn" v-if="v.order_status==3" @click="edit_order_status(v.id,4)">确定收货</div>
-                        <div class="gray_btn" v-if="v.order_status==4" @click="$router.push('/user/comment/add/'+v.id)">前往评论</div>
-                        <div class="warn_btn" v-if="v.order_status>3 && v.order_status !=5 && v.refund_status!=2" @click="$router.push('/user/refund/'+v.id)">申请售后</div>
-                        <div class="warn_btn" v-if="v.order_status==5 || v.refund_status==2" @click="$router.push('/user/refund/form/'+v.id)">查看售后</div>
+                    <div class="order_item_btn" v-if="v.order_status!= 20">
+                        <!-- 未支付取消订单 -->
+                        <div class="default_btn" v-if="v.pay_status==10" @click="cancel(v.id)">取消订单</div>
+                        <!-- 已支付取消订单 -->
+                        <template v-if="v.order_status!= 21">
+                            <div class="default_btn" v-if="v.pay_status==20 && v.delivery_status==10" @click="cancel(v.id)">申请取消</div>
+                        </template>
+                        <template v-else>
+                            <div class="default_btn">取消申请中</div>
+                        </template>
+                        <div class="success_btn" v-if="v.pay_status==10" @click="pay_order(v.id)">立即支付</div>
+                        <div class="error_btn" v-if="v.delivery_status ==20 && v.receipt_status == 10" @click="receipt(v.id)">确定收货</div>
+                        <div class="gray_btn" v-if="v.order_status ==30 && v.is_comment==0" @click="$router.push('/user/comment/add/'+v.id)">前往评论</div>
                     </div>
+
                 </div>
                 <div class="fy" v-if="total>0">
                     <a-pagination v-model="params.page" :page-size.sync="params.per_page" :total="total" @change="onChange" show-less-items />
@@ -148,6 +153,18 @@ export default {
         },
         edit_order_status(id,order_status=0){
             this.$put(this.$api.homeOrder+'/'+'edit_order_status',{id:id,order_status:order_status}).then(res=>{
+                this.onload();
+                return this.$returnInfo(res)
+            })
+        },
+        cancel(id){
+            this.$put(this.$api.homeOrder+'/'+'cancel',{id:id}).then(res=>{
+                this.onload();
+                return this.$returnInfo(res)
+            })
+        },
+        receipt(id){
+            this.$put(this.$api.homeOrder+'/'+'receipt',{id:id}).then(res=>{
                 this.onload();
                 return this.$returnInfo(res)
             })

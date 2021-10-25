@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\OrderResource\OrderCollection;
 use App\Http\Resources\Home\OrderResource\OrderResource;
-use App\Services\OrderService;
+use App\Models\User;
+use App\Services\Home\OrderService;
 use App\Services\PayMentService;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,22 @@ class OrderController extends Controller
     public function wechat_pay_check(PayMentService $payment_service){
         $rs = $payment_service->wechatPayCheck();
         return $rs['status']?$this->success($rs['data']):$this->error($rs['msg']);
+    }
+    // 取消订单
+    public function cancel(Request $request)
+    {
+        $order_service = new OrderService();
+        $user_info = User::getAuthUserInfo();
+        $order_service->cancel($request->id,$user_info);
+        return $this->success([],"订单取消成功");
+    }
+    //收货
+    public function receipt(Request $request)
+    {
+        $order_service = new OrderService();
+        $user_info = User::getAuthUserInfo();
+        $order_service->receipt($request->id,$user_info);
+        return $this->success([],"订单收货成功");
     }
 
     // 修改订单状态 // 用户只能操作取消订单

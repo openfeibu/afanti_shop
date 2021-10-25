@@ -38,4 +38,43 @@ return [
         'collective' => '拼团',
         'bargain' => '砍价',
     ],
+
+    'order_status' => [
+        '10' => '进行中',
+        '20' => '已取消',
+        '21' => '待取消',
+        '30' => '已完成',
+    ],
+    'pay_status' => [
+        '10' => '待支付',
+        '20' => '已支付',
+    ],
+    'receipt_status' => [
+        '10' => '未收货',
+        '20' => '已收货',
+    ],
+    'delivery_status' => [
+        '10' => '未发货',
+        '20' => '已发货',
+    ],
+
+    // 订单状态
+    'order_cancel'                                  =>   '订单取消',
+    'wait_pay'                                      =>   '等待支付',
+    'wait_send'                                     =>   '等待发货',
+    'wait_rec'                                      =>   '等待收货',
+    'order_confirm'                                 =>   '等待收货', // 确认收货
+    'wait_comment'                                  =>   '等待评论',
+    'order_refund'                                  =>   '售后退款',
+    'order_returned'                                =>   '售后退货',
+    'order_refund_over'                             =>   '售后完成',
+    'order_completion'                              =>   '订单完成',
+
+    // 支付类型
+    'payment_name' => [
+        'payment_wechat'                                =>   '微信支付',
+        'payment_ali'                                   =>   '支付宝支付',
+        'payment_money'                                 =>   '余额支付',
+    ],
+
 ];

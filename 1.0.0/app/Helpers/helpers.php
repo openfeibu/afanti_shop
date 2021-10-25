@@ -786,6 +786,21 @@ if(!function_exists('getArrayItemByColumn')) {
 /**
  * 获取数组中指定的列
  * @param $source
+ * @param $column
+ * @return array
+ */
+function getArrayColumn($source, $column)
+{
+    $columnArr = [];
+    foreach ($source as $item) {
+        $columnArr[] = $item[$column];
+    }
+    return $columnArr;
+}
+
+/**
+ * 获取数组中指定的列
+ * @param $source
  * @param $columns
  * @return array
  */

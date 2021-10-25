@@ -54,6 +54,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 物流公司
         Route::apiResource('expresses','ExpressController');
+        Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses'); // 缓存清除商品分类
 
         // 编辑器上传图片接口
         Route::post('/editor/upload','EditorController@editor')->name('public.editor');  // 富文本编辑器图上传
@@ -100,12 +101,17 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 订单管理 
         Route::apiResource('orders','OrderController')->except(['store']);
+        Route::put('/orders/delivery/{id}','OrderController@delivery')->name('orders.delivery');
+        Route::get('/orders/delivery_info/{id}','OrderController@delivery_info')->name('orders.delivery_info'); // 缩略图上传
+
+        //退款退货
+        Route::apiResource('order_refunds','OrderRefundController')->except(['store']);
 
         // 积分订单管理 
         Route::apiResource('integral_orders','IntegralOrderController')->except(['store','destroy']);
 
         // 订单评论
-        Route::apiResource('order_comments','OrderCommentController')->except(['store','update']);
+        Route::apiResource('order_comments','OrderCommentController')->except(['store']);
 
         // 分销
         Route::apiResource('distribution_logs','DistributionLogController')->only(['index']); // 分销日志
@@ -355,20 +361,24 @@ Route::namespace('Home')->group(function(){
         Route::apiResource('cashes','CashController')->except(['update','show','destroy']);
 
         // 订单列表
-        Route::get('/order','OrderController@get_orders'); // 获取订单列表
+        Route::get('/orders','OrderController@get_orders'); // 获取订单列表
 
-        // 订单售后
+        // 订单售后  todo 删除
         Route::apiResource('refunds','RefundController')->except(['index','destroy']);
 
+        Route::apiResource('order_refunds','OrderRefundController')->except(['index','destroy']);
+        Route::put('/order_refunds/apply/{order_goods_id}','OrderRefundController@apply')->name('order_refunds.apply');
         // 订单处理
-        Route::get('/order/create_order_before','OrderController@create_order_before'); // 生成订单前处理
-        Route::get('/order/create_order_after','OrderController@create_order_after'); // 生成订单后处理
-        Route::post('/order/create_order','OrderController@create_order'); // 生成订单
-        Route::post('/order/pay','OrderController@pay'); // 订单支付
-        Route::post('/order/wechat_pay_check','OrderController@wechat_pay_check'); // 微信支付验证
-        Route::put('/order/edit_order_status','OrderController@edit_order_status'); // 取消订单
-        Route::get('/order/get_order_info/{id}','OrderController@get_order_info'); // 查看订单信息
-        Route::get('/order/get_freight','OrderController@get_freight'); // 生成订单前处理
+        Route::get('/orders/create_order_before','OrderController@create_order_before'); // 生成订单前处理
+        Route::get('/orders/create_order_after','OrderController@create_order_after'); // 生成订单后处理
+        Route::post('/orders/create_order','OrderController@create_order'); // 生成订单
+        Route::post('/orders/pay','OrderController@pay'); // 订单支付
+        Route::post('/orders/wechat_pay_check','OrderController@wechat_pay_check'); // 微信支付验证
+        Route::put('/orders/edit_order_status','OrderController@edit_order_status'); // 取消订单
+        Route::put('/orders/cancel','OrderController@cancel'); // 取消订单
+        Route::put('/orders/receipt','OrderController@receipt')->name('orders.receipt');
+        Route::get('/orders/get_order_info/{id}','OrderController@get_order_info'); // 查看订单信息
+        Route::get('/orders/get_freight','OrderController@get_freight'); // 生成订单前处理
         // 积分订单
         Route::get('/integral_order','IntegralController@get_orders'); // 获取积分订单列表
         Route::get('/integral_order/get_order_info/{id}','IntegralController@get_order_info'); // 查看积分订单信息

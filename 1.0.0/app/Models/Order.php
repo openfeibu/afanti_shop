@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\Order\DeliveryStatus;
+use App\Enums\Order\ReceiptStatus;
+use App\Services\ConfigService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,6 +27,35 @@ class Order extends Model
     // 获取店铺信息
     public function user(){
         return $this->belongsTo('App\Models\User','user_id','id');
+    }
+
+    /**
+     * 当前订单是否允许申请售后
+     * @return bool
+     */
+    public function isAllowRefund()
+    {
+        // 必须是已发货的订单
+        if ($this['delivery_status'] != DeliveryStatus::DELIVERED) {
+            return false;
+        }
+        // 允许申请售后期限(天)
+        $config_service = new ConfigService();
+        $task = $config_service->getFormatConfig('task');
+        $refund_days = $task['refund_days'];
+        // 不允许售后
+        if ($refund_days == 0) {
+            return false;
+        }
+        $refund_date = date('Y-m-d H:i:s',strtotime("{$this['receipt_time']} +{$refund_days} day"));
+        // 当前时间超出允许申请售后期限
+        if (
+            $this['receipt_status'] == ReceiptStatus::RECEIVED
+            && now() > $refund_date
+        ) {
+            return false;
+        }
+        return true;
     }
 
     // 获取售后

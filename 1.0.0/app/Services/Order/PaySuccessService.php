@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Order;
 
+use App\Enums\Order\PayStatus;
 use App\Models\Bargain;
 use App\Models\BargainTask;
 use App\Models\CollectiveActive;
@@ -78,13 +79,13 @@ class PaySuccessService extends BaseService{
             $order_model = new Order();
             $oid_arr = explode(',', $order_pay->order_ids);
             $rs = $order_model->whereIn('id', $oid_arr)->update([
-                'order_status' => 2,
+                'pay_status' => PayStatus::SUCCESS,
                 'pay_time' => now(),
                 'payment_name' => $payment_name,
             ]);
             // 订单支付表修改状态
             $order_pay->payment_name = $payment_name;
-            $order_pay->pay_status = 1;
+            $order_pay->pay_status = PayStatus::SUCCESS;
             $order_pay->save();
 
             // 订单送积分

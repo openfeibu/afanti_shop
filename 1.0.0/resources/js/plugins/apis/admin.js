@@ -79,7 +79,18 @@ export default
 
     // 订单管理
     'adminOrders' : baseUrl + 'Admin/orders',
-    
+
+    // 订单售后 todo 删除
+    'adminRefunds' : baseUrl + 'Admin/refunds',
+
+    // 订单售后
+    'adminOrderRefunds' : baseUrl + 'Admin/order_refunds',
+
+    // 物流公司
+    'adminExpresses' : baseUrl + 'Admin/expresses',
+
+    'adminAllExpresses' : baseUrl + 'Admin/all_expresses',
+
     // 订单评论
     'adminOrderComments' : baseUrl + 'Admin/order_comments',  
 

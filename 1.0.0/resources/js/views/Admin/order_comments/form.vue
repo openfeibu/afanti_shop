@@ -11,7 +11,7 @@
                         {{params.content}}
                 </a-form-model-item>
                 <a-form-model-item label="商家回复内容">
-                        {{params.reply}}
+                    <a-textarea placeholder="输入评论内容..." :rows="4" allow-clear v-model="params.reply" />
                 </a-form-model-item>
                 <a-form-model-item label='综合评分'>
                     <a-rate disabled style="font-size:14px;line-height: 16px;" v-model="params.score" :tooltips="desc" />
@@ -39,6 +39,9 @@
                         </div>
                         <div class="item noimg" v-else><a-font type="iconphoto" /></div>
                     </div>
+                </a-form-model-item>
+                <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+                    <a-button type="primary" @click="handleSubmit">提交</a-button>
                 </a-form-model-item>
             </a-form-model>
             
@@ -68,6 +71,12 @@ export default {
     watch: {},
     computed: {},
     methods: {
+        handleSubmit(){
+            this.$put(this.$api.adminOrderComments+'/'+this.id,{reply:this.params.reply}).then(res=>{
+                this.$returnInfo(res);
+                return this.$router.go(-1);
+            })
+        },
         get_info(){
             this.$get(this.$api.adminOrderComments+'/'+this.id).then(res=>{
                 this.params = res.data;

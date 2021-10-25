@@ -57,7 +57,7 @@ class PayMentService extends BaseService{
 
                 // 订单支付表修改状态
                 $order_pay->payment_name = $payment_name;
-                $order_pay->pay_status = 1;
+                $order_pay->pay_status = 20;
                 $order_pay->order_balance = $order_pay->total_price;
                 $order_pay->save();
 

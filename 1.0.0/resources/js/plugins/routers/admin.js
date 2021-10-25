@@ -42,7 +42,7 @@ export default [
         {path:"/Admin/sms_signs/form/:id?",name:"admin_sms_signs_form",component:()=>import("@/views/Admin/configs/sms/sign/form")}, // 短信签名编辑
         {path:"/Admin/configs/task",name:"admin_configs_task",component:()=>import("@/views/Admin/configs/task/index")}, // 自动任务配置
         {path:"/Admin/configs/oauth",name:"admin_configs_oauth",component:()=>import("@/views/Admin/configs/oauth/index")}, // OAuth 第三方登录
-
+        {path:"/Admin/configs/trade",name:"admin_configs_trade",component:()=>import("@/views/Admin/configs/trade/index")}, // 交易设置
         // 站点协议
         {path:"/Admin/agreements",name:"admin_agreements_index",component:()=>import("@/views/Admin/agreements/index")}, // 站点协议列表
         {path:"/Admin/agreements/form/:id?",name:"admin_agreements_form",component:()=>import("@/views/Admin/agreements/form")}, // 站点协议编辑
@@ -100,6 +100,9 @@ export default [
         // 订单管理
         {path:"/Admin/orders",name:"admin_orders",component:()=>import("@/views/Admin/orders/index")}, 
         {path:"/Admin/orders/form/:id?",name:"admin_orders_form",component:()=>import("@/views/Admin/orders/form")},
+        // 售后管理
+        {path:"/Admin/order_refunds",name:"admin_order_refunds",component:()=>import("@/views/Admin/order_refunds/index")},
+        {path:"/Admin/order_refunds/form/:id?",name:"admin_order_refunds_form",component:()=>import("@/views/Admin/order_refunds/form")},
 
         // 订单管理
         {path:"/Admin/integral_orders",name:"admin_integral_orders",component:()=>import("@/views/Admin/integral_orders/index")}, 

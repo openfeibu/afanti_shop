@@ -106,6 +106,7 @@ class ConfigService extends BaseService{
                 'confirm'=>'5', // 完成订单
                 'cancel'=>'1', // 取消
                 'settlement'=>'7', // 结算
+                'refund_days' => '0' //售后
             ];
         }else{
             $data['task'] = json_decode($data['task'],true);
@@ -153,7 +154,16 @@ class ConfigService extends BaseService{
         }else{
             $data['oauth'] = json_decode($data['oauth'],true);
         }
-
+        
+        if(empty($data['trade'])){
+            $data['trade'] = [
+                'close_days'=>0,
+                'receive_days'=>0,
+                'refund_days'=>0,
+            ];
+        }else{
+            $data['trade'] = json_decode($data['trade'],true);
+        }
         return $data;
     }
 

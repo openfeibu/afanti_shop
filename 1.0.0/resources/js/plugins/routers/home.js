@@ -252,8 +252,12 @@ export default [
                             import ('@/views/Home/users/order/comment')
                     }, // 用户添加评论
                     // 用户订单
-
-                    // 申请售后
+                    {
+                        path: '/user/order_refund/:id',
+                            name: 'home_user_refund',
+                        component: () =>
+                    import ('@/views/Home/users/order_refund/index')
+                    }, // 申请售后
                     {
                         path: '/user/refund/:id',
                         name: 'home_user_refund',

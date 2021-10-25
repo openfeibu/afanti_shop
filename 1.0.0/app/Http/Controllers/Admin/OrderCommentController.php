@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\OrderCommentResource\OrderCommentCollection;
 use App\Http\Resources\Admin\OrderCommentResource\OrderCommentResource;
 use App\Models\OrderComment;
+use App\Services\OrderCommentService;
 use Illuminate\Http\Request;
 
 class OrderCommentController extends Controller
@@ -32,6 +33,19 @@ class OrderCommentController extends Controller
     {
         $info = $oc_model->find($id);
         return $this->success(new OrderCommentResource($info));
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $oc_service = new OrderCommentService();
+        $rs = $oc_service->edit($id,'admin');
+        return $rs['status']?$this->success($rs['data'],$rs['msg']):$this->error($rs['msg']);
     }
 
     /**

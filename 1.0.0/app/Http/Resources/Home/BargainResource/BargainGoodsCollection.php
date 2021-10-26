@@ -26,7 +26,7 @@ class BargainGoodsCollection extends ResourceCollection
                     $goods_price = $item->goods_sku['goods_price'];
                 }
                 return [
-                    'id'                    =>  $item->id,
+                    'goods_id'                    =>  $item->id,
                     'goods_name'            =>  $item->goods_name,
                     'goods_subname'         =>  $item->goods_subname,
                     'goods_price'           =>  $goods_price,
@@ -35,6 +35,7 @@ class BargainGoodsCollection extends ResourceCollection
                     'goods_master_image'    =>  $this->thumb($item->goods_master_image,300),
                     'store_id'              =>  $item->store_id,
                     'store_name'            =>  $item->store->store_name,
+                    'bargin_id' => $item->bargain->id,
                     'floor_price'           => $item->bargain->floor_price,
                     'active_sales' => $item->bargain->active_sales,
                 ];

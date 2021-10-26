@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\OrderRefundResource\OrderRefundCollection;
+use App\Http\Resources\Home\OrderRefundResource\OrderRefundResource;
 use App\Models\OrderGoods;
 use App\Models\User;
 use App\Services\Home\OrderService;
@@ -25,7 +26,7 @@ class OrderRefundController extends Controller
     // 这里的ID 都是OrderId
     public function show($id){
         $order_refund = $this->order_refund_service->getOrderRefundById($id);
-        return$this->success(new OrderRefund($order_refund));
+        return$this->success(new OrderRefundResource($order_refund));
     }
 
     //售后

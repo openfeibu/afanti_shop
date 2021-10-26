@@ -8,18 +8,48 @@
             <div class="uif_block" >
                 <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
 
+                    <a-form-model-item label="商品详情">
+                        <div class="admin_pic_txt">
+                            <div class="img"><img v-if="info.order_goods.goods_image" :src="info.order_goods.goods_image"><a-icon v-else type="picture" /></div>
+                            <div class="text">{{info.order_goods.goods_name}}</div>
+                            <div class="clear"></div>
+                        </div>
+                    </a-form-model-item>
+                    <a-form-model-item label="商品金额">
+                        {{info.order_goods.total_pay_price}}
+                    </a-form-model-item>
                     <a-form-model-item label="申请售后状态">
                         {{ info.status_text_detail }}
                     </a-form-model-item>
                     <a-form-model-item label="售后类型">
                         {{info.refund_type_text}}
                     </a-form-model-item>
+
+                    <a-form-model-item v-if="info.status == 20 && info.refund_type == 10" class="detail-order b-f row-block dis-flex flex-x-end flex-y-center">
+                        <text class="">已退款金额：</text>
+                        <text class="col-m">￥{{ info.refund_money }}</text>
+                    </a-form-model-item>
+
                     <a-form-model-item label="售后原因">
                         {{info.refund_remark}}
                     </a-form-model-item>
+                    <!-- 售后信息 -->
+                    <a-form-model-item v-if="info.status == 10 " label="拒绝原因">
+                        <span>{{ info.refuse_desc }}</span>
+                    </a-form-model-item>
 
-
-
+                    <a-divider orientation="退货地址" >
+                        <a-form-model-item label="收货人">
+                            {{info.address.name}}
+                        </a-form-model-item>
+                        <a-form-model-item label="联系电话">
+                            {{info.address.phone}}
+                        </a-form-model-item>
+                        <a-form-model-item label="详细地址">
+                            {{info.address.detail}}
+                        </a-form-model-item>
+                    </a-divider>
+                    
                     <a-form-model-item label="填写寄回物流" v-if="info.refund_type==1 && info.refund_verify==1 ">
                         <a-input style="width: 75%" placeholder="输入快递单号发货" v-model="info.delivery_no" />
                     </a-form-model-item>

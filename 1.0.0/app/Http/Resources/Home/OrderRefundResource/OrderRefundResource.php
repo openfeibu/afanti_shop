@@ -3,9 +3,9 @@
 namespace App\Http\Resources\Home\OrderRefundResource;
 
 use App\Services\OrderService;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderRefundResource extends ResourceCollection
+class OrderRefundResource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -17,8 +17,6 @@ class OrderRefundResource extends ResourceCollection
     {
         $order_service = new OrderService();
         return [
-          
-         
             'id'                    =>  $this->id,
             'order_id'              =>  $this->order_id,
             'order_goods_id'            =>  $this->order_goods_id,

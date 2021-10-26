@@ -84,7 +84,7 @@ export default {
     'homeSeckill': baseUrl + 'seckills',
     // 砍价
     'homeBargains': baseUrl + 'bargains',
-    'bargainTasks': baseUrl + 'api/bargain_tasks/partake',
+    'bargainTasks': baseUrl + 'bargain_tasks/partake',
 
 
 };

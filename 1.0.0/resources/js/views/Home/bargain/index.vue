@@ -23,8 +23,9 @@
                                     <div class="remind_word"><span class="ling">砍价享¥<b>{{v.floor_price}}</b>元</span></div>
                                    
                                     <div class="main_show clearfix">
-                                            <div class="btn">立即砍价</div>
-                                             <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
+                                            <div v-if="!v.is_partake" class="btn" @click="bargainTasks(v.bargain_id)">立即砍价</div>
+                                            <div v-else class="btn" style="background:#4bb16f" @click="bargainTasks(v.bargain_id)">去邀请砍价</div>
+                                            <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
                                     </div>
                             </div>
                         
@@ -106,7 +107,19 @@ export default {
             this.timeIndex = e;
             this.onload();
         },
-    
+        bargainTasks(id){
+            console.log(id)
+            this.isLoading=true;
+            this.$post(this.$api.bargainTasks,{'bargain_id':id}).then(res=>{
+                if(res.code == 200){
+                    //bargain_task_id
+                    var bargain_task_id  = res.data.bargain_task_id;
+                    //参加砍价成功进入详情页
+                }
+                
+                this.isLoading=false;
+            })
+        }
     },
     created() {
         this.onload();

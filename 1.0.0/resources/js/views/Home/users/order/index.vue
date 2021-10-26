@@ -8,12 +8,11 @@
 
             <div class="home_search_block">
                 <a-form layout="inline">
-                    <!-- <a-form-item label="起始时间"><a-range-picker  v-model="params['created_at']" format="YYYY-MM-DD HH:mm:ss" show-time :allow-clear="false" /></a-form-item><br> -->
                     <a-form-item label="订单号码">
                         <a-input v-model="params['order_no']" :placeholder="'2020091418433488438'"/>
                     </a-form-item>
                     <a-form-item label="订单状态">
-                        <a-select  v-model="params['order_status']" style="width:160px" >
+                        <a-select  v-model="params['type']" style="width:160px" >
                             <a-select-option v-for="(vo,key) in searchConfig[1].data" :key="key" :value="vo.value">{{vo.label}}</a-select-option>
                         </a-select>
                     </a-form-item>
@@ -87,21 +86,18 @@ export default {
           params:{
               page:1,
               per_page:20,
-              order_status:'',
+              type:'all',
           },
           total:0, //总页数
           list:[],
           searchConfig:[
               {label:'订单号',name:'order_no',type:'text'},
-              {label:'订单状态',name:'order_status',type:'select',data:[
-                  {label:'全部订单',value:''},
-                  {label:'订单取消',value:0},
-                  {label:'等待支付',value:1},
-                  {label:'等待发货',value:2},
-                  {label:'确认收货',value:3},
-                  {label:'等待评论',value:4},
-                  {label:'售后订单',value:5},
-                  {label:'订单完成',value:6},
+              {label:'订单状态',name:'type',type:'select',data:[
+                  {label:'全部订单',value:'all'},
+                  {label:'待支付',value:'payment'},
+                  {label:'待发货',value:'delivery'},
+                  {label:'待收货',value:'received'},
+                  {label:'待评价',value:'comment'},
               ]},
           ],
           order_info:{
@@ -118,23 +114,12 @@ export default {
             this.params.page = e;
         },
         search(params){
-            let page = this.params.page;
-            let per_page = this.params.per_page;
-
-            // 事件需要格式化，后面再看看有没有更好得到办法
-            if(!this.$isEmpty(params.created_at) && !this.$isEmpty(params.created_at[0])){
-                params.created_at[0] = moment(params.created_at[0]).format('YYYY-MM-DD HH:mm:ss');
-                params.created_at[1] = moment(params.created_at[1]).format('YYYY-MM-DD HH:mm:ss');
-            }
-            this.params = params;
-            this.params.page = page;
-            this.params.per_page = per_page;
             this.onload();
         },
         onload(){
             console.log(this.$route)
-            if(!this.$isEmpty(this.$route.params.status)){
-                this.params.order_status = this.$route.params.status;
+            if(!this.$isEmpty(this.$route.params.type)){
+                this.params.type = this.$route.params.type;
             }
             this.$get(this.$api.homeOrder,this.params).then(res=>{
                 this.list = res.data.data;

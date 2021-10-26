@@ -83,7 +83,7 @@
                         <span slot="actions" slot-scope="rows">
                              <div class="m-top20 dis-flex flex-x-end">
                                  <span v-if="rows.order_refund" >已申请售后</span>
-                                 <a-button type="danger" size="small"  v-else-if="info.isAllowRefund" @click="$router.push('/user/order_refund/'+rows.id)">
+                                 <a-button type="danger" size="small"  v-else-if="info.isAllowRefund" @click="$router.push('/user/order_refund/form/'+rows.id)">
                                      申请售后
                                  </a-button>
                              </div>

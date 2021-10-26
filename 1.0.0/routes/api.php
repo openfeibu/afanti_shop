@@ -366,7 +366,7 @@ Route::namespace('Home')->group(function(){
         // 订单售后  todo 删除
         Route::apiResource('refunds','RefundController')->except(['index','destroy']);
 
-        Route::apiResource('order_refunds','OrderRefundController')->except(['index','destroy']);
+        Route::apiResource('order_refunds','OrderRefundController');
         Route::put('/order_refunds/apply/{order_goods_id}','OrderRefundController@apply')->name('order_refunds.apply');
         // 订单处理
         Route::get('/orders/create_order_before','OrderController@create_order_before'); // 生成订单前处理

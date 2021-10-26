@@ -8,49 +8,18 @@
             <div class="uif_block" >
                 <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
                     <a-form-model-item label="售后类型">
-                        {{info.refund_type==0?'退款':(info.refund_type==1?'退换货':'售后结束')}}
+                        <a-radio-group :default-value="info.refund_type" @change="typeChange">
+                            <a-radio :value="10">退货退款</a-radio>
+                            <a-radio :value="20">换货</a-radio>
+                        </a-radio-group>
                     </a-form-model-item>
-                    <a-form-model-item label="售后原因">
-                        {{info.refund_remark}}
-                    </a-form-model-item>
-
-                    <a-form-model-item label="申请售后状态">
-                        <a-tag v-if="info.refund_verify==0">等待审核</a-tag>
-                        <a-tag color="green" v-if="info.refund_verify==1">审核成功</a-tag>
-                        <a-tag color="red" v-if="info.refund_verify==2">申请拒绝</a-tag>
-                    </a-form-model-item>
-
-                    <a-form-model-item label="退换货进度" v-if="info.refund_type==1">
-                        <a-tag color="red" v-if="info.refund_verify==0">等待审核</a-tag>
-                        <a-tag color="red" v-if="info.refund_verify==2">拒绝申请</a-tag>
-                        <a-tag color="orange" v-if="info.refund_step==0 && refund_info.refund_verify==1">等待用户发货</a-tag>
-                        <a-tag color="orange" v-if="info.refund_step==1">等待确认发货</a-tag>
-                        <a-tag color="blue" v-if="info.refund_step==2">等待用户确认</a-tag>
-                        <a-tag color="green" v-if="info.refund_step==3">售后处理完成</a-tag>
-                    </a-form-model-item>
-
-                    <a-form-model-item label="填写寄回物流" v-if="info.refund_type==1 && info.refund_verify==1 ">
-                        <a-input style="width: 75%" placeholder="输入快递单号发货" v-model="info.delivery_no" />
-                    </a-form-model-item>
-
-                    <a-form-model-item label="拒绝原因" v-if="info.refund_verify==2">
-                        {{info.refuse_remark}}
-                    </a-form-model-item>
-
-                    <!-- <a-form-model-item label="用户寄回单号" v-if="info.delivery_no !=''">
-                        {{info.delivery_no}}
-                    </a-form-model-item> -->
-
-                    <a-form-model-item label="重新发货单号" v-if="info.re_delivery_no !=''">
-                        {{info.re_delivery_no}}
+                    <a-form-model-item label="申请原因">
+                        <a-textarea v-model="info.apply_desc" :rows="4" />
+                        <a-tag color="red" v-for="(v,k) in error_list" :key="k" @click="changeTag(v)">{{v}}</a-tag>
                     </a-form-model-item>
                     
-                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }"  v-if="info.refund_step==0 && info.refund_type==1 && info.refund_verify==1">
+                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
                         <div class="submit_btn" @click="handleSubmit">确定提交</div>
-                    </a-form-model-item>
-
-                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }" v-if="info.refund_step==2">
-                        <div class="submit_btn" @click="handleSubmit2">完成售后</div>
                     </a-form-model-item>
                 </a-form-model>
             </div>
@@ -67,39 +36,41 @@ export default {
     data() {
       return {
           info:{
-              refund_type:0,
               order_id:0,
-              delivery_no:'',
-              delivery_code:'yd',
+              refund_type:10,
+              apply_desc:'',
           },
           params:{},
+          error_list:[
+              '物品破损',
+              '尺码错误',
+              '颜色不对',
+              '其他原因',
+          ],
       };
     },
     watch: {},
     computed: {},
     methods: {
         handleSubmit(){
-            this.$put(this.$api.homeRefunds+'/'+this.info.order_id,{delivery_no:this.info.delivery_no}).then(res=>{
-                this.$returnInfo(res)
-                return this.get_info();
+            this.$put(this.$api.homeOrderRefunds+'/apply/'+this.info.order_goods_id,this.info).then(res=>{
+                this.$returnInfo(res);
+                setTimeout(()=>{
+                    return this.$router.go(-1);
+                },1000)
+                
             })
         },
-        handleSubmit2(){
-            this.$put(this.$api.homeRefunds+'/'+this.info.order_id,{refund_step:3}).then(res=>{
-                this.$returnInfo(res)
-                return this.get_info();
-            })
+        changeTag(v){
+            this.info.apply_desc = v;
         },
-        get_info(){
-            this.$get(this.$api.homeRefunds+'/'+this.info.order_id).then(res=>{
-                this.info = res.data;
-            })
+        typeChange(e){
+            this.info.refund_type = e.target.value;
         }
       
     },
     created() {
-        this.info.order_id= this.$route.params.id;
-        this.get_info();
+        this.info.order_goods_id= this.$route.params.order_goods_id;
     },
     mounted() {}
 };

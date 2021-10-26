@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Home\OrderRefundResource\OrderRefundCollection;
 use App\Models\OrderGoods;
 use App\Models\User;
 use App\Services\Home\OrderService;
@@ -14,6 +15,17 @@ class OrderRefundController extends Controller
     public function __construct(OrderRefundService $order_refund_service)
     {
         $this->order_refund_service = $order_refund_service;
+    }
+
+    public function index(Request $request)
+    {
+        $order_refunds = $this->order_refund_service->getOrderRefunds();
+        return $this->success(new OrderRefundCollection($order_refunds));
+    }
+    // 这里的ID 都是OrderId
+    public function show($id){
+        $order_refund = $this->order_refund_service->getOrderRefundById($id);
+        return$this->success(new OrderRefund($order_refund));
     }
 
     //售后
@@ -33,11 +45,7 @@ class OrderRefundController extends Controller
         $rs = $this->order_refund_service->add();
         return $rs['status']?$this->success($rs['data'],$rs['msg']):$this->error($rs['msg']);
     }
-    // 这里的ID 都是OrderId
-    public function show($id){
-        $rs = $this->order_refund_service->getRefundByOrderId($id);
-        return $rs['status']?$this->success($rs['data']):$this->error($rs['msg']);
-    }
+
     // 这里的ID 都是OrderId
     public function update($id){
         $rs = $this->order_refund_service->edit($id);

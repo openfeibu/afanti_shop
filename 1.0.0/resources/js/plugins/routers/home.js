@@ -253,10 +253,22 @@ export default [
                     }, // 用户添加评论
                     // 用户订单
                     {
-                        path: '/user/order_refund/:id',
-                            name: 'home_user_refund',
+                        path: '/user/order_refund/form/:order_goods_id',
+                            name: 'home_user_order_refund_form',
+                        component: () =>
+                    import ('@/views/Home/users/order_refund/form')
+                    }, // 申请售后
+                    {
+                        path: '/user/order_refund',
+                            name: 'home_user_order_refund',
                         component: () =>
                     import ('@/views/Home/users/order_refund/index')
+                    }, // 申请售后
+                    {
+                        path: '/user/order_refund/:id',
+                            name: 'home_user_order_refund_info',
+                        component: () =>
+                    import ('@/views/Home/users/order_refund/info')
                     }, // 申请售后
                     {
                         path: '/user/refund/:id',

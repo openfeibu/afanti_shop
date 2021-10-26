@@ -4,25 +4,25 @@
         <div class="order_status_block">
             <ul>
                 <li>
-                    <router-link :to="{name:'home_user_order',params:{status:1}}">
+                    <router-link :to="{name:'home_user_order',params:{type:'payment'}}">
                     <a-font type="icondengdaifh"></a-font>
                     <span><a-badge :count="count[0]" :offset="[11,-7]">待支付</a-badge></span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{name:'home_user_order',params:{status:2}}">
+                    <router-link :to="{name:'home_user_order',params:{type:'delivery'}}">
                     <a-font type="iconwuliu"></a-font>
                     <span><a-badge :count="count[1]" :offset="[11,-7]">待发货</a-badge></span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{name:'home_user_order',params:{status:3}}">
+                    <router-link :to="{name:'home_user_order',params:{type:'received'}}">
                     <a-font type="iconchanpin1"></a-font>
                     <span><a-badge :count="count[2]" :offset="[11,-7]">待收货</a-badge></span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{name:'home_user_order',params:{status:4}}">
+                    <router-link :to="{name:'home_user_order',params:{type:'comment'}}">
                     <a-font type="iconpinglun"></a-font>
                     <span><a-badge :count="count[3]" :offset="[11,-7]">待评论</a-badge></span>
                     </router-link>

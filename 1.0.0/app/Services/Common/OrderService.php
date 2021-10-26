@@ -1,8 +1,10 @@
 <?php
 namespace App\Services\Common;
 
+use App\Enums\Order\DeliveryStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\PayStatus;
+use App\Enums\Order\ReceiptStatus;
 use App\Exceptions\OutOfStockException;
 use App\Http\Resources\Home\OrderResource\CreateOrderAfterCollection;
 use App\Models\Address;
@@ -237,7 +239,36 @@ class OrderService extends BaseService{
         if(!empty($created_at)){
             $order_model = $order_model->whereBetween('created_at',[$created_at[0],$created_at[1]]);
         }
-
+        $filter = [];
+        // 订单数据类型
+        switch (request()->type) {
+            case 'all':
+                break;
+            case 'payment';
+                $filter['pay_status'] = PayStatus::PENDING;
+                $filter['order_status'] = OrderStatus::NORMAL;
+                break;
+            case 'delivery';
+                $filter['pay_status'] = PayStatus::SUCCESS;
+                $filter['delivery_status'] = DeliveryStatus::UNDELIVERED;
+                $filter['order_status'] = OrderStatus::NORMAL;
+                break;
+            case 'received';
+                $filter['pay_status'] = PayStatus::SUCCESS;
+                $filter['delivery_status'] = DeliveryStatus::DELIVERED;
+                $filter['receipt_status'] = ReceiptStatus::UNRECEIVED;
+                $filter['order_status'] = OrderStatus::NORMAL;
+                break;
+            case 'comment';
+                $filter['is_comment'] = 0;
+                $filter['order_status'] = OrderStatus::COMPLETED;
+                break;
+        }
+        foreach($filter as $key => $value)
+        {
+            $order_model = $order_model->where($key,$value);
+        }
+        /*
         // 订单状态
         if(isset(request()->order_status) && request()->order_status!=-1){
             $order_model = $order_model->where('order_status',request()->order_status);
@@ -252,6 +283,7 @@ class OrderService extends BaseService{
         if(isset(request()->is_return)){
             $order_model = $order_model->where('order_status',5)->where('refund_status',1);
         }
+         */
 
         $order_model = $order_model->orderBy('id','desc')
             ->paginate(request()->per_page??30);

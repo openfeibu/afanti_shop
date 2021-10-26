@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\OrderRefund;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -49,13 +50,12 @@ class OrderRefundService extends BaseService{
 
         $order_refund_model = $order_refund_model->with(['user'=>function($q){
             return $q->select('id','username');
-        },'order_goods']);
+        },'order_goods','order']);
 
         // 用户ID
-        $user_id = request()->user_id;
-        if(!empty($user_id)){
-            $order_refund_model = $order_refund_model->where('user_id',$user_id);
-        }
+        $user = User::getAuthUserInfo();
+        $order_refund_model = $order_refund_model->where('user_id',$user['id']);
+
         // 时间
         $created_at = request()->created_at;
         if(!empty($created_at)){
@@ -66,5 +66,19 @@ class OrderRefundService extends BaseService{
             ->paginate(request()->per_page??30);
 
         return $order_refund_model;
+    }
+    public function getOrderRefundById($id)
+    {
+        $user = User::getAuthUserInfo();
+        $order_refund = OrderRefund::where('user_id',$user['id'])->with(['user'=>function($q){
+            return $q->select('id','username');
+        },'order_goods','order'])
+        ->where('id',$id)
+        ->first();
+        if(!$order_refund)
+        {
+            OutputServerMessageException("售后订单不存在");
+        }
+        return $order_refund;
     }
 }

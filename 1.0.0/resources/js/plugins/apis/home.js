@@ -86,5 +86,6 @@ export default {
     'homeBargains': baseUrl + 'bargains',
     'bargainTasks': baseUrl + 'bargain_tasks/partake',
 
+    'homeAllExpresses' : baseUrl + 'all_expresses',
 
 };

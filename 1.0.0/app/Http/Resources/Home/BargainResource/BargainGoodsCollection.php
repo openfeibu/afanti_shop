@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Home\BargainResource;
 
+use App\Services\BargainService;
+use App\Services\UserService;
 use App\Traits\HelperTrait;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -17,6 +19,7 @@ class BargainGoodsCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
+
             'data'=>$this->collection->map(function($item){
 
                 $goods_price = $item->goods_price;
@@ -25,6 +28,12 @@ class BargainGoodsCollection extends ResourceCollection
                 if(isset($item->goods_sku)){
                     $goods_price = $item->goods_sku['goods_price'];
                 }
+                $bargain = $item->bargain;
+                $bargain_service = new BargainService();
+                $user_service = new UserService();
+                $user_info = $user_service->getUserInfo();
+                $bargain_task_id =  $user_info ? $bargain_service->getWhetherPartake($bargain->id, $user_info) : 0;
+                $is_partake = $bargain_task_id ? 1 : 0;
                 return [
                     'goods_id'                    =>  $item->id,
                     'goods_name'            =>  $item->goods_name,
@@ -35,9 +44,11 @@ class BargainGoodsCollection extends ResourceCollection
                     'goods_master_image'    =>  $this->thumb($item->goods_master_image,300),
                     'store_id'              =>  $item->store_id,
                     'store_name'            =>  $item->store->store_name,
-                    'bargin_id' => $item->bargain->id,
-                    'floor_price'           => $item->bargain->floor_price,
-                    'active_sales' => $item->bargain->active_sales,
+                    'bargain_id' => $bargain->id,
+                    'bargain_task_id' => $bargain_task_id,
+                    'is_partake' => $is_partake,
+                    'floor_price'           => $bargain->floor_price,
+                    'active_sales' => $bargain->active_sales,
                 ];
             }),
             'total'=>$this->total(), // 数据总数

@@ -10,7 +10,8 @@
 
                     <a-form-model-item label="商品详情">
                         <div class="admin_pic_txt">
-                            <div class="img"><img v-if="info.order_goods.goods_image" :src="info.order_goods.goods_image"><a-icon v-else type="picture" /></div>
+                            <div class="img">
+                                <img v-if="info.order_goods.goods_image" :src="info.order_goods.goods_image"><a-icon v-else type="picture" /></div>
                             <div class="text">{{info.order_goods.goods_name}}</div>
                             <div class="clear"></div>
                         </div>
@@ -38,7 +39,7 @@
                         <span>{{ info.refuse_desc }}</span>
                     </a-form-model-item>
 
-                    <a-divider orientation="退货地址" >
+                    <a-divider v-if="info.is_agree==10" orientation="退货地址" >
                         <a-form-model-item label="收货人">
                             {{info.address.name}}
                         </a-form-model-item>
@@ -49,30 +50,19 @@
                             {{info.address.detail}}
                         </a-form-model-item>
                     </a-divider>
-                    
-                    <a-form-model-item label="填写寄回物流" v-if="info.refund_type==1 && info.refund_verify==1 ">
-                        <a-input style="width: 75%" placeholder="输入快递单号发货" v-model="info.delivery_no" />
-                    </a-form-model-item>
-
-                    <a-form-model-item label="拒绝原因" v-if="info.refund_verify==2">
-                        {{info.refuse_remark}}
-                    </a-form-model-item>
-
-                    <!-- <a-form-model-item label="用户寄回单号" v-if="info.delivery_no !=''">
-                        {{info.delivery_no}}
-                    </a-form-model-item> -->
-
-                    <a-form-model-item label="重新发货单号" v-if="info.re_delivery_no !=''">
-                        {{info.re_delivery_no}}
-                    </a-form-model-item>
-                    
-                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }"  v-if="info.refund_step==0 && info.refund_type==1 && info.refund_verify==1">
-                        <div class="submit_btn" @click="handleSubmit">确定提交</div>
-                    </a-form-model-item>
-
-                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }" v-if="info.refund_step==2">
-                        <div class="submit_btn" @click="handleSubmit2">完成售后</div>
-                    </a-form-model-item>
+                    <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" v-if="info.refund_type == 10 && info.is_agree == 10 && info.is_user_send == 0">
+                        <a-form-model-item label="物流公司" :rules="{ required: true}">
+                            <a-select style="width: 25%" v-model="info.delivery_code">
+                                <a-select-option :value="v.code" v-for="(v,k) in express" :key="k">{{v.name}}</a-select-option>
+                            </a-select>
+                        </a-form-model-item>
+                        <a-form-model-item label="物流单号" :rules="{ required: true}">
+                            <a-input placeholder="输入快递单号发货" v-model="info.delivery_no" />
+                        </a-form-model-item>
+                        <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+                            <a-button type="primary" @click="deliverySubmit">提交</a-button>
+                        </a-form-model-item>
+                    </a-form-model>
                 </a-form-model>
             </div>
 
@@ -93,6 +83,7 @@ export default {
               delivery_no:'',
               delivery_code:'yd',
           },
+          express:[],
           params:{},
       };
     },
@@ -111,16 +102,22 @@ export default {
                 return this.get_info();
             })
         },
+        get_express(){
+            this.$get(this.$api.homeAllExpresses).then(res=>{
+                this.express = res.data;
+            })
+        },
         get_info(){
-            this.$get(this.$api.homeOrderRefunds+'/'+this.info.order_id).then(res=>{
+            this.$get(this.$api.homeOrderRefunds+'/'+this.info.id).then(res=>{
                 this.info = res.data;
             })
         }
       
     },
     created() {
-        this.info.order_id= this.$route.params.id;
+        this.info.id= this.$route.params.id;
         this.get_info();
+        this.get_express();
     },
     mounted() {}
 };

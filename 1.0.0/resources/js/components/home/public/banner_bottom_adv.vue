@@ -3,29 +3,29 @@
         <div class="shop_left_on">
             <ul>
 
-                <li><router-link to="/groupbuy">
-                <img :src="require('@/asset/pc/003.png')" alt="">
-                <p>优惠团购</p>
-                </router-link></li>
                 <li><router-link to="/seckill">
-                <img :src="require('@/asset/pc/004.png')" alt="">
+                <img :src="require('@/asset/pc/active01.png')" alt="">
                 <p>秒杀活动</p>
                 </router-link></li>
-                <li><router-link to="/user/article/notice">
-                <img :src="require('@/asset/pc/005.png')" alt="">
-                <p>帮助中心</p>
+                <li><router-link to="/collective">
+                <img :src="require('@/asset/pc/active02.png')" alt="">
+                <p>拼团专区</p>
                 </router-link></li>
-                <li><router-link to="/user/article/notice">
-                <img :src="require('@/asset/pc/006.png')" alt="">
-                <p>展馆列表</p>
+                <li><router-link to="/bargain">
+                <img :src="require('@/asset/pc/active03.png')" alt="">
+                <p>砍价专区</p>
+                </router-link></li>
+                <li><router-link to="/coupon">
+                <img :src="require('@/asset/pc/active04.png')" alt="">
+                <p>优惠券</p>
                 </router-link></li>
                 <li><router-link to="/store">
-                <img :src="require('@/asset/pc/006.png')" alt="">
+                <img :src="require('@/asset/pc/active05.png')" alt="">
                 <p>展馆列表</p>
                 </router-link></li>
                 <li><router-link to="/user/article/notice">
-                <img :src="require('@/asset/pc/006.png')" alt="">
-                <p>敬请期待</p>
+                <img :src="require('@/asset/pc/active06.png')" alt="">
+                <p>帮助中心</p>
                 </router-link></li>
 
             </ul>
@@ -77,6 +77,7 @@ export default {
         float: left;
         font-size: 12px;
         line-height: 24px;
+        img{width: 32px;}
     }
     .shop_left_on ul li:first-child, .shop_left_on ul li:nth-child(2) {
         border-right: 1px solid #dedede;

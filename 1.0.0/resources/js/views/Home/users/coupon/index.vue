@@ -35,7 +35,7 @@ export default {
           total:0, //总页数
           columns:[
               {title:'优惠券名称',fixed:'left',dataIndex:'name'},
-              {title:'展馆',dataIndex:'nickname'},
+            
               {title:'优惠券额度',dataIndex:'money'},
               {title:'消费金额',dataIndex:'use_money'},
               {title:'使用状态',key:'id',scopedSlots: { customRender: 'status' }},

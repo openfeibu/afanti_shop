@@ -11,7 +11,7 @@
 
         <!-- 产品列表 S -->
         <div class="goods_list w1200" v-if="list.length>0">
-            <ul>
+            <ul class="clearfix">
                 <li v-for="(v,k) in list" :key="k">
                     
                     <div class="product_act_in">
@@ -19,24 +19,36 @@
                         <div class="img"><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></div>
                             <div class="product_info">
                                     <div class="p_name">{{v.goods_name}}</div>
-                                    <div class="label_t"><span class="price_r">售价 ¥{{v.goods_price}}</span></div>
-                                    <div class="price"><div class="kan_success">已有<span class="now_price">5</span>人砍价成功</div></div>
-                                    <div class="main_show">
-                                            <div class="btn">去砍价</div>
-                                            <div class="remind_word"><span class="ling">砍价1元得</span></div>
+                                    <div class="label_t">售价：<span class="price_r">¥{{v.goods_price}}</span></div>
+                                    <div class="remind_word"><span class="ling">砍价享¥<b>{{v.floor_price}}</b>元</span></div>
+                                   
+                                    <div class="main_show clearfix">
+                                            <div class="btn">立即砍价</div>
+                                             <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
                                     </div>
                             </div>
                         
-            
-                                <!-- <dl>
-                                    <dt><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></dt>
-                                    <dd class="product_title" :title="v.goods_name">{{v.goods_name}}</dd>
-                                     <dd class="product_subtitle">{{v.goods_subname}}</dd> 
-                                    <dd class="product_store_name"><span>{{v.store_name}}</span></dd>
-                                    <dd class="product_price">￥{{v.goods_price}}<span>{{v.goods_market_price}}元</span></dd>
-                                    <dd class="product_buy">立即抢购</dd>
-                                </dl>
-                         -->
+        
+                    </div>
+
+                </li>
+                 <li v-for="(v,k) in list" :key="k">
+                    
+                    <div class="product_act_in clearfix">
+           
+                        <div class="img"><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></div>
+                            <div class="product_info">
+                                    <div class="p_name">{{v.goods_name}}</div>
+                                    <div class="label_t">售价：<span class="price_r">¥{{v.goods_price}}</span></div>
+                                    <div class="remind_word"><span class="ling">砍价享¥<b>{{v.floor_price}}</b>元</span></div>
+                                   
+                                    <div class="main_show clearfix">
+                                            <div class="btn">立即砍价</div>
+                                             <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
+                                    </div>
+                            </div>
+                        
+        
                     </div>
 
                 </li>
@@ -61,7 +73,7 @@ export default {
       return {
           list:[],
           params:{
-               page:1,
+              page:1,
               per_page:30,
               total:0,
               is_collective:1,
@@ -78,7 +90,7 @@ export default {
            this.get_list();
         },
         get_list(){
-            this.$post(this.$api.homeGoods+'/search/all',this.params).then(res=>{
+            this.$get(this.$api.homeBargains,this.params).then(res=>{
                 this.params.total = res.data.total;
                 this.list = res.data.data;
                 this.isLoading=false;
@@ -98,7 +110,7 @@ export default {
     },
     created() {
         this.onload();
-        this.timing();
+   
     },
     mounted() {}
 };
@@ -112,20 +124,36 @@ export default {
         .item .img {float: left;}
         .item .img img{display: block;width:214px;height: 214px;}
         .product_info {margin-left: 234px;}
-        .product_info .p_name {font-size: 16px;color: #000000;line-height: 20px;width: 290px;margin-top: 12px;height: 60px;overflow: hidden;font-family: PingFangSC-Regular;}
-        .product_info .label_t {margin-top:14px;}
-        .product_info .label_t .price_r {font-size: 14px;color: #999999;font-family:Microsoft YaHei;}
+        .product_info .p_name {font-size: 16px;color: #000000;line-height: 20px;width: 290px;margin-top: 12px;height: 40px;overflow: hidden;font-family: PingFangSC-Regular;}
+        .product_info .label_t {margin-top:5px;}
+        .product_info .label_t .price_r {font-size: 18px;color: #FF463C;font-family:Microsoft YaHei;}
         .product_info .label_t .label{font-size: 12px;color: #FF463C;border: 1px solid #FF463C;border-radius: 2px;display: inline-block;padding: 1px 2px;}
+        .product_info .remind_word{color: #353535;}
+        .product_info .remind_word b{color: #FF463C;font-size: 18px;}
         .product_info .label_t .num {font-size: 14px;color: #353535;margin-left: 5px;}
-        .product_info .price {font-size: 20px;margin-top: 16px;}
+        .product_info .price {font-size: 14px;}
         .product_info .price .now_price {color: #FF4433;font-size: 20px;font-family:Microsoft YaHei;}
-        .product_info .price .kan_success {font-size: 14px;}
+        .product_info .price .kan_success {font-size: 12px;}
         .product_info .price .origin_price {font-size: 12px;color: #999999;text-decoration: line-through;margin-left: 7px;font-family: "Microsoft YaHei";}
 
-        
-        ul li:hover .product_act_in{
-            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-            margin-top:-3px;
+        li{float: left;margin:20px 1%;border:1px solid #eee;
+            border-radius: 5px;width:48%}
+
+        .product_act_in{
+            padding:20px;
+           
+            
+            .img{
+                float: left;width: 200px;height: 200px;
+                img{width: 100%;height: 100%;}
+            }
+            .main_show{margin-top: 30px;}
+            .btn{
+                width: 120px;height: 40px;background: #FF463C;text-align: center;line-height: 40px;color: #fff;cursor: pointer;border-radius: 5px;float: left;
+                &:hover{opacity: 0.8;}
+            }
+            .kan_success{float: left;line-height: 40px;margin-left:10px;color:#666;font-size: 12px;
+            .now_price{color: #FF463C;font-size: 16px;}}
         }
     }
  

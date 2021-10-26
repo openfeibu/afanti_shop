@@ -8,7 +8,10 @@
                 <div class="des">{{store_info.store_description}}</div>
             </div>
             <div class="shopInfo-video">
-               <video src=""></video>
+                <video :src="store_info.store_video" controls="controls">
+                您的浏览器不支持 video 标签。
+                </video>
+        
             </div>
         </div>
         <div class="store_info_block w1200">
@@ -594,6 +597,7 @@ export default {
             background: #fbfbfb;
             border-radius: 5px;
             height:304px ;
+            video{width: 100%;height: 100%;}
         }
     }
 </style>

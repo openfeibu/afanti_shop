@@ -10,10 +10,10 @@
         </div>
 
         <!-- 当前用户余额 S -->
-        <div class="block">
+        <!-- <div class="block">
             <div class="title"><div class="now_money">当前账号余额：￥{{userInfo.money}}</div></div>
             
-        </div>
+        </div> -->
         <!-- 当前用户余额 E -->
 
         <!-- 选择支付方式 S -->
@@ -21,7 +21,7 @@
             <div class="title">选择支付方式</div>
             <div class="pay">
                 <ul>
-                    <li @click="visible=true;"><img :src="require('@/asset/order/pc_money_pay.png')" alt="mpay"></li>
+                    <li @click="visible=true;" style="line-height:100px;text-align:center;color:#1c8d44;font-size:20px">点击支付（密码123456）</li>
                     <li @click="pay('wechat_scan')"><img :src="require('@/asset/order/pc_wxpay.jpg')" alt="wechatpay"></li>
                     <li @click="pay('ali_scan')"><img :src="require('@/asset/order/pc_alipay.jpg')" alt="alipay"></li>
                 </ul>

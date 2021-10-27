@@ -61,8 +61,8 @@
                 </span>
                 <span slot="action" slot-scope="rows">
                     <a-button @click="$router.push('/Admin/order_refunds/form/'+rows.id)">查看详情</a-button>
-                    <a-button type="primary" v-if="rows.is_agree==0" @click="$router.push('/Admin/orders/form/'+rows.id+'/#delivery')">去审核</a-button>
-                    <a-button type="danger" v-if="rows.refund_type == 10 && rows.is_agree==10 && rows.is_user_send==1&&rows.is_receipt==0" @click="$router.push('/Admin/orders/form/'+rows.id+'/#cancel')">确认收货</a-button>
+                    <a-button type="primary" v-if="rows.is_agree==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#delivery')">去审核</a-button>
+                    <a-button type="danger" v-if="rows.refund_type == 10 && rows.is_agree==10 && rows.is_user_send==1&&rows.is_receipt==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#cancel')">确认收货</a-button>
 
 
                 </span>

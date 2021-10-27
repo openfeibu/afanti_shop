@@ -9,20 +9,18 @@
             <div class="order_info_list">
                 <a-row>
                     <a-col :span="8">
-                        订单号：<span class="content">{{info.order_no}}</span>
+                        订单号：<span class="content">{{info.order.order_no}}</span>
                     </a-col>
                     <a-col :span="8">
-                        状态：
+                        买家：
                         <span class="content">
-                            <a-tag color="red" v-if="info.order_status==0">{{info.order_status_cn}}</a-tag>
-                            <a-tag color="orange" v-if="info.order_status==1">{{info.order_status_cn}}</a-tag>
-                            <a-tag color="blue" v-if="info.order_status>1&&info.order_status<6">{{info.order_status_cn}}</a-tag>
-                            <a-tag color="cyan" v-if="info.order_status==6">{{info.order_status_cn}}</a-tag>
-                            <a-tag color="green" v-if="info.order_status>=7">{{info.order_status_cn}}</a-tag>
+                            {{info.user.username}} (用户ID：{{info.user.id}})
                         </span>
                     </a-col>
                     <a-col :span="8">
-
+                        <span class="content">
+                            <a-button @click="$router.push('/Admin/order/form/'+info.order.id)">订单详情</a-button>
+                        </span>
                     </a-col>
                 </a-row>
             </div>
@@ -30,46 +28,49 @@
             <div class="order_info_list">
                 <a-row>
                     <a-col :span="8">
-                        支付方式：<span class="content">{{info.payment_name_cn||'-'}}</span>
+                        售后类型：<span class="content">{{info.refund_type_text||'-'}}</span>
                     </a-col>
                     <a-col :span="8">
-                        支付时间：<span class="content">{{info.pay_time||'-'}}</span>
+                        处理状态：<span class="content">{{info.pay_time||'-'}}</span>
                     </a-col>
                     <a-col :span="8">
-
+                        <div v-if="info.status == 0">
+                            <p>
+                                商家审核：
+                                <a-tag v-if="info.is_agree == 0">{{ info.is_agree_text }}</a-tag>
+                                <a-tag color="blue" v-else-if="info.is_agree == 10">{{ info.is_agree_text }}</a-tag>
+                                <a-tag color="orange" v-else-if="info.is_agree == 20">{{ info.is_agree_text }}</a-tag>
+                            </p>
+                            <template v-if="info.refund_type == 10 && info.is_agree == 10">
+                                <p>
+                                    用户发货：
+                                    <a-tag v-if="info.is_user_send == 0">待发货</a-tag>
+                                    <a-tag color="blue" v-else>已发货</a-tag>
+                                </p>
+                            </template>
+                            <template v-if="info.refund_type == 10 && info.is_agree == 10 && info.is_user_send == 1 && info.is_receipt == 0">
+                                <p>
+                                    商家收货：
+                                    <a-tag>待收货</a-tag>
+                                </p>
+                            </template>
+                        </div>
+                        <div v-else-if="info.status == 20">
+                            <a-tag color="blue">{{ info.status_text}}</a-tag>
+                        </div>
+                        <div v-else-if="info.status == 10 || info.status == 30">
+                            <a-tag color="orange">{{ info.status_text}}</a-tag>
+                        </div>
                     </a-col>
                 </a-row>
             </div>
-            <div class="order_info_list">
-                <a-row>
-                    <a-col :span="24">
-                        备注：<span class="content">{{info.remark||'-'}}</span>
-                    </a-col>
-                </a-row>
-            </div>
 
-            <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">物流地址</span></div>
-            <div class="unline underm"></div>
-
-            <div class="order_info_list">
-                <a-row>
-                    <a-col :span="8">
-                        用户：<span class="content">{{info.receive_name}}</span>
-                    </a-col>
-                    <a-col :span="8">
-                        联系电话：<span class="content">{{info.receive_tel}}</span>
-                    </a-col>
-                    <a-col :span="8">
-                        取货地址：<span class="content">{{info.receive_area+info.receive_address}}</span>
-                    </a-col>
-                </a-row>
-            </div>
 
             <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">商品信息</span></div>
             <div class="unline underm"></div>
 
             <div class="admin_table_list">
-                <a-table :columns="columns" :data-source="info.order_goods" :pagination="false"  >
+                <a-table :columns="columns" :data-source="order_goods" :pagination="false"  >
                     <span slot="name" slot-scope="rows">
                         <div class="admin_pic_txt">
                             <div class="img"><img v-if="rows.goods_image" :src="rows.goods_image"><a-icon v-else type="picture" /></div>
@@ -77,78 +78,140 @@
                             <div class="clear"></div>
                         </div>
                     </span>
-                    <span slot="buy_num" slot-scope="rows">
-                        x {{rows.buy_num}}
-                    </span>
                     <span slot="goods_price" slot-scope="rows">
-                        <font color="#ca151e">￥{{rows.goods_price}}</font>
+                        <font color="#ca151e">￥{{rows.total_pay_price}}</font>
+                    </span>
+                    <span slot="buy_num" slot-scope="rows">
+                         {{rows.buy_num}}
+                    </span>
+                    <span slot="total_pay_price" slot-scope="rows">
+                        <font color="#ca151e">￥{{rows.total_pay_price}}</font>
                     </span>
                 </a-table>
             </div>
 
-
-            <div class="order_info_right_price">总计：￥ {{info.total_price}}<span data-v-01d38243="">（运费：{{info.freight_money}}）</span></div>
-
-            <div style="margin-top:40px" id="delivery"><span style="font-size: 14px;font-weight: bold;">快递信息</span></div>
+            <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">用户申请原因</span></div>
             <div class="unline underm"></div>
-            <template v-if="info.pay_status==20 && info.order_status!=20 && info.order_status!=21">
-                <template v-if="info.delivery_status==10">
-                    <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
-                        <a-form-model-item label="物流公司" :rules="{ required: true}">
-                            <a-select style="width: 25%" v-model="info.delivery_code">
-                                <a-select-option :value="v.code" v-for="(v,k) in express" :key="k">{{v.name}}</a-select-option>
-                            </a-select>
-                        </a-form-model-item>
-                        <a-form-model-item label="物流单号" :rules="{ required: true}">
-                            <a-input placeholder="输入快递单号发货" v-model="info.delivery_no" />
-                        </a-form-model-item>
-                        <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
-                            <a-button type="primary" @click="deliverySubmit">提交</a-button>
-                        </a-form-model-item>
-                    </a-form-model>
+            <div class="order_info_list">
+                <a-row>
+                    <a-col :span="8">
+                        <span class="content">{{info.apply_desc||'-'}}</span>
+                    </a-col>
+                    <a-col :span="8">
 
-                </template>
-                <template v-else>
-                    <div class="order_info_list">
-                        <a-row>
-                            <a-col :span="6">
-                                物流公司：<span class="content">{{info.delivery_company}}</span>
+                    </a-col>
+                    <a-col :span="8">
 
-                            </a-col>
-                            <a-col :span="6">
-                                快递单号：<span class="content">{{info.delivery_no}}</span>
-                            </a-col>
-                            <a-col :span="6">
-                                发货时间：<span class="content">{{info.delivery_time}}</span>
-                            </a-col>
-                            <a-col :span="6">
-                                <a-button type="primary" size="small" @click="edit_express()"><a-icon type="edit"  />修改</a-button>
-                            </a-col>
-                        </a-row>
-                    </div>
-
-                </template>
-            </template>
-            <div class="order_info_kd">
-                <a-timeline v-if="delivery_list.length>0">
-                    <a-timeline-item  v-for="(v,k) in delivery_list" :key="k" :color="k==0?'red':'gray'">
-                        <p>{{v.context+' '+v.time}}</p>
-                    </a-timeline-item>
-                </a-timeline>
-                <a-empty v-else><span slot="description">暂无物流信息</span></a-empty>
+                    </a-col>
+                </a-row>
             </div>
-            <br>
-            <!-- <a-button type="primary" @click="handleSubmit">提交</a-button> -->
+            <template v-if="info.is_agree == 0">
+                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">商家审核</span></div>
+                <div class="unline underm"></div>
+                <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+                    <a-form-model-item label="售后类型" >
+                        {{ info.refund_type_text }}
+                    </a-form-model-item>
+                    <a-form-model-item label="审核状态" :rules="{ required: true}">
+                        <a-radio-group :options="is_agree_options" v-model=is_agree  @change="onChangeIsAgree" />
+                    </a-form-model-item>
+                </a-form-model>
+
+                <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" v-show="is_agree==10">
+                    <a-form-model-item label="收货人" >
+                        <a-input v-model="info.return_name" placeholder="" />
+                    </a-form-model-item>
+                    <a-form-model-item label="收货手机号码" >
+                        <a-input v-model="info.return_phone" placeholder="" />
+                    </a-form-model-item>
+                    <a-form-model-item label="收货地址" >
+                        <a-input v-model="info.return_address" placeholder="" />
+                    </a-form-model-item>
+                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+                        <a-button type="primary" @click="auditSubmit">确认审核</a-button>
+                    </a-form-model-item>
+                </a-form-model>
+                <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" v-show="is_agree==20">
+                    <a-form-model-item label="拒绝原因" >
+                        <a-textarea :auto-size="{ minRows: 2, maxRows: 6 }" v-model="info.refuse_desc" />
+                    </a-form-model-item>
+                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+                        <a-button type="primary" @click="auditSubmit">确认审核</a-button>
+                    </a-form-model-item>
+                </a-form-model>
+            </template>
+            <template v-if="info.is_agree == 10">
+            <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">退货地址</span></div>
+            <div class="unline underm"></div>
+            <div class="order_info_list">
+                <a-row>
+                    <a-col :span="8">
+                        收货人：<span class="content">{{info.return_name||'-'}}</span>
+                    </a-col>
+                    <a-col :span="8">
+                        收货手机号码：<span class="content">{{info.return_phone||'-'}}</span>
+                    </a-col>
+                    <a-col :span="8">
+                        收货地址：<span class="content">{{info.return_address||'-'}}</span>
+                    </a-col>
+                </a-row>
+            </div>
+            </template>
+            <template v-if="info.is_agree == 20">
+                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">商家拒绝原因</span></div>
+                <div class="unline underm"></div>
+                <div class="order_info_list">
+                    <a-row>
+                        <a-col :span="8">
+                            <span class="content">{{info.refuse_desc||'-'}}</span>
+                        </a-col>
+                        <a-col :span="8">
+
+                        </a-col>
+                        <a-col :span="8">
+
+                        </a-col>
+                    </a-row>
+                </div>
+            </template>
+            <!-- 用户发货信息 -->
+            <template v-if="info.refund_type==10 && info.is_agree==10 && info.is_user_send==1">
+                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">用户发货信息</span></div>
+                <div class="unline underm"></div>
+                <div class="order_info_list">
+                    <a-row>
+                        <a-col :span="8">
+                            快递公司：<span class="content">{{info.delivery_company||'-'}}</span>
+                        </a-col>
+                        <a-col :span="8">
+                            快递单号：<span class="content">{{info.delivery_no||'-'}}</span>
+                        </a-col>
+                        <a-col :span="8">
+                            商家收货状态：
+                            <a-tag v-if="info.is_receipt == 1" color="blue">已收货</a-tag>
+                            <a-tag>待收货</a-tag>
+                        </a-col>
+                    </a-row>
+                </div>
+            </template>
+            <!-- 确认收货并退款 -->
+            <template v-if="info.refund_type==10 && info.is_agree==10 && info.is_user_send==1 && info.is_receipt==0">
+                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">确认收货并退款</span></div>
+                <div class="unline underm"></div>
+                <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" v-show="is_agree==10">
+                    <a-form-model-item label="售后类型" >
+                        {{ info.refund_type_text }}
+                    </a-form-model-item>
+                    <a-form-model-item label="退款金额" extra="退款最大金额：">
+                        <a-input-number v-model="info.refund_money" placeholder="" :max="info.refund_money"/>
+                    </a-form-model-item>
+
+                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+                        <a-button type="primary" @click="receiptSubmit">确认收货并退款</a-button>
+                    </a-form-model-item>
+                </a-form-model>
+            </template>
         </div>
-        <!-- 修改物流 -->
-        <a-modal v-model="visible" title="编辑物流" ok-text="确认" cancel-text="取消" @ok="deliverySubmit">
-            <a-input-group compact>
-                <a-select style="width: 25%" v-model="info.delivery_code">
-                    <a-select-option :value="v.code" v-for="(v,k) in express" :key="k">{{v.name}}</a-select-option>
-                </a-select>
-                <a-input style="width: 75%" placeholder="输入快递单号发货" v-model="info.delivery_no" />
-            </a-input-group>
-        </a-modal>
     </div>
 </template>
 
@@ -160,87 +223,63 @@ export default {
     data() {
       return {
           info:{
+              order:[],
+              user:[],
+              order_goods:[],
           },
           delivery_list:[],
           id:0,
-          express:[],
           columns:[
             //   {title:'#',dataIndex:'id',fixed:'left'},
               {title:'商品名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
               {title:'规格属性',dataIndex:'sku_name'},
+              {title:'单价',key:'id',scopedSlots: { customRender: 'goods_price'} },
               {title:'购买数量',key:'id',scopedSlots: { customRender: 'buy_num'}},
-              {title:'商品价格',key:'id',scopedSlots: { customRender: 'goods_price'} },
+              {title:'付款价',key:'id',scopedSlots: { customRender: 'total_pay_price'} },
           ],
           loading:false,
-          visible:false,
+          order_goods:[],
+          is_agree_options: [
+              { label: '同意', value: '10' },
+              { label: '拒绝', value: '20' },
+          ],
+          is_agree:'10',
       };
     },
     watch: {},
     computed: {},
     methods: {
-        deliverySubmit(){
-            let api = this.$apiHandle(this.$api.adminOrders);
-            this.$put(api.url+'/delivery/'+this.id,{delivery_code:this.info.delivery_code,delivery_no:this.info.delivery_no}).then(res=>{
+        auditSubmit(){
+            let api = this.$apiHandle(this.$api.adminOrderRefunds);
+            this.$put(api.url+'/audit/'+this.id,{is_agree:this.is_agree,refuse_desc:this.info.refuse_desc,return_name:this.info.return_name,return_phone:this.info.return_phone,return_address:this.info.return_address}).then(res=>{
                 if(res.code == 200){
                     this.$message.success(res.msg)
                     this.get_info();
-                    this.visible = false;
                 }else{
                     return this.$message.error(res.msg)
                 }
             })
         },
-        handleSubmit(){
-
-            // 验证代码处
-            // if(this.$isEmpty(this.info.name)){
-            //     return this.$message.error('分类名不能为空');
-            // }
-            let api = this.$apiHandle(this.$api.adminOrders,this.id);
-            if(api.status){
-                this.$put(api.url,this.info).then(res=>{
-                    if(res.code == 200){
-                        this.$message.success(res.msg)
-                        return this.$router.back();
-                    }else{
-                        return this.$message.error(res.msg)
-                    }
-                })
-            }else{
-                this.$post(api.url,this.info).then(res=>{
-                    if(res.code == 200){
-                        this.$message.success(res.msg)
-                        return this.$router.back();
-                    }else{
-                        return this.$message.error(res.msg)
-                    }
-                })
-            }
-   
-            
-        },
-        get_info(){
-            this.$get(this.$api.adminOrders+'/'+this.id).then(res=>{
-                this.info = res.data;
-                if(res.data.delivery_no != ''){
-                    this.get_delivery();
+        receiptSubmit(){
+            let api = this.$apiHandle(this.$api.adminOrderRefunds);
+            this.$put(api.url+'/receipt/'+this.id,{refund_money:this.info.refund_money}).then(res=>{
+                if(res.code == 200){
+                    this.$message.success(res.msg)
+                    this.get_info();
+                }else{
+                    return this.$message.error(res.msg)
                 }
             })
         },
-        edit_express(e){
-            this.visible = true;
-            this.get_express();
-        },
-        get_express(){
-            this.$get(this.$api.adminAllExpresses).then(res=>{
-                this.express = res.data;
+        get_info(){
+            this.$get(this.$api.adminOrderRefunds+'/'+this.id).then(res=>{
+                this.info = res.data;
+                this.info.refund_money = Math.min(this.info.order.total_price,this.info.order_goods.total_pay_price);
+                this.order_goods = [this.info.order_goods];
             })
         },
-        // 获取物流信息
-        get_delivery(){
-            this.$get(this.$api.adminOrders+'/delivery_info/'+this.id).then(res=>{
-                this.delivery_list = res.data;
-            })
+        onChangeIsAgree(e){
+            this.is_agree = e.target.value;
         },
         // 获取菜单列表
         onload(){
@@ -250,7 +289,6 @@ export default {
                 this.id = this.$route.params.id;
                 this.get_info();
             }
-            this.get_express();
 
         },
 

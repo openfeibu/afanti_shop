@@ -48,13 +48,14 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('configs','ConfigController')->except(['update','show','destroy']);
         Route::post('/configs/upload/logo','ConfigController@config_logo')->name('configs.config_logo'); // 配置中心图上传(Logo)
         Route::post('/configs/upload/icon','ConfigController@config_icon')->name('configs.config_icon'); // 配置中心上传(icon)
+        Route::get('/configs/config/{name}','ConfigController@config')->name('configs.config');
 
         Route::apiResource('agreements','AgreementController'); // 站点协议 
         Route::apiResource('articles','ArticleController'); // 文章，帮助中心 
 
         // 物流公司
         Route::apiResource('expresses','ExpressController');
-        Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses'); // 缓存清除商品分类
+        Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses');
 
         // 编辑器上传图片接口
         Route::post('/editor/upload','EditorController@editor')->name('public.editor');  // 富文本编辑器图上传
@@ -106,7 +107,8 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         //退款退货
         Route::apiResource('order_refunds','OrderRefundController')->except(['store']);
-
+        Route::put('/order_refunds/audit/{id}','OrderRefundController@audit')->name('order_refunds.audit'); //审核
+        Route::put('/order_refunds/receipt/{id}','OrderRefundController@receipt')->name('order_refunds.receipt'); //收货
         // 积分订单管理 
         Route::apiResource('integral_orders','IntegralOrderController')->except(['store','destroy']);
 
@@ -321,6 +323,8 @@ Route::namespace('Home')->group(function(){
 
     Route::get('/bargains','BargainController@index'); // 砍价列表
 
+    Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses');
+
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车
         Route::apiResource('carts','CartController')->except(['show']);
@@ -368,6 +372,7 @@ Route::namespace('Home')->group(function(){
 
         Route::apiResource('order_refunds','OrderRefundController');
         Route::put('/order_refunds/apply/{order_goods_id}','OrderRefundController@apply')->name('order_refunds.apply');
+        Route::put('/order_refunds/delivery/{id}','OrderRefundController@delivery')->name('order_refunds.delivery'); //发货
         // 订单处理
         Route::get('/orders/create_order_before','OrderController@create_order_before'); // 生成订单前处理
         Route::get('/orders/create_order_after','OrderController@create_order_after'); // 生成订单后处理

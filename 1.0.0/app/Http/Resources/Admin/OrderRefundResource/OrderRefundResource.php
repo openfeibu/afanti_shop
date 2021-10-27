@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Home\OrderRefundResource;
+namespace App\Http\Resources\Admin\OrderRefundResource;
 
 use App\Services\OrderService;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,8 +15,8 @@ class OrderRefundResource extends JsonResource
      */
     public function toArray($request)
     {
-        $order_service = new OrderService();
         return [
+
             'id'                    =>  $this->id,
             'order_id'              =>  $this->order_id,
             'order_goods_id'            =>  $this->order_goods_id,
@@ -30,20 +30,21 @@ class OrderRefundResource extends JsonResource
             'refund_money'         =>  $this->refund_money,
             'is_user_send'         =>  $this->is_user_send,
             'send_time'         =>  $this->send_time,
-            'is_receipt'         =>  $this->is_receipt,
-            'status'         =>  $this->status,
-            'status_text' => $this->status_text,
-            'status_text_detail' => $this->status_text_detail,
-            'images'         =>  $this->images,
             'delivery_no' =>  $this->delivery_no,
             'delivery_code' => $this->delivery_code,
             'delivery_company' => $this->delivery_company,
+            'is_receipt'         =>  $this->is_receipt,
+            'status'         =>  $this->status,
+            'status_text' => $this->status_text,
+            'images'         =>  $this->images,
             'return_name' => $this->return_name,
             'return_phone' => $this->return_phone,
             'return_address' => $this->return_address,
             'created_at'            =>  $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at'            =>  $this->updated_at->format('Y-m-d H:i:s'),
             'order_goods' => $this->order_goods,
             'order' => $this->order,
+            'user' => $this->user,
 
         ];
     }

@@ -22,13 +22,13 @@ class OrderRefundService extends BaseService{
 
             $order_refund_model = new OrderRefund();
             $images = request()->images??'';
-            $refund_type = request()->refund_type??10;
+            $refund_refund_type = request()->refund_refund_type??10;
             $apply_desc = request()->apply_desc??'';
 
             $order_refund_model->user_id = $user_info['id'];
             $order_refund_model->order_goods_id = $order_goods['id'];
             $order_refund_model->order_id =  $order_goods['order_id'];
-            $order_refund_model->refund_type = $refund_type;
+            $order_refund_model->refund_refund_type = $refund_refund_type;
             $order_refund_model->images = $images;
             $order_refund_model->apply_desc = $apply_desc;
             $order_refund_model->is_agree = 0;
@@ -80,5 +80,28 @@ class OrderRefundService extends BaseService{
             OutputServerMessageException("售后订单不存在");
         }
         return $order_refund;
+    }
+    public function delivery($order_refund,$data)
+    {
+        if (
+            $order_refund['refund_type'] != 10
+            || $order_refund['is_agree'] != 10
+            || $order_refund['is_user_send'] != 0
+        ) {
+            OutputServerMessageException("当前售后单不合法，不允许该操作");
+        }
+        if (empty($data['delivery_code'])) {
+            OutputServerMessageException("请选择物流公司");
+        }
+        if (empty($data['delivery_no'])) {
+            OutputServerMessageException('请填写物流单号');
+        }
+        $order_refund->is_user_send = 1;
+        $order_refund->send_time = now();
+        $order_refund->delivery_code = $data['delivery_code'];
+        $order_refund->delivery_no = $data['delivery_no'];
+        $order_refund->delivery_company = $data['delivery_company'];
+        $order_refund->save();
+        return true;
     }
 }

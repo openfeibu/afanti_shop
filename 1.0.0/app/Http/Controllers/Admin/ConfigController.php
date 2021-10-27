@@ -11,14 +11,19 @@ use Illuminate\Support\Facades\DB;
 
 class ConfigController extends Controller
 {
+    public function __construct(ConfigService $config_service)
+    {
+        $this->config_service = $config_service;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ConfigService $config_service)
+    public function index()
     {
-        $list = $config_service->getFormatConfig();
+        $list = $this->config_service->getFormatConfig();
         return $this->success($list);
     }
 
@@ -67,5 +72,9 @@ class ConfigController extends Controller
             return $this->error($rs['msg']);
         }
     }
-
+    public function config(Request $request, $name)
+    {
+        $config = $this->config_service->getFormatConfig('return_address');
+        return $this->success($config);
+    }
 }

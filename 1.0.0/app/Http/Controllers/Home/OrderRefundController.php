@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\OrderRefundResource\OrderRefundCollection;
 use App\Http\Resources\Home\OrderRefundResource\OrderRefundResource;
+use App\Models\Express;
 use App\Models\OrderGoods;
 use App\Models\User;
 use App\Services\Home\OrderService;
@@ -42,15 +43,16 @@ class OrderRefundController extends Controller
         return $this->success([],"申请成功，请等待审核");
     }
 
-    public function store(){
-        $rs = $this->order_refund_service->add();
-        return $rs['status']?$this->success($rs['data'],$rs['msg']):$this->error($rs['msg']);
-    }
-
-    // 这里的ID 都是OrderId
-    public function update($id){
-        $rs = $this->order_refund_service->edit($id);
-        return $rs['status']?$this->success([],$rs['msg']):$this->error($rs['msg']);
-    }
+   public function delivery(Request $request, $id)
+   {
+       $order_refund = $this->order_refund_service->getOrderRefundById($id);
+       $data = [
+           'delivery_code' => $request->get('delivery_code',''),
+           'delivery_no' =>  $request->get('delivery_no',''),
+       ];
+       $data['delivery_company'] = Express::where('code',$data['delivery_code'])->value('name');
+       $this->order_refund_service->delivery($order_refund,$data);
+       return $this->success([],"发货成功");
+   }
 
 }

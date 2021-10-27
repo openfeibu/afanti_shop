@@ -33,4 +33,80 @@ class OrderRefundService extends BaseService{
 
         return $order_refund_model;
     }
+    public function getOrderRefundById($id)
+    {
+        $order_refund = OrderRefund::where('id',$id)->with(['user'=>function($q){
+            return $q->select('id','username');
+        },'order_goods','order'])
+            ->first();
+        if(!$order_refund)
+        {
+            OutputServerMessageException("售后订单不存在");
+        }
+        return $order_refund;
+    }
+    public function audit($order_refund,$data)
+    {
+        if ($data['is_agree'] == 20 && empty($data['refuse_desc'])) {
+            OutputServerMessageException('请输入拒绝原因');
+            return false;
+        }
+        if ($data['is_agree'] == 10 && (empty($data['return_name']) || empty($data['return_phone']) || empty($data['return_address']))) {
+            OutputServerMessageException('请完善退货信息');
+            return false;
+        }
+        try {
+            DB::beginTransaction();
+            // 拒绝申请, 标记售后单状态为已拒绝
+            $data['is_agree'] == 20 && $order_refund->status = 10;
+            // 同意换货申请, 标记售后单状态为已完成
+            $data['is_agree'] == 10 && $order_refund['refund_type'] == 20 && $order_refund->status = 20;
+            // 更新退款单状态
+            $order_refund->is_agree =  $data['is_agree'];
+            $order_refund->refuse_desc =  $data['refuse_desc'] ?? '';
+
+            // 同意售后申请, 记录退货地址
+            if ($data['is_agree'] == 10) {
+                $order_refund->return_name = $data['return_name'] ?? '';
+                $order_refund->return_phone = $data['return_phone'] ?? '';
+                $order_refund->return_address = $data['return_address'] ?? '';
+            }
+            $order_refund->save();
+            // 订单详情
+            // 发送模板消息
+            // 事务提交
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            Log::channel('qwlog')->debug('auditOrderRefund:'.json_encode($e->getMessage()));
+            DB::rollBack();
+            OutputServerMessageException(__('orders.error'));
+        }
+    }
+    public function receipt($order_refund,$data)
+    {
+        // 订单详情
+        $order = $order_refund->order;
+        if ($data['refund_money'] > min($order['total_price'], $order_refund['order_goods']['total_pay_price'])) {
+            $order_refund->error = '退款金额不能大于商品实付款金额';
+            return false;
+        }
+        DB::beginTransaction();
+        // 更新售后单状态
+        $order_refund->refund_money = $data['refund_money'];
+        $order_refund->is_receipt = 1;
+        $order_refund->status = 20;
+        $order_refund->save();
+        // 消减用户的实际消费金额
+        // 条件：判断订单是否已结算
+        if ($order['is_settlement'] == true) {
+
+        }
+        // 执行原路退款
+
+        // 发送模板消息
+
+        DB::commit();
+        return true;
+    }
 }

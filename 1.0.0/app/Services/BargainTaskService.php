@@ -24,7 +24,7 @@ class BargainTaskService extends BaseService{
             OutputServerMessageException('砍价任务不存在');
         }
         $bargain = $bargain_task->bargain()->first(['id','goods_id','floor_price','is_self_cut','is_floor_buy','status']);
-        $goods = $bargain_task->goods()->first(['id','goods_price','goods_market_price','goods_subname','goods_master_image','goods_images']);
+        $goods = $bargain_task->goods()->first(['id','goods_name','goods_price','goods_market_price','goods_subname','goods_master_image','goods_images']);
         $goods['goods_images'] =  explode(',',$goods['goods_images']);
         $goods['goods_sku'] = GoodsSku::select('id','sku_name','goods_price','goods_market_price','goods_stock','goods_weight')->where('goods_id',$bargain_task['goods_id'])->where('id',$bargain_task['goods_sku_id'])->first();
         // 好友助力榜

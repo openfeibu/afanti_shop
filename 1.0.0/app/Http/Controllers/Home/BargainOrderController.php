@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use App\Services\BargainService;
 use App\Services\CheckoutService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 
 class BargainOrderController extends Controller
@@ -15,17 +16,13 @@ class BargainOrderController extends Controller
     }
 
     public function create_order(){
-        $check = $this->base64Check();
-        if(!$check['status']){
-            OutputServerMessageException($check['msg']);
-        }
-        $user_service = new UserService;
+        $params = base64Check();
+
+        $user_service = new UserService();
         $user_info = $user_service->getUserInfo();
         if(empty($user_info)){
             OutputServerMessageException(__('base.error').' - order_service');
         }
-
-        $params = $check['data'];
         $checkout_service = new CheckoutService();
         // 订单结算api参数
         $params = $checkout_service->setParams($params);

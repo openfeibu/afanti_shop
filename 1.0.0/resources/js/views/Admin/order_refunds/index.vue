@@ -53,12 +53,13 @@
                         </template>
                     </div>
                     <div v-else-if="rows.status == 20">
-                        <a-tag color="blue">{{ row.status_text}}</a-tag>
+                        <a-tag color="blue">{{ rows.status_text}}</a-tag>
                     </div>
                     <div v-else-if="rows.status == 10 || rows.status == 30">
                         <a-tag color="orange">{{ rows.status_text}}</a-tag>
                     </div>
                 </span>
+
                 <span slot="action" slot-scope="rows">
                     <a-button @click="$router.push('/Admin/order_refunds/form/'+rows.id)">查看详情</a-button>
                     <a-button type="primary" v-if="rows.is_agree==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#delivery')">去审核</a-button>

@@ -46,6 +46,7 @@ class BargainTask extends Model
             $bargain_task->save();
         }
         $bargain_task->surplus_money = $bargain_task->surplus_money;
+        $bargain_task->bargain_rate = $bargain_task->bargain_rate;
         return $bargain_task;
     }
 
@@ -73,10 +74,23 @@ class BargainTask extends Model
     {
         return $this->update(['status' => 0]);
     }
+    /**
+     * 获取器：剩余砍价金额
+     */
     public function getSurplusMoneyAttribute()
     {
         $maxCutMoney =bcsub($this['goods_price'], $this['floor_price']);
         return number2(bcsub($maxCutMoney, $this['cut_money']));
+    }
+
+    /**
+     * 获取器：砍价进度百分比
+     */
+    public function getBargainRateAttribute()
+    {
+        $maxCutMoney = bcsub($this['goods_price'], $this['floor_price']);
+        $rate = bcdiv($this['cut_money'], $maxCutMoney) * 100;
+        return $rate;
     }
     /**
      * 砍价任务标记为已购买

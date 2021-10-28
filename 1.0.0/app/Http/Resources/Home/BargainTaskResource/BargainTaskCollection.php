@@ -36,6 +36,7 @@ class BargainTaskCollection extends ResourceCollection
                     'status' => $item->status == 1 &&  $item->end_time > now() ? 1 : 0,
                     'cut_people' => $item->cut_people,
                     'surplus_money' => $item->surplus_money,
+                    'bargain_rate' => $item->bargain_rate,
                     'created_at'            =>  $item->created_at->format('Y-m-d H:i:s'),
                     'updated_at'            =>  $item->updated_at->format('Y-m-d H:i:s'),
                     'goods'                 =>  [

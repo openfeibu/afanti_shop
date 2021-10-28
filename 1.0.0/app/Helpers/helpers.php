@@ -878,3 +878,22 @@ if(!function_exists('number2')) {
         return sprintf('%.2f', $number);
     }
 }
+if(!function_exists('base64Check')) {
+    function base64Check()
+    {
+        $base64 = request()->params??'';
+
+        // 如果为空
+        if (empty($base64)) {
+            OutputServerMessageException(__('orders.error'));
+        }
+
+        // 判断是否能解析
+        try {
+            $params = json_decode(base64_decode($base64), true);
+        } catch (\Exception $e) {
+            OutputServerMessageException(__('orders.error') . '2');
+        }
+        return $params;
+    }
+}

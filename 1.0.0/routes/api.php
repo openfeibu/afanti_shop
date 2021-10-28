@@ -395,6 +395,8 @@ Route::namespace('Home')->group(function(){
         Route::post('/bargain_tasks/help_cut/{bargain_task_id}','BargainTaskController@helpCut'); //生成砍价
         Route::get('/bargain_tasks/{id}','BargainTaskController@show'); //砍价任务详情
 
+        Route::post('/bargain_orders/create_order','BargainOrderController@create_order'); // 生成订单
+
         // 评论管理
         Route::apiResource('order_comments','OrderCommentController')->except(['destroy']);
         Route::post('/order_comments/thumb/upload','OrderCommentController@comment_upload'); // 评论管理图片上传

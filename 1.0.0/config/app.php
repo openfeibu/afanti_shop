@@ -180,6 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\Alioss\AliOssServiceProvider::class, // 阿里云上传
+        Fruitcake\Cors\CorsServiceProvider::class,
 
 
     ],

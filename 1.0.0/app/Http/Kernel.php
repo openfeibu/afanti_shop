@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\EnableCrossRequestMiddleware::class,
+            \Fruitcake\Cors\HandleCors::class,
         ],
 
         'api' => [
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \App\Http\Middleware\EnableCrossRequestMiddleware::class,
+            \Fruitcake\Cors\HandleCors::class,
         ],
     ];
 
@@ -68,5 +70,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jwt.admin' => \App\Http\Middleware\RefreshTokenAdmin::class,
         'jwt.user' => \App\Http\Middleware\RefreshTokenUser::class,
+        'cors' => \Fruitcake\Cors\HandleCors::class,
     ];
 }

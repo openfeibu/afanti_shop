@@ -31,9 +31,6 @@
                         售后类型：<span class="content">{{info.refund_type_text||'-'}}</span>
                     </a-col>
                     <a-col :span="8">
-                        处理状态：<span class="content">{{info.pay_time||'-'}}</span>
-                    </a-col>
-                    <a-col :span="8">
                         <div v-if="info.status == 0">
                             <p>
                                 商家审核：
@@ -61,6 +58,9 @@
                         <div v-else-if="info.status == 10 || info.status == 30">
                             <a-tag color="orange">{{ info.status_text}}</a-tag>
                         </div>
+                    </a-col>
+                    <a-col :span="8">
+
                     </a-col>
                 </a-row>
             </div>
@@ -187,9 +187,23 @@
                             快递单号：<span class="content">{{info.delivery_no||'-'}}</span>
                         </a-col>
                         <a-col :span="8">
+
+                        </a-col>
+                    </a-row>
+
+                </div>
+                <div class="order_info_list">
+                    <a-row>
+                        <a-col :span="8">
                             商家收货状态：
                             <a-tag v-if="info.is_receipt == 1" color="blue">已收货</a-tag>
-                            <a-tag>待收货</a-tag>
+                            <a-tag v-if="info.is_receipt == 0">待收货</a-tag>
+                        </a-col>
+                        <a-col :span="8">
+                            退款金额：¥{{ info.refund_money||'-'}}
+                        </a-col>
+                        <a-col :span="8">
+
                         </a-col>
                     </a-row>
                 </div>

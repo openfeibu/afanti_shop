@@ -48,6 +48,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('configs','ConfigController')->except(['update','show','destroy']);
         Route::post('/configs/upload/logo','ConfigController@config_logo')->name('configs.config_logo'); // 配置中心图上传(Logo)
         Route::post('/configs/upload/icon','ConfigController@config_icon')->name('configs.config_icon'); // 配置中心上传(icon)
+        Route::post('/configs/upload/user_avatar','ConfigController@config_user_avatar')->name('configs.config_user_avatar'); // 配置中心图上传(user_avatar)
         Route::get('/configs/config/{name}','ConfigController@config')->name('configs.config');
 
         Route::apiResource('agreements','AgreementController'); // 站点协议 
@@ -389,6 +390,7 @@ Route::namespace('Home')->group(function(){
         Route::get('/integral_order/get_order_info/{id}','IntegralController@get_order_info'); // 查看积分订单信息
 
         //砍价
+        Route::get('/bargain_tasks','BargainTaskController@index'); //我的砍价
         Route::post('/bargain_tasks/partake','BargainTaskController@partake'); //生成砍价
         Route::post('/bargain_tasks/help_cut/{bargain_task_id}','BargainTaskController@helpCut'); //生成砍价
         Route::get('/bargain_tasks/{id}','BargainTaskController@show'); //砍价任务详情

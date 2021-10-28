@@ -21,7 +21,11 @@ class BargainTaskController extends Controller
         $this->bargain_service = $bargain_service;
         $this->bargain_task_service = $bargain_task_service;
     }
-
+    public function index()
+    {
+        $user_bargain_tasks = $this->bargain_task_service->getUserBargainTasks();
+        return $this->success($user_bargain_tasks['data']);
+    }
     public function show($id)
     {
         $user = User::getAuthUserInfo();
@@ -78,21 +82,5 @@ class BargainTaskController extends Controller
             OutputServerMessageException("砍价火热，请稍后重试");
         }
 
-        /*
-        Lock::lockUp("bargain_help_cut_{$task_id}");
-        // 砍价任务详情
-        $model = TaskModel::detail($task_id);
-        // 砍一刀的金额
-        $cut_money = $model->getCutMoney();
-        // 帮砍一刀事件
-        $status = $model->helpCut($this->getUser());
-        // 解除并发锁
-        Lock::unLock("bargain_help_cut_{$task_id}");
-        if ($status == true) {
-            return $this->renderSuccess(compact('cut_money'), '砍价成功');
-        }
-
-        return $this->renderError($model->getError() ?: '砍价失败');
-        */
     }
 }

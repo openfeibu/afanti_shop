@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Exceptions\OutOfStockException;
 use App\Http\Resources\Home\BargainResource\BargainGoodsCollection;
 use App\Http\Resources\Home\BargainResource\BargainGoodsIndexCollection;
+use App\Http\Resources\Home\BargainTaskResource\BargainTaskCollection;
 use App\Models\Bargain;
 use App\Models\BargainTask;
 use App\Models\BargainTaskHelp;
@@ -16,6 +17,15 @@ use DB, Log;
 class BargainTaskService extends BaseService{
 
     use HelperTrait;
+
+    public function getUserBargainTasks()
+    {
+        $user = User::getAuthUserInfo();
+        $user_bargain_tasks = BargainTask::where('user_id',$user['id'])
+            ->orderBy('id','desc')
+            ->paginate(request()->per_page??30);
+        return $this->format(new BargainTaskCollection($user_bargain_tasks));;
+    }
 
     public function getTaskDetail($id, $user = false)
     {
@@ -143,9 +153,9 @@ class BargainTaskService extends BaseService{
         // 好友助力榜
         $helpList = BargainTaskHelp::getListByBargainTaskId($bargain_task['id']);
         // 当前是否已砍
-        if ($this->isCut($helpList, $user)) {
-            OutputServerMessageException("您已参与砍价，请不要重复操作");
-        }
+//        if ($this->isCut($helpList, $user)) {
+//            OutputServerMessageException("您已参与砍价，请不要重复操作");
+//        }
         // 帮砍一刀事件
         try {
             DB::beginTransaction();

@@ -223,6 +223,17 @@ class UploadService extends BaseService{
         }
         return $this->uploadFile($path);
     }
+    public function config_user_avatar($id=0){
+        $path = 'configs';
+        $opt = [
+            'width'=>600,
+            'height'=>600,
+        ]; // 配置文件
+        if(!empty($id)){
+            $path = $path.'/'.$id;
+        }
+        return $this->uploadPhoto($path,$opt);
+    }
 
     /**
      * 商品分类缩略图上传

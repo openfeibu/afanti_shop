@@ -154,7 +154,7 @@ class UserService extends BaseService{
         if(!$smsRes['status']){
             OutputServerMessageException($smsRes['msg']);
         }
-
+        $config_service = new ConfigService();
         $randNickName = $credentials[$username].'_'.mt_rand(100,999);
         $user_model->username = $randNickName;
         $user_model->phone = $credentials[$username];
@@ -163,6 +163,7 @@ class UserService extends BaseService{
         $user_model->inviter_id = request()->inviter_id??0;
         $user_model->password = Hash::make($credentials['password']);
         $user_model->pay_password = Hash::make('123456');
+        $user_model->avatar = $config_service->getFormatConfig()['user_avatar'];
         $user_model->save();
         
         if (! $token = auth($auth)->login($user_model)) {

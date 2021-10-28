@@ -18,5 +18,4 @@ class BargainController extends Controller
         return $this->success($rs['data']);
     }
 
-
 }

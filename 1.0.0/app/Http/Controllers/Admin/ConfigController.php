@@ -72,6 +72,16 @@ class ConfigController extends Controller
             return $this->error($rs['msg']);
         }
     }
+    public function config_user_avatar(UploadService $upload_service)
+    {
+        $rs = $upload_service->config_user_avatar();
+        if($rs['status']){
+            return $this->success($rs['data'],$rs['msg']);
+        }else{
+            return $this->error($rs['msg']);
+        }
+    }
+
     public function config(Request $request, $name)
     {
         $config = $this->config_service->getFormatConfig('return_address');

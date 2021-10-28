@@ -26,7 +26,7 @@ export default
     'adminConfigs' : baseUrl + 'Admin/configs', // 配置信息获取
     'adminConfigsUploadLogo' : baseUrl + 'Admin/configs/upload/logo', // Logo图上传
     'adminConfigsUploadIcon' : baseUrl + 'Admin/configs/upload/icon', // Icon图上传
-
+    'adminConfigsUploadUserAvatar' : baseUrl + 'Admin/configs/upload/user_avatar', // Icon图上传
     // 站点协议
     'adminAgreements' : baseUrl + 'Admin/agreements', 
 

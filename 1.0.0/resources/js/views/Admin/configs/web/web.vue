@@ -42,6 +42,21 @@
                 </div>
             </a-upload>
         </a-form-model-item>
+        <a-form-model-item label="用户默认头像" extra="新用户有效">
+            <a-upload
+                    list-type="picture-card"
+                    class="avatar-uploader"
+                    :show-upload-list="false"
+                    :action="$api.adminConfigsUploadUserAvatar"
+                    :data="{token:$getSession('token_type')}"
+                    @change="user_avatar"
+            >
+                <img width="90px" v-if="info.user_avatar" :src="info.user_avatar" />
+                <div v-else>
+                    <a-font type="iconplus" />
+                </div>
+            </a-upload>
+        </a-form-model-item>
         <a-form-model-item label="电话">
             <a-input v-model="info.mobile"></a-input>
         </a-form-model-item>
@@ -94,6 +109,7 @@ export default {
                     description:res.data.description,
                     logo:res.data.logo,
                     icon:res.data.icon,
+                    user_avatar:res.data.user_avatar,
                     mobile:res.data.mobile,
                     email:res.data.email,
                     icp:res.data.icp,
@@ -112,6 +128,9 @@ export default {
         },
         icon(e){
             this.upload(e,'icon');
+        },
+        user_avatar(e){
+            this.upload(e,'user_avatar');
         },
         upload(e,name){
             if(e.file.status == 'done'){

@@ -45,6 +45,7 @@ class BargainTask extends Model
             $bargain_task->status = 0;
             $bargain_task->save();
         }
+        $bargain_task->surplus_money = $bargain_task->surplus_money;
         return $bargain_task;
     }
 
@@ -71,6 +72,11 @@ class BargainTask extends Model
     public function setBargainTaskEnd()
     {
         return $this->update(['status' => 0]);
+    }
+    public function getSurplusMoneyAttribute()
+    {
+        $maxCutMoney =bcsub($this['goods_price'], $this['floor_price']);
+        return number2(bcsub($maxCutMoney, $this['cut_money']));
     }
     /**
      * 砍价任务标记为已购买

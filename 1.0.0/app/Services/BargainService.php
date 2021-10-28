@@ -24,7 +24,6 @@ class BargainService extends BaseService{
         return $this->format(new BargainGoodsCollection($list));
     }
 
-
     // 根据商品ID 获取秒杀 详情
     public function getBargainInfoByGoodsId($goods_id){
         $info = Bargain::select('id','floor_price','start_time','end_time')->where('goods_id',$goods_id)->where('start_time','<=',now())->where('end_time','>=',now())->first();

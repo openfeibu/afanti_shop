@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\EnableCrossRequestMiddleware::class,
+            //\App\Http\Middleware\EnableCrossRequestMiddleware::class,
             \Fruitcake\Cors\HandleCors::class,
         ],
 
@@ -45,7 +45,7 @@ class Kernel extends HttpKernel
             'throttle:1000,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            \App\Http\Middleware\EnableCrossRequestMiddleware::class,
+            //\App\Http\Middleware\EnableCrossRequestMiddleware::class,
             \Fruitcake\Cors\HandleCors::class,
         ],
     ];

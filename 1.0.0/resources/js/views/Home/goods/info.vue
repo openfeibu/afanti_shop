@@ -128,7 +128,7 @@
                     <template v-else>
                         <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
                         <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
-                        <div class="goods_info_buy" @click="bargain_buy()"><a-font type="iconchanpin1" />砍价</div>
+                        <!-- <div class="goods_info_buy" @click="bargain_buy()"><a-font type="iconchanpin1" />砍价</div> -->
 
                     </template>
                     
@@ -421,18 +421,18 @@ export default {
             let str = window.btoa(JSON.stringify(params)); 
             this.$router.push("/order/create_order/"+str);
         },
-        // 立即购买
-        bargain_buy(){
-            let params = {
-                order:[],
-                bargain_task_id :17,
-                ifcart:0, // 是否购物车，
-                order_source: 'bargain',
-            };
+        // // 立即购买
+        // bargain_buy(){
+        //     let params = {
+        //         order:[],
+        //         bargain_task_id :17,
+        //         ifcart:0, // 是否购物车，
+        //         order_source: 'bargain',
+        //     };
 
-            let str = window.btoa(JSON.stringify(params));
-            this.$router.push("/order/create_order/"+str);
-        },
+        //     let str = window.btoa(JSON.stringify(params));
+        //     this.$router.push("/order/create_order/"+str);
+        // },
         // 加入购物车
         add_cart(){
             let params = {

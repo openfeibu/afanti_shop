@@ -8,6 +8,7 @@
 
         <!-- 分类商品列表 -->
         <div class="index_bg">
+        <div class="index_bg_box">
             <!-- 秒杀 -->
             <div class="seckill width_center_1200" v-if="seckill_list.length>0">
                 <!-- <div class="seckill_title">商城秒杀<span><router-link to="/seckill">查看更多</router-link></span> </div> -->
@@ -103,7 +104,7 @@
 
             </div>
         </div>
-        
+        </div>
 
         <!-- 底部 -->
         <shop-foot />
@@ -193,9 +194,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .index_bg{
-    background: #f5f5f5;
+    background: #eef8e0 url(~@/asset/pc/bg.jpg) no-repeat center top/ 100% auto;
     padding: 20px 0 60px 0;
     margin-top: 40px;
+    .index_bg_box{
+        background: #fff;
+        width: 1240px;
+        padding:0 20px;
+        margin:0 auto
+    }
 }
 .index_class_goods_right{
     width: 100%;
@@ -297,6 +304,7 @@ export default {
 }
 .goods_class_list{
     margin-bottom: 30px;
+    overflow: hidden;
     .title{
         font-size: 22px;
         margin-bottom: 20px;

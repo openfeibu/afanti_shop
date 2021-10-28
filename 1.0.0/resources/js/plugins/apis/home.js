@@ -85,6 +85,8 @@ export default {
     // 砍价
     'homeBargains': baseUrl + 'bargains',
     'bargainTasks': baseUrl + 'bargain_tasks/partake',
+    'getBargainTasks': baseUrl + 'bargain_tasks',
+    'BargainsHelpCut': baseUrl + 'bargain_tasks/help_cut',
 
     'homeAllExpresses' : baseUrl + 'all_expresses',
 

@@ -3,7 +3,7 @@
         <div class="mbx w1200">
             <a-breadcrumb>
                 <a-breadcrumb-item><a href="/">首页</a></a-breadcrumb-item>
-                <a-breadcrumb-item v-for="(v,k) in goods_info.goods_class" :key="k"><a href="#">{{v.name}}</a></a-breadcrumb-item>
+                <a-breadcrumb-item><router-link to="/bargain">砍价专区</router-link></a-breadcrumb-item>
                 <a-breadcrumb-item>{{goods_info.goods_name}}</a-breadcrumb-item>
             </a-breadcrumb>
         </div>
@@ -11,259 +11,140 @@
         <div class="goods_info_top w1200">
             <div class="goods_info_top_left" >
                 <div class="goods_image_item">
-                    <pic-zoom :url="goods_info.goods_images_thumb_400[chose_img_pos]" :highUrl="goods_info.goods_images[chose_img_pos]"></pic-zoom>
+                    <pic-zoom :url="goods_info.goods_images[chose_img_pos]" :highUrl="goods_info.goods_images[chose_img_pos]"></pic-zoom>
                 </div>
-                <div class="pic_zoom_list">
+                <div class="goods_info_title">
+                    <!-- <span>{{store_info['store_name']}}</span> -->
+                    <b>{{goods_info.goods_name}}  </b>
+                    <p>{{goods_info.goods_subname}}</p>
+                </div>
+                <!-- <div class="pic_zoom_list">
                     <div class="pic_zoom_list_left" @click="pre_img()">
                         <a-icon type="left" />
                     </div>
                     <ul>
-                        <li v-for="(v,k) in goods_info.goods_images_thumb_150" :key="k" @click="click_silde_img(k)" :class="chose_img_pos==k?'border_color':''"><img :src="v" alt=""></li>
+                        <li v-for="(v,k) in goods_info.goods_images" :key="k" @click="click_silde_img(k)" :class="chose_img_pos==k?'border_color':''"><img :src="v" alt=""></li>
                     </ul>
                     <div class="pic_zoom_list_right" @click="next_img()">
                         <a-icon type="right" />
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="goods_info_top_right" >
-                <div class="goods_info_title">
-                    <span>{{store_info['store_name']}}</span>
-                    <b>{{goods_info.goods_name}}  </b>
-                    <p>{{goods_info.goods_subname}}</p>
-                    <div :class="isFav?'goods_info_sc red_color':'goods_info_sc'" @click="goods_fav()">{{isFav?'已收藏':'收藏'}}<a-icon type="like" /></div>
+                <div class="kanjia-user">
+                    <div class="img"><img :src="bargain_task.user.avatar || require('@/asset/pc/portrait.jpg')" alt="" /></div>
+                    <div class="test">{{bargain_task.user.username}}</div>
+                    <div class="des">“朋友一生一起走，帮砍一刀有没有”</div>
                 </div>
+              
                  <div class="goods_info_active">
-                     <div class="goods_skill"  v-if="seckills">
+                     <div class="goods_skill"  >
                         <span><a-icon type="history" /></span>
-                        <span>秒杀活动</span>
-                        <span class="span_time">距离结束 {{seckills.format_time||'0 天 00 时 00 分 00 秒'}}</span>
+                        <span>砍价活动</span>
+                        <span class="span_time">距离结束 {{seckills.format_time}}</span>
                     </div>
                       
-                    <div class="goods_skill tuan_active" v-if="collectives" >
-                        <span><a-icon type="usergroup-delete" /></span>
-                        <span>团购活动 </span>
-                        <span class="span_time">团购价：￥ {{$formatFloat(goods_info.goods_price*(1-collectives.discount/100)||'0.00')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 需要 {{collectives.need}} 人</span>
-                    </div>
+                  
                  </div>
                 <div class="goods_info_group">
-                    <template v-if="seckills">
-                     
-                        <div class="goods_info_price"><span>秒杀价：</span>￥{{$formatFloat(goods_info.goods_price*(1-seckills.discount/100))||'0.00'}}</div>
-                        <div class="goods_info_market_price"><span>市场价：</span><div class="overx_goods_info">￥{{goods_info.goods_market_price||'0.00'}}</div></div>
-                    </template>
-                    <template v-else>
-                        <div class="goods_info_price"><span>商城价：</span>￥{{goods_info.goods_price||'0.00'}}</div>
-                        <div class="goods_info_market_price"><span>市场价：</span><div class="overx_goods_info">￥{{goods_info.goods_market_price||'0.00'}}</div></div>
-                    </template>
-                
-                    <!-- <div class="goods_info_active"><span>优惠：</span><font class="noy" v-if="goods_info.goods_freight<=0 && goods_info.freight_id<=0">包邮</font><font v-else-if="store_info.free_freight>0">满{{store_info.free_freight}}包邮</font><font class="noz" v-else>暂无优惠</font></div> -->
-                    <div class="goods_info_sale_num">累计销量<font color="#ca151e">{{goods_info.goods_sale}}</font></div>
-                    
 
-                    <!-- 优惠券 S -->
-                    <div class="coupons_block" v-if="coupons.length>0">
-                        <span>优惠券：</span>
-                        <ul>
-                            <li :class="{'active': v.coupon_log_id != null}" v-for="(v,k) in coupons" :key="k"  v-if="k < 4"  @click="receiveCoupon(v.id,k)" >
-                                <div class="price">满{{v.use_money}}减{{v.money}} </div>
-                               
-                            </li>
-                        </ul>
-                        <div class="coupon-more" @click="showDrawer">
-                            更多>
+                        <div class="goods_info_price"><span>底价：</span>￥{{$formatFloat(bargain.floor_price)||'0.00'}}</div>
+                        <div class="goods_info_market_price"><span>市场价：</span><div class="overx_goods_info">￥{{goods_info.goods_market_price||'0.00'}}</div></div>
+            
+                        <div class="goods_info_speed_box">
+                            <div class="goods_info_speed_box_ed" :style="{width:(bargain_task.cut_money/(bargain_task.goods_price - bargain_task.floor_price))*100+'%'}"></div>
                         </div>
-                    </div>
-                    <!-- 优惠券 E -->
-                    
+                        <div class="kanjia-price" v-if="bargain_task.surplus_money != 0">
+                            已砍<span>{{bargain_task.cut_money}}</span>元，还需{{bargain_task.surplus_money}}元
+                        </div>
+                        <div class="kanjia-price" v-else>
+                            <span>已砍价完成</span>
+                        </div>
+               
                 </div>
-                <!-- 参加活动 -->
-                <div class="goods_info_active">
-                  
-                    <div class="tuan_list" v-if="collectives && collective_list.length>0">
-                        <a-carousel autoplay :autoplaySpeed="3000" speed="1000" :vertical="true" :adaptiveHeight="true" :dots="false">
-                            <div class="tuan_item" v-for="(v,k) in collective_list" :key="k">
-                                <img v-lazy="v.avatar||require('@/asset/user/user_default.png')">
-                                <div class="nickname">{{v.nickname}}</div>
-                                <div class="btn" @click="collective_active_id=v.id;buy()">立即参团</div>
-                                <div class="orders_count">已经参团 {{v.actual_people}} / {{v.people}} 人</div>
-                            </div>
-                        </a-carousel>
-                    </div>
-                </div>
-                
-                <!-- 满减 S -->
-                <div class="goods_info_full_reduction" v-if="full_reductions.length>0">
-                    <span class="title">活动：</span>
-                    <span class="act" v-for="(v,k) in full_reductions" :key="k"> 满￥{{v.use_money}}减￥{{v.money}}；</span>
-                </div>
-                <!-- 满减 E -->
 
-                <div class="goods_info_spec" v-show="!this.$isEmpty(goods_info.skuList)">
-                    <div class="spec_list" v-for="(v,k) in goods_info.attrList" :key="k">
-                        <span>{{v.name}}：</span>
-                        <ul>
-                            <li :class="($isEmpty(val.is_chose) || val.is_chose==false)?'':'red'" v-for="(val,key) in v.specs" :key="key" @click="attr_click(k,key)" >{{val.name}}</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="goods_info_num">
-                    <div class="goods_info_num_title">数量：</div>
-                    <div class="goods_info_num_jian" @click="change_buy_num(false)"><a-icon type="minus" /></div>
-                    <div class="goods_info_num_input"><input v-model="buy_num" type="text" value="1"></div>
-                    <div class="goods_info_num_jia" @click="change_buy_num(true)"><a-icon type="plus" /></div>
-                    <div class="goods_info_num_stock">&nbsp;&nbsp;{{goods_info.goods_stock}} 库存</div>
-                    <div class="clear"></div>
-                </div>
+             
+
+             
                 <div class="goods_info_btn">
-                    <!-- <div v-show="goods_info.is_groupbuy==1" class="goods_info_add_groupbuy" @click="group_buy()"><i class="icon iconfont">&#xe601;</i>选择团购</div> -->
-                    <template v-if="seckills">
-                        <div class="goods_info_buy" style="background:#fe0851" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
-                    </template>
-                    <template v-else-if="collectives">
-                        <div class="goods_info_buy" style="background:#67c23a"  @click="is_collective=1;collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
-                        <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
-                        <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
-                    </template>
-                    <template v-else>
-                        <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
-                        <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
-                        <div class="goods_info_buy" @click="bargain_buy()"><a-font type="iconchanpin1" />砍价</div>
+                        <div v-if="is_creator && !bargain_task.is_floor || !is_creator && is_cut " class="goods_info_buy" style="background:#fe0851" @click="invitation()">邀请朋友砍价</div>
+                        <div  v-else-if="is_creator && bargain_task.is_floor"  class="goods_info_buy" style="background:#fe0851" @click="buy()">已砍完,立即{{$formatFloat(bargain.floor_price)}}元购买</div>
+                        <div  v-else-if="!is_creator && bargain_task.is_floor"  class="goods_info_buy" style="background:#fe0851" @click="bargain_buy()">商品已砍完,我也要去砍价</div>
+                        <div v-else class="goods_info_buy" style="background:#fe0851" @click="bargaining()">帮朋友砍一刀</div>
+                        <div v-if="!is_creator && is_cut" class="des">你已帮朋友砍了<span>1刀</span></div>
+                        <div  class="goods_info_buy" ><router-link :to="'/goods/'+bargain_task.goods_id">原价购买</router-link></div>
 
-                    </template>
-                    
                 </div>
 
             </div>
             <div class="clear"></div>
         </div>
         <div class="goods_info_content w1200">
-            <div class="left_item">
-                <div class="store_info">
-                    <div class="store_title">
-
-                        <span class="tip">展馆</span>
-                        <span class="title">{{store_info['store_name']}}</span>
-                    </div>
-                    <div class="store_com fb-overflow-3 " >{{store_info.store_description}}</div>
-                  
-                    <div class="btn">
-                        <span class="navstore" @click="$router.push('/store/'+store_info.id)">进入展馆</span>
-                        <!-- <span class="contact" @click="">联系客服</span> -->
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <!-- // 销售排行 -->
-                <div class="store_info">
-                    <div class="store_title"><span class="title">销售排行</span></div>
-                    <div class="goods_list" v-if="goods_info.sale_list.length>0">
-                        <dl v-for="(v,k) in goods_info.sale_list" :key="k"><a :href="'/goods/'+v.id">
-                            <dt><img v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
-                            <dd class="info">
-                                <div class="title">{{v.goods_name||''}}</div>
-                                <div class="price">￥{{v.goods_price}}</div>
-                                <div class="round">{{k+1}}</div>
-                            </dd></a>
-                        </dl>
-                    </div>
-                    <div style="line-height:90px;text-align:center;color:#999;" v-else>暂时没有商品~~</div>
-                </div>
+           <div class="left_item team" >
+               <div class="t">砍价记录</div>
+               <ul v-if="bargain_task_help_list.length !=0">
+                   <li  class="clear" v-for="(v,k) in bargain_task_help_list" :key="k" >
+                       <div class="img"><img :src="v.user.avatar" alt="" /></div>
+                        <div class="test">{{v.user.username}}</div>
+                        <div class="cut">砍{{v.cut_money}}</div>
+                   </li>
+               </ul>
             </div>
             <div class="right_item tablist" >
-                 <a-tabs default-active-key="1" >
-                <a-tab-pane key="1" tab="商品详情" force-render>
-                    <div v-html="goods_info.goods_content||''"></div>
-                </a-tab-pane>
-                <a-tab-pane key="2" :tab="'用户评价 ('+(comment_statistics.all||0)+')'" force-render>
-                     <!-- 评论 -->
-                    <div class="comment_list_top">
-                        <div class="left_bfb">
-                            {{comment_statistics.rate||100}}<font style="font-size:20px">%</font>
-                            <span>好评率</span>
-                        </div>
-                        <div class="right_comment_list">
-                            <ul>
-                                <li :class="params.is_type==0?'red':''" @click="comment_type_click(0)">全部 ({{comment_statistics.all||0}})</li>
-                                <li :class="params.is_type==1?'red':''" @click="comment_type_click(1)">好评 ({{comment_statistics.good||0}})</li>
-                                <li :class="params.is_type==2?'red':''" @click="comment_type_click(2)">中评 ({{comment_statistics.commonly||0}})</li>
-                                <li :class="params.is_type==3?'red':''" @click="comment_type_click(3)">差评 ({{comment_statistics.bad||0}})</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="user_content_blcok_line"></div>
-                    <div class="comment_list_block">
-                        <a-list :data-source="comments">
-                            <a-list-item slot="renderItem" slot-scope="item">
-                                <a-comment :author="item.user.nickname" :avatar="item.user.avatar||require('@/asset/user/user_default.png')">
-                                    <!-- <template slot="actions">
-                                    </template> -->
-                                    {{ item.content }}
-                                    <a-tooltip slot="datetime" :title="item.created_at">
-                                    <span>{{item.created_at}}</span>
-                                    </a-tooltip>
-                                    <a-comment v-if="item.reply != ''" :author="'售后客服'" :avatar="item.user.avatar||require('@/asset/user/kefu.png')">
-                                        <font color="red">{{ item.reply }}</font>
-                                        <a-tooltip slot="datetime" :title="item.reply_time">
-                                        <span>{{item.reply_time}}</span>
-                                        </a-tooltip>
-                
-                                    </a-comment>
-                                </a-comment>
-                            </a-list-item>
-                        </a-list>
-                    </div>
-                    <div class="fy" v-if="comments.length>0" style="margin-top:20px">
-                        <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
-                    </div>
-                    
-                </a-tab-pane>
-                <a-tab-pane key="3" tab="售后服务" force-render>
-                    <div v-html="store_info.after_sale_service"></div>
-                </a-tab-pane>
-                </a-tabs>
+                <div class="t">砍价说明</div>
+               1、砍价活动说说明
+
+                砍价活动是设置商城中的商品进行设置的砍价活动，只有参与砍价商品链接，发起砍价活动的会员只能自己砍一次，亲友团可砍多次（根据设置的每人砍价次数），亲友团也可发起砍价再次邀请亲友团砍价，扩大了商城推广的范围，有效提升商城的会员量，继而提高商城的销售量。
+
+                2、砍价活动商品参与条件
+
+                a.不能参与砍价活动的商品：拼团添加的商品、启用多规格的商品
+
+                b.可以参与砍价活动的商品：商城添加的未启用多规格的所有商品
+
+                3、砍价活动邀请亲友团
+
+                邀请亲友团两种方式：
+
+                a.复制链接邀请亲友团助阵，根据成为下线条件即可确定上下线关系。
+
+                b.点击发送给朋友，根据成为下线条件即可确定上下线关系。
             </div>
             <div class="clear"></div>
         </div>
-        <a-drawer
-        title="领取优惠券"
-        placement="left"
-        :closable="false"
-        :visible="visible"
-        :after-visible-change="afterVisibleChange"
-        @close="onClose"
-        >
-             <div class="coupon_list_item" :class="{'active': v.coupon_log_id != null}" v-for="(v,k) in coupons" :key="k" @click="receiveCoupon(v.id,k)">
-                <div class="q-price ">
-                    <em>¥</em>
-                    <strong>{{v.money}}</strong>
-                    <span class="q-limit" data-tips="">满{{v.use_money}}元可用</span>
-                </div>
-              
-            </div>
-              
-        </a-drawer>
+
         <a-modal
-            title="阿凡提"
-            cancelText="取消"
-            okText="去购物车结算"
+            title="点击下方进行分享"
+            cancelText=""
+            okText="确认"
             :visible="modal"
             closable="false"
             @ok="modalOk"
             @cancel="modalCancel"
            okType="danger"
             >
-            <p>商品已成功加入购物车！</p>
+            <vshare  :vshareConfig="vshareConfig"></vshare>
         </a-modal>
-        <loading v-if="isLoading"></loading>
+        <div class="kanjia_success" v-if="kanjia_modal">
+            <div class="kanjia_success_box">
+                <p>砍价成功<br>帮朋友成功砍了<span>{{friend_cut_money}}</span>元</p>
+                <div @click="kanjiaSuccess" class="kanjia_close">X</div>
+            </div>
+            
+        </div>
+       
 
+        <loading v-if="isLoading"></loading>
+        
     </div>
 </template>
 
 <script>
 
 import PicZoom from '@/components/home/goods/vue-piczoom.vue' // 放大镜组件 
+import vshare from 'vshare' // 放大镜组件 
 export default {
-    components: {PicZoom},
+    components: {PicZoom,vshare},
     props: {},
     data() {
       return {
@@ -272,75 +153,77 @@ export default {
               goods_images_thumb_150:[],
               goods_images:[],
               sale_list:[],
+              user:{}
           },
-          params:{
-              page:1,
-              per_page:30,
-              total:0,
-              is_type:0,
+           bargain:{
+              floor_price:"",
+              user:{}
           },
-          comment_statistics:[],
-          comments:[],
-          store_info:{
-              area_info:'',
-              store_address:'',
+          bargain_task:{
+              floor_price:"",
+              user:{}
           },
-          chat:false,
+         bargain_task_help_list:[
+             {user:{}}
+         ],
           rate_info:{},
-          buy_num:1, // 购买数量
-          goods_id:0,
+        
           chose_img_pos:0,
           chose_spec:[],
-          sku_id:0,
-          isFav:false,
-          save_history:true,
-          desc: ['1.0分', '2.0分', '3.0分', '4.0分', '5.0分'],
-          coupons:[], // 优惠券
-          full_reductions:[], // 满减
-          seckills:false, // 秒杀
-          collectives:false, // 拼团
-          collective_list:[], // 正在进行的团
-          collective_active_id:0,
-          is_collective:0,
+          seckills:{},
           isLoading:true,
-          visible: false,
-          modal: false,
+         href:"",
+         modal:false,
+         kanjia_modal:false,
+         friend_cut_money:0,
+          vshareConfig: {
+                shareList: ['copy',
+                            'qzone',
+                            'sqq',
+                            'weixin'],
+                common : {
+                    //此处放置通用设置
+                    bdText:"帮我砍一砍",
+                    bdDesc:"帮我砍一砍",
+                    bdUrl:''
+                },
+                share : [{
+                    bdSize:'32'
+                    }
+                ],
+                slide : [
+                    //此处放置浮窗分享设置
+                ],
+                image : [
+                    //此处放置图片分享设置
+                ],
+                selectShare : [
+                    //此处放置划词分享设置
+                ]
+            }
+        
       };
     },
-    watch: {
-        // 监听选择购买数量
-        buy_num:function(e){
-            if(e>this.goods_info.goods_stock || e<=0){
-                if(this.goods_info.goods_stock != 0){
-                    this.$message.error('请认真填写购买数量');
-                    this.buy_num = this.goods_info.goods_stock;
-                }
-            }
-        },
-    },
+
     computed: {},
     methods: {
         get_goods_info(){
-            this.$get(this.$api.homeGoods+'/'+this.goods_id).then(res=>{
+            this.$get(this.$api.getBargainTasks+'/'+this.bargain_task_id).then(res=>{
                 if(res.code == 200){
-                    this.goods_info = res.data;
-                    this.store_info = res.data.store_info;
-                    this.rate_info = this.store_info.rate;
-                    this.coupons = res.data.coupons; // 优惠券
-                    this.full_reductions = res.data.full_reductions; // 满减
-                    this.seckills = res.data.seckills; // 秒杀
+                    this.goods_info = res.data.goods;
+                    this.bargain_task_help_list = res.data.bargain_task_help_list;
+                    this.bargain_task = res.data.bargain_task;
+                    this.bargain = res.data.bargain;
+                    this.is_creator = res.data.is_creator;
+                    this.is_cut = res.data.is_cut;
+                    // this.seckills = res.data.bargain_task.end_time; // 秒杀
+                    this.seckills = {'end_time':res.data.bargain_task.end_time}
                     this.timing(this.seckills); // 倒计时
-                    this.collectives = res.data.collectives; // 拼团
-                    this.collective_list = res.data.collective_list; // 拼团
+                  
 
-                    this.is_fav(res.data.id); // 获取收藏情况
-                    // 存储游览记录
-                    if(this.save_history){
-                        this.save_history_fun(this.goods_info);
-                    }
                 }else{
                     this.$message.error(res.msg);
-                    this.$router.go(-1);
+                    // this.$router.go(-1);
                 }
                  this.isLoading = false;
             })
@@ -349,7 +232,9 @@ export default {
         timing(market){
             if(market){
                 let obj = setInterval(()=>{
+                   
                     let timeVal = moment(market.end_time).format('X') - moment().format('X');
+                    //  console.log(timeVal)
                     // 时间戳转换
                     var d = Math.floor(timeVal / (24 * 3600));
                     var h = Math.floor((timeVal - 24 * 3600 * d) / 3600);
@@ -362,43 +247,44 @@ export default {
                     var ss = s < 10 ? '0' + s : s;
                     // this.seckills.format_time =  d + '天' + hh + '时' + mm + '分' + ss + '秒';
                     this.$set(this.seckills,'format_time',d + ' 天 ' + hh + ' 时 ' + mm + ' 分 ' + ss + ' 秒')
+                 
                     if(moment(market.end_time).valueOf()<moment().valueOf()){
                         clearInterval(obj);
-                        this.$router.go(0);
+                        // this.$router.go(0);
                     }
                 },1000)
             }
             
         },
-        get_goods_comments(){
-            this.$get(this.$api.homeGoods+'/comments/'+this.goods_id,this.params).then(res=>{
+
+        //邀请好友
+        invitation(){
+          
+            this.modal = true;
+
+        },
+        //帮朋友砍价
+        bargaining(){ 
+            this.isLoading = true;
+            this.$post(this.$api.BargainsHelpCut+'/'+this.bargain_task_id).then(res=>{
                 if(res.code == 200){
-                    this.params.total = res.data.total;
-                    this.params.per_page = res.data.per_page;
-                    this.params.current_page = res.data.current_page;
-                    this.comments = res.data.data;
+                    
+                    this.friend_cut_money = res.data.cut_money;
+                    this.kanjia_modal = true;
+
                 }else{
                     this.$message.error(res.msg);
+                    // this.$router.go(-1);
                 }
+                 this.isLoading = false;
             })
         },
-        onChange(e){
-            this.params.page = e;
-            this.get_goods_comments();
+        kanjiaSuccess(){
+            this.$router.go(0);
         },
-        comment_type_click(is_type){
-            this.params.page = 1;
-            this.params.is_type = is_type;
-            this.get_goods_comments();
-        },
-        get_goods_goods_comment_statistics(){
-            this.$get(this.$api.homeGoods+'/comment_statistics/'+this.goods_id).then(res=>{
-                if(res.code == 200){
-                    this.comment_statistics = res.data;
-                }else{
-                    this.$message.error(res.msg);
-                }
-            })
+        modalCancel(){
+            this.modal = false;
+
         },
         // 立即购买
         buy(){
@@ -421,11 +307,11 @@ export default {
             let str = window.btoa(JSON.stringify(params)); 
             this.$router.push("/order/create_order/"+str);
         },
-        // 立即购买
+         // 砍价立即购买
         bargain_buy(){
             let params = {
                 order:[],
-                bargain_task_id :17,
+                bargain_task_id :this.bargain_task_id,
                 ifcart:0, // 是否购物车，
                 order_source: 'bargain',
             };
@@ -433,83 +319,8 @@ export default {
             let str = window.btoa(JSON.stringify(params));
             this.$router.push("/order/create_order/"+str);
         },
-        // 加入购物车
-        add_cart(){
-            let params = {
-                goods_id:this.goods_info.id, // 商品ID
-                sku_id:this.sku_id, // SKUid 没有则为0
-                buy_num:this.buy_num, // 购买数量
-            };
-            this.$post(this.$api.homeCarts,params).then(res=>{
-                this.cart_count();
       
-                this.modal = true;
-            })
-            // this.$get(this.$api.homeCarts).then(res=>{
-            //     this.$returnInfo(res);
-            // })
-        },
-        cart_count(){
-            this.$get(this.$api.homeCarts+'/cart_count').then(res=> {
-                if(res.code == 200){
-                    this.$store.dispatch('homeCart/set_cart_num',res.data);
-                }
-            });
-        },
-
-        // 属性被选择点击
-        attr_click:function(e,index){
-            console.log(123)
-            this.goods_info.attrList[e]['specs'].forEach((res,key)=>{
-                res.is_chose = false;
-                if(key == index){
-                    res.is_chose = true;
-                }
-            });
-            this.buy_num = 1;
-
-            // 循环获取选择的规格属性
-            let chose_spec = [];
-            this.goods_info.attrList.forEach(res=>{
-                res['specs'].forEach(listRes=>{
-                    if(!this.$isEmpty(listRes.is_chose) && listRes.is_chose == true){
-                        chose_spec.push(listRes.id);
-                    }
-                });
-            });
-            
-            this.chose_spec = chose_spec;
-            
-            // 如果选择数量和规格数量一致则表示选择完所有的规格属性
-            if(this.chose_spec.length == this.goods_info.attrList.length){
-                this.get_spec_attr_data();
-            }
-
-            this.$forceUpdate();
-        },
-        // 根据选择的规格属性去获取数据库存在的规格数据
-        get_spec_attr_data:function(){
-            this.goods_info.skuList.forEach(res=>{
-                let a = 0;
-                this.chose_spec.forEach(specRes=>{
-                    res.spec_id.forEach(itm=>{
-                        if(itm == specRes){
-                             a += 1;
-                        }
-                    })
-                });
-                if(a == this.goods_info.attrList.length){
-                    this.chose_spec_info = res;
-                    this.sku_id = res.id;
-                    return this.change_goods_info(res);
-                }
-            });
-        },
-        change_goods_info:function(res){
-            this.goods_info.goods_price = res.goods_price;
-            this.goods_info.goods_market_price = res.goods_market_price;
-            this.goods_info.goods_stock = res.goods_stock;
-        },
+ 
         // 存储数据记录
         save_history_fun:function(goods_info){
             this.save_history=false;
@@ -563,20 +374,7 @@ export default {
         click_silde_img:function(e){
             this.chose_img_pos = e;
         },
-        // 购买数量修改
-        change_buy_num:function(type){
-            if(type){
-                if(parseInt(this.buy_num)+1>this.goods_info.goods_stock){
-                    return this.$message.error('库存不足');
-                }
-                this.buy_num = parseInt(this.buy_num) + 1;
-            }else{
-                if(parseInt(this.buy_num)<=1){
-                    return this.$message.error('最低购买数量为 1');
-                }
-                this.buy_num = parseInt(this.buy_num) - 1
-            }
-        },
+
         goods_fav(){
             if(this.isFav){
                 return this.del_fav(this.goods_info.id);
@@ -584,82 +382,30 @@ export default {
                 return this.add_fav(this.goods_info.id);
             }
         },
-        // 添加收藏
-        add_fav(id){
-            this.$post(this.$api.homeFav,{id:id,is_type:0}).then(res=>{
-                return this.is_fav(id);
-            })
-        },
-        // 删除收藏
-        del_fav(id){
-            this.$delete(this.$api.homeFav+'/'+id,{is_type:0}).then(res=>{
-                return this.is_fav(id);
-            })
-        },
-        // 判断是否收藏该产品
-        is_fav(id){
-            this.$get(this.$api.homeFav+'/'+id,{is_type:0}).then(res=>{
-                if(res.code == 200){
-                    return this.isFav = res.data ? true : false;
-                }else{
-                    return this.isFav = false;
-                }
-            })
-        },
-        // 领取优惠券
-        receiveCoupon(id,k){
-            if( this.coupons[k].coupon_log_id == null ){
-                this.$post(this.$api.homeCoupon+'/receive',{id:id}).then(res=>{
-                    if(res.code == 200){
-                        this.coupons[k].coupon_log_id = 1;
-                    }
-                    return this.$returnInfo(res)
-                })
-            }
-        },
-        afterVisibleChange(val) {
-        console.log('visible', val);
-        },
-        showDrawer() {
-        this.visible = true;
-        },
-        onClose() {
-        this.visible = false;
-        },
-        modalOk() {
-            this.$router.push('/cart') 
-        },
-        modalCancel() {
-        this.modal = false;
-        },
     },
     created() {
-        this.goods_id = this.$route.params.id;
+        sessionStorage.setItem('token_type', 'bargain_task_id');
+        this.bargain_task_id = this.$route.params.id;
+        this.vshareConfig.common.bdUrl = window.location.host;
         this.get_goods_info();
-        this.get_goods_comments();
-        this.get_goods_goods_comment_statistics();
+
     },
     mounted() {},
-    beforeRouteUpdate (to, from, next) {
-        console.log(to,from);
-        if(from.params.id != to.params.id){
-            this.goods_id = to.params.id;
-            this.get_goods_info();
-        }
-        next();
-        // react to route changes...
-        // don't forget to call next()
-    }
+   
 };
 </script>
 <style lang="scss" scoped>
 
 .goods_info_content{
+    min-height: 500px;
+    margin-bottom: 20px;
     .right_item{
+        min-height: 500px;
+        .t{ color: #333;font-size: 20px;margin-bottom: 20px;}
         border:1px solid #efefef;
         padding:20px;
         box-sizing: border-box;
-        width: 946px;
+        width: 874px;
         float: left;
         .user_content_blcok_line{
             clear: both;
@@ -723,7 +469,7 @@ export default {
         }
     }
     .left_item{
-        width: 234px;
+        width: 300px;
         float: left;
         margin-right: 20px;
         .store_info{
@@ -904,6 +650,16 @@ export default {
     .goods_info_btn{
         clear: both;
         margin-top: 20px;
+        .des{
+              line-height: 46px;
+            float: left;
+            margin-right: 20px;
+            color: #666;
+            font-size: 16px;
+            span{
+                color:#e4393c;font-size: 20px;font-weight: bold;
+            }
+        }
     }
     .goods_info_add_cart,.goods_info_buy{
         cursor: pointer;
@@ -919,6 +675,7 @@ export default {
             font-size: 16px;
             font-weight: bold;
         }
+        a{color: #fff;display: block;}
         &:hover{
             opacity: 0.8;
         }
@@ -947,32 +704,7 @@ export default {
         }
     }
     
-    .goods_info_title{
-        position: relative;
-        font-size: 18px;
-        margin-bottom: 15px;
-        padding-right: 100px;
-        p{
-            color:#999;
-            line-height: 35px;
-            font-size: 14px;
-        }
-        span{
-            background: #e4393c;
-            font-size: 12px;color: #fff;
-            padding:2px 10px;
-            border-radius: 3px;
-            vertical-align: middle;
-            display: inline-block;
-            *display: inline-block;
-        }
-        b{
-             vertical-align: middle;
-            display: inline-block;
-            *display: inline-block;
-        }
-        
-    }
+
     .goods_info_group{
         position: relative;
         box-sizing: border-box;
@@ -1080,14 +812,13 @@ export default {
     }
 }
 .goods_info_top_left{
-    width: 402px;
-    border: 1px solid #efefef;
-    margin-right: 28px;
+    width: 300px;
+    margin-right: 20px;
     float: left;
     box-sizing: border-box;
     .goods_image_item{
-        width: 400px;
-        height: 400px;
+        width: 300px;
+        height: 300px;
         display: block;
         border-bottom: 1px solid #efefef;
     }
@@ -1132,6 +863,31 @@ export default {
                 color:#ca151e;
             }
         }
+    }
+        .goods_info_title{
+        position: relative;
+        font-size: 18px;
+        margin-bottom: 15px;
+        p{
+            color:#999;
+            line-height: 35px;
+            font-size: 14px;
+        }
+        span{
+            background: #e4393c;
+            font-size: 12px;color: #fff;
+            padding:2px 10px;
+            border-radius: 3px;
+            vertical-align: middle;
+            display: inline-block;
+            *display: inline-block;
+        }
+        b{
+             vertical-align: middle;
+            display: inline-block;
+            *display: inline-block;
+        }
+        
     }
 }
 .goods_info_sc{
@@ -1337,5 +1093,46 @@ export default {
             text-align: left;font-size: 14px;color: #666;margin-left: 30px;
         }
     }
+    .kanjia-user{
+        height: 60px;
+        margin-bottom: 20px;
+        .img{height: 60px;width: 60px;overflow: hidden;float: left;background: #eee;border-radius: 50%;img{width: 100%;height: 100%;}}
+        .test{float: left;line-height: 60px;margin:0 10px;color: #000;font-size: 22px;}
+        .des{float: left;line-height: 60px;margin:0 10px;color: #e43838;font-size: 22px;}
+    }
+    .goods_info_speed_box{
+        background: #999;width: 100%;height: 10px;border-radius: 10px;margin:20px 0 10px 0; position: relative;overflow:hidden;
+            .goods_info_speed_box_ed{
+                background: #ffb507;width: 100px;height: 10px;border-radius: 10px;
+            }
 
-</style>
+    }
+    .kanjia-price{
+        font-size: 16px;color: #666;
+        span{color: #e01d20;font-size: 20px;}
+    }
+    .left_item{
+        .t{
+            color: #333;font-size: 20px;margin-bottom: 20px;
+        }
+        ul li{
+            margin:10px 0;
+        .img{height: 50px;width: 50px;overflow: hidden;float: left;background: #eee;border-radius: 50%;
+        img{width: 100%;height: 100%;}}
+        .test{float: left;line-height: 50px;margin:0 10px;color: #666;font-size: 18px;}
+        .cut{float: right;line-height: 50px;margin:0 10px;color: #e43838;font-size: 22px;}
+        }
+         
+    }
+    .kanjia_success{
+        position: fixed;top:0;left: 0;z-index:999;background:rgba(0,0,0,0.2);width:100%;height:100%;    
+        .kanjia_success_box{
+        width: 450px;height: 400px;position: relative;top:20%;z-index:999;background: url(~@/asset/pc/kjcg.png) no-repeat center/100% 100%;
+        margin-left: -225px;left: 50%;
+        p{padding:47% 100px 0 100px;color:#333;font-size: 18px;line-height: 40px;text-align: center;}
+        span{color: #fe0851;font-size: 40px;font-weight: bold;}
+        
+        }
+        .kanjia_close{text-align: center;font-size: 20px;position: absolute;bottom: 30px;left: 50%;margin-left: -20px;width: 40px;width: 40px;line-height: 40px;border-radius: 50%;border:1px solid #666;cursor: pointer;}
+    }
+    </style>

@@ -156,8 +156,15 @@ export default [
                 path: '/bargain',
                 name: 'home_bargain',
                 component: () =>
-                    import ('@/views/Home/bargain/index')
-            }, // 积分商城首页
+                    import ('@/views/Home/bargain/index'),
+
+            },
+            {
+                path: '/bargain/info/:id',
+                name: 'home_bargain_detail',
+                component: () =>
+                    import ('@/views/Home/bargain/info')
+            },
 
             // 秒杀页面
             {
@@ -165,6 +172,7 @@ export default [
                 name: 'home_seckill',
                 component: () =>
                     import ('@/views/Home/seckills/index')
+
             }, // 秒杀首页
 
             // 用户中心
@@ -254,21 +262,21 @@ export default [
                     // 用户订单
                     {
                         path: '/user/order_refund/form/:order_goods_id',
-                            name: 'home_user_order_refund_form',
+                        name: 'home_user_order_refund_form',
                         component: () =>
-                    import ('@/views/Home/users/order_refund/form')
+                            import ('@/views/Home/users/order_refund/form')
                     }, // 申请售后
                     {
                         path: '/user/order_refund',
-                            name: 'home_user_order_refund',
+                        name: 'home_user_order_refund',
                         component: () =>
-                    import ('@/views/Home/users/order_refund/index')
+                            import ('@/views/Home/users/order_refund/index')
                     }, // 申请售后
                     {
                         path: '/user/order_refund/:id',
-                            name: 'home_user_order_refund_info',
+                        name: 'home_user_order_refund_info',
                         component: () =>
-                    import ('@/views/Home/users/order_refund/info')
+                            import ('@/views/Home/users/order_refund/info')
                     }, // 申请售后
                     {
                         path: '/user/refund/:id',

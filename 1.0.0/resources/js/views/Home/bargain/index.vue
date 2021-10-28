@@ -24,7 +24,7 @@
                                    
                                     <div class="main_show clearfix">
                                             <div v-if="!v.is_partake" class="btn" @click="bargainTasks(v.bargain_id)">立即砍价</div>
-                                            <div v-else class="btn" style="background:#4bb16f" @click="bargainTasks(v.bargain_id)">去邀请砍价</div>
+                                            <div v-else class="btn" style="background:#4bb16f" ><router-link :to="'/bargain/info/'+v.bargain_task_id">去邀请好友砍价</router-link></div>
                                             <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
                                     </div>
                             </div>
@@ -33,26 +33,7 @@
                     </div>
 
                 </li>
-                 <li v-for="(v,k) in list" :key="k">
-                    
-                    <div class="product_act_in clearfix">
-           
-                        <div class="img"><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></div>
-                            <div class="product_info">
-                                    <div class="p_name">{{v.goods_name}}</div>
-                                    <div class="label_t">售价：<span class="price_r">¥{{v.goods_price}}</span></div>
-                                    <div class="remind_word"><span class="ling">砍价享¥<b>{{v.floor_price}}</b>元</span></div>
-                                   
-                                    <div class="main_show clearfix">
-                                            <div class="btn">立即砍价</div>
-                                             <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
-                                    </div>
-                            </div>
-                        
-        
-                    </div>
-
-                </li>
+                
             </ul>
             <div class="clear"></div>
             <div class="fy" style="margin-top:30px">
@@ -60,6 +41,15 @@
             </div>
         </div>
         <a-empty v-else style="margin-top:250px" />
+
+        <!-- <div class="kanjia_success" v-if="kanjia_modal">
+            <div class="kanjia_success_box">
+                <p>砍价成功<br>帮朋友成功砍了<span>{{friend_cut_money}}</span>元</p>
+                <div @click="cutClick" class="kanjia_close">X</div>
+            </div>
+            
+        </div> -->
+
         <!-- 产品列表 E -->
         <loading v-if="isLoading" ></loading>
     </div>
@@ -80,6 +70,7 @@ export default {
               is_collective:1,
           },
           isLoading:true,
+          kanjia_modal:true
       };
     },
     watch: {},
@@ -149,12 +140,12 @@ export default {
         .product_info .price .kan_success {font-size: 12px;}
         .product_info .price .origin_price {font-size: 12px;color: #999999;text-decoration: line-through;margin-left: 7px;font-family: "Microsoft YaHei";}
 
-        li{float: left;margin:20px 1%;border:1px solid #eee;
+        li{float: left;margin:10px 1%;border:1px solid #eee;
             border-radius: 5px;width:48%}
 
         .product_act_in{
             padding:20px;
-           
+            background: url(~@/asset/pc/kj.png) no-repeat 98% center /auto 120px;
             
             .img{
                 float: left;width: 200px;height: 200px;
@@ -163,12 +154,23 @@ export default {
             .main_show{margin-top: 30px;}
             .btn{
                 width: 120px;height: 40px;background: #FF463C;text-align: center;line-height: 40px;color: #fff;cursor: pointer;border-radius: 5px;float: left;
+                a{color: #fff;display: block;}
                 &:hover{opacity: 0.8;}
             }
             .kan_success{float: left;line-height: 40px;margin-left:10px;color:#666;font-size: 12px;
             .now_price{color: #FF463C;font-size: 16px;}}
         }
     }
- 
+        .kanjia_success{
+        position: fixed;top:0;left: 0;z-index:999;background:rgba(0,0,0,0.2);width:100%;height:100%;    
+        .kanjia_success_box{
+        width: 450px;height: 400px;position: relative;top:20%;z-index:999;background: url(~@/asset/pc/kjcg.png) no-repeat center/100% 100%;
+        margin-left: -225px;left: 50%;
+        p{padding:47% 100px 0 100px;color:#333;font-size: 18px;line-height: 40px;text-align: center;}
+        span{color: #fe0851;font-size: 40px;font-weight: bold;}
+        
+        }
+        .kanjia_close{text-align: center;font-size: 20px;position: absolute;bottom: 30px;left: 50%;margin-left: -20px;width: 40px;width: 40px;line-height: 40px;border-radius: 50%;border:1px solid #666;cursor: pointer;}
+    }
 }
 </style>

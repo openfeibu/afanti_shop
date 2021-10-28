@@ -3,6 +3,7 @@
 // window.VueRouter = require('vue-router');
 
 import Vue from 'vue'
+
 import store from '@/store/index'
 import router from '@/plugins/router'
 import Antd from 'ant-design-vue'
@@ -21,12 +22,14 @@ import Loading from "@/components/home/public/loading";
 Vue.use(Loading)
 Vue.component('Loading', Loading) //初始化组件
     //使用组件
+    //引入封装通用加载组件库
 
 import VueLazyload from 'vue-lazyload' // 懒加载图片
 
 
 
 import 'babel-polyfill' // 兼容IE
+
 
 Vue.prototype.$api = api;
 Vue.prototype.$post = post;
@@ -40,8 +43,8 @@ Vue.prototype.$apiHandle = apiHandle;
 Vue.prototype.$getSession = getSession; // 获取session
 Vue.prototype.$returnInfo = returnInfo; // api返回信息做处理
 Vue.prototype.$formatFloat = formatFloat; // 浮点型格式化
-
 Vue.config.productionTip = false;
+
 
 // 字体图标 iconFont 
 let fontjs = require('@/plugins/font');
@@ -50,7 +53,6 @@ const AFont = Icon.createFromIconfontCN({
 });
 Vue.use(Antd);
 Vue.component('a-font', AFont);
-
 Vue.use(VueLazyload); // 懒加载图片
 
 
@@ -60,6 +62,10 @@ router.afterEach(() => {
 });
 
 Vue.use(VueRouter)
+
+// var vshare = require('vshare')
+// Vue.use(vshare)
+
 const app = new Vue({
     el: '#app',
     store,

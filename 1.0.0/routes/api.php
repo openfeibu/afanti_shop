@@ -326,7 +326,7 @@ Route::namespace('Home')->group(function(){
 
     Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses');
     // 帮助中心文章获取
-    Route::get('/article/{id}','ArticleController@show');
+    Route::get('/articles/{id}','ArticleController@show');
     Route::get('/article_categories','ArticleController@categories');
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车

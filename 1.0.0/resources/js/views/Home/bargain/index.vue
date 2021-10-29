@@ -8,39 +8,43 @@
             </a-breadcrumb>
         </div>
 
-
+        <div class="index_bg">
         <!-- 产品列表 S -->
-        <div class="goods_list w1200" v-if="list.length>0">
-            <ul class="clearfix">
-                <li v-for="(v,k) in list" :key="k">
-                    
-                    <div class="product_act_in">
-           
-                        <div class="img"><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></div>
-                            <div class="product_info">
-                                    <div class="p_name">{{v.goods_name}}</div>
-                                    <div class="label_t">售价：<span class="price_r">¥{{v.goods_price}}</span></div>
-                                    <div class="remind_word"><span class="ling">砍价享¥<b>{{v.floor_price}}</b>元</span></div>
-                                   
-                                    <div class="main_show clearfix">
-                                            <div v-if="!v.is_partake" class="btn" @click="bargainTasks(v.bargain_id)">立即砍价</div>
-                                            <div v-else class="btn" style="background:#4bb16f" ><router-link :to="'/bargain/info/'+v.bargain_task_id">去邀请好友砍价</router-link></div>
-                                            <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
-                                    </div>
-                            </div>
-                        
-        
-                    </div>
-
-                </li>
+            <div class="goods_list w1200" >
+                <block v-if="list.length>0">
+                    <ul class="clearfix">
+                        <li v-for="(v,k) in list" :key="k">
+                            
+                            <div class="product_act_in">
                 
-            </ul>
-            <div class="clear"></div>
-            <div class="fy" style="margin-top:30px">
-                <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
+                                <div class="img"><img v-lazy="v.goods_master_image||''" :alt="v.goods_name" /></div>
+                                    <div class="product_info">
+                                            <div class="p_name">{{v.goods_name}}</div>
+                                            <div class="label_t">售价：<span class="price_r">¥{{v.goods_price}}</span></div>
+                                            <div class="remind_word"><span class="ling">砍价享¥<b>{{v.floor_price}}</b>元</span></div>
+                                        
+                                            <div class="main_show clearfix">
+                                                    <div v-if="!v.is_partake" class="btn" @click="bargainTasks(v.bargain_id)">立即砍价</div>
+                                                    <div v-else class="btn" style="background:#4bb16f" ><router-link :to="'/bargain/info/'+v.bargain_task_id">去邀请好友砍价</router-link></div>
+                                                    <div class="kan_success">已有<span class="now_price">{{v.active_sales}}</span>人砍价成功</div>
+                                            </div>
+                                    </div>
+                                
+                
+                            </div>
+
+                        </li>
+                    </ul>
+                    <div class="clear"></div>
+                    <div class="fy" style="margin-top:30px">
+                        <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
+                    </div>
+                </block>
+                <a-empty style="padding:100px 0" description="没有砍价商品" v-else />
             </div>
+             
         </div>
-        <a-empty v-else style="margin-top:250px" />
+        <!-- <a-empty v-else style="margin-top:250px;" /> -->
 
         <!-- <div class="kanjia_success" v-if="kanjia_modal">
             <div class="kanjia_success_box">
@@ -120,10 +124,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.index_bg{
+    overflow: hidden;
+    background: rgba(254,243,57,0.5) url(~@/asset/pc/bg2.jpg) no-repeat center top/ 100% auto;
+}
 .home_seckills{
+overflow: hidden;
     min-height: 600px;
     .goods_list{
-        margin-top: 30px;
+        border-radius: 10px;
+        background: #fff;
+        padding:20px;
+        margin: 20px auto;
         .item {float: left;padding: 16px 40px 16px 16px;background: #FFFFFF;border-radius: 8px;margin:0 15px 20px 0;}
         .item .img {float: left;}
         .item .img img{display: block;width:214px;height: 214px;}

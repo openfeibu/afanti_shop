@@ -68,8 +68,8 @@
              
                 <div class="goods_info_btn">
                         <div v-if="is_creator && !bargain_task.is_floor || !is_creator && is_cut " class="goods_info_buy" style="background:#fe0851" @click="invitation()">邀请朋友砍价</div>
-                        <div  v-else-if="is_creator && bargain_task.is_floor"  class="goods_info_buy" style="background:#fe0851" @click="buy()">已砍完,立即{{$formatFloat(bargain.floor_price)}}元购买</div>
-                        <div  v-else-if="!is_creator && bargain_task.is_floor"  class="goods_info_buy" style="background:#fe0851" @click="bargain_buy()">商品已砍完,我也要去砍价</div>
+                        <div  v-else-if="is_creator && bargain_task.is_floor"  class="goods_info_buy" style="background:#fe0851" @click="bargain_buy()">已砍完,立即{{$formatFloat(bargain.floor_price)}}元购买</div>
+                        <div  v-else-if="!is_creator && bargain_task.is_floor"  class="goods_info_buy" style="background:#fe0851" >商品已砍完,我也要去砍价</div>
                         <div v-else class="goods_info_buy" style="background:#fe0851" @click="bargaining()">帮朋友砍一刀</div>
                         <div v-if="!is_creator && is_cut" class="des">你已帮朋友砍了<span>1刀</span></div>
                         <div  class="goods_info_buy" ><router-link :to="'/goods/'+bargain_task.goods_id">原价购买</router-link></div>

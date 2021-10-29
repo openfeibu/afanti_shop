@@ -8,9 +8,10 @@
             </a-breadcrumb>
         </div>
      
+    <div class="index_bg">
 
-
-        <div class="s_goods_content w1200" v-if="params.total>0">
+        <div class="s_goods_content w1200" >
+            <block v-if="params.total>0">
             <!-- 产品列表 S -->
             <div class="s_goods_list2">
                 <div class="item" v-for="(v,k) in list" :key="k">
@@ -34,8 +35,12 @@
             <div class="fy">
                 <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
             </div>
+            </block>
+            <a-empty style="padding:100px 0" description="没有拼团商品" v-else />
         </div>
-        <a-empty style="margin-top:40px" v-else />
+      
+        
+    </div>
        <loading v-if="isLoading"></loading>
     </div>
 </template>
@@ -94,7 +99,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.integral_index{overflow: hidden;}
+.index_bg{
+    overflow: hidden;
+    background: rgba(255,96,80,0.5) url(~@/asset/pc/bg4.jpg) no-repeat center top/ 100% auto;
+    min-height: 600px;
+   
+}
+.s_goods_content{
+background: #fff;padding:20px 20px;
+margin-top: 20px;
+ border-radius: 10px;
+}
 .goods_where{
+    
     border: 1px solid #efefef;
     line-height: 50px;
     font-size: 14px;
@@ -227,7 +245,7 @@ export default {
 }
 
 .s_goods_list2 {
-    margin-top: 40px;
+    // margin-top: 40px;
     margin-bottom: 30px;
      .item {
         float: left;

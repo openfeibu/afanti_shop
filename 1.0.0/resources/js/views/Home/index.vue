@@ -196,7 +196,7 @@ export default {
 .index_bg{
     background: #eef8e0 url(~@/asset/pc/bg.jpg) no-repeat center top/ 100% auto;
     padding: 20px 0 60px 0;
-    margin-top: 40px;
+    margin-top: 0px;
     .index_bg_box{
         background: #fff;
         width: 1240px;

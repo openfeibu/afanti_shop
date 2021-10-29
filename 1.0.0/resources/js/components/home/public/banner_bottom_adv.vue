@@ -1,4 +1,5 @@
 <template>
+    <div class="banner_bottom_adv_bg">
     <div class="banner_bottom_adv width_center_1200">
         <div class="shop_left_on">
             <ul>
@@ -36,6 +37,7 @@
             </ul>
         </div>
     </div>
+    </div>
 </template>
 
 <script>
@@ -60,9 +62,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.banner_bottom_adv_bg{
+    padding:22px 0;
+// background: #eef8e0 url(~@/asset/pc/bg3.jpg) no-repeat center bottom/ 100% auto;
+}
 .banner_bottom_adv{
-    margin-bottom: 22px;
-    margin-top:22px;
+    
     .shop_left_on{
         float: left;
         width: 240px;

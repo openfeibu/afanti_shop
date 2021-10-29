@@ -37,7 +37,7 @@ class OrderCollection extends ResourceCollection
                     'refund_status'         =>  $item->refund_status,
                     'user'                  =>  $item->user,
                     'order_source' => $item->order_source,
-                    'order_source_desc' => __('orders.order_source_desc.'.$item->order_source),
+                    'order_source_text' => __('orders.order_source_text.'.$item->order_source),
                     'created_at'            =>  $item->created_at->format('Y-m-d H:i'),
                     'order_goods'           =>  $item->order_goods->map(function($v){
                                                 return [

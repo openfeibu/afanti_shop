@@ -44,6 +44,8 @@ class OrderResource extends JsonResource
             'comment_time'          =>  $this->comment_time,
             'is_comment'            =>  $this->is_comment,
             'state_text' => $this->state_text,
+            'order_source' => $this->order_source,
+            'order_source_text' => __('orders.order_source_text.'.$this->order_source),
             'order_goods'           =>  $this->order_goods,
         ];
     }

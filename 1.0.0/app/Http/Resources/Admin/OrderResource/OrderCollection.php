@@ -37,6 +37,8 @@ class OrderCollection extends ResourceCollection
                     'is_comment'          =>  $item->is_comment,
                     'delivery_code' => $item->delivery_code,
                     'delivery_company' => $item->delivery_company,
+                    'order_source' => $item->order_source,
+                    'order_source_text' => __('orders.order_source_text.'.$item->order_source),
                     'created_at'            =>  $item->created_at->format('Y-m-d H:i:s'),
                     'updated_at'            =>  $item->updated_at->format('Y-m-d H:i:s'),
                 ];

@@ -32,7 +32,7 @@ return [
 
     'goods_failure' => '部分产品已下架.',
 
-    'order_source_desc' => [
+    'order_source_text' => [
         'common' => '普通下单',
         'seckill' => '秒杀',
         'collective' => '拼团',

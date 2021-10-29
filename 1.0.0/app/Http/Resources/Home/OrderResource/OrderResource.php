@@ -48,7 +48,7 @@ class OrderResource extends JsonResource
             //'delivery_list'         =>  empty($this->delivery_no)?[]:$kb_service->getExpressInfo($this->delivery_no,$this->delivery_code,$this->receive_tel),
             'delivery_list'         => [],
             'order_source' => $this->order_source,
-            'order_source_desc' => __('orders.order_source_desc.'.$this->order_source),
+            'order_source_text' => __('orders.order_source_text.'.$this->order_source),
             'order_goods'           =>  $this->order_goods->map(function($q){
                                     return [
                                         'id' => $q->id,

@@ -1,18 +1,18 @@
 <template>
     <div class="qingwu">
-        <div class="admin_table_page_title">文章管理</div>
+        <div class="admin_table_page_title">文章分类管理</div>
         <div class="unline underm"></div>
 
         <admin-search :searchConfig="searchConfig" @searchParams="search"></admin-search>
 
         <div class="admin_table_handle_btn">
-            <a-button @click="$router.push('/Admin/articles/form')" type="primary" icon="plus">添加</a-button>
+            <a-button @click="$router.push('/Admin/article_categories/form')" type="primary" icon="plus">添加</a-button>
             <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
         </div>
         <div class="admin_table_list">
             <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
                 <span slot="action" slot-scope="rows">
-                    <a-button icon="edit" @click="$router.push('/Admin/articles/form/'+rows.id)">编辑</a-button>
+                    <a-button icon="edit" @click="$router.push('/Admin/article_categories/form/'+rows.id)">编辑</a-button>
                 </span>
             </a-table>
         </div>
@@ -26,27 +26,15 @@ export default {
     props: {},
     data() {
       return {
-          params:{
-              page:1,
-              per_page:30,
-          },
-          total:0, //总页数
           searchConfig:[
               {label:'标题',name:'name',type:'text'},
-              {label:'英文名',name:'ename',type:'text'},
-              {label:'文章分类',name:'article_category_id',type:'text'},
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[
               {title:'标题',fixed:'left',dataIndex:'name'},
-              {title:'分类',fixed:'left',dataIndex:'category_name'},
-              {title:'英文名',fixed:'left',dataIndex:'ename'},
-              {title:'修改时间',dataIndex:'updated_at'},
-              {title:'创建时间',dataIndex:'created_at'},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],
           list:[],
-          article_categories:[],
       };
     },
     watch: {},
@@ -64,11 +52,6 @@ export default {
         onSelectChange(selectedRowKeys) {
             this.selectedRowKeys = selectedRowKeys;
         },
-        get_article_categories(){
-            this.$get(this.$api.adminArticleCategories,this.params).then(res=>{
-                this.article_categories = res.data;
-            });
-        },
         // 删除
         del(){
             if(this.selectedRowKeys.length==0){
@@ -76,13 +59,13 @@ export default {
             }
             this.$confirm({
                 title: '你确定要删除选择的数据？',
-                content: '确定删除后无法恢复.',
+                content: '确定删除后分类下的文章无法恢复.',
                 okText: '是',
                 okType: 'danger',
                 cancelText: '取消',
                 onOk:()=> {
                     let ids = this.selectedRowKeys.join(',');
-                    this.$delete(this.$api.adminArticles+'/'+ids).then(res=>{
+                    this.$delete(this.$api.adminArticleCategories+'/'+ids).then(res=>{
                         if(res.code == 200){
                             this.onload();
                             this.$message.success('删除成功');
@@ -95,10 +78,9 @@ export default {
             });
         },
         onload(){
-            this.$get(this.$api.adminArticles,this.params).then(res=>{
-                this.list = res.data.data;
+            this.$get(this.$api.adminArticleCategories,this.params).then(res=>{
+                this.list = res.data;
             });
-            this.get_article_categories();
         },
     },
     created() {

@@ -47,10 +47,13 @@ export default [
         {path:"/Admin/agreements",name:"admin_agreements_index",component:()=>import("@/views/Admin/agreements/index")}, // 站点协议列表
         {path:"/Admin/agreements/form/:id?",name:"admin_agreements_form",component:()=>import("@/views/Admin/agreements/form")}, // 站点协议编辑
 
-        // 文章 帮助中心
+        // 文章
         {path:"/Admin/articles",name:"admin_articles_index",component:()=>import("@/views/Admin/articles/index")}, // 帮助中心列表
         {path:"/Admin/articles/form/:id?",name:"admin_articles_form",component:()=>import("@/views/Admin/articles/form")}, // 帮助中心编辑
-        
+        // 文章分类
+        {path:"/Admin/article_categories",name:"admin_article_categories_index",component:()=>import("@/views/Admin/article_categories/index")}, // 帮助中心列表
+        {path:"/Admin/article_categories/form/:id?",name:"admin_article_categories_form",component:()=>import("@/views/Admin/article_categories/form")}, // 帮助中心编辑
+
         // 物流公司
         {path:"/Admin/expresses",name:"admin_expresses_index",component:()=>import("@/views/Admin/expresses/index")}, // 物流公司列表
         {path:"/Admin/expresses/form/:id?",name:"admin_aexpresses_form",component:()=>import("@/views/Admin/expresses/form")}, // 物流公司编辑

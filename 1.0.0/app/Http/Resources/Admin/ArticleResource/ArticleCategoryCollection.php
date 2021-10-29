@@ -4,7 +4,7 @@ namespace App\Http\Resources\Admin\ArticleResource;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ArticleCollection extends ResourceCollection
+class ArticleCategoryCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -19,10 +19,6 @@ class ArticleCollection extends ResourceCollection
                 return [
                     'id'                    =>  $item->id,
                     'name'                  =>  $item->name,
-                    'ename'                 =>  $item->ename,
-                    'category_name' => $item->article_category->name,
-                    'created_at'            =>  $item->created_at->format('Y-m-d H:i:s'),
-                    'updated_at'            =>  $item->updated_at->format('Y-m-d H:i:s'),
                 ];
             }),
             'total'=>$this->total(), // 数据总数

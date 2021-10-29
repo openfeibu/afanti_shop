@@ -5,10 +5,11 @@
                     :media="$info.store_video"
                     :unlimited="false"
                     collection="store_video"
+                    name="store_video"
                     :tokens="$getSession('token_type')"
                     notes="格式要求: mp4"
                     accept="video/*"
-                    @complete="handleComplete(data)"
+                    @complete="handleComplete()"
             >
 
             </file-uploader>
@@ -48,9 +49,9 @@
                     this.info = res.data;
                 })
             },
-            handleComplete(data)
+            handleComplete()
             {
-                console.log(data)
+                console.log(this)
             }
         },
         created() {

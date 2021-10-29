@@ -32,7 +32,7 @@ export default
 
     // 文章 帮助中心
     'adminArticles' : baseUrl + 'Admin/articles', 
-
+    'adminArticleCategories': baseUrl + 'Admin/article_categories',
     // 物流公司
     'adminExpresses' : baseUrl + 'Admin/expresses',
 

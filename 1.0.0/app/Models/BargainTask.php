@@ -45,8 +45,6 @@ class BargainTask extends Model
             $bargain_task->status = 0;
             $bargain_task->save();
         }
-        $bargain_task->surplus_money = $bargain_task->surplus_money;
-        $bargain_task->bargain_rate = $bargain_task->bargain_rate;
         return $bargain_task;
     }
 

@@ -53,7 +53,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         Route::apiResource('agreements','AgreementController'); // 站点协议 
         Route::apiResource('articles','ArticleController'); // 文章，帮助中心 
-
+        Route::apiResource('article_categories','ArticleCategoryController'); // 文章，帮助中心
         // 物流公司
         Route::apiResource('expresses','ExpressController');
         Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses');
@@ -325,7 +325,9 @@ Route::namespace('Home')->group(function(){
     Route::get('/bargains','BargainController@index'); // 砍价列表
 
     Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses');
-
+    // 帮助中心文章获取
+    Route::get('/article/{id}','ArticleController@show');
+    Route::get('/article_categories','ArticleController@categories');
     Route::group(['middleware'=>'jwt.user'],function(){
         // 购物车
         Route::apiResource('carts','CartController')->except(['show']);
@@ -409,10 +411,9 @@ Route::namespace('Home')->group(function(){
         // 全国省市区地址获取
         Route::get('/areas','AreaController@areas'); 
 
-        // 帮助中心文章获取
-        Route::get('/article/{ename}','ArticleController@show'); 
 
-        
+
+
     });
 
 

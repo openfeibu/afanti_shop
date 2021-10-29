@@ -34,6 +34,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request,Article $article_model)
     {
+        $article_model->article_category_id = $request->article_category_id??0;
         $article_model->name = $request->name??'';
         $article_model->ename = $request->ename??'';
         $article_model->content = $request->content??'';
@@ -63,6 +64,7 @@ class ArticleController extends Controller
     public function update(Request $request,Article $article_model, $id)
     {
         $article_model = $article_model->find($id);
+        $article_model->article_category_id = $request->article_category_id??0;
         $article_model->name = $request->name;
         $article_model->ename = $request->ename??'';
         $article_model->content = $request->content??'';

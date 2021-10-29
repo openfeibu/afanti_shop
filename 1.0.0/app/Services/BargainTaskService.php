@@ -30,6 +30,8 @@ class BargainTaskService extends BaseService{
     public function getTaskDetail($id, $user = false)
     {
         $bargain_task = BargainTask::detail($id);
+        $bargain_task->surplus_money = $bargain_task->surplus_money;
+        $bargain_task->bargain_rate = $bargain_task->bargain_rate;
         if (empty($bargain_task)) {
             OutputServerMessageException('砍价任务不存在');
         }

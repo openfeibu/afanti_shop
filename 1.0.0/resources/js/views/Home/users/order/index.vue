@@ -5,7 +5,40 @@
                 我的订单
             </div>
             <div class="x20"></div>
-
+              <div class="order_status_block">
+                <ul>
+                    <li>
+                        <router-link :to="{name:'home_user_order',params:{type:'payment'}}">
+                        <a-font type="icondengdaifh"></a-font>
+                        <span><a-badge :offset="[11,-7]">待支付</a-badge></span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name:'home_user_order',params:{type:'delivery'}}">
+                        <a-font type="iconwuliu"></a-font>
+                        <span><a-badge :offset="[11,-7]">待发货</a-badge></span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name:'home_user_order',params:{type:'received'}}">
+                        <a-font type="iconchanpin1"></a-font>
+                        <span><a-badge :offset="[11,-7]">待收货</a-badge></span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name:'home_user_order',params:{type:'comment'}}">
+                        <a-font type="iconpinglun"></a-font>
+                        <span><a-badge :offset="[11,-7]">待评论</a-badge></span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name:'home_user_order',params:{status:5}}">
+                        <a-font type="iconshouhou"></a-font>
+                        <span><a-badge :offset="[11,-7]">售后处理</a-badge></span>
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
             <div class="home_search_block">
                 <a-form layout="inline">
                     <a-form-item label="订单号码">
@@ -181,7 +214,7 @@ export default {
 }
 .order_status_block{
     background: #fff;
-    padding: 20px;
+    // padding: 20px;
     font-size: 14px;
     margin-top: 20px;
     margin-bottom: 20px;

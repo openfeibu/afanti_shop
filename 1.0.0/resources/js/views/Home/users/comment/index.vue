@@ -14,9 +14,9 @@
                             <div class="clear"></div>
                         </div>
                     </span>
-                    <span slot="action" slot-scope="rows">
+                    <!-- <span slot="action" slot-scope="rows">
                         <a-button icon="edit" @click="$router.push('/user/order_comments/form/'+rows.id)" :disabled="rows.goods.id==0">编辑</a-button>
-                    </span>
+                    </span> -->
                 </a-table>
                 <div class="fy" style="margin-top:20px;" v-if="total>0">
                     <a-pagination v-model="params.page" :page-size.sync="params.per_page" :total="total" @change="onChange" show-less-items />
@@ -42,12 +42,12 @@ export default {
           columns:[
               {title:'商品名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
               {title:'综合评分',dataIndex:'score'},
-              {title:'描述相符',dataIndex:'agree'},
-              {title:'服务态度',dataIndex:'service'},
-              {title:'发货速度',dataIndex:'speed'},
+            //   {title:'描述相符',dataIndex:'agree'},
+            //   {title:'服务态度',dataIndex:'service'},
+            //   {title:'发货速度',dataIndex:'speed'},
               {title:'内容',dataIndex:'content'},
               {title:'建立时间',dataIndex:'created_at'},
-              {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
+            //   {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],
           list:[],
       };

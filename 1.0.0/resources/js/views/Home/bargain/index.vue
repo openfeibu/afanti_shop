@@ -110,6 +110,7 @@ export default {
                     //bargain_task_id
                     var bargain_task_id  = res.data.bargain_task_id;
                     //参加砍价成功进入详情页
+                    this.$router.push('/bargain/info/'+bargain_task_id);
                 }
                 
                 this.isLoading=false;

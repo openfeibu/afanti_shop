@@ -7,58 +7,51 @@
             <div class="x20"></div>
               <div class="order_status_block">
                 <ul>
-                    <li>
-                        <router-link :to="{name:'home_user_order',params:{type:'payment'}}">
+                    <li :class="{'active':params.type == 'all' }" @click="changeType('all')">
+                        
+                        <!-- <a-font type="icondengdingdan"></a-font> -->
+                        <span><a-badge :offset="[0,0]">全部</a-badge></span>
+                     
+                    </li>
+                    <li :class="{'active':params.type == 'payment' }" @click="changeType('payment')">
+                        
                         <a-font type="icondengdaifh"></a-font>
-                        <span><a-badge :offset="[11,-7]">待支付</a-badge></span>
-                        </router-link>
+                        <span><a-badge >待支付</a-badge></span>
+                     
                     </li>
-                    <li>
-                        <router-link :to="{name:'home_user_order',params:{type:'delivery'}}">
+                    <li :class="{'active':params.type == 'delivery' }" @click="changeType('delivery')">
+                     
                         <a-font type="iconwuliu"></a-font>
-                        <span><a-badge :offset="[11,-7]">待发货</a-badge></span>
-                        </router-link>
+                        <span><a-badge >待发货</a-badge></span>
+                     
                     </li>
-                    <li>
-                        <router-link :to="{name:'home_user_order',params:{type:'received'}}">
+                    <li :class="{'active':params.type == 'received' }" @click="changeType('received')">
+
                         <a-font type="iconchanpin1"></a-font>
-                        <span><a-badge :offset="[11,-7]">待收货</a-badge></span>
-                        </router-link>
+                        <span><a-badge >待收货</a-badge></span>
+                      
                     </li>
-                    <li>
-                        <router-link :to="{name:'home_user_order',params:{type:'comment'}}">
+                    <li :class="{'active':params.type == 'comment' }" @click="changeType('comment')">
                         <a-font type="iconpinglun"></a-font>
-                        <span><a-badge :offset="[11,-7]">待评论</a-badge></span>
-                        </router-link>
+                        <span><a-badge >待评论</a-badge></span>
+                      
                     </li>
                     <li>
-                        <router-link :to="{name:'home_user_order',params:{status:5}}">
+                        <router-link :to="{name:'home_user_order_refund'}">
                         <a-font type="iconshouhou"></a-font>
-                        <span><a-badge :offset="[11,-7]">售后处理</a-badge></span>
+                        <span><a-badge >售后处理</a-badge></span>
                         </router-link>
                     </li>
                 </ul>
             </div>
-            <div class="home_search_block">
-                <a-form layout="inline">
-                    <a-form-item label="订单号码">
-                        <a-input v-model="params['order_no']" :placeholder="'2020091418433488438'"/>
-                    </a-form-item>
-                    <a-form-item label="订单状态">
-                        <a-select  v-model="params['type']" style="width:160px" >
-                            <a-select-option v-for="(vo,key) in searchConfig[1].data" :key="key" :value="vo.value">{{vo.label}}</a-select-option>
-                        </a-select>
-                    </a-form-item>
-                    <span class="default_btn" style="margin-top:5px;display:inline-block;padding:4px 15px;" @click="search()"><a-icon type="search" />&nbsp;查询</span>
-                </a-form>
-            </div>
+         
 
             <div class="safe_block" >
               <div class="order_list" v-if="list.length>0">
-                <div class="order_item" v-for="(v,k) in list" :key="k">
+                <div class="order_item clearfix" v-for="(v,k) in list" :key="k">
                     <div class="order_item_title">
                         <span>{{v.created_at}}<font :color="v.order_status==6?'#42b983':'#ca151e'">{{v.order_status_cn||'-'}}</font></span>
-                        订单号：{{v.order_no||'-'}}
+                        订单号：{{v.order_no||'-'}} <b v-if="v.order_source != 'common'" :class="{'bargain':v.order_source == 'bargain','collective':v.order_source == 'collective','seckill':v.order_source == 'seckill'}">{{v.order_source_text}}</b>
                     </div>
                     <div class="order_item_list"  @click="$router.push('/user/order/'+v.id)">
                         <ul>
@@ -79,7 +72,7 @@
                             <div class="default_btn" v-if="v.pay_status==20 && v.delivery_status==10" @click="cancel(v.id)">申请取消</div>
                         </template>
                         <template v-else>
-                            <div class="default_btn">取消申请中</div>
+                            <div class="default_btn">等待商家确认取消</div>
                         </template>
                         <div class="success_btn" v-if="v.pay_status==10" @click="pay_order(v.id)">立即支付</div>
                         <div class="error_btn" v-if="v.delivery_status ==20 && v.receipt_status == 10" @click="receipt(v.id)">确定收货</div>
@@ -106,6 +99,7 @@
             </a-timeline>
             <a-empty v-else />
         </a-modal>
+       <loading v-if="isLoading"></loading>
     </div>
 </template>
 
@@ -119,7 +113,7 @@ export default {
           params:{
               page:1,
               per_page:20,
-              type:'all',
+              type:'',
           },
           total:0, //总页数
           list:[],
@@ -131,12 +125,14 @@ export default {
                   {label:'待发货',value:'delivery'},
                   {label:'待收货',value:'received'},
                   {label:'待评价',value:'comment'},
+                 
               ]},
           ],
           order_info:{
               delivery_list:[],
           },
           visible:false,
+          isLoading:true,
       };
     },
     watch: {},
@@ -150,13 +146,21 @@ export default {
             this.onload();
         },
         onload(){
-            console.log(this.$route)
-            if(!this.$isEmpty(this.$route.params.type)){
-                this.params.type = this.$route.params.type;
+            this.isLoading = true;
+            var type = this.params.type;
+            if(type == ''){
+                if(!this.$isEmpty(this.$route.params.type)){
+                    this.params.type = this.$route.params.type;
+                }else{
+                     this.params.type = 'all';
+                }
             }
+            
+            // console.log(this.params.type)
             this.$get(this.$api.homeOrder,this.params).then(res=>{
                 this.list = res.data.data;
                 this.total = res.data.total;
+                 this.isLoading = false;
             })
         },
         get_order_info(id){
@@ -176,17 +180,50 @@ export default {
             })
         },
         cancel(id){
-            this.$put(this.$api.homeOrder+'/'+'cancel',{id:id}).then(res=>{
-                this.onload();
-                return this.$returnInfo(res)
-            })
+            var id= id;
+            var that = this;
+            this.$confirm({
+                title: '是否确定取消该订单',
+                content: '',
+                onOk() {
+                    that.isLoading = true;
+                    that.$put(that.$api.homeOrder+'/'+'cancel',{id:id}).then(res=>{
+                        that.onload();
+                        return that.$returnInfo(res)
+                     })
+                },
+                onCancel() {
+                console.log('Cancel');
+                },
+                class: 'test'
+            });
+            
+         
         },
         receipt(id){
-            this.$put(this.$api.homeOrder+'/'+'receipt',{id:id}).then(res=>{
-                this.onload();
-                return this.$returnInfo(res)
-            })
+            var id= id;
+            var that = this;
+             this.$confirm({
+                title: '是否确定收货？',
+                content: '',
+                onOk() {
+                    that.isLoading = true;
+                     that.$put(that.$api.homeOrder+'/'+'receipt',{id:id}).then(res=>{
+                        that.onload();
+                        return that.$returnInfo(res)
+                    })
+                },
+                onCancel() {
+                console.log('Cancel');
+                },
+                class: 'test'
+            });
+           
         },
+        changeType(type){
+            this.params.type=type;
+            this.onload();
+        }
     },
     created() {
         this.onload()
@@ -195,20 +232,44 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.order_item_btn{
-    text-align: right;
-    margin-top: 20px;
+.order_list{
+    .order_item{
+        margin-bottom: 20px;
+    }
+    .order_item_btn{
+        text-align: right;
+        margin-top: 10px;
+        height: auto;
+    }
 }
+
 .order_item_title{
     background: #f6f6f6;
     line-height: 40px;
     padding: 0 15px;
-    margin: 20px 0;
+    color: #666;
     span{
         float: right;
         font-size: 12px;
         font{
             margin-left:15px;
+        }
+       
+    }
+     b{
+        background: #FF463C;
+            padding: 5px 10px;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 5px;
+        &.collective{
+           background: #FF463C; 
+        }
+        &.seckill{
+           background: #4bb16f; 
+        }
+        &.bargain{
+           background: #4bb16f; 
         }
     }
 }
@@ -226,34 +287,49 @@ export default {
         }
         li{
             position: relative;
+            cursor: pointer;
+
             &:first-child i{
                 font-weight: bold;
                 font-size: 26px;
             }
             &:nth-child(1) i{
-                top:-2px;
+                top:-2px; left :30px;
             }
             &:nth-child(2) i{
-                left :36px;
+                top:0px; left :30px;
             }
              &:nth-child(3) i{
-                 left :40px;
-                 top:-2px;
+                 left :28px;
+                 top:0px;
             }
              &:nth-child(4) i{
                 top:1px;
-                left :40px;
+                left :30px;
+            } 
+            &:nth-child(5) i{
+                top:1px;
+                left :30px;
+            }
+            &:nth-child(6) i{
+                top:1px;
+                left :22px;
             }
             float: left;
             text-align: center;
-            width: 180px;
+            width: 150px;
             i{
                 position: absolute;
                 font-size: 22px;
                 margin-right: 4px;
                 left :34px;
             }
-        
+            &:hover{
+                color: #ca151e;
+            }
+            &.active{
+                color: #ca151e;
+            }
         }
     }
 }

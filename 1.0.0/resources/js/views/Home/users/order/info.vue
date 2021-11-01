@@ -24,54 +24,58 @@
                     </a-row>
                 </div>
                 
-                <div class="order_info_list">
-                    <a-row>
-                        <a-col :span="8">
-                            支付方式：<span class="content">{{info.payment_name_cn||'-'}}</span>
-                        </a-col>
-                        <a-col :span="8">
-                            支付时间：<span class="content">{{info.pay_time||'-'}}</span>
-                        </a-col>
-                        <a-col :span="8">
-                            快递单号：<span class="content">{{info.delivery_no||'-'}}</span>
-                        </a-col>
-                    </a-row>
-                </div>
+                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">快递信息</span></div>
+                <div class="unline underm"></div>
                 <div class="order_info_list">
                     <a-row>
                         <a-col :span="24">
+                            快递单号：<span class="content">{{info.delivery_no||'-'}}</span>
+                        </a-col>
+                       
+                    </a-row>
+                </div>
+                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">收货人信息</span></div>
+                <div class="unline underm"></div>
+                <div class="order_info_list">
+                    <a-row>
+                        <a-col :span="24">
+                            收货人：<span class="content">{{info.receive_name}}</span>
+                        </a-col>
+                        <a-col :span="24">
+                            联系电话：<span class="content">{{info.receive_tel}}</span>
+                        </a-col>
+                        <a-col :span="24">
+                            收货地址：<span class="content">{{info.receive_area+info.receive_address}}</span>
+                        </a-col>
+                         <a-col :span="24">
                             备注：<span class="content">{{info.remark||'-'}}</span>
                         </a-col>
                     </a-row>
                 </div>
-
-                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">收货人信息</span></div>
+                 <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">付款信息</span></div>
                 <div class="unline underm"></div>
-
                 <div class="order_info_list">
                     <a-row>
-                        <a-col :span="8">
-                            收货人：<span class="content">{{info.receive_name}}</span>
+                         <a-col :span="24">
+                            支付方式：<span class="content">{{info.payment_name_cn||'-'}}</span>
                         </a-col>
-                        <a-col :span="8">
-                            联系电话：<span class="content">{{info.receive_tel}}</span>
-                        </a-col>
-                        <a-col :span="8">
-                            取货地址：<span class="content">{{info.receive_area+info.receive_address}}</span>
+                        <a-col :span="24">
+                            支付时间：<span class="content">{{info.pay_time||'-'}}</span>
                         </a-col>
                     </a-row>
                 </div>
-
                 <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">商品信息</span></div>
                 <div class="unline underm"></div>
 
                 <div class="admin_table_list">
                     <a-table :columns="columns" :data-source="info.order_goods" :pagination="false"  >
                         <span slot="name" slot-scope="rows">
-                            <div class="admin_pic_txt">
-                                <div class="img"><img v-if="rows.goods_image" :src="rows.goods_image"><a-icon v-else type="picture" /></div>
-                                <div class="text" style="max-width:475px;line-height:20px">{{rows.goods_name}}</div>
-                                <div class="clear"></div>
+                            <div class="admin_pic_txt" @click="$router.push('/goods/'+rows.id)">
+                                
+                                    <div class="img"><img v-if="rows.goods_image" :src="rows.goods_image"><a-icon v-else type="picture" /></div>
+                                    <div class="text" style="max-width:475px;line-height:20px">{{rows.goods_name}}</div>
+                                    <div class="clear"></div>
+                               
                             </div>
                         </span>
                         <span slot="buy_num" slot-scope="rows">
@@ -102,7 +106,7 @@
                         <div class="default_btn" v-if="info.pay_status==20 && info.delivery_status==10" @click="cancel(info.id)">申请取消</div>
                     </template>
                     <template v-else>
-                        <div class="default_btn">取消申请中</div>
+                        <div class="default_btn">等待商家确认取消</div>
                     </template>
                     <div class="success_btn" v-if="info.pay_status==10" @click="pay_order(info.id)">立即支付</div>
                     <div class="error_btn" v-if="info.delivery_status ==20 && info.receipt_status == 10" @click="receipt(info.id)">确定收货</div>
@@ -173,16 +177,43 @@ export default {
             this.$router.push("/order/order_pay/"+str);
         },
         cancel(id){
-            this.$put(this.$api.homeOrder+'/'+'cancel',{id:id}).then(res=>{
-                this.onload();
-                return this.$returnInfo(res)
-            })
+              var id= id;
+                var that = this;
+                this.$confirm({
+                    title: '是否确定取消该订单',
+                    content: '',
+                    onOk() {
+                        that.isLoading = true;
+                        that.$put(that.$api.homeOrder+'/'+'cancel',{id:id}).then(res=>{
+                            that.onload();
+                            return that.$returnInfo(res)
+                        })
+                    },
+                    onCancel() {
+                    console.log('Cancel');
+                    },
+                    class: 'test'
+                });
+      
         },
         receipt(id){
-            this.$put(this.$api.homeOrder+'/'+'receipt',{id:id}).then(res=>{
-                this.onload();
-                return this.$returnInfo(res)
-            })
+            var id= id;
+            var that = this;
+             this.$confirm({
+                title: '是否确定收货？',
+                content: '',
+                onOk() {
+                    that.isLoading = true;
+                     that.$put(that.$api.homeOrder+'/'+'receipt',{id:id}).then(res=>{
+                        that.onload();
+                        return that.$returnInfo(res)
+                    })
+                },
+                onCancel() {
+                console.log('Cancel');
+                },
+                class: 'test'
+            });
         },
         apply_refund(order_goods_id){
             this.$put(this.$api.homeRefunds+'/'+'apply',{order_goods_id:order_goods_id}).then(res=>{
@@ -198,5 +229,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
+.order_info_right_price{padding:20px}
+ .order_info_list{line-height: 28px;background: #f9f9f9;padding:10px 20px}
+ .order_item_btn{text-align: right;padding-bottom: 20px;}
+ .home .default_btn{padding:10px 25px}
 </style>

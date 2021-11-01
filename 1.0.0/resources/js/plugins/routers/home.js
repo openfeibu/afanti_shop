@@ -247,12 +247,14 @@ export default [
                         component: () =>
                             import ('@/views/Home/users/order/index')
                     }, // 用户订单
+
                     {
                         path: '/user/order/:id',
                         name: 'home_user_order_info',
                         component: () =>
                             import ('@/views/Home/users/order/info')
                     }, // 用户订单详情
+
                     {
                         path: '/user/comment/add/:id',
                         name: 'home_user_order_comment',

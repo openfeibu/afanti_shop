@@ -109,6 +109,8 @@
                 a.复制链接邀请亲友团助阵，根据成为下线条件即可确定上下线关系。
 
                 b.点击发送给朋友，根据成为下线条件即可确定上下线关系。
+
+                 <div v-html="goods_info.goods_content||''"></div>
             </div>
             <div class="clear"></div>
         </div>

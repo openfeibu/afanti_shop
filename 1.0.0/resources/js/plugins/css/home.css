@@ -1,6 +1,7 @@
 .home .shop_head {
     position: relative;
     /* height: 205px; */
+    background: #fff url(~@/asset/pc/bg3.png) no-repeat center bottom/cover !important;
 }
 
 .home .shop_head3 {
@@ -375,4 +376,11 @@
 
 .home .ant-tabs-nav .ant-tabs-tab:hover {
     color: #ca151e
+}
+
+.btn-disable {
+    border: 1px solid #ebebeb !important;
+    color: #ccc !important;
+    background-color: #f7f7f7 !important;
+    cursor: not-allowed !important;
 }

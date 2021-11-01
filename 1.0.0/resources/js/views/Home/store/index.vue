@@ -41,25 +41,26 @@
             </div>
         </div>
         搜索条件 E -->
-
-        <div class="home_store_list w1200" v-if="list.length>0">
-            <ul>
-                <li v-for="(v,k) in list" :key="k">
-                    <div  @click="$router.push('/store/'+v.id)">
-                        <img class="transition500" v-lazy="v.store_face_image" alt="">
-                        <div class="right_item">
-                            <div class="title">{{v.store_name||''}}</div>
-                            <!-- <div class="qy"><span class="stitle">公司：</span>{{v.store_company_name||''}}</div> -->
-                            <div class="address" :title="v.store_description"><span class="stitle"></span>{{v.store_description}}</div>
-                            <div class="btn" @click="$router.push('/store/'+v.id)">进入展馆</div>
+        <div class="index_bg">
+            <div class="home_store_list w1200" v-if="list.length>0">
+                <ul>
+                    <li v-for="(v,k) in list" :key="k">
+                        <div  @click="$router.push('/store/'+v.id)">
+                            <img class="transition500" v-lazy="v.store_face_image" alt="">
+                            <div class="right_item">
+                                <div class="title">{{v.store_name||''}}</div>
+                                <!-- <div class="qy"><span class="stitle">公司：</span>{{v.store_company_name||''}}</div> -->
+                                <div class="address" :title="v.store_description"><span class="stitle"></span>{{v.store_description}}</div>
+                                <div class="btn" @click="$router.push('/store/'+v.id)">进入展馆</div>
+                            </div>
+                        
                         </div>
-                       
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
 
-            <div class="fy">
-                <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
+                <div class="fy">
+                    <a-pagination v-model="params.page" :default-page-size="params.per_page" :total="params.total" @change="onChange" />
+                </div>
             </div>
         </div>
         <!-- <a-empty style="margin-top:40px" v-else /> -->
@@ -148,7 +149,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.index_bg{
+    background: #eef8e0 url(~@/asset/pc/bg.jpg) no-repeat center top/100% auto;overflow: hidden;border-radius: 10px;
+}
+.fy{
+    margin: 0 20px;
+}
 .home_store_list{
+    background: #fff;padding:0 0 20px 0;margin:20px auto;
     ul{margin-bottom: 30px;&:after{content:'';display: block;clear:both;}}
     ul li{float:left;width:550px;height:250px;margin:20px 25px;background:#fbfbfb;position:relative;cursor: pointer;
      border-radius: 5px;box-shadow: 0 5px 20px #eee;overflow: hidden;

@@ -52,7 +52,9 @@ export default {
                     icon:'icondingdan',
                     children:[
                         {name:'我的订单',url:'/user/order'},
-                        {name:'收货地址',url:'/user/address'},
+                        {name:'我的售后订单',url:'/user/order_refund'},
+                        {name:'我的砍价活动',url:'/user/order_refund'},
+                        {name:'收货地址',url:'/user/bargain_rate'},
                         {name:'评论列表',url:'/user/order_comments'},
                     ],
                 },

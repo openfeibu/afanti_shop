@@ -38,8 +38,8 @@
                         <span>秒杀活动</span>
                         <span class="span_time">距离结束 {{seckills.format_time||'0 天 00 时 00 分 00 秒'}}</span>
                     </div>
-                      
-                    <div class="goods_skill tuan_active" v-if="collectives" >
+                   
+                    <div class="goods_skill tuan_active" v-if="collectives && goods_type=='collective'" >
                         <span><a-icon type="usergroup-delete" /></span>
                         <span>团购活动 </span>
                         <span class="span_time">团购价：￥ {{$formatFloat(goods_info.goods_price*(1-collectives.discount/100)||'0.00')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 需要 {{collectives.need}} 人</span>
@@ -47,7 +47,6 @@
                  </div>
                 <div class="goods_info_group">
                     <template v-if="seckills">
-                     
                         <div class="goods_info_price"><span>秒杀价：</span>￥{{$formatFloat(goods_info.goods_price*(1-seckills.discount/100))||'0.00'}}</div>
                         <div class="goods_info_market_price"><span>市场价：</span><div class="overx_goods_info">￥{{goods_info.goods_market_price||'0.00'}}</div></div>
                     </template>
@@ -79,7 +78,7 @@
                 <!-- 参加活动 -->
                 <div class="goods_info_active">
                   
-                    <div class="tuan_list" v-if="collectives && collective_list.length>0">
+                    <div class="tuan_list" v-if="collectives && goods_type=='collective' && collective_list.length>0">
                         <a-carousel autoplay :autoplaySpeed="3000" speed="1000" :vertical="true" :adaptiveHeight="true" :dots="false">
                             <div class="tuan_item" v-for="(v,k) in collective_list" :key="k">
                                 <img v-lazy="v.avatar||require('@/asset/user/user_default.png')">
@@ -107,11 +106,13 @@
                     </div>
                 </div>
                 
-                <div class="goods_info_num">
+                <div class="goods_info_num" >
                     <div class="goods_info_num_title">数量：</div>
-                    <div class="goods_info_num_jian" @click="change_buy_num(false)"><a-icon type="minus" /></div>
-                    <div class="goods_info_num_input"><input v-model="buy_num" type="text" value="1"></div>
-                    <div class="goods_info_num_jia" @click="change_buy_num(true)"><a-icon type="plus" /></div>
+                    <block v-if="goods_info.goods_stock > 0">
+                        <div class="goods_info_num_jian" @click="change_buy_num(false)"><a-icon type="minus" /></div>
+                        <div class="goods_info_num_input"><input v-model="buy_num" type="text" value="1"></div>
+                        <div class="goods_info_num_jia" @click="change_buy_num(true)"><a-icon type="plus" /></div>
+                    </block>
                     <div class="goods_info_num_stock">&nbsp;&nbsp;{{goods_info.goods_stock}} 库存</div>
                     <div class="clear"></div>
                 </div>
@@ -120,10 +121,14 @@
                     <template v-if="seckills">
                         <div class="goods_info_buy" style="background:#fe0851" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
                     </template>
-                    <template v-else-if="collectives">
-                        <div class="goods_info_buy" style="background:#67c23a"  @click="is_collective=1;collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
-                        <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
-                        <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
+                    <template v-else-if="collectives && goods_type=='collective'">
+                        <block  v-if="goods_info.goods_stock > 0">
+                        <div  class="goods_info_buy" style="background:#67c23a"  @click="is_collective=1;collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
+                         <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
+                        </block>
+                        <div  v-else class="goods_info_buy btn-disable" ><a-icon type="team" />无货</div>
+                        
+                       
                     </template>
                     <template v-else>
                         <div class="goods_info_buy" @click="buy()"><a-font type="iconchanpin1" />立即购买</div>
@@ -267,6 +272,7 @@ export default {
     props: {},
     data() {
       return {
+          goods_type:'',
           goods_info:{
               goods_images_thumb_400:[],
               goods_images_thumb_150:[],
@@ -634,6 +640,7 @@ export default {
         },
     },
     created() {
+        this.goods_type = this.$route.query.type || 'common';
         this.goods_id = this.$route.params.id;
         this.get_goods_info();
         this.get_goods_comments();
@@ -958,7 +965,7 @@ export default {
             font-size: 14px;
         }
         span{
-            background: #e4393c;
+            background: #4bb16f;
             font-size: 12px;color: #fff;
             padding:2px 10px;
             border-radius: 3px;

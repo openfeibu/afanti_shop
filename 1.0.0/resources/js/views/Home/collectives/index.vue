@@ -16,7 +16,7 @@
             <div class="s_goods_list2">
                 <div class="item" v-for="(v,k) in list" :key="k">
                     <dl>
-                        <router-link :to="'/goods/'+v.id">
+                        <router-link :to="'/goods/'+v.id+'?type=collective'">
                             <dt><img width="180px" height="180px" v-lazy="v.goods_master_image" :alt="v.goods_name"></dt>
                             <dd class="title">{{v.goods_name}}</dd>
                             <dd class="product_store_name"><span>{{v.store_name}}</span></dd>

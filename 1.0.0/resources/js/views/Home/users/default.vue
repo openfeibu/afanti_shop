@@ -44,9 +44,9 @@
             <div class="x20"></div>
             <div class="order_list" v-if="order.length>0">
                 <div class="order_item" v-for="(v,k) in order" :key="k">
-                    <div class="order_item_title">
+                     <div class="order_item_title">
                         <span>{{v.created_at}}<font :color="v.order_status==6?'#42b983':'#ca151e'">{{v.order_status_cn||'-'}}</font></span>
-                        订单号：{{v.order_no||'-'}}
+                        订单号：{{v.order_no||'-'}} <b v-if="v.order_source != 'common'" :class="{'bargain':v.order_source == 'bargain','collective':v.order_source == 'collective','seckill':v.order_source == 'seckill'}">{{v.order_source_text}}</b>
                     </div>
                     <div class="order_item_list"  @click="$router.push('/user/order/'+v.id)">
                         <ul>
@@ -234,6 +234,22 @@ export default {
         font-size: 12px;
         font{
             margin-left:15px;
+        }
+    }
+      b{
+        background: #FF463C;
+            padding: 5px 10px;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 5px;
+        &.collective{
+           background: #FF463C; 
+        }
+        &.seckill{
+           background: #4bb16f; 
+        }
+        &.bargain{
+           background: #4bb16f; 
         }
     }
 }

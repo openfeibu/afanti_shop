@@ -43,7 +43,7 @@
         <div class="goods_list w1200" v-if="list.length>0">
             <ul>
                 <li v-for="(v,k) in list" :key="k">
-                    <router-link :to="'/goods/'+v.id">
+                    <router-link :to="'/goods/'+v.id+'?type=seckill'">
                     <div class="product_act_in">
                         <!-- <dl>
                             <dt><img v-lazy="v.goods_master_image" :alt="v.goods_name" /></dt>

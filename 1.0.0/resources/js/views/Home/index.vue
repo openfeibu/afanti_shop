@@ -66,7 +66,7 @@
 
             </div> -->
             <div class="goods_class_list w1200" v-for="(v,k) in list.goods" :key="k">
-                <shop-index-adv v-if="v.goods.length>0" :adv="(list.class_top_adv[k] && list.class_top_adv[k].image_url)?list.class_left_adv[k]:{adv_image:require('@/asset/pc/adv.jpg'),adv_link:'',adv_title:'加载中...'}" />
+                <!-- <shop-index-adv v-if="v.goods.length>0" :adv="(list.class_top_adv[k] && list.class_top_adv[k].image_url)?list.class_left_adv[k]:{adv_image:require('@/asset/pc/adv.jpg'),adv_link:'',adv_title:'加载中...'}" /> -->
                 <div >
                     <!-- <div class="adv_width_1200"><img v-lazy="v.image_url" :alt="v.name"></div>   -->
                     <div class="title">{{v.name||'加载中...'}}<span><router-link to="/s/eyJrZXl3b3JkcyI6IiJ9">查看更多</router-link></span></div>
@@ -75,16 +75,6 @@
                         <ul>
                              <li class="index_adv_goods_left"><img v-lazy="v.thumb" :alt="v.name"></li>
 
-                            <!-- <li v-for="(vo,key) in v.goods" :key="key" @click="toGoods(vo.id)">
-                                <div class="product_act_in">
-                                    <dl>
-                                        <dt><img v-lazy="vo.goods_master_image||''" :alt="vo.goods_name" /></dt>
-                                        <dd class="product_title" :title="vo.goods_name">{{vo.goods_name}}</dd>
-                                        <dd class="product_subtitle">{{vo.goods_subname}}</dd>
-                                        <dd class="product_price">￥{{vo.goods_price}}<span>{{vo.goods_market_price}}元</span></dd>
-                                    </dl>
-                                </div>
-                            </li> -->
                             <li v-for="(vo,key) in v.goods" :key="key" @click="toGoods(vo.id)">
                                 <div class="product_act_in">
                                     <dl>

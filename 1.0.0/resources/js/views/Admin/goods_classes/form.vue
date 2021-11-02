@@ -7,6 +7,7 @@
         <div class="unline underm"></div>
         <div class="admin_form">
             <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+                <!--
                 <a-form-model-item label="所属菜单">
                     <a-tree-select tree-default-expand-all v-model="info.pid">
                         <a-tree-select-node title="顶级菜单" :value="0"></a-tree-select-node>
@@ -20,6 +21,7 @@
                         
                     </a-tree-select>
                 </a-form-model-item>
+                -->
                 <a-form-model-item label="分类名称">
                     <a-input v-model="info.name"></a-input>
                 </a-form-model-item>

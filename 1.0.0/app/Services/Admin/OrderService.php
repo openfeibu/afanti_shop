@@ -64,6 +64,62 @@ class OrderService extends \App\Services\Common\OrderService{
         }
         return true;
     }
+    public function confirmCancel($order,$data)
+    {
+        // 判断订单是否有效
+        if ($order['pay_status'] != 20) {
+            OutputServerMessageException("该订单不合法");
+        }
+        try {
+            DB::beginTransaction();
+            if ($data['is_cancel']) {
+                // 执行退款操作
+
+                // 回退商品库存
+                $og_model = new OrderGoods();
+                $og_list = $og_model->select('goods_id','sku_id','buy_num')->where('order_id',$order['id'])->get();
+                foreach($og_list as $v){
+                    $this->orderStock($v['goods_id'],$v['sku_id'],$v['buy_num'],1);
+                }
+                // 回退用户优惠券 如果有优惠券则修改优惠券
+                $coupon_log_model = new CouponLog();
+                $coupon_log_model->where('order_id',$order['id'])->update(['status'=>0,'order_id'=>0]);
+            }
+            // 更新订单状态
+            $order->order_status = $data['is_cancel'] ? 20 : 10;
+            $order->save();
+            DB::commit();
+            return true;
+        }catch (\Exception $e) {
+            Log::channel('qwlog')->debug('confirm_cancel_order:'.json_encode($e->getMessage()));
+            DB::rollBack();
+            OutputServerMessageException(__('orders.error'));
+        }
+
+
+        // 订单取消事件
+        $status = $this->transaction(function () use ($data) {
+            if ($data['is_cancel'] == true) {
+                // 执行退款操作
+                (new RefundService)->execute($this);
+                // 回退商品库存
+                FactoryStock::getFactory($this['order_source'])->backGoodsStock($this['goods'], true);
+                // 回退用户优惠券
+                $this['coupon_id'] > 0 && UserCouponModel::setIsUse($this['coupon_id'], false);
+                // 回退用户积分
+                $User = UserModel::detail($this['user_id']);
+                $describe = "订单取消：{$this['order_no']}";
+                $this['points_num'] > 0 && $User->setIncPoints($this['points_num'], $describe);
+            }
+            // 更新订单状态
+            return $this->save(['order_status' => $data['is_cancel'] ? 20 : 10]);
+        });
+        if ($status == true) {
+            // 同步好物圈订单
+            (new WowService(self::$wxapp_id))->update([$this]);
+        }
+        return $status;
+    }
     /**
      * 验证订单是否满足发货条件
      * @param $orderList
@@ -81,5 +137,6 @@ class OrderService extends \App\Services\Common\OrderService{
         }
         return true;
     }
+
 
 }

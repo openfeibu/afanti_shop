@@ -128,6 +128,10 @@ export default {
                 this.total = res.data.total;
             });
         },
+        onChange(e){
+            this.params.page = e;
+            this.onload();
+        },
         to_nav(e){
             this.params.goods_verify = e;
             this.params.page = 1;

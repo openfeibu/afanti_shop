@@ -105,6 +105,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('orders','OrderController')->except(['store']);
         Route::put('/orders/delivery/{id}','OrderController@delivery')->name('orders.delivery');
         Route::get('/orders/delivery_info/{id}','OrderController@delivery_info')->name('orders.delivery_info'); // 缩略图上传
+        Route::put('/orders/confirm_cancel/{id}','OrderController@confirm_cancel')->name('orders.confirm_cancel');
 
         //退款退货
         Route::apiResource('order_refunds','OrderRefundController')->except(['store']);

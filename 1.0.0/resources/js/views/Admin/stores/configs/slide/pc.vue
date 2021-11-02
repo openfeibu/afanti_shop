@@ -9,7 +9,7 @@
                 :data="{token:$getSession('token_type'),name:'slide',id:this.$route.query.id}"
                 @change="upload"
             >
-                <img v-if="info.store_slide[0]" width="600px" height="220px" :src="info.store_slide[0]" />
+                <img v-if="info.store_slide[0]" width="600px" :src="info.store_slide[0]" />
                 <div v-else>
                     <a-font v-if="!loading" type='iconplus' />
                     <a-icon v-else type="loading" />
@@ -25,7 +25,7 @@
                 :data="{token:$getSession('token_type'),name:'slide',id:this.$route.query.id}"
                 @change="upload2"
             >
-                <img v-if="info.store_slide[1]" width="600px" height="220px" :src="info.store_slide[1]" />
+                <img v-if="info.store_slide[1]" width="600px" :src="info.store_slide[1]" />
                 <div v-else>
                     <a-font v-if="!loading1" type='iconplus' />
                     <a-icon v-else type="loading" />
@@ -41,7 +41,7 @@
                 :data="{token:$getSession('token_type'),name:'slide',id:this.$route.query.id}"
                 @change="upload3"
             >
-                <img v-if="info.store_slide[2]" width="600px" height="220px" :src="info.store_slide[2]" />
+                <img v-if="info.store_slide[2]" width="600px" :src="info.store_slide[2]" />
                 <div v-else>
                     <a-font v-if="!loading2" type='iconplus' />
                     <a-icon v-else type="loading" />

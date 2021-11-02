@@ -153,9 +153,9 @@ class CheckoutService extends BaseService{
         $this->store_goods_list = array_merge($this->store_goods_list,[]);
         $this->create_order_data['list'] = $this->store_goods_list;
 
-        //拼团，不参与秒杀，满减，优惠 //todo
+        //拼团，不参与秒杀，满减，优惠
         $this->setCollective($this->create_order_data['order_price']);
-        //秒杀，不参与拼团，满减，优惠 //todo
+        //秒杀，不参与拼团，满减，优惠
         $this->setSeckill();
 
         // 循环查看是否存在优惠券
@@ -517,7 +517,8 @@ class CheckoutService extends BaseService{
         $i=0;
         foreach($this->store_goods_list as $key => &$store_list) {
             foreach ($store_list['goods_list'] as $goods_key => &$goods) {
-                $goods['goods_price'] = $goods['goods_price'] - ($goods['goods_price']*($seckill_info['discount']/100));
+                $discount = number2($goods['goods_price']*($seckill_info['discount']/100));
+                $goods['goods_price'] = number2($goods['goods_price'] - $discount);
                 $i++;
                 $goods['total_price'] = $goods['goods_price'] * $goods['buy_num'];
                 $this->create_order_data['order_price'] = $goods['total_price'];

@@ -88,10 +88,21 @@
 
 
             <div class="order_info_right_price">总计：￥ {{info.total_price}}<span data-v-01d38243="">（运费：{{info.freight_money}}）</span></div>
-
-            <div style="margin-top:40px" id="delivery"><span style="font-size: 14px;font-weight: bold;">快递信息</span></div>
-            <div class="unline underm"></div>
+            <template v-if="info.pay_status==20 && info.order_status==21">
+                <div id="cancel"><span style="font-size: 14px;font-weight: bold;">用户取消订单</span></div>
+                <div class="unline underm"></div>
+                <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+                    <a-form-model-item label="审核状态" :rules="{ required: true}" extra="当前买家已付款并申请取消订单，请审核是否同意，如同意则自动退回付款金额（微信支付原路退款）并关闭订单。">
+                        <a-radio-group :options="is_cancel_options" v-model=is_cancel  @change="onChangeIsCancel" />
+                    </a-form-model-item>
+                    <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+                        <a-button type="primary" @click="confirmCancelSubmit">确认审核</a-button>
+                    </a-form-model-item>
+                </a-form-model>
+            </template>
             <template v-if="info.pay_status==20 && info.order_status!=20 && info.order_status!=21">
+                <div style="margin-top:40px" id="delivery"><span style="font-size: 14px;font-weight: bold;">快递信息</span></div>
+                <div class="unline underm"></div>
                 <template v-if="info.delivery_status==10">
                     <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
                         <a-form-model-item label="物流公司" :rules="{ required: true}">
@@ -128,16 +139,16 @@
                     </div>
 
                 </template>
+                <div class="order_info_kd">
+                    <a-timeline v-if="delivery_list.length>0">
+                        <a-timeline-item  v-for="(v,k) in delivery_list" :key="k" :color="k==0?'red':'gray'">
+                            <p>{{v.context+' '+v.time}}</p>
+                        </a-timeline-item>
+                    </a-timeline>
+                    <a-empty v-else><span slot="description">暂无物流信息</span></a-empty>
+                </div>
+                <br>
             </template>
-            <div class="order_info_kd">
-                <a-timeline v-if="delivery_list.length>0">
-                    <a-timeline-item  v-for="(v,k) in delivery_list" :key="k" :color="k==0?'red':'gray'">
-                        <p>{{v.context+' '+v.time}}</p>
-                    </a-timeline-item>
-                </a-timeline>
-                <a-empty v-else><span slot="description">暂无物流信息</span></a-empty>
-            </div>
-            <br>
             <!-- <a-button type="primary" @click="handleSubmit">提交</a-button> -->
         </div>
         <!-- 修改物流 -->
@@ -173,6 +184,11 @@ export default {
           ],
           loading:false,
           visible:false,
+          is_cancel_options: [
+              { label: '同意', value: '1' },
+              { label: '拒绝', value: '0' },
+          ],
+          is_cancel:'1',
       };
     },
     watch: {},
@@ -190,6 +206,22 @@ export default {
                 }
             })
         },
+        confirmCancelSubmit(){
+            let api = this.$apiHandle(this.$api.adminOrders);
+            this.$put(api.url+'/confirm_cancel/'+this.id,{is_cancel:this.is_cancel}).then(res=>{
+                if(res.code == 200){
+                    this.$message.success(res.msg)
+                    this.get_info();
+                    this.visible = false;
+                }else{
+                    return this.$message.error(res.msg)
+                }
+            })
+        },
+        onChangeIsCancel(e){
+            this.is_cancel = e.target.value;
+        },
+
         handleSubmit(){
 
             // 验证代码处

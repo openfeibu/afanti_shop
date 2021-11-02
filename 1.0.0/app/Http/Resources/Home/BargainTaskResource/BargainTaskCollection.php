@@ -34,6 +34,7 @@ class BargainTaskCollection extends ResourceCollection
                     'end_time' => $item->end_time,
                     'is_buy' => $item->is_buy,
                     'status' => $item->status == 1 &&  $item->end_time > now() ? 1 : 0,
+                    'is_floor' =>  $item->is_floor,
                     'cut_people' => $item->cut_people,
                     'surplus_money' => $item->surplus_money,
                     'bargain_rate' => $item->bargain_rate,

@@ -83,6 +83,17 @@ class OrderController extends Controller
 
         return $this->success([],'发货成功');
     }
+    public function confirm_cancel(Request $request, $id)
+    {
+        $rs = $this->order_service->getOrderInfoById($id,'admin');
+        $order = $rs['data'];
+        $data = [
+            'is_cancel' => $request->get('is_cancel',''),
+            'delivery_no' =>  $request->get('delivery_no',''),
+        ];
+        $this->order_service->confirmCancel($order,$data);
+        return $this->success([],'审核成功');
+    }
     public function delivery_info($id)
     {
         $order = Order::find($id);

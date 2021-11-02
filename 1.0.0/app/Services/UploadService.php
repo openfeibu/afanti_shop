@@ -325,12 +325,12 @@ class UploadService extends BaseService{
     public function goods($store_id=0){
         $path = 'goods';
         $opt = [
-            'width'=>800,
-            'height'=>800,
+            'width'=>1200,
+            'height'=>1200,
             'thumb'=>[
-                [400,400],
+                [800,800],
+                [600,600],
                 [300,300],
-                [150,150],
             ],
         ]; // 配置文件
         if(!empty($store_id)){

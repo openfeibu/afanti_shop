@@ -9,7 +9,7 @@
                 :data="{token:$getSession('token_type'),name:'store_face_image',id:this.$route.params.id}"
                 @change="upload"
             >
-                <img v-if="info.store_face_image" width="600px" height="220px" :src="info.store_face_image" />
+                <img v-if="info.store_face_image" width="600px"  :src="info.store_face_image" />
                 <div v-else>
                     <a-font v-if="!loading" type='iconplus' />
                     <a-icon v-else type="loading" />

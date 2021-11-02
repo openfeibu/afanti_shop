@@ -22,13 +22,13 @@ class OrderRefundService extends BaseService{
 
             $order_refund_model = new OrderRefund();
             $images = request()->images??'';
-            $refund_refund_type = request()->refund_refund_type??10;
+            $refund_type = request()->refund_type??10;
             $apply_desc = request()->apply_desc??'';
 
             $order_refund_model->user_id = $user_info['id'];
             $order_refund_model->order_goods_id = $order_goods['id'];
             $order_refund_model->order_id =  $order_goods['order_id'];
-            $order_refund_model->refund_refund_type = $refund_refund_type;
+            $order_refund_model->refund_type = $refund_type;
             $order_refund_model->images = $images;
             $order_refund_model->apply_desc = $apply_desc;
             $order_refund_model->is_agree = 0;

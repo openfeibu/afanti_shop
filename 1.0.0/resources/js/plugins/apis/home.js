@@ -87,7 +87,10 @@ export default {
     'bargainTasks': baseUrl + 'bargain_tasks/partake',
     'getBargainTasks': baseUrl + 'bargain_tasks',
     'BargainsHelpCut': baseUrl + 'bargain_tasks/help_cut',
+    'homeMyBargains': baseUrl + 'bargain_tasks',
 
-    'homeAllExpresses' : baseUrl + 'all_expresses',
-
+    'homeAllExpresses': baseUrl + 'all_expresses',
+    // 帮助
+    'homeHelp': baseUrl + 'article_categories',
+    'homeHelpDetail': baseUrl + 'articles', //传/id
 };

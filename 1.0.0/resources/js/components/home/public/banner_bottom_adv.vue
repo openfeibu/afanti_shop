@@ -24,7 +24,7 @@
                 <img :src="require('@/asset/pc/active05.png')" alt="">
                 <p>展馆列表</p>
                 </router-link></li>
-                <li><router-link to="/user/article/notice">
+                <li><router-link to="/help">
                 <img :src="require('@/asset/pc/active06.png')" alt="">
                 <p>帮助中心</p>
                 </router-link></li>

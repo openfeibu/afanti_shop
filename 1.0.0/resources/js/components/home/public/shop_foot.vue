@@ -17,26 +17,12 @@
                 </div>
 
                 <div class="footer-info-right">
-                    <dl class="fore1">
-                        <dt>购物指南</dt>
-                        <dd><router-link to="">购物流程</router-link></dd>
-                        <dd><router-link to="">会员介绍</router-link></dd>
-                        <dd><router-link to="">常见问题</router-link></dd>
-                        <dd><router-link to="">联系客服</router-link></dd>
+                    <dl class="fore1"  v-for="(v,k) in helpList" :key="k">
+                        <dt>{{v.name}}</dt>
+                        <dd v-for="(vo,key) in v.articles" :key="key" ><router-link :to="'/help?id='+vo.id">{{vo.name}}</router-link></dd>
+ 
                     </dl>
-                    <dl class="fore1">
-                        <dt>支付方式</dt>
-                        <dd><router-link to="">微信支付</router-link></dd>
-                        <dd><router-link to="">支付宝支付</router-link></dd>
-                        
-                    </dl>
-                    <dl class="fore1">
-                        <dt>售后服务</dt>
-                        <dd><router-link to="">售后政策</router-link></dd>
-                        <dd><router-link to="">退款说明</router-link></dd>
-                        <dd><router-link to="">退换货</router-link></dd>
-                        <dd><router-link to="">取消订单</router-link></dd>
-                    </dl>
+                
                     <dl class="fore1">
                         <dt>特色活动</dt>
                         <dd><router-link to="/seckill">秒杀专区</router-link></dd>
@@ -90,8 +76,9 @@ export default {
     props: {},
     data() {
       return {
-          adv:{},
+          adv:{}, 
           info:{},
+          helpList:[]
       };
     },
     watch: {},
@@ -99,9 +86,18 @@ export default {
         ...mapState('homeCommon',['common'])
     },
     methods: {
-        
+          homeHelp(){
+            this.$get(this.$api.homeHelp).then(res=>{
+                this.helpList = res.data;
+                // if(this.id == null){
+                //     this.id = this.helpList[0].articles[0].id;
+                //     this.getDetail(this.id)
+                // }
+            })
+        },
     },
     created() {
+        this.homeHelp();
     },
     mounted() {}
 };

@@ -354,6 +354,13 @@ export default [
                         component: () =>
                             import ("@/views/Home/users/coupon/index")
                     },
+                    //我的砍价活动
+                    {
+                        path: '/user/my_bargain',
+                        name: 'home_user_my_bargain',
+                        component: () =>
+                            import ('@/views/Home/users/my_bargain/index')
+                    }, // 申请售后
                 ]
             },
             // 优惠券
@@ -363,7 +370,14 @@ export default [
                 component: () =>
                     import ('@/views/Home/coupon/index')
             }, // 秒杀首页
+            // 帮助中心
+            {
+                path: '/help',
+                name: 'home_help',
+                component: () =>
+                    import ('@/views/Home/help/index')
 
+            }, // 帮助中心
         ]
     },
 

@@ -52,7 +52,7 @@
                             <router-link to="/integral/index">积分商城</router-link>
                         </li> -->
                         <li>
-                            <router-link to="/user/article/help">帮助中心</router-link>
+                            <router-link to="/help">帮助中心</router-link>
                         </li>
                     </ul>
                 </div>

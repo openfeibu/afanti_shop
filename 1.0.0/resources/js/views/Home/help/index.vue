@@ -3,40 +3,33 @@
         <div class="user_default_in w1200">
             <!-- 用户左侧栏目 -->
             <div class="user_left">
-                <div class="user_info_block">
-                    <dl>
-                        <dt><img :src="user_info.avatar||require('@/asset/user/user_default.png')" alt=""></dt>
-                        <dd style="min-width:100px">{{user_info.nickname||'加载中...'}}</dd>
-                        <dd class="edit_user_info"><router-link to="/user/user_info">编辑信息</router-link></dd>
-                    </dl>
-                    <div class="user_stepbar">
-                        <span>账号资料：</span><a-progress class="progress" :percent="user_info.completion" size="small" stroke-color="#ca151e" />
-                    </div>
-                    <div class="user_safe">
-                        <span>账户安全：</span>
-                        <span class="safe_icon">
-                            <a-font :class="user_info.phone!=''?'success':''" type="iconshouji"></a-font>
-                            <!-- <a-font :class="user_info.user_check?'success':''" type="iconnamecard"></a-font> -->
-                        </span>
-                    </div>
-                </div>
-
                 <div class="user_nav">
-                    <div class="block" v-for="(v,k) in nav" :key="k">
+                    <div class="block" v-for="(v,k) in helpList" :key="k">
                         <div class="title">
-                            <a-font :type="v.icon"></a-font>
+                            <!-- <a-font :type="v.icon"></a-font> -->
                             <span>{{v.name}}</span>
                         </div>
-                        <div class="nav_item" v-for="(vo,key) in v.children" :key="key"><router-link :to="vo.url">{{vo.name}}</router-link></div>
+                        <div class="nav_item" :class="{'active':vo.id == id}" v-for="(vo,key) in v.articles" :key="key" @click="getDetail(vo.id)">{{vo.name}}</div>
                     </div>
                 </div>
             </div>
 
             <div class="user_right">
-                <router-view></router-view>
+                <div class="user_default2">
+                    <div class="user_main">
+                        <div class="block_title">
+                            {{helpDetail.name}}
+                        </div>
+                        <div class="x20"></div>
+                        <div class="content" v-html="helpDetail.content">
+                        
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="clear"></div>
         </div>
+        <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -46,56 +39,39 @@ export default {
     props: {},
     data() {
         return {
-            nav:[
-                {
-                    name:'订单中心',
-                    icon:'icondingdan',
-                    children:[
-                        {name:'我的订单',url:'/user/order'},
-                        {name:'我的售后',url:'/user/order_refund'},
-                        {name:'我的砍价',url:'/user/my_bargain'},
-                        {name:'收货地址',url:'/user/address'},
-                        {name:'评论列表',url:'/user/order_comments'},
-                    ],
-                },
-                {
-                    name:'会员中心',
-                    icon:'iconchengyuan',
-                    children:[
-                        {name:'用户资料',url:'/user/user_info'},
-                        {name:'账户安全',url:'/user/safe'},
-                        {name:'账号绑定',url:'/user/oauth'},
-                        {name:'收藏商品',url:'/user/favorite'},
-                        // {name:'关注展馆',url:'/user/follows'},
-                        {name:'我的优惠券',url:'/user/coupon'},
-                    ],
-                },
-               
-                {
-                    name:'帮助中心',
-                    icon:'iconbangzhu',
-                    children:[
-                        {name:'网站公告',url:'/user/article/notice'},
-                        {name:'其他合作',url:'/user/article/cooperation'},
-                        {name:'帮助中心',url:'/user/article/help'},
-                        {name:'关于我们',url:'/user/article/about'},
-                    ],
-                },
-            ],
-            user_info:{},
+            helpList:[],
+            id:null,
+            helpDetail:{
+                name:''
+            },
+            isLoading:true
         };
     },
     watch: {},
     computed: {},
     methods: {
-        get_user_info(){
-            this.$get(this.$api.homeUser+'/info').then(res=>{
-                this.user_info = res.data;
+        homeHelp(){
+            this.$get(this.$api.homeHelp).then(res=>{
+                this.helpList = res.data;
+                if(this.id == null){
+                    this.id = this.helpList[0].articles[0].id;
+                    
+                }
+                this.getDetail(this.id)
             })
         },
+        getDetail(id){
+            this.id  = id;
+            this.isLoading=true;
+            this.$get(this.$api.homeHelpDetail+'/'+id).then(res=>{
+                this.helpDetail = res.data;
+                this.isLoading=false
+            })
+        }
     },
     created() {
-        this.get_user_info();
+        this.id = this.$route.query.id || null
+        this.homeHelp();
     },
     mounted() {},
     
@@ -110,7 +86,6 @@ export default {
     float: left;
     width: 234px;
     margin-right: 20px;
-    padding-top: 30px;
     .user_nav{
         margin-top: 20px;
         background: #fff;
@@ -128,7 +103,10 @@ export default {
                     color: #4bb16f;
                     font-weight: bold;
                 }
-                a:hover{
+                &:hover{
+                    color:#4bb16f;
+                }
+                &.active{
                     color:#4bb16f;
                 }
             }
@@ -205,6 +183,6 @@ export default {
 .user_right{
     float: left;
     width: 946px;
-    padding-top: 30px;
+    padding-top: 20px;
 }
 </style>

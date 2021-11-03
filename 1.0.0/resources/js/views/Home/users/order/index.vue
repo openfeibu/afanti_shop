@@ -269,7 +269,7 @@ export default {
            background: #4bb16f; 
         }
         &.bargain{
-           background: #4bb16f; 
+           background: #f39701; 
         }
     }
 }

@@ -25,7 +25,7 @@
         <div class="shop_top_nav">
             <div class="width_center_1200">
                 <div class="shop_top_nav_left" @mouseover="subnav_show?subnav:subnav=true" @mouseleave="subnav_show?subnav:subnav=false">
-                    全部分类
+                    <router-link to="/s/e30=">全部分类</router-link>
                     <transition name="el-zoom-in-top"><leftBar :goods_class="common.classes" :change_color="change_color" v-show="subnav"></leftBar></transition>
                 </div>
                 <div class="shop_top_nav_right">
@@ -184,6 +184,9 @@ export default {
         box-sizing: border-box;
         padding-left: 15px;
         position: relative;
+        > a{
+            color:#fff
+        }
     }
     .shop_top_nav_right{
         padding-left: 20px;

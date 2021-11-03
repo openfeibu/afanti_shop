@@ -46,7 +46,7 @@
                 <!-- <shop-index-adv v-if="v.goods.length>0" :adv="(list.class_top_adv[k] && list.class_top_adv[k].image_url)?list.class_left_adv[k]:{adv_image:require('@/asset/pc/adv.jpg'),adv_link:'',adv_title:'加载中...'}" /> -->
                 <div >
                     <!-- <div class="adv_width_1200"><img v-lazy="v.image_url" :alt="v.name"></div>   -->
-                    <div class="title">{{v.name||'加载中...'}}<span><router-link to="/s/eyJrZXl3b3JkcyI6IiJ9">查看更多</router-link></span></div>
+                    <div class="title">{{v.name||'加载中...'}}<span @click="to_nav(v.id)">查看更多</span></div>
                     <!-- <div class="index_adv_goods_left"><img v-lazy="(list.class_left_adv[k] && list.class_left_adv[k].image_url)?list.class_left_adv[k].image_url:require('@/asset/pc/pc_class_btadv.jpg')" :alt="v.name"></div> -->
                     <div class="index_class_goods_right">
                         <ul>
@@ -142,6 +142,12 @@ export default {
         toGoods(id){
             return this.$router.push('/goods/'+id);
         },
+         to_nav(id){
+            let params = {};
+            params.pid = id; // 顶级栏目ID
+ 
+            this.$router.push('/s/'+window.btoa(JSON.stringify(params)))
+        }
     },
     created() {
         this.get_index();
@@ -273,13 +279,14 @@ export default {
     margin-bottom: 30px;
     overflow: hidden;
     border-bottom: 1px solid #eee;
-    
     .title{
         font-size: 22px;
         margin-bottom: 20px;
         span{
             font-size: 14px;
             float: right;
+            cursor: pointer;
+            &:hover{color: #4bb16f;}
         }
     }
 }

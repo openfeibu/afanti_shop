@@ -72,6 +72,7 @@ export default {
                 params.tid = info.id;
                 params.class_id.push(info.id);
             }
+           
             this.$router.push('/s/'+window.btoa(JSON.stringify(params)))
         }
     },

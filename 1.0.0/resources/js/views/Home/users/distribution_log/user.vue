@@ -55,6 +55,7 @@ export default {
         // 选择分页
         onChange(e){
             this.params.page = e;
+            this.onload();
         },
         onload(){
             this.$get(this.$api.homeDistributionUser,this.params).then(res=>{

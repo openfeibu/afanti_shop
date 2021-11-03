@@ -72,6 +72,7 @@ export default {
         // 选择分页
         onChange(e){
             this.params.page = e;
+            this.onload();
         },
         // 删除
         del(){

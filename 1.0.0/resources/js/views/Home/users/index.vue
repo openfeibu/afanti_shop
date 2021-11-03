@@ -37,6 +37,7 @@
             </div>
             <div class="clear"></div>
         </div>
+
     </div>
 </template>
 
@@ -64,7 +65,7 @@ export default {
                     children:[
                         {name:'用户资料',url:'/user/user_info'},
                         {name:'账户安全',url:'/user/safe'},
-                        {name:'账号绑定',url:'/user/oauth'},
+                        {name:'微信绑定',url:'/user/oauth'},
                         {name:'收藏商品',url:'/user/favorite'},
                         // {name:'关注展馆',url:'/user/follows'},
                         {name:'我的优惠券',url:'/user/coupon'},
@@ -83,6 +84,7 @@ export default {
                 // },
             ],
             user_info:{},
+      
         };
     },
     watch: {},
@@ -91,6 +93,7 @@ export default {
         get_user_info(){
             this.$get(this.$api.homeUser+'/info').then(res=>{
                 this.user_info = res.data;
+            
             })
         },
     },

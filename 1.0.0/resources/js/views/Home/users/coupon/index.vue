@@ -18,7 +18,7 @@
             </div>
 
         </div>
-        
+        <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
               {title:'领取时间',dataIndex:'created_at'},
           ],
           list:[],
+          isLoading:true,
       };
     },
     watch: {},
@@ -56,6 +57,7 @@ export default {
             this.$get(this.$api.homeUserCoupon,this.params).then(res=>{
                 this.total = res.data.total;
                 this.list = res.data.data;
+                this.isLoading = false
             });
         },
     },

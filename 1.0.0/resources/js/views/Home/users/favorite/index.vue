@@ -29,7 +29,7 @@
             </div>
 
         </div>
-        
+        <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -53,6 +53,7 @@ export default {
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],
           list:[],
+          isLoading:true,
       };
     },
     watch: {},
@@ -66,8 +67,8 @@ export default {
         // 删除
         del(ids){
             this.$confirm({
-                title: '你确定要删除选择的数据？',
-                content: '确定删除后无法恢复.',
+                title: '你是否删除该商品？',
+                content: '',
                 okText: '是',
                 okType: 'danger',
                 cancelText: '取消',
@@ -86,9 +87,11 @@ export default {
         },
  
         onload(){
+            this.isLoading = true;
             this.$get(this.$api.homeFav,this.params).then(res=>{
                 this.total = res.data.total;
                 this.list = res.data.data;
+                this.isLoading = false;
             });
         },
     },

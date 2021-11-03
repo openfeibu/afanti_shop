@@ -39,7 +39,7 @@
             </div>
 
         </div>
-
+       <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -54,6 +54,7 @@ export default {
               avatar:'',
           },
           loading:false,
+          isLoading:true,
       };
     },
     watch: {},
@@ -62,14 +63,18 @@ export default {
         get_user_info(){
             this.$get(this.$api.homeUser+'/edit_user').then(res=>{
                 this.info = res.data;
+                this.isLoading = false;
             })
         },
         handleSubmit(){
+              this.isLoading = true;
             this.$put(this.$api.homeUser+'/edit_user',this.info).then(res=>{
                 this.$returnInfo(res);
+                  this.isLoading = false;
             })
         },
         upload(e){
+            
             if(e.file.status == 'done'){
                 this.loading = false;
                 let rs = e.file.response;
@@ -81,6 +86,7 @@ export default {
             }else{
                 this.loading = true;
             }
+              
         },
         sexChange(e){
             this.info.sex = e.target.value;

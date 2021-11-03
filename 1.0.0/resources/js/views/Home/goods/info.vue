@@ -117,17 +117,16 @@
                     <div class="clear"></div>
                 </div>
                 <div class="goods_info_btn">
-                    <!-- <div v-show="goods_info.is_groupbuy==1" class="goods_info_add_groupbuy" @click="group_buy()"><i class="icon iconfont">&#xe601;</i>选择团购</div> -->
+                    <block v-if="goods_info.goods_stock > 0">
                     <template v-if="seckills">
                         <div class="goods_info_buy" style="background:#fe0851" @click="buy()"><a-font type="iconchanpin1" />立即抢购</div>
                     </template>
                     <template v-else-if="collectives && goods_type=='collective'">
-                        <block  v-if="goods_info.goods_stock > 0">
+                        <block  >
                         <div  class="goods_info_buy" style="background:#67c23a"  @click="is_collective=1;collective_active_id=-1;buy()"><a-icon type="team" />我要开团</div>
                          <div class="goods_info_add_cart" @click="add_cart()"><a-font type="icongouwuche1" />加入购物车</div>
                         </block>
-                        <div  v-else class="goods_info_buy btn-disable" ><a-icon type="team" />无货</div>
-                        
+                       
                        
                     </template>
                     <template v-else>
@@ -136,7 +135,9 @@
                         <!-- <div class="goods_info_buy" @click="bargain_buy()"><a-font type="iconchanpin1" />砍价</div> -->
 
                     </template>
-                    
+                    </block>
+                     <div  v-else class="goods_info_buy btn-disable" ><a-font type="iconchanpin1" />无货</div>
+                        
                 </div>
 
             </div>

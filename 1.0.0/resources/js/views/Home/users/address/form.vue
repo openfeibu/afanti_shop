@@ -26,7 +26,7 @@
                 </a-form-model-item>
             </a-form-model>
         </div>
-
+        <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
           },
           areas:[],
           id:0,
+          isLoading:true
       };
     },
     watch: {},
@@ -62,14 +63,16 @@ export default {
             if(this.$isEmpty(this.info.address)){
                 return this.$message.error('地区');
             }
-        
+            this.isLoading = true;
             let api = this.$apiHandle(this.$api.homeAddress,this.id);
             if(api.status){
                 this.$put(api.url,this.info).then(res=>{
                     if(res.code == 200){
                         this.$message.success(res.msg)
+                          this.isLoading = false;
                         return this.$router.back();
                     }else{
+                          this.isLoading = false;
                         return this.$message.error(res.msg)
                     }
                 })
@@ -77,12 +80,16 @@ export default {
                 this.$post(api.url,this.info).then(res=>{
                     if(res.code == 200){
                         this.$message.success(res.msg)
+                          this.isLoading = false;
                         return this.$router.back();
                     }else{
+                          this.isLoading = false;
                         return this.$message.error(res.msg)
                     }
+                    
                 })
             }
+           
    
             
         },
@@ -94,7 +101,8 @@ export default {
         // 获取地址
         get_areas(){
             this.$get(this.$api.homeAreas).then(res=>{
-                this.areas = res.data
+                this.areas = res.data;
+                this.isLoading = false;
             })
         },
         onChange(e){

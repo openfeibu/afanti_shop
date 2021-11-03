@@ -62,7 +62,7 @@ export default {
 .head{
   border-bottom: 1px solid #efefef;
   height: 30px;
-  background: #f9f9f9;
+
   font-size: 12px;
   line-height: 30px;
 

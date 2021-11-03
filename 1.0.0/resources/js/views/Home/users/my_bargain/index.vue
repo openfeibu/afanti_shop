@@ -42,7 +42,7 @@
                 <a-empty style="padding:100px 0" description="没有砍价商品" v-else />
             </div>
         </div>
-
+        <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -76,6 +76,7 @@ export default {
               delivery_list:[],
           },
           visible:false,
+          isLoading: true
       };
     },
     watch: {},

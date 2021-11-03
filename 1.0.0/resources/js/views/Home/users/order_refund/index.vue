@@ -52,7 +52,7 @@
             </div>
             </div>
         </div>
-
+        <loading v-if="isLoading"></loading>
     </div>
 </template>
 
@@ -67,6 +67,7 @@ export default {
               page:1,
               per_page:20,
               type:'all',
+              isLoading:true,
           },
           total:0, //总页数
           list:[],
@@ -101,13 +102,14 @@ export default {
             this.onload();
         },
         onload(){
-            console.log(this.$route)
+           this.isLoading = true;
             if(!this.$isEmpty(this.$route.params.type)){
                 this.params.type = this.$route.params.type;
             }
             this.$get(this.$api.homeOrderRefunds,this.params).then(res=>{
                 this.list = res.data.data;
                 this.total = res.data.total;
+                this.isLoading = false;
             })
         },
 

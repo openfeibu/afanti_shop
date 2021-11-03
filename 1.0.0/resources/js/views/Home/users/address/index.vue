@@ -19,7 +19,7 @@
 
             <a-empty v-else />
         </div>
-
+        <loading v-if="isLoading" />
     </div>
 </template>
 
@@ -31,7 +31,8 @@ export default {
       return {
           visible:false,
           addresses:[],
-          info:{}
+          info:{},
+          isLoading:true
       };
     },
     watch: {},
@@ -40,6 +41,7 @@ export default {
         get_addresses(){
             this.$get(this.$api.homeAddress).then(res=>{
                 this.addresses = res.data;
+                this.isLoading = false;
             })
         },
         add_address(){
@@ -48,14 +50,29 @@ export default {
             })
         },
         del(id){
-            this.$delete(this.$api.homeAddress+'/'+id).then(res=>{
-                if(res.code == 200){
-                    this.get_addresses();
-                    this.$message.success('删除成功');
-                }else{
-                    this.$message.error(res.msg)
-                }
+            var that = this;
+            this.$confirm({
+                title: '是否确定取消该地址',
+                content: '',
+                onOk() {
+                    that.isLoading = true;
+                    that.$delete(that.$api.homeAddress+'/'+id).then(res=>{
+                        if(res.code == 200){
+                            that.get_addresses();
+                            that.$message.success('删除成功');
+                        }else{
+                            that.$message.error(res.msg)
+                        }
+                    });
+                },
+                onCancel() {
+                console.log('Cancel');
+                },
+                class: 'test'
             });
+            
+
+
         },
         set_default(id){
             this.$put(this.$api.homeAddress+'/default/set',{id:id}).then(res=>{

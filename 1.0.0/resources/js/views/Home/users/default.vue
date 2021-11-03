@@ -94,12 +94,15 @@
             </div>
             <a-empty v-else />
         </div>
+           <loading v-if="isLoading" />
     </div>
+ 
 </template>
 
 <script>
+import Loading from '../../../components/home/public/loading.vue';
 export default {
-    components: {},
+    components: {Loading},
     props: {},
     data() {
       return {
@@ -108,6 +111,7 @@ export default {
           history:[],
           count:[],
           user_info:{},
+          isLoading:true
       };
     },
     watch: {},
@@ -119,6 +123,7 @@ export default {
                 this.order = res.data.order.data;
                 this.fav = res.data.fav.data;
                 this.count = res.data.count;
+                this.isLoading = false;
             })
         },
 

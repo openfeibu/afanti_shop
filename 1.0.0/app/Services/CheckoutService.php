@@ -170,20 +170,12 @@ class CheckoutService extends BaseService{
         $this->create_order_data['total_weight'] = $total_weight;
         return $this->create_order_data;
     }
-    public function createOrder($create_order_data)
+    public function createOrder($create_order_data,$address_info)
     {
         // 实例化订单表
         $order_model = new Order();
         $order_goods_model = new OrderGoods();
         $order_service = new OrderService();
-
-        // 地址验证
-        $address_resp = $this->checkAddress();
-        if(!$address_resp['status']){
-            OutputServerMessageException($address_resp['msg']);
-        }
-        $address_info = $address_resp['data'];
-
 
         $resp_data = [];
         $make_rand = date('YmdHis').$this->user['id'].mt_rand(1000,9999); // 生成订单号
@@ -273,23 +265,6 @@ class CheckoutService extends BaseService{
 
         return $this->format($resp_data);
 
-    }
-
-    // 地址验证
-    public function checkAddress(){
-        $id = request()->address_id??0;
-        if(empty($id)){
-            OutputServerMessageException(__('orders.no_address'));
-        }
-
-        $address_model = new Address();
-        $address_info = $address_model->find($id);
-
-        if(empty($address_info)){
-            OutputServerMessageException(__('orders.no_address').'2');
-        }
-
-        return $this->format($address_info);
     }
 
     /**

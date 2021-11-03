@@ -88,8 +88,15 @@ class OrderService extends \App\Services\Common\OrderService{
         $user_service = new UserService;
         $user_info = $user_service->getUserInfo();
         if(empty($user_info)){
-            OutputServerMessageException(__('base.error').' - order_service');
+            OutputServerMessageException("未登录");
         }
+        // 地址验证
+        $address_resp = $this->checkAddress();
+        if(!$address_resp['status']){
+            OutputServerMessageException($address_resp['msg']);
+        }
+        $address_info = $address_resp['data'];
+
 
         $params = $check['data'];
         $params['order'] = $params['order'] ?? [];
@@ -126,7 +133,7 @@ class OrderService extends \App\Services\Common\OrderService{
                     break;
             }
             $create_order_data = $checkout_service->onCheckout($user_info, $store_goods_list);
-            $resp_data = $checkout_service->createOrder($create_order_data);
+            $resp_data = $checkout_service->createOrder($create_order_data,$address_info);
             // 执行成功则删除购物车
             $this->delCart($car_ids);
             // 结束砍价
@@ -377,72 +384,20 @@ class OrderService extends \App\Services\Common\OrderService{
         }
     }
 
-    /**
-     * 订单状态修改 function
-     *
-     * @param [type] $order_id 订单ID
-     * @param [type] $order_status 订单状态
-     * @param [type] $auth 用户操作还是管理员操作 user|admin
-     * @return void
-     * @Description
-     * @author hg <www.qingwuit.com>
-     */
-    public function editOrderStatus($order_id,$order_status,$auth="user"){
-        $order_model = new Order;
-        $order_model = $order_model->where('id',$order_id);
-        if($auth == 'user'){
-            $user_service = new UserService;
-            $user_info = $user_service->getUserInfo();
-            if(empty($user_info)){
-                OutputServerMessageException(__('users.no_token'));
-            }
-            // 用户不允许随意操作状态，只能修改 取消订单和确定订单
-            if($order_status !=0 && $order_status !=4){
-                OutputServerMessageException(__('base.error'));
-            }
-            $order_model = $order_model->where('user_id',$user_info['id']);
+    // 地址验证
+    public function checkAddress(){
+        $id = request()->address_id??0;
+        if(empty($id)){
+            OutputServerMessageException(__('orders.no_address'));
         }
-        $order_model = $order_model->first();
+        $address_model = new Address();
+        $address_info = $address_model->find($id);
 
-        if(empty($order_model)){
-            OutputServerMessageException(__('users.error_token'));
+        if(empty($address_info)){
+            OutputServerMessageException(__('orders.no_address').'2');
         }
 
-        switch($order_status){
-            case 0: // 取消订单
-                if($order_model->order_status != 1){ // 只有待支付的订单能取消
-                    OutputServerMessageException(__('base.error').' - 0');
-                }
-                $og_model = new OrderGoods();
-                $og_list = $og_model->select('goods_id','sku_id','buy_num')->where('order_id',$order_id)->get();
-                foreach($og_list as $v){
-                    $this->orderStock($v['goods_id'],$v['sku_id'],$v['buy_num'],1);
-                }
-                // 如果有优惠券则修改优惠券
-                $coupon_log_model = new CouponLog();
-                $coupon_log_model->where('order_id',$order_id)->update(['status'=>0,'order_id'=>0]);
-
-                // 库存修改
-                break;
-            case 1: // 等待支付
-                break;
-            case 2: // 等待发货
-                break;
-            case 3: // 确认收货
-                if(empty($order_model->delivery_no) || empty($order_model->delivery_code)){ // 只有待支付的订单能取消
-                    OutputServerMessageException(__('base.error').' - 3');
-                }
-                break;
-            case 4: // 等待评论
-                break;
-            case 5: // 5售后
-                break;
-            case 6: // 6订单完成
-                break;
-        }
-        $order_model->order_status = $order_status;
-        $order_model->save();
-        return $this->format([$order_status],__('base.success'));
+        return $this->format($address_info);
     }
 
 

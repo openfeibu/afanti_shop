@@ -31,20 +31,17 @@
                 </div> -->
             </div>
             <div class="goods_info_top_right" >
-                <div class="kanjia-user">
-                    <div class="img"><img :src="bargain_task.user.avatar || require('@/asset/pc/portrait.jpg')" alt="" /></div>
-                    <div class="test">{{bargain_task.user.username}}</div>
-                    <div class="des">“朋友一生一起走，帮砍一刀有没有”</div>
-                </div>
-              
-                 <div class="goods_info_active">
-                     <div class="goods_skill"  >
+                    <div class="kanjia-user">
+                        <div class="img"><img :src="bargain_task.user.avatar || require('@/asset/pc/portrait.jpg')" alt="" /></div>
+                        <div class="test">{{bargain_task.user.username}}</div>
+                        <div class="des">“朋友一生一起走，帮砍一刀有没有”</div>
+                    </div>
+                    <div class="goods_info_active">
+                     <div class="goods_skill" v-if="bargain.status == 0" >
                         <span><a-icon type="history" /></span>
                         <span>砍价活动</span>
                         <span class="span_time">距离结束 {{seckills.format_time}}</span>
                     </div>
-                      
-                  
                  </div>
                 <div class="goods_info_group">
 
@@ -132,9 +129,8 @@
                 <p>砍价成功<br>帮朋友成功砍了<span>{{friend_cut_money}}</span>元</p>
                 <div @click="kanjiaSuccess" class="kanjia_close">X</div>
             </div>
-            
         </div>
-       
+     
 
         <loading v-if="isLoading"></loading>
         
@@ -210,6 +206,7 @@ export default {
     computed: {},
     methods: {
         get_goods_info(){
+            var that = this;
             this.$get(this.$api.getBargainTasks+'/'+this.bargain_task_id).then(res=>{
                 if(res.code == 200){
                     this.goods_info = res.data.goods;
@@ -221,7 +218,17 @@ export default {
                     // this.seckills = res.data.bargain_task.end_time; // 秒杀
                     this.seckills = {'end_time':res.data.bargain_task.end_time}
                     this.timing(this.seckills); // 倒计时
-                  
+                    if(this.bargain.status == 1 && this.bargain.is_buy == 1){
+                        //结束
+                        this.$info({
+                            title: '该商品活动已结束',
+                            content: '',
+                            onOk() {
+                                that.$router.push("/bargain");
+                            },
+                        });
+                   
+                    }
 
                 }else{
                     this.$message.error(res.msg);
@@ -1128,6 +1135,17 @@ export default {
     }
     .kanjia_success{
         position: fixed;top:0;left: 0;z-index:999;background:rgba(0,0,0,0.2);width:100%;height:100%;    
+        .kanjia_success_box{
+        width: 450px;height: 400px;position: relative;top:20%;z-index:999;background: url(~@/asset/pc/kjcg.png) no-repeat center/100% 100%;
+        margin-left: -225px;left: 50%;
+        p{padding:47% 100px 0 100px;color:#333;font-size: 18px;line-height: 40px;text-align: center;}
+        span{color: #fe0851;font-size: 40px;font-weight: bold;}
+        
+        }
+        .kanjia_close{text-align: center;font-size: 20px;position: absolute;bottom: 30px;left: 50%;margin-left: -20px;width: 40px;width: 40px;line-height: 40px;border-radius: 50%;border:1px solid #666;cursor: pointer;}
+    }
+    .kanjia_end{
+        position: fixed;top:0;left: 0;z-index:999;background:rgba(0,0,0,0.5);width:100%;height:100%;    
         .kanjia_success_box{
         width: 450px;height: 400px;position: relative;top:20%;z-index:999;background: url(~@/asset/pc/kjcg.png) no-repeat center/100% 100%;
         margin-left: -225px;left: 50%;

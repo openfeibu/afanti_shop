@@ -71,16 +71,16 @@ export default {
                     ],
                 },
                
-                {
-                    name:'帮助中心',
-                    icon:'iconbangzhu',
-                    children:[
-                        {name:'网站公告',url:'/user/article/notice'},
-                        {name:'其他合作',url:'/user/article/cooperation'},
-                        {name:'帮助中心',url:'/user/article/help'},
-                        {name:'关于我们',url:'/user/article/about'},
-                    ],
-                },
+                // {
+                //     name:'帮助中心',
+                //     icon:'iconbangzhu',
+                //     children:[
+                //         {name:'网站公告',url:'/user/article/notice'},
+                //         {name:'其他合作',url:'/user/article/cooperation'},
+                //         {name:'帮助中心',url:'/user/article/help'},
+                //         {name:'关于我们',url:'/user/article/about'},
+                //     ],
+                // },
             ],
             user_info:{},
         };

@@ -97,8 +97,8 @@ export default {
     .class_1{
         padding: 8px 15px 0 15px;
         a{
-            // font-weight: bold;
             display: block;
+            width: 100%;height: 100%;
         }
     }
     
@@ -248,6 +248,8 @@ export default {
         a{
             // font-weight: bold;
             color:#fff;
+            display: block;
+            width: 100%;height: 100%;
         }
     }
     

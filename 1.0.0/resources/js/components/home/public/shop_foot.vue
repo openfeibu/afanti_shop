@@ -30,14 +30,14 @@
                         <dd><router-link to="">砍价专区</router-link></dd>
               
                     </dl>
-                    <dl class="fore1">
+                    <!-- <dl class="fore1">
                         <dt>友情链接</dt>
                         <dd><a href="http://www.feibu.info">飞步科技</a></dd>
                       
               
-                    </dl>
+                    </dl> -->
                      <div class="clear"></div>
-                     <div class="code-list">
+                    <div class="code-list">
                     <div class="code-list-item">
                          <img src="@/asset/qrcode.png" alt="">  
                         <p>微信公众号</p>
@@ -57,7 +57,7 @@
                
             </div>
             <div class="foot_copyright">
-                <p>Copyright © 2012-2016 xxxxxx.COM 版权所有 保留一切权利</p>
+                <p>Copyright © 2021 xxxxxx.COM 版权所有 保留一切权利</p>
                 <p>公安备案 | {{common.common.icp}} | 技术支持：<a target="_black" href="http://www.feibu.info">飞步科技</a></p>
             </div>
             <!-- <a-back-top /> -->

@@ -5,9 +5,7 @@
                 <ul>
                     <li><router-link to="/">阿凡提官网</router-link></li>
                     <li>|</li>
-                    <li><router-link to="/">联系方式</router-link></li>
-                    <li>|</li>
-                    <li><router-link to="/">关于我们</router-link></li>
+                    <li><router-link to="/help?id=10">联系客服</router-link></li>
                 </ul>
             </div>
             <div class="top_shop_right">

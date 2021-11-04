@@ -1,5 +1,5 @@
 <template>
-    <div class="qingwu">
+    <div class="afanti">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
             阿里短信

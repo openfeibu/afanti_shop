@@ -58,7 +58,7 @@
                     <div class="content" style="margin-top:0;">
                         <div class="copyright">
                             <span class="copyright_title">当前版本：</span>
-                            <span class="copyright_rs"><a-tag>2.0.0</a-tag></span>
+                            <span class="copyright_rs"><a-tag>1.0.0</a-tag></span>
                         </div>
                         <div class="unline"></div>
                         <div class="copyright">
@@ -66,10 +66,6 @@
                             <span class="copyright_rs" @click="openWeb">阿凡提·水果巴扎系统（QwSystem）</span>
                         </div>
                         <div class="unline"></div>
-                        <div class="copyright" style="padding-bottom:18px">
-                            <span class="copyright_title">开源地址：</span>
-                            <span class="copyright_rs"><a-button icon="download" type="primary" @click="download">前往下载</a-button></span>
-                        </div>
                     </div>
                 </div>
             </a-col>
@@ -135,9 +131,6 @@ export default {
     watch: {},
     computed: {},
     methods: {
-        download(){
-            window.open("https://gitee.com/qingwuitcn/qwshop")
-        },
         openWeb(){
             window.open("https://www.qwststem.com")
         },

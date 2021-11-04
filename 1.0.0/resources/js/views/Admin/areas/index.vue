@@ -1,5 +1,5 @@
 <template>
-    <div class="qingwu">
+    <div class="afanti">
         <div class="admin_table_page_title">全国地址管理</div>
         <div class="unline underm"></div>
 

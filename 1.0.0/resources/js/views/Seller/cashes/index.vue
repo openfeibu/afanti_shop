@@ -1,5 +1,5 @@
 <template>
-    <div class="qingwu">
+    <div class="afanti">
         <div class="admin_table_page_title"><a-button @click="$router.push('/Seller/cashes/form')" type="danger" size="small" class="float_right" icon="money-collect">申请提现</a-button>资金提现</div>
         <div class="unline underm"></div>
 

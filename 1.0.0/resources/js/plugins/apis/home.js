@@ -3,7 +3,7 @@ const baseUrl = common.baseUrl;
 export default {
     /**
      * 青梧商城PC接口
-     * <www.qingwuit.com>
+     * <www.feibu.info>
      */
 
     // 登录验证

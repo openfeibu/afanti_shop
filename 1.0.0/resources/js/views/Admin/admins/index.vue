@@ -1,5 +1,5 @@
 <template>
-    <div class="qingwu">
+    <div class="afanti">
         <div class="admin_table_page_title">管理员列表</div>
         <div class="unline underm"></div>
 

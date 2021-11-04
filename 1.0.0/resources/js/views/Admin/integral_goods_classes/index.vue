@@ -1,5 +1,5 @@
 <template>
-    <div class="qingwu">
+    <div class="afanti">
         <div class="admin_table_page_title">积分商品分类</div>
         <div class="unline underm"></div>
 

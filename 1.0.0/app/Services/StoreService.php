@@ -100,36 +100,6 @@ class StoreService extends BaseService{
 
     // 获取商家拥有的栏目信息
     public function getStoreGoodsClasses($store_id){
-        /*
-         //弃用，
-        // 店铺分类
-        $store_classes_model = new StoreClass();
-        $store_classes = $store_classes_model->where('store_id',$store_id)->first();
-
-        if(empty($store_classes['class_id']) || empty($store_classes['class_name'])){
-            OutputServerMessageException(__('goods.goods_classes_not_fond'));
-        }
-        
-        try{
-            $class_id = json_decode($store_classes['class_id'],true);
-            $class_name = json_decode($store_classes['class_name'],true);
-        }catch(\Exception $e){
-            OutputServerMessageException($e->getMessage());
-        }
-        
-        $choseStoreClasses = [];
-
-        // 	@jiangslee todo:不存在分类时，会报错  @qingwuit 我认为入驻就一定有分类|不过可以做错误提示
-
-        foreach($class_id as $k=>$v){
-            $choseStoreClasses[$k] = [];
-            foreach($v as $key=>$vo){
-                $choseStoreClasses[$k][$key]['id'] = $vo;
-                $choseStoreClasses[$k][$key]['name'] = $class_name[$k][$key];
-            }
-        }
-        return $this->format($choseStoreClasses);
-        */
         $goods_class_model = new GoodsClass();
         $goods_class_list = $goods_class_model->orderBy('is_sort','asc')->get()->toArray();
         $list = $this->getChildren($goods_class_list);

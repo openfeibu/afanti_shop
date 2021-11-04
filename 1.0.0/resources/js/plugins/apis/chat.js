@@ -4,7 +4,7 @@ export default
 {
      /**
      * 青梧商城聊天接口
-     * <www.qingwuit.com>
+     * <www.feibu.info>
      */
 
     "chatFriends" : baseUrl + "Chat/friends", // 好友列表

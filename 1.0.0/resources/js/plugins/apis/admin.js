@@ -4,7 +4,7 @@ export default
 {
      /**
      * 后台接口
-     * <www.qingwuit.com>
+     * <www.feibu.info>
      */
 
     "adminLogin" : baseUrl + "Admin/login", // 登录
@@ -79,9 +79,6 @@ export default
 
     // 订单管理
     'adminOrders' : baseUrl + 'Admin/orders',
-
-    // 订单售后 todo 删除
-    'adminRefunds' : baseUrl + 'Admin/refunds',
 
     // 订单售后
     'adminOrderRefunds' : baseUrl + 'Admin/order_refunds',

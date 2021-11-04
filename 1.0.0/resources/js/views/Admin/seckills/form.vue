@@ -112,7 +112,7 @@ export default {
         // 选择分页
         onChange(e){
             this.params.page = e;
-            this.onload();
+            this.onSearch();
         },
         onChose(e){
             if(e.is_use){

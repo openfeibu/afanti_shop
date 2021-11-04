@@ -55,7 +55,7 @@ class Goods extends Model
 
     // 获取拼团
     public function collective(){
-        return $this->hasOne('App\Models\Collective','goods_id','id')->withTrashed();
+        return $this->hasOne('App\Models\Collective','goods_id','id');
     }
     // 获取砍价
     public function bargain(){

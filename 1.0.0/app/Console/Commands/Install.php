@@ -13,14 +13,14 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'qwshop:install';
+    protected $signature = 'fbshop:install';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Qwshop Install Command Start';
+    protected $description = 'Fbshop Install Command Start';
 
     /**
      * Create a new command instance.
@@ -66,9 +66,9 @@ class Install extends Command
 
         $mysqlHost = $this->anticipate('Please enter your MySQL address (Host)', ['127.0.0.1', 'localhost']);
         $dbPort = $this->anticipate('Please enter your MySQL port ', ['3306']);
-        $dbName = $this->anticipate('Please enter your MySQL DBName ', ['qwshop', 'shop']);
-        $dbUserName = $this->anticipate('Please enter your MySQL DBusername ', ['root','qwshop']);
-        $dbPassword = $this->anticipate('Please enter your MySQL DBpassword ', ['root','qwshop']);
+        $dbName = $this->anticipate('Please enter your MySQL DBName ', ['fbshop', 'shop']);
+        $dbUserName = $this->anticipate('Please enter your MySQL DBusername ', ['root','fbshop']);
+        $dbPassword = $this->anticipate('Please enter your MySQL DBpassword ', ['root','fbshop']);
 
         // 设置成功Mysql
         $this->table(['domain','host','prot','dbname','username','password'], [[$domain,$mysqlHost,$dbPort,$dbName,$dbUserName,$dbPassword]]);
@@ -101,7 +101,7 @@ class Install extends Command
         Artisan::call('migrate'); // 原本想使用这个太麻烦
         $this->line('');
         $this->line('Creating table. Please wait...');
-        Artisan::call('qwshop:mysql'); // 导入数据结构
+        Artisan::call('fbshop:mysql'); // 导入数据结构
         $this->line('');
         $this->info('Database imported successfully.');
         
@@ -114,7 +114,7 @@ class Install extends Command
 
         // 修改前端接口链接
         $bar->advance(); // 第三步
-        Artisan::call('qwshop:vue '.$domain);
+        Artisan::call('fbshop:vue '.$domain);
         $this->line('');
         $this->line('');
         $this->info('Modify front end interface link successfully.');
@@ -124,7 +124,7 @@ class Install extends Command
       
         $this->line('');
         $this->line('');
-        $this->info('Install Successfully , Welcome Qwshop.');
+        $this->info('Install Successfully , Welcome Fbshop.');
         $this->line('');
         $this->line('Admin url :  '.$domain.'/Admin/login');
         $this->line('Seller url :  '.$domain.'/Seller/login');

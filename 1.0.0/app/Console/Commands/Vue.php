@@ -11,7 +11,7 @@ class Vue extends Command
      *
      * @var string
      */
-    protected $signature = 'qwshop:vue {host=http://127.0.0.1:8000}';
+    protected $signature = 'fbshop:vue {host=http://127.0.0.1:8000}';
 
     /**
      * The console command description.

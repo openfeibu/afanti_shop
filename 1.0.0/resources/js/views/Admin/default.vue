@@ -63,7 +63,7 @@
                         <div class="unline"></div>
                         <div class="copyright">
                             <span class="copyright_title">商城框架：</span>
-                            <span class="copyright_rs" @click="openWeb">阿凡提·水果巴扎系统（QwSystem）</span>
+                            <span class="copyright_rs">阿凡提·水果巴扎系统（QwSystem）</span>
                         </div>
                         <div class="unline"></div>
                     </div>
@@ -131,9 +131,6 @@ export default {
     watch: {},
     computed: {},
     methods: {
-        openWeb(){
-            window.open("https://www.qwststem.com")
-        },
         onChange(e){
             // this.params.created_at = e;
             this.params.created_at[0] = moment(e[0]).format('YYYY-MM-DD')

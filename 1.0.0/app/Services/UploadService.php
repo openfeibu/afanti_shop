@@ -328,9 +328,9 @@ class UploadService extends BaseService{
             'width'=>1200,
             'height'=>1200,
             'thumb'=>[
-                [800,800],
                 [600,600],
                 [300,300],
+                [150,150],
             ],
         ]; // 配置文件
         if(!empty($store_id)){

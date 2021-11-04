@@ -70,7 +70,7 @@
                 <div class="admin_table_list">
                     <a-table :columns="columns" :data-source="info.order_goods" :pagination="false"  >
                         <span slot="name" slot-scope="rows">
-                            <div class="admin_pic_txt" @click="$router.push('/goods/'+rows.id)">
+                            <div class="admin_pic_txt" @click="$router.push('/goods/'+rows.goods_id)">
                                 
                                     <div class="img"><img v-if="rows.goods_image" :src="rows.goods_image"><a-icon v-else type="picture" /></div>
                                     <div class="text" style="max-width:475px;line-height:20px">{{rows.goods_name}}</div>

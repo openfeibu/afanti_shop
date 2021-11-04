@@ -200,7 +200,7 @@ class OrderService extends \App\Services\Common\OrderService{
      * @param string $recharge 如：1 （非必填）
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function payOrder(){
         $order_id = request()->order_id;

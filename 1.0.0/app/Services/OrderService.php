@@ -211,7 +211,7 @@ class OrderService extends BaseService{
      * @param string $recharge 如：1 （非必填）
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function payOrder(){
         $order_id = request()->order_id;
@@ -371,7 +371,7 @@ class OrderService extends BaseService{
      * @param [type] $auth 用户操作还是管理员操作 user|admin
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function editOrderStatus($order_id,$order_status,$auth="user"){
         $order_model = new Order;

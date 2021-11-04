@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Yansongda\Pay\Pay;
 use App\Services\BaseService;
 /**
- *  支付回调 qingwuit
+ *  支付回调
  */
 
 class PaySuccessService extends BaseService{

@@ -10,7 +10,7 @@ use Yansongda\Pay\Pay;
 use App\Services\BaseService;
 
 /**
- *  支付回调 qingwuit
+ *  支付回调
  */
 
 class PayMentService extends BaseService{
@@ -22,7 +22,7 @@ class PayMentService extends BaseService{
      * @param [type] $order_pay 支付订单的支付数据 order_pay 表内数据
      * @return Mix
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function pay($payment_name,$order_pay){
         if(empty($payment_name) || empty($order_pay)){

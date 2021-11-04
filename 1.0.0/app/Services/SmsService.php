@@ -42,7 +42,7 @@ class SmsService extends BaseService{
      * @param [String] $name  模版对应英文名
      * @return void
      * @Description 发送短信
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function sendSms($phone,$name){
     	

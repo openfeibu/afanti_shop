@@ -20,7 +20,7 @@ class OrderCommentService extends BaseService{
      * @param mixed request()->image
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function add($ids=[]){
         // 判断订单是否已经评论过了
@@ -122,7 +122,7 @@ class OrderCommentService extends BaseService{
      * @param string request()->reply|request()->content
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function edit($id,$auth='user'){
 

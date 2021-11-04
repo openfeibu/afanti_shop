@@ -16,7 +16,7 @@ class OrderSettlementService extends BaseService{
      * @param boolean $auto 系统处理 | 手动处理
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function add($auto=true){
         $order_model = new Order();

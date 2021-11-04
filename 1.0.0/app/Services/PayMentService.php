@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Yansongda\Pay\Pay;
 
 /**
- *  支付回调 qingwuit 
+ *  支付回调
  */
 
 class PayMentService extends BaseService{
@@ -82,7 +82,7 @@ class PayMentService extends BaseService{
      * @param [type] $order_pay 支付订单的支付数据 order_pay 表内数据
      * @return Mix
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function pay($payment_name,$order_pay){
         if(empty($payment_name) || empty($order_pay)){
@@ -287,7 +287,7 @@ class PayMentService extends BaseService{
      * @param array $notify_info 如果非第三方支付可以为空
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function payHandle($payment_name,$out_trade_no='',$notify_info=[]){
         $trade_no = ''; // 平台支付流水号
@@ -325,7 +325,7 @@ class PayMentService extends BaseService{
         'miniapp_id' => 'wxb3fxxxxxxxxxxx', // 小程序 APPID
         'mch_id' => '14577xxxx',
         'key' => 'mF2suE9sU6Mk1Cxxxxxxxxxxx',
-        'notify_url' => 'www.qingwuit.com',
+        'notify_url' => 'www.feibu.info',
         // 'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
     ];
 

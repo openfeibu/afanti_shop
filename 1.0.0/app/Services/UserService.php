@@ -271,7 +271,7 @@ class UserService extends BaseService{
      * @param string $auth 前端允许修改和后台允许修改
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function editUser($auth='user'){
         $user_service = new UserService();

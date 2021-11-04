@@ -112,7 +112,7 @@ class UploadService extends BaseService{
      * 编辑器图片上传
      *
      * @param integer $type 类型 
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function editer($type=0){
 
@@ -138,7 +138,7 @@ class UploadService extends BaseService{
      * 用户头像上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function avatar($id=0){
         $path = 'avatars';
@@ -156,7 +156,7 @@ class UploadService extends BaseService{
      * 商家Logo上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     /*
     public function store_logo($id=0){
@@ -182,7 +182,7 @@ class UploadService extends BaseService{
      * 商家幻灯片门面上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function store_slide($id=0){
         $path = 'store_slide';
@@ -196,7 +196,7 @@ class UploadService extends BaseService{
      * 配置中心图片上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function config_logo($id=0){
         $path = 'configs';
@@ -214,7 +214,7 @@ class UploadService extends BaseService{
      * 配置中心icon上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function config_icon($id=0){
         $path = 'configs';
@@ -239,7 +239,7 @@ class UploadService extends BaseService{
      * 商品分类缩略图上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     /*
     public function goods_class($id=0){
@@ -266,7 +266,7 @@ class UploadService extends BaseService{
      * 商品品牌缩略图上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function goods_brand($id=0){
         $path = 'goods_brand';
@@ -284,7 +284,7 @@ class UploadService extends BaseService{
      * 广告图上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function adv($id=0){
         $path = 'adv';
@@ -298,7 +298,7 @@ class UploadService extends BaseService{
      * 在线聊天图片商城
      *
      * @param integer $store_id  商家ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function chat($store_id=0){
         $path = 'chat';
@@ -320,7 +320,7 @@ class UploadService extends BaseService{
      * 商品图片上传
      *
      * @param integer $store_id  商家ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function goods($store_id=0){
         $path = 'goods';
@@ -344,7 +344,7 @@ class UploadService extends BaseService{
      * 积分产品图片上传
      *
      * @param integer $store_id  商家ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function integral($store_id=0){
         $path = 'integrals';
@@ -367,7 +367,7 @@ class UploadService extends BaseService{
      * 商家入驻 图片上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function store_join($id=0){
         $path = 'store_join';
@@ -381,7 +381,7 @@ class UploadService extends BaseService{
      * 用户认证 图片上传
      *
      * @param integer $id 用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function user_check($id=0){
         $path = 'user_check';
@@ -395,7 +395,7 @@ class UploadService extends BaseService{
      * 评论图片
      *
      * @param integer $id  用户ID
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function comment($id=0){
         $path = 'comments';

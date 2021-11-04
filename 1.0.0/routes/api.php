@@ -371,9 +371,6 @@ Route::namespace('Home')->group(function(){
         // 订单列表
         Route::get('/orders','OrderController@get_orders'); // 获取订单列表
 
-        // 订单售后  todo 删除
-        Route::apiResource('refunds','RefundController')->except(['index','destroy']);
-
         Route::apiResource('order_refunds','OrderRefundController');
         Route::put('/order_refunds/apply/{order_goods_id}','OrderRefundController@apply')->name('order_refunds.apply');
         Route::put('/order_refunds/delivery/{id}','OrderRefundController@delivery')->name('order_refunds.delivery'); //发货

@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
  * 快宝第三方平台物流查询
  *
  * @Description
- * @author hg <www.qingwuit.com>
+ *
  */
 class KuaibaoService extends BaseService{
     

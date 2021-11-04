@@ -20,7 +20,7 @@ class MoneyLogService extends BaseService{
      * @param integer $type 类型 0 金额 1冻结资金 2积分
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function editMoney($name,$user_id,$money,$type=0,$info=''){
         try{
@@ -63,7 +63,7 @@ class MoneyLogService extends BaseService{
      * @param integer $type 类型 0 金额 1冻结资金 2积分
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function editSellerMoney($name,$store_id,$money,$type=0,$info=''){
         try{

@@ -70,7 +70,7 @@ class CouponService extends BaseService{
      * @param integer $order_id // 使用的订单
      * @return void
      * @Description
-     * @author hg <www.qingwuit.com>
+     *
      */
     public function use_coupon($coupon_log_id=0,$order_id=0){
         if(empty($coupon_log_id)){

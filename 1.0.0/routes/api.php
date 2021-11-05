@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 
 /**
- * 
+ *
  * @author hg <364825702@qq.com>
  * 商城总后台 路由
- * 
+ *
  */
 //Route::any('/test','Admin\LoginController@test'); // 测试接口
 
@@ -31,7 +31,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
     Route::get('/check_login','LoginController@check_login'); // 检测登陆
 
     Route::group(['middleware'=>'jwt.admin'],function(){
-        
+
         Route::apiResources([
             'admins'=>'AdminController', // 超级管理员
             'users'=>'UserController', // 平台用户
@@ -39,7 +39,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
             'menus'=>'MenuController', // 用户菜单
             'permissions'=>'PermissionController', // 角色权限
             'permission_groups'=>'PermissionGroupController', // 接口权限分组
-        ]); 
+        ]);
 
         // 菜单处理
         Route::get('/menus/cache/clear','MenuController@clear_cache')->name('menus.clear_cache'); // 缓存清除接口
@@ -51,8 +51,8 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::post('/configs/upload/user_avatar','ConfigController@config_user_avatar')->name('configs.config_user_avatar'); // 配置中心图上传(user_avatar)
         Route::get('/configs/config/{name}','ConfigController@config')->name('configs.config');
 
-        Route::apiResource('agreements','AgreementController'); // 站点协议 
-        Route::apiResource('articles','ArticleController'); // 文章，帮助中心 
+        Route::apiResource('agreements','AgreementController'); // 站点协议
+        Route::apiResource('articles','ArticleController'); // 文章，帮助中心
         Route::apiResource('article_categories','ArticleCategoryController'); // 文章，帮助中心
         // 物流公司
         Route::apiResource('expresses','ExpressController');
@@ -101,7 +101,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('advs','AdvController');
         Route::post('/advs/upload/thumb','AdvController@adv_upload')->name('advs.adv_upload'); // 缩略图上传
 
-        // 订单管理 
+        // 订单管理
         Route::apiResource('orders','OrderController')->except(['store']);
         Route::put('/orders/delivery/{id}','OrderController@delivery')->name('orders.delivery');
         Route::get('/orders/delivery_info/{id}','OrderController@delivery_info')->name('orders.delivery_info'); // 缩略图上传
@@ -111,7 +111,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('order_refunds','OrderRefundController')->except(['store']);
         Route::put('/order_refunds/audit/{id}','OrderRefundController@audit')->name('order_refunds.audit'); //审核
         Route::put('/order_refunds/receipt/{id}','OrderRefundController@receipt')->name('order_refunds.receipt'); //收货
-        // 积分订单管理 
+        // 积分订单管理
         Route::apiResource('integral_orders','IntegralOrderController')->except(['store','destroy']);
 
         // 订单评论
@@ -120,7 +120,6 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         // 分销
         Route::apiResource('distribution_logs','DistributionLogController')->only(['index']); // 分销日志
 
-        //TODO:加入权限
         // 优惠券
         Route::apiResource('coupons','CouponController');
         Route::apiResource('coupon_logs','CouponLogController')->only(['index']); // 优惠券日志
@@ -130,16 +129,16 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 秒杀
         Route::apiResource('seckills','SeckillController');
-        Route::get('seckills/goods/get_seckill_goods','SeckillController@get_seckill_goods'); // 获取商品列表
+        Route::get('seckills/goods/get_seckill_goods','SeckillController@get_seckill_goods')->name('seckills.get_seckill_goods'); // 获取商品列表
 
         // 拼团
         Route::apiResource('collectives','CollectiveController');
-        Route::get('collectives/goods/get_collective_goods','CollectiveController@get_collective_goods'); // 获取商品列表
+        Route::get('collectives/goods/get_collective_goods','CollectiveController@get_collective_goods')->name('collectives.get_collective_goods'); // 获取商品列表
         Route::apiResource('collective_logs','CollectiveLogController')->only(['index']); // 拼团日志
 
         // 砍价
         Route::apiResource('bargains','BargainController');
-        Route::get('bargains/goods/get_bargain_goods','BargainController@get_bargain_goods'); // 获取商品列表
+        Route::get('bargains/goods/get_bargain_goods','BargainController@get_bargain_goods')->name('bargains.get_collective_goods'); // 获取商品列表
 
         // 结算日志
         Route::apiResource('order_settlements','OrderSettlementController')->except(['update','destroy']);
@@ -166,15 +165,15 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
     });
 
-    
+
 });
 
 
 /**
- * 
+ *
  * @author hg <364825702@qq.com>
  * 商城商家后台 路由
- * 
+ *
  */
 Route::namespace('Seller')->prefix('Seller')->group(function(){
 
@@ -196,12 +195,12 @@ Route::namespace('Seller')->prefix('Seller')->group(function(){
         Route::post('/goods/upload/images','GoodsController@goods_upload'); // 图片上传
 
         // 编辑器上传图片接口
-        Route::post('/editor/upload','EditorController@editor'); 
+        Route::post('/editor/upload','EditorController@editor');
 
         // 商品品牌
         Route::apiResource('goods_brands','GoodsBrandController')->except(['update','show','store','destroy']);
 
-        // 订单管理 
+        // 订单管理
         Route::apiResource('orders','OrderController')->except(['store','destroy']);
 
         // 订单评论
@@ -261,14 +260,14 @@ Route::namespace('Seller')->prefix('Seller')->group(function(){
 
     });
 
-    
+
 });
 
 /**
- * 
+ *
  * @author hg <364825702@qq.com>
  * 商城PC端 路由
- * 
+ *
  */
 Route::namespace('Home')->group(function(){
 
@@ -282,16 +281,16 @@ Route::namespace('Home')->group(function(){
     Route::get('/send_sms','LoginController@send_sms'); // 发送短信
 
     // 获取站点协议
-    Route::get('/agreement/{ename}','AgreementController@show'); 
+    Route::get('/agreement/{ename}','AgreementController@show');
 
     // 网站公共配置获取
     Route::get('/common','CommonController@common');
     Route::get('/config','CommonController@config');
     // 获取商品栏目
-    Route::get('/goods_classes','GoodsClassController@goods_classes'); 
+    Route::get('/goods_classes','GoodsClassController@goods_classes');
 
     // PC端首页
-    Route::get('/index','IndexController@index'); 
+    Route::get('/index','IndexController@index');
 
     // 商品
     Route::get('/goods/{id}','GoodsController@goods_info'); // 获取商品详情
@@ -326,7 +325,7 @@ Route::namespace('Home')->group(function(){
 
     Route::get('/bargains','BargainController@index'); // 砍价列表
 
-    Route::get('/all_expresses','ExpressController@all_expresses')->name('expresses.all_expresses');
+    Route::get('/all_expresses','ExpressController@all_expresses');
     // 帮助中心文章获取
     Route::get('/articles/{id}','ArticleController@show');
     Route::get('/article_categories','ArticleController@categories');
@@ -408,7 +407,7 @@ Route::namespace('Home')->group(function(){
         Route::post('/store/join/upload','StoreController@store_join_upload'); // 商家入驻图片上传
 
         // 全国省市区地址获取
-        Route::get('/areas','AreaController@areas'); 
+        Route::get('/areas','AreaController@areas');
 
 
 
@@ -416,46 +415,46 @@ Route::namespace('Home')->group(function(){
     });
 
 
-    
+
 });
 
 
 /**
- * 
+ *
  * @author hg <364825702@qq.com>
  * 在线聊天 路由 ['middleware'=>'jwt.user'],
- * 
+ *
  */
 Route::namespace('Chat')->prefix('Chat')->middleware('jwt.user')->group(function(){
 
-    Route::get('/friends','IndexController@friends'); // 
-    Route::post('/add_friend','IndexController@add_friend'); // 
-    Route::post('/chat_msg','IndexController@chat_msg'); // 
-    Route::post('/read_msg','IndexController@read_msg'); // 
-    Route::post('/chat_event','IndexController@chat_event'); // 
-    Route::post('/image','IndexController@image'); // 
+    Route::get('/friends','IndexController@friends'); //
+    Route::post('/add_friend','IndexController@add_friend'); //
+    Route::post('/chat_msg','IndexController@chat_msg'); //
+    Route::post('/read_msg','IndexController@read_msg'); //
+    Route::post('/chat_event','IndexController@chat_event'); //
+    Route::post('/image','IndexController@image'); //
 
 });
 Route::namespace('Chat')->prefix('Seller')->middleware('jwt.user')->group(function(){
     // 商家端'
-    Route::get('/chat_friends','SellerChatController@friends'); // 
-    Route::post('/chat_msg','SellerChatController@chat_msg'); // 
-    Route::post('/chat_read_msg','SellerChatController@read_msg'); // 
-    Route::post('/chat_event','SellerChatController@chat_event'); // 
+    Route::get('/chat_friends','SellerChatController@friends'); //
+    Route::post('/chat_msg','SellerChatController@chat_msg'); //
+    Route::post('/chat_read_msg','SellerChatController@read_msg'); //
+    Route::post('/chat_event','SellerChatController@chat_event'); //
 });
 
 
 
 /**
- * 
+ *
  * @author hg <364825702@qq.com>
  * 商城支付回调|其他回调 路由
- * 
+ *
  */
 Route::namespace('PayCallBack')->group(function(){
 
     Route::any('/payment/{name}','PaymentController@payment'); // 回调地址  [/api/payment/wechat] | [/api/payment/ali]
     Route::any('/oauth/{name}','OauthController@oauth'); // Oauth 第三方登录  [/api/oauth/wechat] | [/api/payment/github]
     Route::any('/oauth/callback/{name}','OauthController@oauthCallback'); // Oauth 第三方登录回调地址  [/api/oauth/wechat] | [/api/payment/github]
-    
+
 });

@@ -24,16 +24,6 @@
                     </a-row>
                 </div>
                 
-                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">快递信息</span></div>
-                <div class="unline underm"></div>
-                <div class="order_info_list">
-                    <a-row>
-                        <a-col :span="24">
-                            快递单号：<span class="content">{{info.delivery_no||'-'}}</span>
-                        </a-col>
-                       
-                    </a-row>
-                </div>
                 <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">收货人信息</span></div>
                 <div class="unline underm"></div>
                 <div class="order_info_list">
@@ -112,21 +102,34 @@
                     <div class="error_btn" v-if="info.delivery_status ==20 && info.receipt_status == 10" @click="receipt(info.id)">确定收货</div>
                     <div class="gray_btn" v-if="info.order_status ==30 && info.is_comment==0" @click="$router.push('/user/comment/add/'+info.id)">前往评论</div>
                 </div>
-                
 
                 <template v-if="info.delivery_status==20">
-                <div style="margin-top:40px"><span style="font-size: 14px;font-weight: bold;">快递信息</span></div>
+                <div style=""><span style="font-size: 14px;font-weight: bold;">发货信息</span></div>
                 <div class="unline underm"></div>
-
-                <div class="order_info_kd">
-                    <a-timeline v-if="info.delivery_list.length>0">
-                        <a-timeline-item  v-for="(v,k) in info.delivery_list" :key="k" :color="k==0?'red':'gray'">
-                        <p>{{info.context+' '+info.time}}</p>
-                        </a-timeline-item>
-                    </a-timeline>
-                    <a-empty v-else><span slot="description">暂无物流信息</span></a-empty>
-                </div>
-                <br>
+                    <div class="order_info_list">
+                        <a-row>
+                            <a-col :span="8">
+                                快递公司：<span class="content">{{info.delivery_company||'-'}}</span>
+                            </a-col>
+                            <a-col :span="8">
+                                快递单号：<span class="content">{{info.delivery_no||'-'}}</span>
+                            </a-col>
+                            <a-col :span="8">
+                                <span class="content" v-if="info.delivery_url"><a :href="info.delivery_url" target="_blank">点击查询</a></span>
+                            </a-col>
+                        </a-row>
+                    </div>
+                    <!--
+                    <div class="order_info_kd">
+                        <a-timeline v-if="info.delivery_list.length>0">
+                            <a-timeline-item  v-for="(v,k) in info.delivery_list" :key="k" :color="k==0?'red':'gray'">
+                            <p>{{info.context+' '+info.time}}</p>
+                            </a-timeline-item>
+                        </a-timeline>
+                        <a-empty v-else><span slot="description">暂无物流信息</span></a-empty>
+                    </div>
+                    -->
+                    <br>
                 </template>
             </div>
             

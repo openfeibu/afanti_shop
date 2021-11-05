@@ -30,6 +30,7 @@ class OrderResource extends JsonResource
             'delivery_no'           =>  $this->delivery_no,
             'delivery_code' => $this->delivery_code,
             'delivery_company' => $this->delivery_company,
+            'delivery_url' => $this->delivery_url ?? '' ,
             'total_price'           =>  $this->total_price,
             'freight_money'         =>  $this->freight_money,
             'remark'                =>  $this->remark,

@@ -15,12 +15,12 @@ class ExpressController extends Controller
      */
     public function index(Request $request,Express $express_model)
     {
-        $list = $express_model->orderBy('id','asc')->paginate($request->per_page??30);
+        $list = $express_model->orderBy('order','asc')->orderBy('id','asc')->paginate($request->per_page??30);
         return $this->success($list);
     }
     public function all_expresses(Request $request,Express $express_model)
     {
-        $list = $express_model->orderBy('id','asc')->get();
+        $list = $express_model->orderBy('order','asc')->orderBy('id','asc')->get();
         return $this->success($list);
     }
 

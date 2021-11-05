@@ -11,7 +11,7 @@ class ExpressController extends Controller
 
     public function all_expresses(Request $request,Express $express_model)
     {
-        $list = $express_model->orderBy('id','asc')->get();
+        $list = $express_model->orderBy('order','asc')->orderBy('id','asc')->get();
         return $this->success($list);
     }
 

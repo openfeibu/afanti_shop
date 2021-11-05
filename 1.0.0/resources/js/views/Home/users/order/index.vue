@@ -189,8 +189,14 @@ export default {
                 onOk() {
                     that.isLoading = true;
                     that.$put(that.$api.homeOrder+'/'+'cancel',{id:id}).then(res=>{
-                        that.onload();
-                        return that.$returnInfo(res)
+                        if(res.code==200)
+                        {
+                            that.onload();
+                            return that.$returnInfo(res)
+                        }else{
+                            that.isLoading = false;
+                            return that.$returnInfo(res)
+                        }
                      })
                 },
                 onCancel() {

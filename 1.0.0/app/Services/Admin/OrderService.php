@@ -88,6 +88,7 @@ class OrderService extends \App\Services\Common\OrderService{
             // 更新订单状态
             $order->order_status = $data['is_cancel'] ? 20 : 10;
             $order->save();
+
             DB::commit();
             return true;
         }catch (\Exception $e) {

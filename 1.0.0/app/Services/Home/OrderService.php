@@ -320,12 +320,23 @@ class OrderService extends \App\Services\Common\OrderService{
             OutputServerMessageException(__('users.error_token'));
         }
         if ($order['delivery_status'] == 20) {
-            OutputServerMessageException("已发货订单不可取消");
+            OutputServerMessageException("已发货订单不可取消，请申请售后");
+        }
+        // 订单是否已支付
+        $isPay = $order['pay_status'] == PayStatus::SUCCESS;
+        if($order['order_source'] == 'collective')
+        {
+            if($isPay)
+            {
+                $collective_active = $order->collective_active;
+                if($collective_active['status'] == 'collecting')
+                {
+                    OutputServerMessageException("拼团中，取消失败。拼团失败会自动取消退款，或拼团成功后申请退款。");
+                }
+            }
         }
         try {
             DB::beginTransaction();
-            // 订单是否已支付
-            $isPay = $order['pay_status'] == PayStatus::SUCCESS;
             // 未付款的订单
             if ($isPay == false) {
                 // 回退商品库存

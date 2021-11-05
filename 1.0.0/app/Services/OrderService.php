@@ -646,16 +646,8 @@ class OrderService extends BaseService{
         switch ($order_info['order_source'])
         {
             case 'collective':
-                // 付款状态
-                if ($order_info['pay_status'] == 10) {
-                    return '待付款';
-                }
                 $collective_active = $order_info->collective_active;
-                if(!$collective_active)
-                {
-                    return "待付款";
-                }
-                $order_info['active_status'] = $collective_active['status'];
+                $order_info['active_status'] = $collective_active['status'] ?? 'un-collect';
                 // 订单状态：已完成
                 if ($order_info['order_status'] == 30) {
                     return '已完成';
@@ -667,6 +659,10 @@ class OrderService extends BaseService{
                         return $order_info['is_refund'] ? '拼团未成功，已退款' : '拼团未成功，待退款';
                     }
                     return '已取消';
+                }
+                // 付款状态
+                if ($order_info['pay_status'] == 10) {
+                    return '待付款';
                 }
                 // 拼单未成功
                 if ($order_info['active_status'] == 'failed-collect') {

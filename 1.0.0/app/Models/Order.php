@@ -68,9 +68,11 @@ class Order extends Model
     }
 
     public function collective_active_user(){
-        return $this->hasOne('App\Models\CollectiveActiveUser','order_id','id');
+        return $this->hasMany('App\Models\CollectiveActiveUser','order_id','id');
     }
-
+    public function collective_active(){
+        return $this->belongsTo('App\Models\CollectiveActive');
+    }
     public function getOrderSourceTextAttribute()
     {
         return isset($this->attributes['order_source']) ? trans('orders.order_source_text.'.$this->attributes['order_source']) : '';

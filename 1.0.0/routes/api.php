@@ -120,6 +120,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         // 分销
         Route::apiResource('distribution_logs','DistributionLogController')->only(['index']); // 分销日志
 
+        //TODO:加入权限
         // 优惠券
         Route::apiResource('coupons','CouponController');
         Route::apiResource('coupon_logs','CouponLogController')->only(['index']); // 优惠券日志

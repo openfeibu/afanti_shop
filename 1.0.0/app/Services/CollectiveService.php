@@ -21,10 +21,15 @@ class CollectiveService extends BaseService{
         return $this->format($info);
     }
     // 根据商品ID获取当前的正在操作的团
-    public function getCollectiveActiveByGoodsId($goods_id){
+    public function getCollectiveActiveByGoodsId($goods_id,$user_id=0){
         $collective_active_model = new CollectiveActive();
-        $list = $collective_active_model->where('goods_id',$goods_id)->whereIn('status',['un-collect','collecting'])->where('end_time','>',date('Y-m-d H:i:s'))->with('user')->get();
-        return $this->success(new CollectiveActiveGoodsCollection( $list));
+        $list = $collective_active_model->where('goods_id',$goods_id)->whereIn('status',['collecting'])->where('end_time','>',date('Y-m-d H:i:s'))->with('user')->get();
+        foreach ($list as $key => $active)
+        {
+            $collective_active_user_ids = CollectiveActiveUser::where('collective_active_id',$active->id)->pluck('user_id')->toArray();
+            $active->is_active = in_array($user_id,$collective_active_user_ids) ? 1 : 0;
+        }
+        return $this->success(new CollectiveActiveGoodsCollection($list));
     }
 
     // 弃用 根据商品ID获取当前的正在操作的团
@@ -110,7 +115,7 @@ class CollectiveService extends BaseService{
                 'discount' => $collective_resp['data']['discount'],
                 'people' => $collective_resp['data']['need'],
                 'actual_people' => 1,
-                'status' => 'un-collect',
+                'status' => 'collecting',
                 'end_time' => date('Y-m-d H:i:s',time() + ($collective_resp['data']['group_time'] * 60 * 60))
             ];
             $collective_active = CollectiveActive::create($data);

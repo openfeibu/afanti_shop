@@ -42,6 +42,7 @@ class GoodsController extends Controller
     public function goods_info($id){
         $goods_info = $this->goods_service->getGoodsInfo($id);
         $user_info = $this->user_service->getUserInfo();
+        $user_id = $user_info ? $user_info['id'] : 0;
         if($goods_info['status']){
             $goods_info['data']['store_info'] = $this->store_service->getStoreInfoAndRate($goods_info['data']['store_id'],'id,store_name,store_description')['data'];
             $goods_info['data']['sale_list'] = $this->goods_service->getSaleSortGoods(['class_id'=>$goods_info['data']['class_id']])['data']; // 销售排名
@@ -55,7 +56,7 @@ class GoodsController extends Controller
             $goods_info['data']['is_partake'] = $goods_info['data']['bargain_task_id'] > 0;
             $collective_info = $this->collective_service->getCollectiveInfoByGoodsId($id);
             $goods_info['data']['collectives'] = $collective_info['status']?$collective_info['data']:false; // 团购
-            $goods_info['data']['collective_list'] = $this->collective_service->getCollectiveActiveByGoodsId($id)['data']; // 正在团的
+            $goods_info['data']['collective_list'] = $this->collective_service->getCollectiveActiveByGoodsId($id,$user_id)['data']; // 正在团的
             return $this->success($goods_info['data']);
         }
         return $this->error($goods_info['msg']);

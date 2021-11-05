@@ -39,6 +39,7 @@ class CollectiveController extends Controller
         $collective_model->goods_id = $goods_id;
         $collective_model->discount = floatval($request->discount);
         $collective_model->need = intval(abs($request->need));
+        $collective_model->group_time = intval(abs($request->group_time));
 
         $collective_model->save();
         return $this->success([],__('base.success'));
@@ -72,6 +73,7 @@ class CollectiveController extends Controller
         $collective_model->store_id = $goods->store_id;
         $collective_model->discount = floatval($request->discount);
         $collective_model->need = intval(abs($request->need));
+        $collective_model->group_time = intval(abs($request->group_time));
         $collective_model->save();
         return $this->success([],__('base.success'));
     }

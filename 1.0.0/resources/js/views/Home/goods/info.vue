@@ -83,7 +83,9 @@
                             <div class="tuan_item" v-for="(v,k) in collective_list" :key="k">
                                 <img v-lazy="v.avatar||require('@/asset/user/user_default.png')">
                                 <div class="nickname">{{v.nickname}}</div>
-                                <div class="btn" @click="collective_active_id=v.id;buy()">立即参团</div>
+
+                                <div class="btn" v-if="v.is_active == 1">等待成团</div>
+                                <div class="btn" v-else @click="collective_active_id=v.id;buy()">立即参团</div>
                                 <div class="orders_count">已经参团 {{v.actual_people}} / {{v.people}} 人</div>
                             </div>
                         </a-carousel>

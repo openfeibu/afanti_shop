@@ -24,6 +24,7 @@ class CollectiveActiveGoodsCollection extends ResourceCollection
                 'nickname'                  =>  $tool_service->formatTrueName2($item->user->nickname),
                 'avatar'                    =>  $item->user->avatar,
                 'end_time'              =>  $item->end_time,
+                'is_active' => $item->is_active ?? 0,
             ];
         });
     }

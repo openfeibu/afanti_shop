@@ -78,7 +78,7 @@ class UserService extends BaseService{
                     
                     // 插入第三方表
                     $uw_model->create([
-                        'openid'        =>  $oauth->openid,
+                        'openid'        =>  $oauth->user['openid'],
                         'nickname'      =>  $oauth->nickname,
                         'user_id'       =>  $user_id,
                         'unionid'       =>  $oauth->unionid,

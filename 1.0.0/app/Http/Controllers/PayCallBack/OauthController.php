@@ -34,8 +34,7 @@ class OauthController extends Controller
         $user = Socialite::driver($oauth_name)->stateless()->user(); // 无认证状态#
         $user_service = new UserService();
         $rs = $user_service->oauthLogin($user,$oauth_name);
-        dd($rs);
-
+        return redirect('user');
         // $user->token;
     }
 

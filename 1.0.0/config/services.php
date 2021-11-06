@@ -37,9 +37,9 @@ return [
     ],
 
     'weixinweb' => [    
-        'client_id' => env('WEIXINWEB_CLIENT_ID'),  
-        'client_secret' => env('WEIXINWEB_CLIENT_SECRET'),  
-        'redirect' => env('WEIXINWEB_REDIRECT_URI') 
+        'client_id' => env('WEIXINWEB_CLIENT_ID','wxdbb3fd7a1ae01d9d'),
+        'client_secret' => env('WEIXINWEB_CLIENT_SECRET','54267fc709bd489fb7fa76c05fd2a035'),
+        'redirect' => env('WEIXINWEB_REDIRECT_URI','http://afanti.feibu.info/api/oauth/weixinweb')
     ],
 
     'weixin' => [    

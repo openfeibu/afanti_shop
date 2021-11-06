@@ -83,7 +83,10 @@ class SmsService extends BaseService{
             $rs = $easySms->send($phone, [
                 'content'  => '',
                 'template' => $alisms['code'],
-                'data' => ['code'=>$rand],
+                'data' => [
+                    'code'=>$rand,
+                    'product' => '阿凡提 水果巴扎'
+                ],
             ]);
         } catch (\Overtrue\EasySms\Exceptions\NoGatewayAvailableException $e) {
         	$error_msg = $e->getException('aliyun')->getMessage();

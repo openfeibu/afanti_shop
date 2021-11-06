@@ -62,14 +62,14 @@ class UserService extends BaseService{
             // 判断是否存在该ID
             if($oauth_name == 'weixinweb' || empty($oauth_name)){
                 $uw_model = new UserWechat();
-                $uwInfo = $uw_model->where('unionid',$oauth['unionid'])->first();
+                $uwInfo = $uw_model->where('unionid',$oauth->unionid)->first();
                 
                 // 不存在则开始创建
                 if(!$uwInfo){
                     $userInsertData = [];
                     $userInsertData['username'] = 'wx'.date('Ymd').mt_rand(100,999);
-                    $userInsertData['nickname'] = $oauth['nickname'];
-                    $userInsertData['avatar'] = $oauth['avatar'];
+                    $userInsertData['nickname'] = $oauth->nickname;
+                    $userInsertData['avatar'] = $oauth->avatar;
                     $userInsertData['ip'] = request()->getClientIp();
                     $userInsertData['inviter_id'] = request()->inviter_id??0;
                     $userInsertData['password'] = Hash::make('123456');
@@ -78,11 +78,11 @@ class UserService extends BaseService{
                     
                     // 插入第三方表
                     $uw_model->create([
-                        'openid'        =>  $oauth['openid'],
-                        'nickname'      =>  $oauth['nickname'],
+                        'openid'        =>  $oauth->openid,
+                        'nickname'      =>  $oauth->nickname,
                         'user_id'       =>  $user_id,
-                        'unionid'       =>  $oauth['unionid'],
-                        'headimgurl'    =>  $oauth['avatar']??'',
+                        'unionid'       =>  $oauth->unionid,
+                        'headimgurl'    =>  $oauth->avatar??'',
                     ]);
                 }else{
                     $user_id = $uwInfo->user_id;
@@ -126,18 +126,18 @@ class UserService extends BaseService{
     public function bindWechat($oauth){
         $user_id = auth()->id();
         $uw_model = new UserWechat();
-        $uwInfo = $uw_model->where('unionid',$oauth['unionid'])->first();
+        $uwInfo = $uw_model->where('unionid',$oauth->unionid)->first();
         // 不存在则开始创建
         if($uwInfo){
             OutputServerMessageException(__('users.bind_wechat_error'));
         }
         // 插入第三方表
         $uw_model->create([
-            'openid'        =>  $oauth['openid'],
-            'nickname'      =>  $oauth['nickname'],
+            'openid'        =>  $oauth->openid,
+            'nickname'      =>  $oauth->nickname,
             'user_id'       =>  $user_id,
-            'unionid'       =>  $oauth['unionid'],
-            'headimgurl'    =>  $oauth['avatar']??'',
+            'unionid'       =>  $oauth->unionid,
+            'headimgurl'    =>  $oauth->avatar??'',
         ]);
         return $this->format();
     }

@@ -333,7 +333,7 @@ class UserService extends BaseService{
                 }
 
                 $sms_service = new SmsService();
-                $smsRes = $sms_service->checkSms(request()->phone,request()->code);
+                $smsRes = $sms_service->checkSms($user_model['phone'],request()->code);
                 if(!$smsRes['status']){
                     OutputServerMessageException($smsRes['msg']);
                 }

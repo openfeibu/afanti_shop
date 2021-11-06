@@ -79,7 +79,7 @@ export default {
             })
         },
         handleSubmit(){
-            if(this.params.phone != this.re_phone){
+            if(this.params.phone != this.params.re_phone){
                 return this.$message.error('两次手机不相符.');
             }
             this.$put(this.$api.homeUser+'/edit_user',this.params).then(res=>{

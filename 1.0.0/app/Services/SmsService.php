@@ -112,6 +112,7 @@ class SmsService extends BaseService{
     public function checkSms($phone,$code){
         $failureTime = 600; // 失效时间
         $sms_log_model = new SmsLog();
+
         if(empty($smsInfo = $sms_log_model->where([
             'ip'    =>  request()->getClientIp(),
             'content'    =>  $code,

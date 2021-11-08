@@ -70,7 +70,21 @@ export default {
             });
         },
         wechat_login(){
-            window.location.href="/api/oauth/weixinweb"
+            //window.location.href="/api/oauth/weixinweb"
+            //关键 方法打开一个新页面请求这个地址 其实 process.env.GITEE_CLIENT_ID 和process.env.REDIRECT_URI 写在配置文件中
+            window.open('/api/oauth/weixinweb')
+            //监听回调方法 方法文档地址：https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener
+            window.addEventListener('message', function (e) {
+                //e.data 就是后端颁发的token
+                //执行vuex里面的方法 可以理解拿到了token 去请求获取用户信息的接口
+                localStorage.setItem("token", e.data);
+                vm.$store.dispatch('homeLogin/login',res);
+                vm.$message.success('登录成功！');
+                vm.$router.push({ name: "home_user_default" });
+
+            }, false)
+            this.show = false
+
         }
     },
     created: function() {

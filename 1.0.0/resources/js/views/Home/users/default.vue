@@ -132,7 +132,7 @@ export default {
         this.get_info();
         let history = localStorage.getItem('shop_goods_historys')
         if(!this.$isEmpty(history)){
-            this.history = JSON.parse(history) 
+            this.history = JSON.parse(history)
         }
         
     },

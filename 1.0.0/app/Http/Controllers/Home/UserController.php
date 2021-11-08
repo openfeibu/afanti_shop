@@ -48,6 +48,10 @@ class UserController extends Controller
         return $this->success(new UserEditResource($user_info));
     }
 
+    public function edit_phone(Request $request)
+    {
+
+    }
     // 个人中心首页默认信息
     public function default(){
         // 用户信息

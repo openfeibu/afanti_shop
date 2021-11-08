@@ -60,6 +60,7 @@
                     if (res.code == 200) {
                         // console.log(res);
                         // 存储用户的token
+                        console.log(res);return false;
                         localStorage.setItem("token", res.data.token);
                         vm.$store.dispatch('homeLogin/login',res);
                         vm.$message.success('登录成功！');
@@ -73,20 +74,27 @@
                 var vm = this;
                 //window.location.href="/api/oauth/weixinweb"
                 //关键 方法打开一个新页面请求这个地址 其实 process.env.GITEE_CLIENT_ID 和process.env.REDIRECT_URI 写在配置文件中
-                window.open('/api/oauth/weixinweb', 'newwindow', 'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+                //window.open('/api/oauth/weixinweb', 'newwindow', 'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+                window.open('/api/oauth/callback/weixinweb', 'newwindow', 'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
                 //监听回调方法 方法文档地址：https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener
                 window.addEventListener('message', function (e) {
                     console.log(e.data);
-                    //e.data 就是后端颁发的token
-                    //执行vuex里面的方法 可以理解拿到了token 去请求获取用户信息的接口
-                    localStorage.setItem("token", e.data);
-                    vm.$message.success('登录成功！');
-                    window.location.href="/user";
-//                    vm.$get(vm.$api.homeUser+'/info').then(res=>{
-//                        vm.$store.dispatch('homeLogin/login',res);
-//                        vm.$router.push({ name: "home_user_default" });
-//                    })
+                    //已经注册且绑定用户
+                   if(e.data.is_user)
+                   {
+                       localStorage.setItem("token", e.data.token);
+                       var res = {'data':{'token':'','user_info':{}}};
+                       res['data']['token'] = e.data.token;
+                       res['data']['user_info'] = e.data.user_info;
+                       // console.log(res);return false;
+                       vm.$message.success('登录成功！');
+                       vm.$store.dispatch('homeLogin/login',res);
+                       vm.$router.push({ name: "home_user_default" });
+                       //window.location.href="/user";
+                   }else{
+                       //已注册，调用登录接口绑定；未注册，调用注册接口绑定。 接口加多字段oauth_data（e.data.oauth_data）即可
 
+                   }
 
                 }, false)
 

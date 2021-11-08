@@ -32,12 +32,27 @@ class UserService extends BaseService{
             $admin_model->save();
         }
         if($auth=='user'){
+            $oauth_name = request()->get('oauth_name','');
+            switch ($oauth_name)
+            {
+                case 'weixinweb':
+                    $oauth_data = request()->get('oauth_data');
+                    $uw_model = new UserWechat();
+                    // 插入第三方表
+                    $uw_model->create([
+                        'openid'        =>  $oauth_data['openid'],
+                        'nickname'      =>  $oauth_data['nickname'],
+                        'user_id'       =>  $userInfo['id'],
+                        'unionid'       =>  $oauth_data['unionid'],
+                        'headimgurl'    =>  $oauth_data['avatar'],
+                    ]);
+                    break;
+            }
             $user_model = User::find($userInfo['id']);
             $user_model->login_time = now();
             $user_model->last_login_time = $userInfo['login_time'];
             $user_model->ip = request()->getClientIp();
             $user_model->save();
-
             // 登录送积分
             $config_service = new ConfigService();
             $config_service->giveIntegral('login');
@@ -52,6 +67,7 @@ class UserService extends BaseService{
     }
 
     // 第三方登录
+    /*
     public function oauthLogin($oauth,$oauth_name="weixinweb"){
         $user_model = new User();
         $auth = 'user';
@@ -121,6 +137,55 @@ class UserService extends BaseService{
         
         
     }
+    */
+    public function oauthLogin($oauth,$oauth_name="weixinweb"){
+        $user_model = new User();
+        $auth = 'user';
+        $is_user =  0;
+        $token = '';
+        $oauth_data = [];
+        // 判断是否存在该ID
+        if($oauth_name == 'weixinweb' || empty($oauth_name)){
+            $oauth_data['nickname'] = $oauth->nickname;
+            $oauth_data['avatar'] = $oauth->avatar ?? '';
+            $oauth_data['openid'] = $oauth->user['openid'];
+            $oauth_data['unionid'] = $oauth->unionid;
+
+            $uw_model = new UserWechat();
+            $uwInfo = $uw_model->where('unionid',$oauth->unionid)->first();
+
+            if($uwInfo && $uwInfo->user_id)
+            {
+                //已注册用户直接登录返回token
+                $user_id = $uwInfo->user_id;
+                $is_user =  1;
+                $user_model = $user_model->where('id',$user_id)->first();
+                $user_model->login_time = now();
+                $user_model->last_login_time = $user_model['login_time'];
+                $user_model->save();
+                $token = auth($auth)->login($user_model);
+                $user_info = $this->getUserInfo($auth)->toArray();
+                // 登录送积分
+                /*
+                $config_service = new ConfigService();
+                $config_service->giveIntegral('login');
+                */
+            }else{
+                $user_info = [];
+            }
+
+        }
+
+        $data = [
+            'token' => $token,
+            'is_user'=> $is_user,
+            'user_info' => $user_info,
+            'oauth_data' => $oauth_data
+
+        ];
+
+        return $data;
+    }
 
     // 绑定微信
     public function bindWechat($oauth){
@@ -165,7 +230,24 @@ class UserService extends BaseService{
         $user_model->pay_password = Hash::make('123456');
         $user_model->avatar = $config_service->getFormatConfig()['user_avatar'];
         $user_model->save();
-        
+
+        $oauth_name = request()->get('oauth_name','');
+        switch ($oauth_name)
+        {
+            case 'weixinweb':
+                $oauth_data = request()->get('oauth_data');
+                $uw_model = new UserWechat();
+                // 插入第三方表
+                $uw_model->create([
+                    'openid'        =>  $oauth_data['openid'],
+                    'nickname'      =>  $oauth_data['nickname'],
+                    'user_id'       =>  $user_model->id,
+                    'unionid'       =>  $oauth_data['unionid'],
+                    'headimgurl'    =>  $oauth_data['avatar'],
+                ]);
+                break;
+        }
+
         if (! $token = auth($auth)->login($user_model)) {
             OutputServerMessageException(__('auth.error'));
         }
@@ -173,6 +255,7 @@ class UserService extends BaseService{
         if(!$userInfo = $this->getUserInfo($auth)){
             OutputServerMessageException(__('auth.user_error'));
         }
+
 
         // 登录送积分
         $config_service = new ConfigService();

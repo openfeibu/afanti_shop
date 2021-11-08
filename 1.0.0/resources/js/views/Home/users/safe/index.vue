@@ -17,11 +17,13 @@
                         <div class="safe_text">支付密码<p>安全认证，保证余额。</p></div>
                         <div class="safe_btn" @click="$router.push('/user/safe/edit_pay_password')">修改</div>
                     </li> -->
+                    <!--
                     <li>
                         <div class="safe_icon success"><a-font type="iconshouji" /></div>
                         <div class="safe_text">手机认证<p>您的手机已验证，若已丢失或停用，请立即更换，避免账户被盗。</p></div>
                         <div class="safe_btn" @click="$router.push('/user/safe/edit_phone')">修改</div>
                     </li>
+                    -->
                     <!-- <li>
                         <div :class="user_info.user_check?'safe_icon success':'safe_icon'"><a-font type="iconnamecard" /></div>
                         <div class="safe_text">身份认证<p>您还未实名认证该账户，立即实名认证可加快提现速度。</p></div>

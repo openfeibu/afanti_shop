@@ -31,12 +31,20 @@ class OauthController extends Controller
      */
     public function oauthCallback($oauth_name)
     {
-        $user = Socialite::driver($oauth_name)->stateless()->user(); // 无认证状态#
+        //$oauth = Socialite::driver($oauth_name)->stateless()->user(); // 无认证状态#
+        $oauth['nickname'] = 'G';
+        $oauth['avatar'] = 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIwX34ia7XZUKGzFbkHD8RaMo4glz1Gc6Qib4Zo3UbAruxAsC8lemib1tRGriae7skYeTRLAuqdS0AibAg/132';
+        $oauth['openid'] = 'oSIRP6Q8nLk40LjUzRAMnzCu4W7k';
+        $oauth['unionid'] = 'omuPAwsDeh4cg6p0XOhqD9oBzds8';
+        $oauth = (object)$oauth;
+        $oauth->user['openid'] = 'oSIRP6Q8nLk40LjUzRAMnzCu4W7k';
         $user_service = new UserService();
-        $rs = $user_service->oauthLogin($user,$oauth_name);
+        $data = $user_service->oauthLogin($oauth,$oauth_name);
+
         return view('oauth', [
-            'token' => $rs['data']['token'],
-            'domain' => "http://afanti.feibu.info",
+            'data' => $data,
+            //'domain' => "http://afanti.feibu.info",
+            'domain' => "http://afanti_shop.g.com",
         ]);
 
         // $user->token;

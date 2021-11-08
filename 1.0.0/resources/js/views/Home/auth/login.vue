@@ -81,10 +81,11 @@
                     //执行vuex里面的方法 可以理解拿到了token 去请求获取用户信息的接口
                     localStorage.setItem("token", e.data);
                     vm.$message.success('登录成功！');
-                    vm.$get(vm.$api.homeUser+'/info').then(res=>{
-                        vm.$store.dispatch('homeLogin/login',res);
-                        vm.$router.push({ name: "home_user_default" });
-                    })
+                    window.location.href="/user";
+//                    vm.$get(vm.$api.homeUser+'/info').then(res=>{
+//                        vm.$store.dispatch('homeLogin/login',res);
+//                        vm.$router.push({ name: "home_user_default" });
+//                    })
 
 
                 }, false)

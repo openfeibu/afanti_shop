@@ -14,7 +14,7 @@ class BargainTask extends Model
     }
     public function goods()
     {
-        return $this->belongsTo("App\Models\Goods",'goods_id','id');
+        return $this->belongsTo("App\Models\Goods",'goods_id','id')->withTrashed();
     }
     public function user()
     {

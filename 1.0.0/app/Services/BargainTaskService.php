@@ -21,7 +21,9 @@ class BargainTaskService extends BaseService{
     public function getUserBargainTasks()
     {
         $user = User::getAuthUserInfo();
-        $user_bargain_tasks = BargainTask::where('user_id',$user['id'])
+        $user_bargain_tasks = BargainTask::with(['goods'=>function($q){
+            $q->select('id','goods_name','goods_master_image');
+        }])->where('user_id',$user['id'])
             ->orderBy('id','desc')
             ->paginate(request()->per_page??30);
         return $this->format(new BargainTaskCollection($user_bargain_tasks));;

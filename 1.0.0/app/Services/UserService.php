@@ -354,6 +354,7 @@ class UserService extends BaseService{
                 if(!$phone_check){
                     OutputServerMessageException(__('sms.phone_error'));
                 }
+
                 $user_model->phone = request()->phone;
             }
 

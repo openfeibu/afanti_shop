@@ -23,7 +23,6 @@ class BargainTaskCollection extends ResourceCollection
                     'bargain_id'              =>  $item->bargain_id,
                     'user_id'                  =>  $item->user_id,
                     'goods_id'            =>  $item->goods_id,
-                    'goods_id'              =>  $item->goods_id,
                     'goods_sku_id' => $item->goods_sku_id,
                     'goods_price' => $item->goods_price,
                     'floor_price' => $item->floor_price,

@@ -80,7 +80,7 @@
                     //e.data 就是后端颁发的token
                     //执行vuex里面的方法 可以理解拿到了token 去请求获取用户信息的接口
                     localStorage.setItem("token", e.data);
-                    this.$get(this.$api.homeUser+'/info').then(res=>{
+                    this.$get(vm.$api.homeUser+'/info').then(res=>{
                         vm.$store.dispatch('homeLogin/login',res);
                     })
                     vm.$message.success('登录成功！');

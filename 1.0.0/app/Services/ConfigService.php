@@ -181,6 +181,8 @@ class ConfigService extends BaseService{
     // 积分配送
     public function giveIntegral($name='login'){
 
+        return false;
+
         $info = $this->getFormatConfig('integral')[$name];
         if(!$info['status']){
             return false;

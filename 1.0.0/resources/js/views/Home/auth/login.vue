@@ -60,7 +60,6 @@
                     if (res.code == 200) {
                         // console.log(res);
                         // 存储用户的token
-                        console.log(res);return false;
                         localStorage.setItem("token", res.data.token);
                         vm.$store.dispatch('homeLogin/login',res);
                         vm.$message.success('登录成功！');
@@ -80,21 +79,21 @@
                 window.addEventListener('message', function (e) {
                     console.log(e.data);
                     //已经注册且绑定用户
-                   if(e.data.is_user)
-                   {
-                       localStorage.setItem("token", e.data.token);
-                       var res = {'data':{'token':'','user_info':{}}};
-                       res['data']['token'] = e.data.token;
-                       res['data']['user_info'] = e.data.user_info;
-                       // console.log(res);return false;
-                       vm.$message.success('登录成功！');
-                       vm.$store.dispatch('homeLogin/login',res);
-                       vm.$router.push({ name: "home_user_default" });
-                       //window.location.href="/user";
-                   }else{
-                       //已注册，调用登录接口绑定；未注册，调用注册接口绑定。 接口加多字段oauth_data（e.data.oauth_data）,oauth_name: 'weixinweb'
+                    if(e.data.is_user)
+                    {
+                        localStorage.setItem("token", e.data.token);
+                        var res = {'data':{'token':'','user_info':{}}};
+                        res['data']['token'] = e.data.token;
+                        res['data']['user_info'] = e.data.user_info;
+                        // console.log(res);return false;
+                        vm.$message.success('登录成功！');
+                        vm.$store.dispatch('homeLogin/login',res);
+                        vm.$router.push({ name: "home_user_default" });
+                        //window.location.href="/user";
+                    }else{
+                        //已注册，调用登录接口绑定；未注册，调用注册接口绑定。 接口加多字段oauth_data（e.data.oauth_data）,oauth_name: 'weixinweb'
 
-                   }
+                    }
 
                 }, false)
 

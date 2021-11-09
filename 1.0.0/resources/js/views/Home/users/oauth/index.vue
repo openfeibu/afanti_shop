@@ -11,7 +11,7 @@
                         <div class="safe_icon"><a-font type="iconweixin" /></div>
                         <div class="safe_text">微信绑定<p>绑定后可直接使用微信登录，方便快捷。</p></div>
                         <div class="safe_btn2" v-if="user_info.wechat_check">已经绑定</div>
-                        <div class="safe_btn" v-else>立即绑定</div>
+                        <div class="safe_btn" v-else  @click="wechat_login()">立即绑定</div>
                     </li>
                     
                 </ul>
@@ -36,6 +36,26 @@ export default {
             this.$get(this.$api.homeUser+'/info').then(res=>{
                 this.user_info = res.data;
             })
+        },
+        wechat_login(){
+            var vm = this;
+            //window.open('/api/oauth/weixinweb', 'newwindow', 'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+            window.open('/api/oauth/callback/weixinweb', 'newwindow', 'height=500, width=500, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no')
+            window.addEventListener('message', function (e) {
+                console.log(e.data);
+                //已经注册且绑定用户
+                vm.$put(vm.$api.homeUser+'/bind_oauth',{'oauth_name':'weixinweb','oauth_data':e.data.oauth_data}).then(res=>{
+                    if(res.code == 200)
+                    {
+                        vm.$message.success(res.msg)
+                        vm.user_info.wechat_check = true
+                    }else{
+                        vm.$message.error(res.msg)
+                    }
+
+                })
+            }, false)
+
         },
     },
     created() {

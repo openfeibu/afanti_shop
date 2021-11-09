@@ -92,7 +92,7 @@
                        vm.$router.push({ name: "home_user_default" });
                        //window.location.href="/user";
                    }else{
-                       //已注册，调用登录接口绑定；未注册，调用注册接口绑定。 接口加多字段oauth_data（e.data.oauth_data）即可
+                       //已注册，调用登录接口绑定；未注册，调用注册接口绑定。 接口加多字段oauth_data（e.data.oauth_data）,oauth_name: 'weixinweb'
 
                    }
 

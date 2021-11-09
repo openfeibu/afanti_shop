@@ -38,6 +38,21 @@ class UserController extends Controller
         return $this->success($user_info);
     }
 
+    public function bind_oauth(Request $request)
+    {
+        $user_service = new UserService();
+
+        $oauth_name = $request->get('oauth_name','');
+        $oauth =  $request->get('oauth_data','');
+        switch ($oauth_name)
+        {
+            case 'weixinweb':
+                $user_service->bindWechat($oauth);
+                break;
+        }
+        return $this->success([],'绑定成功');
+    }
+
     public function edit_user(Request $request){
         $user_service = new UserService();
         if($request->isMethod('put')){

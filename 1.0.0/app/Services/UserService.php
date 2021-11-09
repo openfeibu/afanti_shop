@@ -191,20 +191,20 @@ class UserService extends BaseService{
     public function bindWechat($oauth){
         $user_id = auth()->id();
         $uw_model = new UserWechat();
-        $uwInfo = $uw_model->where('unionid',$oauth->unionid)->first();
+        $uwInfo = $uw_model->where('unionid',$oauth['unionid'])->first();
         // 不存在则开始创建
         if($uwInfo){
-            OutputServerMessageException(__('users.bind_wechat_error'));
+            OutputServerMessageException("已经绑定，无需重复");
         }
         // 插入第三方表
         $uw_model->create([
-            'openid'        =>  $oauth->openid,
-            'nickname'      =>  $oauth->nickname,
+            'openid'        =>  $oauth['openid'],
+            'nickname'      =>  $oauth['nickname'],
             'user_id'       =>  $user_id,
-            'unionid'       =>  $oauth->unionid,
-            'headimgurl'    =>  $oauth->avatar??'',
+            'unionid'       =>  $oauth['unionid'],
+            'headimgurl'    =>  $oauth['avatar']??'',
         ]);
-        return $this->format();
+        return true;
     }
 
     // 注册
@@ -364,22 +364,23 @@ class UserService extends BaseService{
         $sms = $config_service->getFormatConfig('alisms');
 
         $user_model = User::find($user_info['id']);
-        
+
         // 微信绑定
+        /*
         if(isset(request()->oauth)){
             try{
                 $oauth = json_decode(request()->oauth,true);
             }catch(\Exception $e){
                 OutputServerMessageException("绑定失败");
             }
-            
+
             $bindRes = $this->bindWechat($oauth);
             if(!$bindRes['status']){
                 OutputServerMessageException($bindRes['msg']);
             }
             return $this->format([]);
         }
-
+        */
         // 昵称
         if(isset(request()->nickname)){
             $user_model->nickname = request()->nickname;

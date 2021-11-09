@@ -30,6 +30,7 @@ class UserController extends Controller
             }
             $all++;
         }
+
         $user_info['completion'] = intval($suc/$all*100);
         $user_info['user_check'] = UserCheck::where('user_id',$user_info['id'])->exists();
         $user_info['wechat_check'] = UserWechat::where('user_id',$user_info['id'])->exists();

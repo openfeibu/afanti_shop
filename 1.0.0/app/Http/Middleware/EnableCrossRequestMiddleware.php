@@ -17,7 +17,6 @@ class EnableCrossRequestMiddleware
      */
     public function handle($request, Closure $next)
     {
-		
         $response = $next($request);
         if(is_array($response)){
 	        $response = response()->json($response);

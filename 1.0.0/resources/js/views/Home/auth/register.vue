@@ -4,9 +4,9 @@
             <div class="login_item">
                 <div class="login_title">
                     <ul>
-                        <li class="red">注册账号</li>
-                        <li>|</li>
                         <li @click="$router.push('/user/login')">账号登录</li>
+                        <li>|</li>
+                        <li class="red">注册账号</li>
                     </ul>
                 </div>
                 <div class="login_input">

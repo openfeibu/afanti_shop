@@ -9,9 +9,9 @@
                         <dd style="min-width:100px">{{user_info.nickname||'加载中...'}}</dd>
                         <dd class="edit_user_info"><router-link to="/user/user_info">编辑信息</router-link></dd>
                     </dl>
-                    <div class="user_stepbar">
+                    <!-- <div class="user_stepbar">
                         <span>账号资料：</span><a-progress class="progress" :percent="user_info.completion" size="small" stroke-color="#ca151e" />
-                    </div>
+                    </div> -->
                     <div class="user_safe">
                         <span>账户安全：</span>
                         <span class="safe_icon">

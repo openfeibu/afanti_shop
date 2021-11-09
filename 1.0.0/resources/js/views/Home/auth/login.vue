@@ -155,9 +155,9 @@
                         res['data']['user_info'] = e.data.user_info;
                          console.log(res);
                         vm.$message.success('登录成功！');
-                        vm.$store.dispatch('homeLogin/login',res);
-                        vm.$router.push({ name: "home_user_default" });
-                        //window.location.href="/user";
+                        //vm.$store.dispatch('homeLogin/login',res);
+                        //vm.$router.push({ name: "home_user_default" });
+                        window.location.href="/user";
                     }else{
                         //已注册，调用登录接口绑定；未注册，调用注册接口绑定。 接口加多字段oauth_data（e.data.oauth_data）,oauth_name: 'weixinweb'
                         vm.oauth_data = e.data.oauth_data;

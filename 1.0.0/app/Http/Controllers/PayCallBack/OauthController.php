@@ -35,7 +35,7 @@ class OauthController extends Controller
         $oauth['nickname'] = 'G';
         $oauth['avatar'] = 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIwX34ia7XZUKGzFbkHD8RaMo4glz1Gc6Qib4Zo3UbAruxAsC8lemib1tRGriae7skYeTRLAuqdS0AibAg/132';
         $oauth['openid'] = 'oSIRP6Q8nLk40LjUzRAMnzCu4W7k';
-        $oauth['unionid'] = 'omuPAwsDeh4cg6p0XOhqD9oBzds1';
+        $oauth['unionid'] = 'omuPAwsDeh4cg6p0XOhqD9oBzds1'.rand(10000,99999);
         $oauth = (object)$oauth;
         $oauth->user['openid'] = 'oSIRP6Q8nLk40LjUzRAMnzCu4W7k';
         $user_service = new UserService();

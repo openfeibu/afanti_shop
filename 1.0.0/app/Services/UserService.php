@@ -32,17 +32,21 @@ class UserService extends BaseService{
             $admin_model->save();
         }
         if($auth=='user'){
+            $user_model = User::find($userInfo['id']);
             $oauth_name = request()->get('oauth_name','');
             switch ($oauth_name)
             {
                 case 'weixinweb':
                     $oauth_data = request()->get('oauth_data');
                     $uw_model = new UserWechat();
+                    if($uw_model->where('user_id',$userInfo['id'])->exists())
+                    {
+                        OutputServerMessageException('该账号已经被绑定其他微信');
+                    }
                     $uwInfo = $uw_model->where('unionid',$oauth_data['unionid'])->first();
-
                     if($uwInfo && $uwInfo->user_id)
                     {
-                        OutputServerMessageException('该微信账号已经被绑定');
+                        OutputServerMessageException('该微信账号已经被其他账号绑定');
                     }
                     $uw_model = new UserWechat();
                     // 插入第三方表
@@ -55,7 +59,6 @@ class UserService extends BaseService{
                     ]);
                     break;
             }
-            $user_model = User::find($userInfo['id']);
             $user_model->login_time = now();
             $user_model->last_login_time = $userInfo['login_time'];
             $user_model->ip = request()->getClientIp();

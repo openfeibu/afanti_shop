@@ -31,8 +31,8 @@ class OauthController extends Controller
      */
     public function oauthCallback($oauth_name)
     {
-        $oauth = Socialite::driver($oauth_name)->stateless()->user(); // 无认证状态#
-        
+        //$oauth = Socialite::driver($oauth_name)->stateless()->user(); // 无认证状态#
+
         $oauth['nickname'] = 'G';
         $oauth['avatar'] = 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIwX34ia7XZUKGzFbkHD8RaMo4glz1Gc6Qib4Zo3UbAruxAsC8lemib1tRGriae7skYeTRLAuqdS0AibAg/132';
         $oauth['openid'] = 'oSIRP6Q8nLk40LjUzRAMnzCu4W7k';

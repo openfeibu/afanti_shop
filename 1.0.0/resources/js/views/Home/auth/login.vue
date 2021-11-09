@@ -153,7 +153,7 @@
                         var res = {'data':{'token':'','user_info':{}}};
                         res['data']['token'] = e.data.token;
                         res['data']['user_info'] = e.data.user_info;
-                        // console.log(res);return false;
+                         console.log(res);
                         vm.$message.success('登录成功！');
                         vm.$store.dispatch('homeLogin/login',res);
                         vm.$router.push({ name: "home_user_default" });

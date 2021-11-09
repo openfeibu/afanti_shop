@@ -38,6 +38,13 @@ class UserService extends BaseService{
                 case 'weixinweb':
                     $oauth_data = request()->get('oauth_data');
                     $uw_model = new UserWechat();
+                    $uwInfo = $uw_model->where('unionid',$oauth_data['unionid'])->first();
+
+                    if($uwInfo && $uwInfo->user_id)
+                    {
+                        OutputServerMessageException('该微信账号已经被绑定');
+                    }
+                    $uw_model = new UserWechat();
                     // 插入第三方表
                     $uw_model->create([
                         'openid'        =>  $oauth_data['openid'],
@@ -214,13 +221,11 @@ class UserService extends BaseService{
         if($user_model->where($username,$credentials[$username])->exists()){
             OutputServerMessageException(__('auth.user_exists'));
         }
-        /*
         $sms_service = new SmsService();
         $smsRes = $sms_service->checkSms(request()->phone,request()->code);
         if(!$smsRes['status']){
             OutputServerMessageException($smsRes['msg']);
         }
-        */
         $config_service = new ConfigService();
         $randNickName = $credentials[$username].'_'.mt_rand(100,999);
         $user_model->username = $randNickName;
@@ -229,10 +234,18 @@ class UserService extends BaseService{
         $user_model->ip = request()->getClientIp();
         $user_model->inviter_id = request()->inviter_id??0;
         $user_model->password = Hash::make($credentials['password']);
-        $user_model->pay_password = Hash::make('123456');
+        $user_model->pay_password = '';
         $user_model->avatar = $config_service->getFormatConfig()['user_avatar'];
         $user_model->save();
 
+        if (! $token = auth($auth)->login($user_model)) {
+            OutputServerMessageException(__('auth.error'));
+        }
+
+        if(!$userInfo = $this->getUserInfo($auth)){
+            OutputServerMessageException(__('auth.user_error'));
+        }
+        $user_model->nickname = 'afanti'.mt_rand(100,999).$userInfo['id'];
         $oauth_name = request()->get('oauth_name','');
         switch ($oauth_name)
         {
@@ -243,22 +256,15 @@ class UserService extends BaseService{
                 $uw_model->create([
                     'openid'        =>  $oauth_data['openid'],
                     'nickname'      =>  $oauth_data['nickname'],
-                    'user_id'       =>  $user_model->id,
+                    'user_id'       =>  $userInfo['id'],
                     'unionid'       =>  $oauth_data['unionid'],
                     'headimgurl'    =>  $oauth_data['avatar'],
                 ]);
+                $user_model->nickname = $oauth_data['nickname'];
+                $user_model->avatar = $oauth_data['avatar'];
                 break;
         }
-
-        if (! $token = auth($auth)->login($user_model)) {
-            OutputServerMessageException(__('auth.error'));
-        }
-        
-        if(!$userInfo = $this->getUserInfo($auth)){
-            OutputServerMessageException(__('auth.user_error'));
-        }
-
-
+        $user_model->save();
         // 登录送积分
         $config_service = new ConfigService();
         $config_service->giveIntegral('login');

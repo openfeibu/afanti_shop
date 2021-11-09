@@ -214,11 +214,13 @@ class UserService extends BaseService{
         if($user_model->where($username,$credentials[$username])->exists()){
             OutputServerMessageException(__('auth.user_exists'));
         }
+        /*
         $sms_service = new SmsService();
         $smsRes = $sms_service->checkSms(request()->phone,request()->code);
         if(!$smsRes['status']){
             OutputServerMessageException($smsRes['msg']);
         }
+        */
         $config_service = new ConfigService();
         $randNickName = $credentials[$username].'_'.mt_rand(100,999);
         $user_model->username = $randNickName;

@@ -1107,8 +1107,8 @@ export default {
             margin:10px 10px 10px 0; 
             border:1px solid #efefef;
             img{
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
         }
         ul li:hover{

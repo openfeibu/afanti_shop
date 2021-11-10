@@ -2,9 +2,9 @@
     <div class="login_bg">
         <div class="login_bg3">
             <div class="login_bg2">
-                <div class="login_hg_left">
+                <!-- <div class="login_hg_left">
                     <img :src="require('@/asset/login/login_bg.png')" >
-                </div>
+                </div> -->
                 <div class="login_black_hg">
                     <div class="head_log">
                         后台管理系统
@@ -120,8 +120,9 @@ export default {
 .login_bg3{
     height: 100%;
     background: url('../../asset/login/bg.png');
-    background-position: top right;
+    background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 .login_bg2:after{
     display: block;

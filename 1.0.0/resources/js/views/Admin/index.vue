@@ -298,7 +298,7 @@ export default {
         line-height: 50px;
         font-size: 20px;
         color:#fff;
-        background: #000;
+        background: #1a8d45;
         text-align: center;
         
         img{

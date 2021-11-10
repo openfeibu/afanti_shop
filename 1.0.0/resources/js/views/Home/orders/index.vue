@@ -204,7 +204,7 @@ export default {
                     // this.$message.destroy();
                     console.log(that.$router.history.matched)
                     this.modal =  this.$error({
-                        title: '阿凡提',
+                        title: '阿凡提·水果巴扎',
                         content: '有产品库存信息发生变化，请返回购物车修改',
                         onOk() {
                             return that.$router.push("/cart")

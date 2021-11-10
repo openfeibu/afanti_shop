@@ -3,7 +3,7 @@
         <div class="head_in">
             <div class="top_shop_left">
                 <ul>
-                    <li><router-link to="/">阿凡提官网</router-link></li>
+                    <li><router-link to="/">阿凡提·水果巴扎官网</router-link></li>
                     <li>|</li>
                     <li><router-link to="/help?id=10">联系客服</router-link></li>
                 </ul>

@@ -4,7 +4,7 @@
 
             <!-- 菜单 start -->
             <a-layout-sider v-if="!subMenu" class="admin_menu" v-model="collapsed" :trigger="null" collapsible>
-                    <div class="admin_menu_title"><img :src="require('@/asset/system_logo.png')" alt="logo"><span :class="collapsed?'hiddens':'shows'">阿凡提·水果巴扎</span></div>
+                    <div class="admin_menu_title"><img :src="require('@/asset/system_logo.png')" alt="logo"><span :class="collapsed?'hiddens':'shows'">阿凡提·疆果巴扎</span></div>
                     <a-menu mode="inline" theme="dark">
                         <a-menu-item @click="to_nav('/Admin/index')"><a-font class="afont menu_icon" type="iconshouye" /><span>系统首页</span></a-menu-item>
                         <a-sub-menu v-for="v in menus" :key="v.id">
@@ -36,7 +36,7 @@
                                     <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">QQ群：xxx</a>
                                 </a-menu-item>
                                 <a-menu-item key="1">
-                                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">阿凡提·水果巴扎</a>
+                                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">阿凡提·疆果巴扎</a>
                                 </a-menu-item>
                                 <a-menu-divider />
                                 <a-menu-item key="3" @click="logout">
@@ -68,7 +68,7 @@
             <!-- 手机菜单 start -->
             <a-drawer bodyStyle="padding:0;height:100%;" placement="left" :closable="false" :visible="drawerShow" @close="onClose">
                 <div class="admin_menu mobile">
-                    <div class="admin_menu_title"><img :src="require('@/asset/system_logo.png')" alt="logo"><span :class="'shows'">阿凡提·水果巴扎</span></div>
+                    <div class="admin_menu_title"><img :src="require('@/asset/system_logo.png')" alt="logo"><span :class="'shows'">阿凡提·疆果巴扎</span></div>
                         <a-menu mode="inline" theme="dark">
                             <a-menu-item @click="to_nav('/Admin/index')"><a-font class="afont menu_icon" type="iconshouye" /><span>系统首页</span></a-menu-item>
                             <a-sub-menu v-for="v in menus" :key="v.id">

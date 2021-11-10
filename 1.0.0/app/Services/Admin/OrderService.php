@@ -97,29 +97,6 @@ class OrderService extends \App\Services\Common\OrderService{
             OutputServerMessageException(__('orders.error'));
         }
 
-
-        // 订单取消事件
-        $status = $this->transaction(function () use ($data) {
-            if ($data['is_cancel'] == true) {
-                // 执行退款操作
-                (new RefundService)->execute($this);
-                // 回退商品库存
-                FactoryStock::getFactory($this['order_source'])->backGoodsStock($this['goods'], true);
-                // 回退用户优惠券
-                $this['coupon_id'] > 0 && UserCouponModel::setIsUse($this['coupon_id'], false);
-                // 回退用户积分
-                $User = UserModel::detail($this['user_id']);
-                $describe = "订单取消：{$this['order_no']}";
-                $this['points_num'] > 0 && $User->setIncPoints($this['points_num'], $describe);
-            }
-            // 更新订单状态
-            return $this->save(['order_status' => $data['is_cancel'] ? 20 : 10]);
-        });
-        if ($status == true) {
-            // 同步好物圈订单
-            (new WowService(self::$wxapp_id))->update([$this]);
-        }
-        return $status;
     }
     /**
      * 验证订单是否满足发货条件

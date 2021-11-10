@@ -85,6 +85,7 @@ class OrderController extends Controller
     public function get_order_info($id){
         $order_service = new OrderService();
         $rs = $order_service->getOrderInfoById($id,'user');
+
         return $rs['status']?$this->success(new OrderResource($rs['data']),$rs['msg']):$this->error($rs['msg']);
     }
     public function get_freight(Request $request)

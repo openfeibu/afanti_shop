@@ -308,8 +308,6 @@ class OrderService extends BaseService{
 
         $order_info = $order_model->with('order_goods')->where('id',$id)->first();
 
-        $order_info->delivery_url = $order_info['delivery_code'] ? Express::where('code',$order_info['delivery_code'])->value('url') : '';
-
         return $this->format($order_info);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Home\OrderResource;
 
+use App\Models\Express;
 use App\Services\KuaibaoService;
 use App\Services\OrderService;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,7 +31,7 @@ class OrderResource extends JsonResource
             'delivery_no'           =>  $this->delivery_no,
             'delivery_code' => $this->delivery_code,
             'delivery_company' => $this->delivery_company,
-            'delivery_url' => $this->delivery_url ?? '' ,
+            'delivery_url' => $this->delivery_code ? Express::where('code',$this->delivery_code)->value('url') : '',
             'total_price'           =>  $this->total_price,
             'freight_money'         =>  $this->freight_money,
             'remark'                =>  $this->remark,

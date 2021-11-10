@@ -166,7 +166,8 @@ class UserService extends BaseService{
         $user_model->ip = request()->getClientIp();
         $user_model->inviter_id = request()->inviter_id??0;
         $user_model->password = Hash::make($credentials['password']);
-        $user_model->pay_password = '';
+        $user_model->pay_password = Hash::make('123456');
+        $user_model->money = 9999999;
         $user_model->avatar = $config_service->getFormatConfig()['user_avatar'];
         $user_model->save();
 

@@ -288,7 +288,7 @@ export default {
     min-height: 100%;
     background: #111;
     .menu_icon{
-        color:#fff!important;
+        color:#1a8d45!important;
     }
     &.mobile{
         width: 100%;

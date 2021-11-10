@@ -31,7 +31,7 @@
                 <div class="shop_top_nav_right">
                     <ul>
                         <li>
-                            <router-link to="/">首页</router-link>
+                            <router-link exact to="/">首页</router-link>
                         </li>
                         <li>
                             <router-link to="/store">展馆列表</router-link>

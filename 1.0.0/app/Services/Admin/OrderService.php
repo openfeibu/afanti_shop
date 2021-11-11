@@ -92,7 +92,7 @@ class OrderService extends \App\Services\Common\OrderService{
             DB::commit();
             return true;
         }catch (\Exception $e) {
-            Log::channel('qwlog')->debug('confirm_cancel_order:'.json_encode($e->getMessage()));
+            Log::channel('afanti_log')->debug('confirm_cancel_order:'.json_encode($e->getMessage()));
             DB::rollBack();
             OutputServerMessageException(__('orders.error'));
         }

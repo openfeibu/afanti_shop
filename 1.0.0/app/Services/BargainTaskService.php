@@ -81,7 +81,7 @@ class BargainTaskService extends BaseService{
 
          }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException("砍价任务创建失败");
         }
     }
@@ -167,7 +167,7 @@ class BargainTaskService extends BaseService{
             return $status;
         }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException("砍价任务创建失败");
         }
     }

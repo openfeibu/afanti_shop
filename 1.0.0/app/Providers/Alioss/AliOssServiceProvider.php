@@ -49,7 +49,7 @@ class AliOssServiceProvider extends ServiceProvider
             $epInternal = !empty($config['endpoint_internal']) ? $config['endpoint_internal'] : $endPoint;
             $epInternal = $isCname ? $cdnDomain : $epInternal; // 内部节点
             
-            if($debug) Log::channel('qwlog')->debug('OSS config:', $config);
+            if($debug) Log::channel('afanti_log')->debug('OSS config:', $config);
             
             $client  = new OssClient($accessId, $accessKey, $epInternal, $isCname);
             $adapter = new AliOssAdapter($client, $bucket, $endPoint, $ssl, $isCname, $debug, $cdnDomain);

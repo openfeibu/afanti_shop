@@ -78,7 +78,7 @@ class OrderRefundService extends BaseService{
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            Log::channel('qwlog')->debug('auditOrderRefund:'.json_encode($e->getMessage()));
+            Log::channel('afanti_log')->debug('auditOrderRefund:'.json_encode($e->getMessage()));
             DB::rollBack();
             OutputServerMessageException(__('orders.error'));
         }

@@ -35,7 +35,7 @@ class RechargeOrderService extends BaseService{
         try{
             $order_pay_info = $order_pay_model->create($create_data);
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('orders.payment_failed'));
         }
 

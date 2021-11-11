@@ -16,7 +16,7 @@ class PaymentController extends Controller
         if($rs['status']){
             return $rs['data'];
         }else{
-            Log::channel('qwlog')->debug($payment_name.'-'.$rs['msg']);
+            Log::channel('afanti_log')->debug($payment_name.'-'.$rs['msg']);
         }
     }
 }

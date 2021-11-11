@@ -39,7 +39,7 @@ class OrderRefundService extends BaseService{
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException("订单操作失败");
         }
     }

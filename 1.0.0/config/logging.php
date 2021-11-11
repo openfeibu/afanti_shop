@@ -101,9 +101,9 @@ return [
         ],
 
         // 自定义日志
-        'qwlog' => [
+        'afanti_log' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/qwlog.log'),
+            'path' => storage_path('logs/afanti_log.log'),
             'level' => 'debug',
             'days' => 1,
             'permission' => 0777,

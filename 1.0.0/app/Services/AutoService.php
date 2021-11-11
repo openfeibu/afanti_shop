@@ -21,14 +21,13 @@ class AutoService extends BaseService{
      *
      * @return void
      * @Description
-     * @author hg <www.qwsystem.com>
      */
     public function autoTask(){
         try{
             $this->orderCancel(); // 取消
             $this->orderConfirm(); // 确认 
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             echo 'fail';
         }
     }
@@ -55,7 +54,7 @@ class AutoService extends BaseService{
     
             }catch(\Exception $e){
                 DB::rollBack();
-                Log::channel('qwlog')->debug($e->getMessage());
+                Log::channel('afanti_log')->debug($e->getMessage());
             }
         }
         

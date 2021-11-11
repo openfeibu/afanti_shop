@@ -249,7 +249,7 @@ class StoreService extends BaseService{
         try{
             $store_model->save();
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('stores.store_edit_error'));
         }
 
@@ -284,7 +284,7 @@ class StoreService extends BaseService{
         try{
             $store_model->save();
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('stores.store_edit_error'));
         }
 

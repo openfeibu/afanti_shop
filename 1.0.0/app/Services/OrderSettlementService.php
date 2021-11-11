@@ -121,7 +121,7 @@ class OrderSettlementService extends BaseService{
             DB::commit();
             return $this->format([]);
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             DB::rollBack();
             OutputServerMessageException(__('admins.order_settlement_error'));
         }

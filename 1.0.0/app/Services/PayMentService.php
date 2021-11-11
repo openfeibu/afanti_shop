@@ -25,13 +25,13 @@ class PayMentService extends BaseService{
                 $out_trade_no = $return_info['out_trade_no'];
             }
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug(__('orders.payment_call_error').' - '.$payment_name.' - Payment 26 message:'.$e->getMessage());
+            Log::channel('afanti_log')->debug(__('orders.payment_call_error').' - '.$payment_name.' - Payment 26 message:'.$e->getMessage());
             OutputServerMessageException(__('orders.payment_call_error').' - Payment');
         }
         
         // 如果商户号没传回来，肯定报错
         if(empty($out_trade_no)){
-            Log::channel('qwlog')->debug(__('orders.payment_call_error').' - Payment 31');
+            Log::channel('afanti_log')->debug(__('orders.payment_call_error').' - Payment 31');
             OutputServerMessageException(__('orders.payment_call_error').' - Payment');
         }
 
@@ -69,7 +69,7 @@ class PayMentService extends BaseService{
             
         }catch(\Exception $e){
             // 验证失败 文档
-            Log::channel('qwlog')->info('no:'.$out_trade_no.' '.$e->getMessage());
+            Log::channel('afanti_log')->info('no:'.$out_trade_no.' '.$e->getMessage());
         }
 
     }
@@ -183,7 +183,7 @@ class PayMentService extends BaseService{
                     break;
             }
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($pay_order_info['out_trade_no'].':'.$e->getMessage());
+            Log::channel('afanti_log')->debug($pay_order_info['out_trade_no'].':'.$e->getMessage());
             OutputServerMessageException(__('orders.payment_failed'));
         }
         
@@ -314,7 +314,7 @@ class PayMentService extends BaseService{
             return $this->format($rs);
         }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug($out_trade_no.':'.$e->getMessage());
+            Log::channel('afanti_log')->debug($out_trade_no.':'.$e->getMessage());
             OutputServerMessageException(__('orders.payment_failed').':'.$out_trade_no);
         }
     }

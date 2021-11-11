@@ -65,8 +65,8 @@ class GoodsService extends BaseService{
             return $this->format([],__('goods.add_success'));
         }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug('商品添加失败');
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug('商品添加失败');
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('goods.add_error'));
         }
         
@@ -202,8 +202,8 @@ class GoodsService extends BaseService{
             return $this->format([],__('goods.add_success'));
         }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug('商品编辑失败');
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug('商品编辑失败');
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('goods.add_error'));
         }
         
@@ -429,7 +429,7 @@ class GoodsService extends BaseService{
                         })
                         ->paginate(request()->per_page??30);
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('goods.search_error'));
         }
         return $this->format(new GoodsSearchCollection($list));
@@ -469,7 +469,7 @@ class GoodsService extends BaseService{
                         }])
                         ->paginate(request()->per_page??30);
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('goods.search_error'));
         }
         return $this->format(new StoreGoodsListCollection($list));

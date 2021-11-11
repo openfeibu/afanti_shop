@@ -16,12 +16,12 @@ class Events
     // socket 连接成功
     public static function onConnect($client_id){
         // Gateway::sendToAll("$client_id said connect \r\n");
-        // Log::channel('qwlog')->info('client_id:'.$client_id);
+        // Log::channel('afanti_log')->info('client_id:'.$client_id);
     }
 
     public static function onWebSocketConnect($client_id, $data){
         // Gateway::sendToAll("$client_id said  onWebSocketConnect \r\n");
-        // Log::channel('qwlog')->info('client_id:'.'____onWebSocketConnect__:'.$data);
+        // Log::channel('afanti_log')->info('client_id:'.'____onWebSocketConnect__:'.$data);
     }
 
     public static function onMessage($client_id, $message){

@@ -142,7 +142,7 @@ class OrderService extends \App\Services\Common\OrderService{
             DB::commit();
             return $resp_data;
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug('createOrder:'.json_encode($e->getMessage()));
+            Log::channel('afanti_log')->debug('createOrder:'.json_encode($e->getMessage()));
             DB::rollBack();
             OutputServerMessageException(__('orders.error'));
         }
@@ -296,7 +296,7 @@ class OrderService extends \App\Services\Common\OrderService{
         try{
             $order_pay_info = $order_pay_model->create($create_data);
         }catch(\Exception $e){
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException(__('orders.payment_failed'));
         }
 
@@ -356,7 +356,7 @@ class OrderService extends \App\Services\Common\OrderService{
             return true;
         }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException("订单取消失败");
         }
 
@@ -390,7 +390,7 @@ class OrderService extends \App\Services\Common\OrderService{
             return true;
         }catch(\Exception $e){
             DB::rollBack();
-            Log::channel('qwlog')->debug($e->getMessage());
+            Log::channel('afanti_log')->debug($e->getMessage());
             OutputServerMessageException("订单操作失败");
         }
     }

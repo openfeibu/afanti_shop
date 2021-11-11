@@ -251,7 +251,7 @@
               
         </a-drawer>
         <a-modal
-            title="阿凡提·疆果巴扎"
+            title="阿凡提·水果巴扎"
             cancelText="取消"
             okText="去购物车结算"
             :visible="modal"

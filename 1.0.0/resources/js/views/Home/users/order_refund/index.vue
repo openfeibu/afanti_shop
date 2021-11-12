@@ -6,20 +6,6 @@
             </div>
             <div class="x20"></div>
 
-            <div class="home_search_block">
-                <a-form layout="inline">
-                    <a-form-item label="订单状态">
-                        <a-select v-model="params['type']" style="width:160px">
-                            <a-select-option value="all">全部</a-select-option>
-                            <a-select-option value="payment">待支付</a-select-option>
-                            <a-select-option value="delivery">待发货</a-select-option>
-                            <a-select-option value="received">待收货</a-select-option>
-                            <a-select-option value="comment">待评价</a-select-option>
-                        </a-select>
-                    </a-form-item>
-                    <span class="default_btn" style="margin-top:5px;display:inline-block;padding:4px 15px;" @click="search()"><a-icon type="search" />&nbsp;查询</span>
-                </a-form>
-            </div>
 
             <div class="safe_block" >
               <div class="order_list" v-if="list.length>0">

@@ -20,7 +20,7 @@
                         <a-col :span="24">
                             商品金额：
                             <span class="content">
-                                {{info.total_pay_price}}
+                                {{info.order_goods.total_pay_price}}
                             </span>
                         </a-col>
                         <a-col :span="24">

@@ -312,15 +312,10 @@ class PayMentService extends BaseService{
             $trade_no = '';
         }
 
-        try{
-            $pay_success_service = new PaySuccessService();
-            $rs = $pay_success_service->onPaymentNotify($payment_name,$trade_no,$out_trade_no);
-            return $this->format($rs);
-        }catch(\Exception $e){
-            DB::rollBack();
-            Log::channel('afanti_log')->debug($out_trade_no.':'.$e->getMessage());
-            OutputServerMessageException(__('orders.payment_failed').':'.$out_trade_no);
-        }
+        $pay_success_service = new PaySuccessService();
+        $rs = $pay_success_service->onPaymentNotify($payment_name,$trade_no,$out_trade_no);
+        return $this->format($rs);
+
     }
 
     protected $wx_config = [

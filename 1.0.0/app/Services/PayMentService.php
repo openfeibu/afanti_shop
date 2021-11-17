@@ -19,7 +19,7 @@ class PayMentService extends BaseService{
             if($payment_name == 'ali'){
                 $out_trade_no = request()->input('out_trade_no');
             }
-    
+
             if($payment_name == 'wechat'){
                 $return_info = json_decode(json_encode(simplexml_load_string(file_get_contents("php://input"), 'SimpleXMLElement', LIBXML_NOCDATA)),true);
                 $out_trade_no = $return_info['out_trade_no'];
@@ -28,7 +28,7 @@ class PayMentService extends BaseService{
             Log::channel('afanti_log')->debug(__('orders.payment_call_error').' - '.$payment_name.' - Payment 26 message:'.$e->getMessage());
             OutputServerMessageException(__('orders.payment_call_error').' - Payment');
         }
-        
+
         // 如果商户号没传回来，肯定报错
         if(empty($out_trade_no)){
             Log::channel('afanti_log')->debug(__('orders.payment_call_error').' - Payment 31');
@@ -66,14 +66,14 @@ class PayMentService extends BaseService{
                 return $rs['status']?$alipayObj->success():$this->format_error($rs['msg']);
             }
 
-            
+
         }catch(\Exception $e){
             // 验证失败 文档
             Log::channel('afanti_log')->info('no:'.$out_trade_no.' '.$e->getMessage());
         }
 
     }
-    
+
 
     /**
      * 调取第三方支付 function
@@ -88,7 +88,7 @@ class PayMentService extends BaseService{
         if(empty($payment_name) || empty($order_pay)){
             OutputServerMessageException(__('orders.error'));
         }
-        
+
         // 判断是否是余额支付
         if($payment_name == 'money'){
             $pay_success_service = new PaySuccessService();
@@ -136,7 +136,7 @@ class PayMentService extends BaseService{
             $rs = $this->payCall($payment_name,$pay_order_info);
             return $rs['status']?$this->format($rs['data']):$this->format_error($rs['msg']);
         }
-        
+
     }
 
     // 支付做分别返回
@@ -165,7 +165,7 @@ class PayMentService extends BaseService{
                     $qr_code = $tool_service->create_qrcode($rs['code_url']);
                     $rs['qr_code'] = $qr_code;
                     break;
-          
+
                 // 阿里支付
                 case 'ali_h5': // wap
                     $rs = Pay::wechat($this->ali_config)->wap($pay_order_info);
@@ -186,7 +186,7 @@ class PayMentService extends BaseService{
             Log::channel('afanti_log')->debug($pay_order_info['out_trade_no'].':'.$e->getMessage());
             OutputServerMessageException(__('orders.payment_failed'));
         }
-        
+
         return $this->format($rs);
     }
 
@@ -244,7 +244,7 @@ class PayMentService extends BaseService{
                 $this->wx_config['key'] = $config_info[$payment_name]['key'];
                 $this->wx_config['notify_url'] = $config_info[$payment_name]['notify_url'];
                 break;
-      
+
             // 阿里支付
             case 'ali_h5': // wap
                 $this->ali_config['app_id'] = $config_info[$payment_name]['app_id'];

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Enums\Order\PayStatus;
 use App\Models\Order;
 use App\Models\OrderPay;
 use App\Services\Order\PaySuccessService;
@@ -187,7 +188,7 @@ class PayMentService extends BaseService{
     // 检测微信支付是否成功
     public function wechatPayCheck(){
         $out_trade_no = request()->out_trade_no;
-        if($rs = Order::where('order_no',$out_trade_no)->where('order_status','>',1)->exists()){
+        if($rs = Order::where('order_no',$out_trade_no)->where('pay_status',PayStatus::SUCCESS)->exists()){
             return $this->format($rs);
         }else{
             OutputServerMessageException($rs);
@@ -319,7 +320,7 @@ class PayMentService extends BaseService{
         'mch_id' => '14577xxxx',
         'key' => 'mF2suE9sU6Mk1Cxxxxxxxxxxx',
         'notify_url' => 'www.feibu.info',
-        // 'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
+        'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
     ];
 
     protected $ali_config = [

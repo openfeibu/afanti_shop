@@ -3,11 +3,14 @@
         <a-form-model-item label="APPID">
             <a-input v-model="ali.app_id"></a-input>
         </a-form-model-item>
-        <a-form-model-item label="公钥(public_key)">
-            <a-input v-model="ali.public_key"></a-input>
+        <a-form-model-item label="支付宝公钥(ali_public_key)">
+            <a-input v-model="ali.ali_public_key"></a-input>
         </a-form-model-item>
-        <a-form-model-item label="私钥(private_key)">
+        <a-form-model-item label="应用私钥(private_key)">
             <a-input v-model="ali.private_key"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="应用公钥(public_key)">
+            <a-input v-model="ali.public_key"></a-input>
         </a-form-model-item>
         <a-form-model-item label="异步回调(notify_url)">
             <a-input v-model="ali.notify_url"></a-input>

@@ -248,21 +248,24 @@ class PayMentService extends BaseService{
             // 阿里支付
             case 'ali_h5': // wap
                 $this->ali_config['app_id'] = $config_info[$payment_name]['app_id'];
-                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['public_key'];
+                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['ali_public_key'];
+                $this->ali_config['public_key'] = $config_info[$payment_name]['public_key'];
                 $this->ali_config['private_key'] = $config_info[$payment_name]['private_key'];
                 $this->ali_config['notify_url'] = $config_info[$payment_name]['notify_url'];
                 $this->ali_config['return_url'] = $config_info[$payment_name]['return_url'];
                 break;
             case 'ali_app': // app
                 $this->ali_config['app_id'] = $config_info[$payment_name]['app_id'];
-                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['public_key'];
+                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['ali_public_key'];
+                $this->ali_config['public_key'] = $config_info[$payment_name]['public_key'];
                 $this->ali_config['private_key'] = $config_info[$payment_name]['private_key'];
                 $this->ali_config['notify_url'] = $config_info[$payment_name]['notify_url'];
                 $this->ali_config['return_url'] = $config_info[$payment_name]['return_url'];
                 break;
             case 'ali_mini': // 小程序
                 $this->ali_config['app_id'] = $config_info[$payment_name]['app_id'];
-                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['public_key'];
+                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['ali_public_key'];
+                $this->ali_config['public_key'] = $config_info[$payment_name]['public_key'];
                 $this->ali_config['private_key'] = $config_info[$payment_name]['private_key'];
                 $this->ali_config['notify_url'] = $config_info[$payment_name]['notify_url'];
                 $this->ali_config['return_url'] = $config_info[$payment_name]['return_url'];
@@ -270,7 +273,8 @@ class PayMentService extends BaseService{
             case 'ali_scan':
                 // 配置支付密钥
                 $this->ali_config['app_id'] = $config_info[$payment_name]['app_id'];
-                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['public_key'];
+                $this->ali_config['ali_public_key'] = $config_info[$payment_name]['ali_public_key'];
+                $this->ali_config['public_key'] = $config_info[$payment_name]['public_key'];
                 $this->ali_config['private_key'] = $config_info[$payment_name]['private_key'];
                 $this->ali_config['notify_url'] = $config_info[$payment_name]['notify_url'];
                 $this->ali_config['return_url'] = $config_info[$payment_name]['return_url'];

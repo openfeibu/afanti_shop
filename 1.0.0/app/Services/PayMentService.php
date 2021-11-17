@@ -38,38 +38,32 @@ class PayMentService extends BaseService{
         // 获取回调的订单号判断是那种支付类型 首字母为支付方式 尾部为是否充值
         $firstWord = substr($out_trade_no,0,1);
 
-        try{
-            //配置好支付的参数
-            if($firstWord == 'W'){
-                $payment_name = 'wechat';
-            }
-            if($firstWord == 'A'){
-                $payment_name = 'ali';
-            }
 
-            // 根据out_trade_no 获取支付订单信息
-            $pay_no = str_replace(['A','W','R'],'',$out_trade_no); // 得到正常得到pay_no
-            $order_pay_model = OrderPay::where('pay_no',$pay_no)->first();
+        //配置好支付的参数
+        if($firstWord == 'W'){
+            $payment_name = 'wechat';
+        }
+        if($firstWord == 'A'){
+            $payment_name = 'ali';
+        }
 
-            $this->getPaymentConfig($order_pay_model->payment_name);
+        // 根据out_trade_no 获取支付订单信息
+        $pay_no = str_replace(['A','W','R'],'',$out_trade_no); // 得到正常得到pay_no
+        $order_pay_model = OrderPay::where('pay_no',$pay_no)->first();
 
-            // 根据情况做回调验证
-            if($payment_name == 'wechat'){
-                $wxpayObj = Pay::wechat($this->wx_config);
-                $notify_info = $wxpayObj->verify();
-                $rs = $this->payHandle($payment_name,$out_trade_no,$notify_info);
-                return $rs['status']?$wxpayObj->success():$this->format_error($rs['msg']);
-            }elseif($payment_name == 'ali'){
-                $alipayObj = Pay::alipay($this->ali_config);
-                $notify_info = $alipayObj->verify();
-                $rs = $this->payHandle($payment_name,$out_trade_no,$notify_info);
-                return $rs['status']?$alipayObj->success():$this->format_error($rs['msg']);
-            }
+        $this->getPaymentConfig($order_pay_model->payment_name);
 
-
-        }catch(\Exception $e){
-            // 验证失败 文档
-            Log::channel('afanti_log')->info('no:'.$out_trade_no.' '.$e->getMessage());
+        // 根据情况做回调验证
+        if($payment_name == 'wechat'){
+            $wxpayObj = Pay::wechat($this->wx_config);
+            $notify_info = $wxpayObj->verify();
+            $rs = $this->payHandle($payment_name,$out_trade_no,$notify_info);
+            return $rs['status']?$wxpayObj->success():$this->format_error($rs['msg']);
+        }elseif($payment_name == 'ali'){
+            $alipayObj = Pay::alipay($this->ali_config);
+            $notify_info = $alipayObj->verify();
+            $rs = $this->payHandle($payment_name,$out_trade_no,$notify_info);
+            return $rs['status']?$alipayObj->success():$this->format_error($rs['msg']);
         }
 
     }

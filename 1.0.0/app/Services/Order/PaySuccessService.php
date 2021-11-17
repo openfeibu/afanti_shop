@@ -84,8 +84,9 @@ class PaySuccessService extends BaseService{
                 'payment_name' => $payment_name,
             ]);
             // 订单支付表修改状态
-            $order_pay->payment_name = $payment_name;
+            //$order_pay->payment_name = $payment_name;
             $order_pay->pay_status = PayStatus::SUCCESS;
+            $order_pay->pay_time = now();
             $order_pay->save();
 
             // 订单送积分

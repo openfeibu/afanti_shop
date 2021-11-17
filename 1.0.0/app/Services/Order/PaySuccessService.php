@@ -43,6 +43,7 @@ class PaySuccessService extends BaseService{
         }
 
         $order_pay->order_balance = $order_pay->total_price;
+
         $this->onPaySuccess($payment_name,$order_pay);
 
         return $this->format([],__('orders.balance_pay_success'));
@@ -53,18 +54,11 @@ class PaySuccessService extends BaseService{
         // 实例化orderPay模型
         $order_pay_model = new OrderPay();
         $order_pay = $order_pay_model->where('pay_no',$pay_no)->first();
-        $lastWord = substr($out_trade_no,-1,1);
-        $isRecharge = false;
-        if($lastWord == 'R'){
-            $isRecharge = true;
-        }
 
         $order_pay->trade_no = $trade_no;
-        $order_pay->pay_time = time();
 
-        $rs = $this->onPaySuccess($payment_name,$order_pay);
+        return $this->onPaySuccess($payment_name,$order_pay);
 
-        return $rs;
     }
     /**
      * 订单支付成功业务处理
@@ -84,7 +78,6 @@ class PaySuccessService extends BaseService{
                 'payment_name' => $payment_name,
             ]);
             // 订单支付表修改状态
-            //$order_pay->payment_name = $payment_name;
             $order_pay->pay_status = PayStatus::SUCCESS;
             $order_pay->pay_time = now();
             $order_pay->save();

@@ -22,7 +22,7 @@
             <div class="pay">
                 <ul>
                     <li @click="visible=true;" style="line-height:100px;text-align:center;color:#1c8d44;font-size:20px">点击支付（密码123456）</li>
-                    <li @click="pay('wechat_scan')"><img :src="require('@/asset/order/pc_wxpay.jpg')" alt="wechatpay">升级中</li>
+                    <li @click="pay('wechat_scan')"><img :src="require('@/asset/order/pc_wxpay.jpg')" alt="wechatpay"></li>
                     <li @click="pay('ali_scan')"><img :src="require('@/asset/order/pc_alipay.jpg')" alt="alipay"></li>
                 </ul>
             </div>
@@ -141,9 +141,6 @@ export default {
             let sendData = {order_id:order_id,payment_name:payment_name};
             if(payment_name == 'money'){
                 sendData.pay_password = this.pay_password;
-            }
-            else{
-                this.$message.error("升级中"); return false
             }
             this.$post(this.$api.homeOrder+'/pay',sendData).then(res=>{
                 if(res.code==200){

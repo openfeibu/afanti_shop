@@ -16,6 +16,7 @@ use Yansongda\Pay\Pay;
 
 class PayMentService extends BaseService{
     public function payment($payment_name){
+        Log::channel('afanti_log')->debug("开始支付：".$payment_name);
         try{
             if($payment_name == 'ali'){
                 $out_trade_no = request()->input('out_trade_no');

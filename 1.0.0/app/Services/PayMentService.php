@@ -313,6 +313,58 @@ class PayMentService extends BaseService{
 
     }
 
+    public function refund($order,$money)
+    {
+        $payment_provider = $order['payment_name'];
+        $order_pay = OrderPay::whereRaw('FIND_IN_SET(?,order_ids)',[$order['id']])->first();
+        if(!$order_pay)
+        {
+            OutputServerMessageException("未找到相关支付");
+        }
+        $payment_name = $order_pay->payment_name;
+        $this->getPaymentConfig($payment_name);
+        switch ($payment_provider)
+        {
+            case 'wechat':
+                /*
+                $refund_order = [
+                    'out_trade_no' => $order_pay->trade_no,
+                    'out_refund_no' => time(),
+                    'amount' => [
+                        'refund' => $money * 100,
+                        'total' => $order['total_price'] * 100,
+                        'currency' => 'CNY',
+                    ],
+                ];
+                */
+                $refund_order = [
+                    'transaction_id' =>  $order_pay->trade_no, //微信交易号
+                    'out_refund_no' => time(),
+                    'total_fee' => $order['total_price'] * 100,
+                    'refund_fee' => $money * 100,
+                    'refund_desc' => '退款',
+
+                ];
+                $wxpayObj = Pay::wechat($this->wx_config);
+                $wxpayObj->refund($refund_order);
+                break;
+            case 'ali':
+                $refund_order = [
+                    'trade_no' => $order_pay->trade_no, //支付宝交易号
+                    'refund_amount' => $money,
+                ];
+                $alipayObj = Pay::alipay($this->ali_config);
+                $rs = $alipayObj->refund($refund_order);
+                //var_dump($rs);exit;
+                break;
+            default:
+                OutputServerMessageException("未找到相关支付方式");
+                break;
+        }
+
+    }
+
+
     protected $wx_config = [
         'appid' => 'wxb3fxxxxxxxxxxx', // APP APPID
         'app_id' => 'wxb3fxxxxxxxxxxx', // 公众号 APPID

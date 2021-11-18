@@ -3,6 +3,8 @@ namespace App\Traits;
 
 use App\Exceptions\OutOfStockException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Yansongda\Pay\Exceptions\BusinessException;
+use Yansongda\Pay\Exceptions\GatewayException;
 
 trait ExceptionCustomHandlerTrait
 {
@@ -64,6 +66,20 @@ trait ExceptionCustomHandlerTrait
             case ($exception instanceof OutOfStockException):
                 $responseJson = [
                     'code' => $exception->getStatusCode(),
+                    'status' => 'error',
+                    'message' => $exception->getMessage(),
+                ];
+                break;
+            case ($exception instanceof GatewayException):
+                $responseJson = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'message' => $exception->raw['alipay_trade_refund_response']['sub_msg'],
+                ];
+                break;
+            case ($exception instanceof BusinessException):
+                $responseJson = [
+                    'code' => 400,
                     'status' => 'error',
                     'message' => $exception->getMessage(),
                 ];

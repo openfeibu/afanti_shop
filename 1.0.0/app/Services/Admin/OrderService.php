@@ -2,6 +2,7 @@
 namespace App\Services\Admin;
 
 use App\Enums\Order\DeliveryStatus;
+use App\Enums\Order\OrderRefundStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\PayStatus;
 use App\Models\Address;
@@ -70,11 +71,13 @@ class OrderService extends \App\Services\Common\OrderService{
         if ($order['pay_status'] != 20) {
             OutputServerMessageException("该订单不合法");
         }
-        try {
+        //try {
             DB::beginTransaction();
             if ($data['is_cancel']) {
                 // 执行退款操作
-
+                $payment_service = new PayMentService();
+                $payment_service->refund($order,$order['total_price']);
+                $order->is_refund = 1;
                 // 回退商品库存
                 $og_model = new OrderGoods();
                 $og_list = $og_model->select('goods_id','sku_id','buy_num')->where('order_id',$order['id'])->get();
@@ -91,11 +94,11 @@ class OrderService extends \App\Services\Common\OrderService{
 
             DB::commit();
             return true;
-        }catch (\Exception $e) {
-            Log::channel('afanti_log')->debug('confirm_cancel_order:'.json_encode($e->getMessage()));
-            DB::rollBack();
-            OutputServerMessageException(__('orders.error'));
-        }
+//        }catch (\Exception $e) {
+//            Log::channel('afanti_log')->debug('confirm_cancel_order:'.json_encode($e->getMessage()));
+//            DB::rollBack();
+//            OutputServerMessageException($e->getMessage() ?? __('orders.error'));
+//        }
 
     }
     /**

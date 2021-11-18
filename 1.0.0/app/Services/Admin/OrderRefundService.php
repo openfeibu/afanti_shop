@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 use App\Models\Order;
 use App\Models\OrderRefund;
 use App\Services\BaseService;
+use App\Services\PayMentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -103,7 +104,8 @@ class OrderRefundService extends BaseService{
 
         }
         // 执行原路退款
-
+        $payment_service = new PayMentService();
+        $payment_service->refund($order,$data['refund_money']);
         // 发送模板消息
 
         DB::commit();

@@ -74,7 +74,7 @@ trait ExceptionCustomHandlerTrait
                 $responseJson = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => $exception->raw['alipay_trade_refund_response']['sub_msg'],
+                    'message' => $exception->raw['alipay_trade_refund_response']['sub_msg'] ?? $exception->getMessage(),
                 ];
                 break;
             case ($exception instanceof BusinessException):

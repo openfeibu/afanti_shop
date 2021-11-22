@@ -376,7 +376,7 @@ class PayMentService extends BaseService{
         'mch_id' => '14577xxxx',
         'key' => 'mF2suE9sU6Mk1Cxxxxxxxxxxx',
         'notify_url' => 'www.feibu.info',
-        'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
+        //'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
     ];
 
     protected $ali_config = [

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 /**
  *
- * @author hg <364825702@qq.com>
+
  * 商城总后台 路由
  *
  */
@@ -168,104 +168,9 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
 });
 
-
 /**
  *
- * @author hg <364825702@qq.com>
- * 商城商家后台 路由
- *
- */
-Route::namespace('Seller')->prefix('Seller')->group(function(){
 
-    Route::post('/login','LoginController@login'); // 登陆
-    Route::get('/logout','LoginController@logout'); // 退出账号
-    Route::get('/check_login','LoginController@check_login'); // 检测登陆
-
-    Route::group(['middleware'=>'jwt.user'],function(){
-
-        // 商家菜单
-        Route::apiResource('menus','MenuController')->except(['update','show','store','destroy']);
-
-        // 属性规格
-        Route::apiResource('goods_attrs','GoodsAttrController');
-
-        // 商品管理
-        Route::apiResource('goods','GoodsController');
-        Route::get('store_goods_classes','GoodsController@store_goods_classes'); // 获取店铺有权的商品栏目信息
-        Route::post('/goods/upload/images','GoodsController@goods_upload'); // 图片上传
-
-        // 编辑器上传图片接口
-        Route::post('/editor/upload','EditorController@editor');
-
-        // 商品品牌
-        Route::apiResource('goods_brands','GoodsBrandController')->except(['update','show','store','destroy']);
-
-        // 订单管理
-        Route::apiResource('orders','OrderController')->except(['store','destroy']);
-
-        // 订单评论
-        Route::apiResource('order_comments','OrderCommentController')->except(['store','destroy']);
-
-        // 订单售后
-        Route::apiResource('refunds','RefundController')->except(['index','store','destroy']);
-
-        // 物流公司
-        Route::apiResource('expresses','ExpressController')->except(['update','store','destroy']);
-
-        // 运费配置
-        Route::apiResource('freights','FreightController')->except(['show','update']);
-
-        // 资金提现
-        Route::apiResource('cashes','CashController')->except(['update','show','destroy']);
-
-        // 分销管理
-        Route::apiResource('distributions','DistributionController');
-        Route::get('distributions/goods/get_distribution_goods','DistributionController@get_distribution_goods');
-        Route::apiResource('distribution_logs','DistributionLogController')->only(['index']); // 分销日志
-
-        // 优惠券
-        Route::apiResource('coupons','CouponController');
-        Route::apiResource('coupon_logs','CouponLogController')->only(['index']); // 优惠券日志
-
-        // 满减
-        Route::apiResource('full_reductions','FullReductionController');
-
-        // 秒杀
-        Route::apiResource('seckills','SeckillController');
-        Route::get('seckills/goods/get_seckill_goods','SeckillController@get_seckill_goods'); // 获取商品列表
-
-        // 拼团
-        Route::apiResource('collectives','CollectiveController');
-        Route::get('collectives/goods/get_collective_goods','CollectiveController@get_collective_goods'); // 获取商品列表
-        Route::apiResource('collective_logs','CollectiveLogController')->only(['index']); // 拼团日志
-
-
-        // 结算日志
-        Route::apiResource('order_settlements','OrderSettlementController')->only(['index','show']);
-
-        // 店铺资金日志
-        Route::apiResource('money_logs','MoneyLogController')->only(['index']);
-
-        // 商家配置
-        Route::get('configs','ConfigController@show');
-        Route::put('configs','ConfigController@update'); // 修改
-        Route::post('configs/upload/images','ConfigController@config_upload'); // 配置上传图片
-
-        // 全国省市区地址获取
-        Route::get('/areas','AreaController@areas'); // 商家状态
-
-        // 数据统计
-        Route::get('/statistics/all','StatisticController@all'); // 所有
-        Route::get('/statistics/order','StatisticController@order'); // 订单
-
-    });
-
-
-});
-
-/**
- *
- * @author hg <364825702@qq.com>
  * 商城PC端 路由
  *
  */
@@ -420,10 +325,21 @@ Route::namespace('Home')->group(function(){
 
 });
 
+/**
+ *
+
+ * 商城小程序端 路由
+ *
+ */
+Route::namespace('Weapp')->prefix('weapp')->group(function(){
+    Route::get('/banners','IndexController@getBanners');
+    Route::get('/beacons','BeaconController@getBeacons');
+    Route::get('/about-us','IndexController@getAboutUs');
+});
 
 /**
  *
- * @author hg <364825702@qq.com>
+
  * 在线聊天 路由 ['middleware'=>'jwt.user'],
  *
  */
@@ -449,7 +365,7 @@ Route::namespace('Chat')->prefix('Seller')->middleware('jwt.user')->group(functi
 
 /**
  *
- * @author hg <364825702@qq.com>
+
  * 商城支付回调|其他回调 路由
  *
  */

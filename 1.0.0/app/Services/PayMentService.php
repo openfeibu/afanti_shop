@@ -346,6 +346,8 @@ class PayMentService extends BaseService{
                         'refund_desc' => '退款',
 
                     ];
+                    $this->wx_config['cert_client'] = storage_path('cert/wechat/apiclient_cert.pem');
+                    $this->wx_config['cert_key'] = storage_path('cert/wechat/apiclient_cert.pem');
                     $wxpayObj = Pay::wechat($this->wx_config);
                     $wxpayObj->refund($refund_order);
                     break;
@@ -376,6 +378,8 @@ class PayMentService extends BaseService{
         'mch_id' => '14577xxxx',
         'key' => 'mF2suE9sU6Mk1Cxxxxxxxxxxx',
         'notify_url' => 'www.feibu.info',
+        //'cert_client' => './cert/apiclient_cert.pem', // optional，退款等情况时用到
+        //'cert_key' => './cert/apiclient_key.pem',// optional，退款等情况时用到
         //'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
     ];
 

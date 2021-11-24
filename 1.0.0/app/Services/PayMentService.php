@@ -346,8 +346,8 @@ class PayMentService extends BaseService{
                         'refund_desc' => '退款',
 
                     ];
-                    $this->wx_config['cert_client'] = storage_path('cert/wechat/apiclient_cert.pem');
-                    $this->wx_config['cert_key'] = storage_path('cert/wechat/apiclient_key.pem');
+                    $this->wx_config['cert_client'] = storage_path('app/cert/wechat/apiclient_cert.pem');
+                    $this->wx_config['cert_key'] = storage_path('app/cert/wechat/apiclient_key.pem');
                     $wxpayObj = Pay::wechat($this->wx_config);
                     $wxpayObj->refund($refund_order);
                     break;

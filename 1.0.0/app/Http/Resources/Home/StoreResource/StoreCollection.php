@@ -22,6 +22,7 @@ class StoreCollection extends ResourceCollection
                     'store_logo'                    =>  $item->store_logo,
                     'store_description'             =>  $item->store_description,
                     //'comment_rate'                  =>  $item->comments_count==0?100:round((($item->good_comment??0)/$item->comments_count)*100,2),
+                    'is_store'                    =>  $item->is_store,
                     'store_name'                    =>  $item->store_name,
                     'created_at'                    =>  $item->created_at->format('Y-m-d H:i:s'),
                 ];

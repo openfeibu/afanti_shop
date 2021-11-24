@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 class ArticleController extends Controller
 {
     public function categories(){
-        $categories = ArticleCategory::orderBy('id','asc')->get();
+        // todo:后台设置
+        $categories = ArticleCategory::where('is_show',1)->orderBy('id','asc')->get();
         foreach ($categories as $key => $category)
         {
             $category->articles = Article::where('article_category_id',$category->id)->orderBy('id','asc')->get(['id','name','ename']);

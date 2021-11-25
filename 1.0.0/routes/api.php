@@ -335,6 +335,10 @@ Route::namespace('Weapp')->prefix('weapp')->group(function(){
     Route::get('/banners','IndexController@getBanners');
     Route::get('/beacons','BeaconController@getBeacons');
     Route::get('/about-us','IndexController@getAboutUs');
+    Route::get('/user-agreement','IndexController@getUserAgreement');
+    // 店铺列表
+    Route::get('/store','StoreController@index'); // 首页店铺列表
+    Route::get('/store/{id}','StoreController@get_store_info'); // 店铺首页
 });
 
 /**

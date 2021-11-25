@@ -27,6 +27,7 @@ class IndexController extends Controller
         $data['bargains'] = $bargain_service->getIndexBargains(4)['data'];
         return $this->success($data);
     }
+
     public function test(UserService $user_service)
     {
         /*

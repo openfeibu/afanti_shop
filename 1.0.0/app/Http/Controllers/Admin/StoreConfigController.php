@@ -17,7 +17,6 @@ class StoreConfigController extends Controller
 
     public function update(Request $request){
         $store_model = Store::find($request->id);
-
         // 店铺基本信息
         if($request->edit_type == 'base'){
             if(isset($request->store_name)){
@@ -34,6 +33,9 @@ class StoreConfigController extends Controller
             }
             if(isset($request->after_sale_service)){
                 $store_model->after_sale_service = $request->after_sale_service;
+            }
+            if(isset($request->is_store)){
+                $store_model->is_store = $request->is_store ? 1 : 0;
             }
         }
 
@@ -86,7 +88,6 @@ class StoreConfigController extends Controller
                 $store_model->store_mobile_slide = empty($request->store_mobile_slide)?'':implode(',',$request->store_mobile_slide);
             }
         }
-
         $store_model->save();
         return $this->success([],__('base.edit.success'));
     }

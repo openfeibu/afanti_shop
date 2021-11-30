@@ -22,7 +22,9 @@
         <a-form-model-item label="展馆描述">
             <a-textarea placeholder="展馆描述" v-model="info.store_description" :rows="4" />
         </a-form-model-item>
-
+        <a-form-model-item label="是否线上商店">
+            <a-switch  v-model="info.is_store" />
+        </a-form-model-item>
         
         <a-form-model-item :wrapper-col="{ span: 12, offset: 4 }">
             <a-button type="primary" @click="handleSubmit">提交</a-button>
@@ -37,7 +39,9 @@ export default {
     props: {},
     data() {
       return {
-          info:{},
+          info:{
+              is_store: 1,
+          },
           loading:false,
       };
     },
@@ -46,6 +50,8 @@ export default {
     methods: {
         handleSubmit(){
             this.info.edit_type = 'base';
+            this.info.is_store = this.info.is_store ? 1 :0;
+            console.log( this.info.is_store);
             this.$put(this.$api.adminStoreConfigs,this.info).then(res=>{
                 this.get_info();
                 return this.$returnInfo(res);

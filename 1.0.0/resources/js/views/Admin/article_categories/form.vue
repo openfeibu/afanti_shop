@@ -10,7 +10,9 @@
                 <a-form-model-item label="标题">
                     <a-input v-model="info.name"></a-input>
                 </a-form-model-item>
-
+                <a-form-model-item label="是否显示">
+                    <a-switch  v-model="info.is_show" />
+                </a-form-model-item>
                 <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
                     <a-button type="primary" @click="handleSubmit">提交</a-button>
                 </a-form-model-item>
@@ -28,6 +30,7 @@ export default {
     data() {
       return {
           info:{
+              is_show:true,
           },
           list:[],
           id:0,

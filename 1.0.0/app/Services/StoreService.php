@@ -18,7 +18,7 @@ class StoreService extends BaseService{
         $store_model = new Store;
         $params = request()->params??'';
 
-        $store_model = $store_model->withCount(['comments','comments as good_comment'=>function($q){
+        $store_model = $store_model->where('is_store',1)->withCount(['comments','comments as good_comment'=>function($q){
             $q->whereRaw('(score+agree+speed+service)>=15');
         }]);
 
@@ -51,7 +51,29 @@ class StoreService extends BaseService{
         return $this->format(new StoreJoin($store_info));
         
     }
+// 获取店铺信息
+    public function getWeappStoreList(){
+        $store_model = new Store;
+        $params = request()->params??'';
 
+        try{
+            if(!empty($params)){
+                $params_array = json_decode(base64_decode($params),true);
+                // 排序
+                $store_model = $store_model->orderBy($params_array['sort_type'],$params_array['sort_order']);
+
+                // 关键词
+                if(isset($params_array['keywords']) && !empty($params_array['keywords'])){
+                    $params_array['keywords'] = urldecode($params_array['keywords']);
+                    $store_model = $store_model->where('store_name','like','%'.$params_array['keywords'].'%');
+                }
+            }
+            $list = $store_model->where('store_status',1)->paginate(request()->per_page??30);
+            return $this->format(new StoreCollection($list) );
+        }catch(\Exception $e){
+            OutputServerMessageException($e->getMessage());
+        }
+    }
     // 登录用户获取店铺信息
     public function getAuthStoreInfo($where=""){
         $store_info = $this->get_store(false,$where);

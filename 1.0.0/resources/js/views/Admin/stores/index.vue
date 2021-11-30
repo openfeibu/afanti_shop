@@ -6,7 +6,7 @@
         <admin-search :searchConfig="searchConfig" @searchParams="search"></admin-search>
 
         <div class="admin_table_handle_btn">
-            <a-button style="margin-right:20px" @click="$router.push('/Admin/goods/form')" type="primary" icon="plus">添加展馆</a-button>
+            <a-button style="margin-right:20px" @click="$router.push('/Admin/stores/form')" type="primary" icon="plus">添加展馆</a-button>
             <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
         </div>
         <div class="admin_table_list">

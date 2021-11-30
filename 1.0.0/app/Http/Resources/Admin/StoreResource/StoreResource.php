@@ -55,8 +55,8 @@ class StoreResource extends JsonResource
             'store_phone'                   =>  $this->store_phone,
             'store_status'                  =>  $this->store_status,
             'store_verify'                  =>  $this->store_verify,
-            'store_verify_cn'               =>  $verify_cn,
             'store_refuse_info'             =>  $this->store_refuse_info??'无原因',
+            'is_store'                  =>  $this->is_store,
             'created_at'                    =>  $this->created_at->format('Y-m-d H:i:s'),
             'updated_at'                    =>  $this->updated_at->format('Y-m-d H:i:s'),
         ];

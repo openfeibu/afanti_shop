@@ -32,6 +32,7 @@ class StoreConfigResource extends JsonResource
             'store_address'             =>  $this->store_address,
             'store_money'               =>  $this->store_money,
             'store_frozen_money'        =>  $this->store_frozen_money,
+            'is_store'        =>  $this->is_store,
             'area_id'                   =>  [$this->province_id,$this->city_id,$this->region_id],
         ];
     }

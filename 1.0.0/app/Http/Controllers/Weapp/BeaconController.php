@@ -27,7 +27,6 @@ class BeaconController extends Controller
        {
            $data[$beacon['major_id']] = $beacon;
        }
-       $data = new BeaconCollection($data);
-       return $this->format($data['data']);
+       return $this->format($data);
    }
 }

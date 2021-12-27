@@ -77,4 +77,45 @@ class Order extends Model
     {
         return isset($this->attributes['order_source']) ? trans('orders.order_source_text.'.$this->attributes['order_source']) : '';
     }
+    public function transferDataType($dataType)
+    {
+        // 数据类型
+        switch ($dataType) {
+            case 'delivery':
+                return $this->where([
+                    ['pay_status','=',20],
+                    ['delivery_status','=',10],
+                ])->whereIn('order_status', [10, 21]);
+
+                break;
+            case 'receipt':
+                return $this->where([
+                    ['pay_status','=',20],
+                    ['delivery_status','=',20],
+                    ['receipt_status','=',10],
+                ]);
+
+                break;
+            case 'pay':
+                return $this->where([
+                    ['pay_status','=',10],
+                    ['order_status','=',10],
+                ]);
+                break;
+            case 'complete':
+                return $this->where([
+                    ['order_status','=',30],
+                ]);
+                break;
+            case 'cancel':
+                return $this->where([
+                    ['order_status','=',20],
+                ]);
+                break;
+            case 'all':
+                return $this;
+                break;
+        }
+        return $this;
+    }
 }

@@ -19,7 +19,7 @@ class AdvPositionController extends Controller
         if(!empty($request->ap_name)){
             $advm_model = $advm_model->where('ap_name','like','%'.$request->ap_name.'%');
         }
-        $list = $advm_model->orderBy('id','desc')->paginate($request->per_page??30);
+        $list = $advm_model->where('is_show',1)->orderBy('id','desc')->paginate($request->per_page??30);
         return $this->success(new AdvPositionCollection($list));
     }
 

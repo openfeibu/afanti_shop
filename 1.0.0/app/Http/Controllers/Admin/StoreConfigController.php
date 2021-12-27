@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\StoreResource\StoreConfigResource;
+use App\Http\Resources\Admin\StoreResource\StoreConfigResource;
 use App\Models\Store;
 use App\Services\UploadService;
 use Illuminate\Http\Request;
@@ -96,13 +96,13 @@ class StoreConfigController extends Controller
     public function config_upload(Request $request){
         $name = $request->name;
         $upload_service = new UploadService;
-        $store_info = $this->get_store(false,'user_id');
+
         switch($name){
             case 'store_logo':
-                $rs = $upload_service->store_logo($store_info['user_id']);
+                $rs = $upload_service->store_logo();
             break;
             default:
-                $rs = $upload_service->store_slide($store_info['user_id']);
+                $rs = $upload_service->store_slide();
             break;
         }
 

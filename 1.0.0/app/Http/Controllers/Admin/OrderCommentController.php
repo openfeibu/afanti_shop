@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\OrderCommentResource\OrderCommentCollection;
 use App\Http\Resources\Admin\OrderCommentResource\OrderCommentResource;
 use App\Models\OrderComment;
-use App\Services\OrderCommentService;
+use App\Services\Admin\OrderCommentService;
 use Illuminate\Http\Request;
 
 class OrderCommentController extends Controller
@@ -44,7 +44,7 @@ class OrderCommentController extends Controller
     public function update(Request $request, $id)
     {
         $oc_service = new OrderCommentService();
-        $rs = $oc_service->edit($id,'admin');
+        $rs = $oc_service->edit($id);
         return $rs['status']?$this->success($rs['data'],$rs['msg']):$this->error($rs['msg']);
     }
 

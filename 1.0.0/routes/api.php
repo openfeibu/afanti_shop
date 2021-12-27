@@ -71,7 +71,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::get('/goods_classes/cache/clear','GoodsClassController@clear_cache')->name('goods_classes.clear_cache'); // 缓存清除商品分类
 
         // 店铺管理
-        Route::apiResource('stores','StoreController')->except(['store']);
+        Route::apiResource('stores','StoreController');
 
         // 商家配置
         Route::get('store_configs','StoreConfigController@show');
@@ -157,12 +157,14 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         // 数据统计
         Route::get('/statistics/all','StatisticController@all')->name('statistics.all'); // 所有
+        Route::get('/statistics/basic','StatisticController@basic')->name('statistics.basic'); // 基础
         Route::get('/statistics/user','StatisticController@user')->name('statistics.user'); // 用户
         Route::get('/statistics/store','StatisticController@store')->name('statistics.store'); // 店铺
         Route::get('/statistics/order','StatisticController@order')->name('statistics.order'); // 订单
         Route::get('/statistics/pay','StatisticController@pay')->name('statistics.pay'); // 支付
 
-
+        //信标管理
+        Route::apiResource('beacons','BeaconController');
     });
 
 
@@ -320,7 +322,7 @@ Route::namespace('Home')->group(function(){
 
 
     });
-
+    Route::get('/ezviz/equipments','EzvizController@getEquipments'); // 砍价列表
 
 
 });

@@ -44,6 +44,7 @@ export default {
           selectedRowKeys:[], // 被选择的行
           columns:[
               {title:'广告名',fixed:'left',key:'id',scopedSlots: { customRender: 'pic' }},
+              {title:'广告位',dataIndex:'ap_name'},
               {title:'链接',dataIndex:'url'},
               {title:'开始时间',fixed:'right',dataIndex:'adv_start'},
               {title:'结束时间',fixed:'right',dataIndex:'adv_end'},

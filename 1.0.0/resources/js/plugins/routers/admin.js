@@ -129,6 +129,7 @@ export default [
         {path:"/Admin/cashes",name:"admin_cashes",component:()=>import("@/views/Admin/cashes/index")}, 
 
         // 数据统计
+        {path:"/Admin/statistics/basic",name:"admin_statistics_basic",component:()=>import("@/views/Admin/statistics/basic")},
         {path:"/Admin/statistics/user",name:"admin_statistics_user",component:()=>import("@/views/Admin/statistics/user")}, 
         {path:"/Admin/statistics/store",name:"admin_statistics_store",component:()=>import("@/views/Admin/statistics/store")}, 
         {path:"/Admin/statistics/order",name:"admin_statistics_order",component:()=>import("@/views/Admin/statistics/order")}, 
@@ -156,5 +157,8 @@ export default [
         // 秒杀
         {path:"/Admin/bargains",name:"admin_bargains",component:()=>import("@/views/Admin/bargains/index")},
         {path:"/Admin/bargains/form/:id?",name:"admin_bargains_form",component:()=>import("@/views/Admin/bargains/form")},
+
+        {path:"/Admin/beacons",name:"admin_beacons",component:()=>import("@/views/Admin/beacons/index")},
+        {path:"/Admin/beacons/form/:id?",name:"admin_beacons_form",component:()=>import("@/views/Admin/beacons/form")},
     ]},
 ];

@@ -22,11 +22,7 @@
                     <font color="red">￥{{rows.total_price}}</font>
                 </span>
                 <span slot="order_status" slot-scope="rows">
-                    <a-tag color="red" v-if="rows.order_status==0">{{rows.order_status_cn}}</a-tag>
-                    <a-tag color="orange" v-if="rows.order_status==1">{{rows.order_status_cn}}</a-tag>
-                    <a-tag color="blue" v-if="rows.order_status>1&&rows.order_status<6">{{rows.order_status_cn}}</a-tag>
-                    <a-tag color="cyan" v-if="rows.order_status==6">{{rows.order_status_cn}}</a-tag>
-                    <a-tag color="green" v-if="rows.order_status>=7">{{rows.order_status_cn}}</a-tag>
+                    <a-tag color="orange">{{rows.order_status_cn}}</a-tag>
                 </span>
                 <span slot="action" slot-scope="rows">
                     <a-button icon="read" @click="$router.push('/Admin/orders/form/'+rows.id)">查看详情</a-button>
@@ -55,21 +51,20 @@ export default {
               per_page:30,
           },
           total:0, //总页数
-          searchConfig:[
-              {label:'订单号',name:'order_no',type:'text'},
-              {label:'下单时间',name:'created_at',type:'date_picker'},
-              {label:'订单状态',name:'order_status',type:'select',data:[
-                  {label:'订单取消',value:0},
-                  {label:'等待支付',value:1},
-                  {label:'等待发货',value:2},
-                  {label:'确认收货',value:3},
-                  {label:'等待评论',value:4},
-                  {label:'售后订单',value:5},
-                  {label:'订单完成',value:6},
+          searchConfig:{
+              "order_no":{label:'订单号',name:'order_no',type:'text'},
+              'created_at':{label:'下单时间',name:'created_at',type:'date_picker'},
+              'status':{label:'订单状态',name:'status',type:'select',data:[
+                  {label:'全部',value:'all'},
+                  {label:'待发货',value:'delivery'},
+                  {label:'待收货',value:'receipt'},
+                  {label:'待付款',value:'pay'},
+                  {label:'已完成',value:'complete'},
+                  {label:'已取消',value:'cancel'},
               ]},
-              {label:'用户ID',name:'user_id',type:'text'},
-              {label:'展馆ID',name:'store_id',type:'text'},
-          ],
+              'user_id':{label:'用户ID',name:'user_id',type:'text'},
+              //'store_id':{label:'展馆ID',name:'store_id',type:'select',data:[{label:'全部',value:'all'}]},
+          },
           selectedRowKeys:[], // 被选择的行
           columns:[
             //   {title:'#',dataIndex:'id',fixed:'left'},
@@ -82,6 +77,7 @@ export default {
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],
           list:[],
+          storeList:[],
       };
     },
     watch: {},
@@ -147,10 +143,25 @@ export default {
                 this.total = res.data.total;
                 this.list = res.data.data;
             });
+
+        },
+        initSearch(){
+            this.$get(this.$api.adminStores).then(res=>{
+                this.storeList = res.data.data;
+                var store;
+                Object.keys(this.storeList).forEach((key) => {
+                    //console.log(this.searchConfig[key]) // foo
+
+                    console.log({label:this.storeList[key].store_name,value:this.storeList[key].id});
+                    this.searchConfig['store_id'].data.push({label:this.storeList[key].store_name,value:this.storeList[key].id});
+                })
+
+            })
         },
     },
     created() {
         this.onload();
+        //this.initSearch();
     },
     mounted() {}
 };

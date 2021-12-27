@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\FullReductionResource\FullReductionCollection;
-use App\Http\Resources\Seller\FullReductionResource\FullReductionResource;
+use App\Http\Resources\Admin\FullReductionResource\FullReductionCollection;
+use App\Http\Resources\Admin\FullReductionResource\FullReductionResource;
 use App\Models\FullReduction;
 use App\Models\Goods;
 use Illuminate\Http\Request;

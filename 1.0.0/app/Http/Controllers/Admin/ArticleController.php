@@ -30,6 +30,7 @@ class ArticleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param Article $article_model
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request,Article $article_model)
@@ -45,6 +46,7 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Article $article_model
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -58,6 +60,7 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param Article $article_model
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -75,6 +78,7 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Article $article_model
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

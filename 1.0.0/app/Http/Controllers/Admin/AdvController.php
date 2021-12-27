@@ -23,7 +23,7 @@ class AdvController extends Controller
         if($request->ap_id != ''){
             $adv_model = $adv_model->where('ap_id','like','%'.$request->ap_id.'%');
         }
-        $list = $adv_model->orderBy('id','desc')->paginate($request->per_page??30);
+        $list = $adv_model->orderBy('ap_id','asc')->orderBy('id','desc')->paginate($request->per_page??30);
         return $this->success(new AdvCollection($list));
     }
 

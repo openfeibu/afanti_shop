@@ -377,8 +377,15 @@ export default [
                 component: () =>
                     import ('@/views/Home/help/index')
 
-            }, // 帮助中心
-        ]
+            },
+            // 帮助中心
+            {
+                path: '/monitoring',
+                name: 'home_monitoring',
+                component: () => import ('@/views/Home/monitoring')
+
+            },
+    ]
     },
 
 ];

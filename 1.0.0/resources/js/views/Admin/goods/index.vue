@@ -60,9 +60,6 @@ export default {
               {label:'商品名称',name:'goods_name',type:'text'},
             //   {label:'商品编号',name:'goods_no',type:'text'},
               {label:'上架状态',name:'goods_status',type:'select',data:[{label:'全部',value:''},{label:'上架',value:1},{label:'下架',value:0}]},
-            //   {label:'审核状态',name:'goods_verify',type:'select',data:[{label:'已审核',value:1},{label:'未审核',value:0}]},
-              {label:'商品品牌',name:'brand_id',type:'text'},
-              {label:'商品分类',name:'class_id',type:'text'},
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[
@@ -78,7 +75,7 @@ export default {
               {title:'操作',key:'id',scopedSlots: { customRender: 'action' }},
           ],
           list:[],
-          count:[],
+          categoryList:[],
       };
     },
     watch: {},
@@ -124,16 +121,18 @@ export default {
         onload(){
             this.$get(this.$api.adminGoods,this.params).then(res=>{
                 this.list = res.data.data;
-                this.count = res.data.count;
                 this.total = res.data.total;
             });
+            this.$get(this.$api.adminGoodsClasses,{}).then(res=>{
+                this.categoryList = res.data;
+            });
+
         },
         onChange(e){
             this.params.page = e;
             this.onload();
         },
         to_nav(e){
-            this.params.goods_verify = e;
             this.params.page = 1;
             this.onload();
         },

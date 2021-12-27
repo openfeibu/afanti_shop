@@ -29,7 +29,7 @@ import VueLazyload from 'vue-lazyload' // 懒加载图片
 
 
 import 'babel-polyfill' // 兼容IE
-
+import  EZUIKit from 'ezuikit-js';
 
 Vue.prototype.$api = api;
 Vue.prototype.$post = post;

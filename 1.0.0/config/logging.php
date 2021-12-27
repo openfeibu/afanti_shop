@@ -44,13 +44,13 @@ return [
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
+            'level' => 'info',
         ],
 
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
+            'level' => 'info',
             'days' => 14,
         ],
 
@@ -104,7 +104,7 @@ return [
         'afanti_log' => [
             'driver' => 'daily',
             'path' => storage_path('logs/afanti_log.log'),
-            'level' => 'debug',
+            'level' => 'info',
             'days' => 1,
             'permission' => 0777,
         ],

@@ -9,6 +9,7 @@
 
 <script>
 import wangeditor from 'wangeditor';
+let editor;
 export default {
     components: {},
     props: {
@@ -48,7 +49,13 @@ export default {
     watch: {
         contents:function(val){
             this.content = this.contents;
-            this.create_editor();
+            if(editor==null)
+            {
+                this.create_editor();
+            }else{
+                editor.destroy();
+                this.create_editor();
+            }
         },
         
     },
@@ -58,7 +65,7 @@ export default {
             var _this = this;
             let token_type = sessionStorage.getItem('token_type');
             this.token = this.$getSession('token_type');
-            var editor = new wangeditor('#editor');
+            editor = new wangeditor('#editor');
             this.content = this.contents;
             editor.config.debug = true;
             editor.config.zIndex = 100;
@@ -109,7 +116,13 @@ export default {
         
     },
     mounted() {
-        this.create_editor();
+        if(editor==null)
+        {
+            this.create_editor();
+        }else{
+            editor.destroy();
+            this.create_editor();
+        }
     }
 };
 </script>

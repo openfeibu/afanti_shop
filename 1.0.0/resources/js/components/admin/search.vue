@@ -6,11 +6,13 @@
                 <a-col :md="6" :sm="24" v-for="(v,k) in searchConfig1" :key="k">
                     <a-form-item :label="v.label">
                         <a-input v-if="v.type=='text'" v-model="params[v.name]" :placeholder="v.placeholder||''"/>
-                        <a-select  v-if="v.type=='select'" v-model="params[v.name]" :placeholder="v.placeholder||''">
+                        <a-select  v-if="v.type=='select'" v-model="params[v.name]" :placeholder="v.placeholder||''" onchage="$forceUpdate()">
                             <a-select-option v-for="(vo,key) in v.data" :key="key" :value="vo.value">{{vo.label}}</a-select-option>
                         </a-select>
                         <a-time-picker v-if="v.type=='time_picker'" v-model="params[v.name]" />
-                        <a-range-picker style="width:100%" v-if="v.type=='date_picker'" v-model="params[v.name]" format="YYYY-MM-DD HH:mm:ss" show-time :allow-clear="false"></a-range-picker>
+                        <a-range-picker style="width:100%" v-if="v.type=='date_picker'" v-model="params[v.name]" format="YYYY-MM-DD HH:mm:ss" show-time></a-range-picker>
+                        <a-range-picker style="width:100%" v-if="v.type=='ymd_picker'" v-model="params[v.name]" format="YYYY-MM-DD"></a-range-picker>
+                        <a-range-picker style="width:100%" v-if="v.type=='y_picker'" v-model="params[v.name]" format="YYYY"></a-range-picker>
                     </a-form-item>
                 </a-col>
                 
@@ -22,7 +24,9 @@
                                 <a-select-option v-for="(vo,key) in v.data" :key="key" :value="vo.value">{{vo.label}}</a-select-option>
                             </a-select>
                             <a-time-picker v-if="v.type=='time_picker'" v-model="params[v.name]" />
-                            <a-range-picker style="width:100%" v-if="v.type=='date_picker'" v-model="params[v.name]" format="YYYY-MM-DD HH:mm:ss" show-time :allow-clear="false"></a-range-picker>
+                            <a-range-picker style="width:100%" v-if="v.type=='date_picker'" v-model="params[v.name]" format="YYYY-MM-DD HH:mm:ss" show-time></a-range-picker>
+                            <a-range-picker style="width:100%" v-if="v.type=='ymd_picker'" v-model="params[v.name]" format="YYYY-MM-DD"></a-range-picker>
+                            <a-range-picker style="width:100%" v-if="v.type=='y_picker'" v-model="params[v.name]" format="YYYY"></a-range-picker>
                         </a-form-item>
                     </a-col>
                 </template>
@@ -81,6 +85,13 @@ export default {
 
     },
     created() {
+        let searchConfig = [];
+        Object.keys(this.searchConfig).forEach((key) => {
+            //console.log(this.searchConfig[key]) // foo
+            searchConfig.push(this.searchConfig[key]);
+        })
+        this.searchConfig = searchConfig;
+        //console.log(searchConfig) // foo
         if(this.searchConfig.length<=0){
             this.show = false;
         }else if(this.searchConfig.length<=3){
@@ -95,6 +106,7 @@ export default {
                 this.params[item] = this.autoParams[item];
             });
         }
+
     },
     mounted() {}
 };

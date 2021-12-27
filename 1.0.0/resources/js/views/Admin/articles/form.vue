@@ -94,6 +94,7 @@ export default {
         get_info(){
             this.$get(this.$api.adminArticles+'/'+this.id).then(res=>{
                 this.info = res.data;
+                console.log(this.info.content);
             })
         },
         // 获取菜单列表

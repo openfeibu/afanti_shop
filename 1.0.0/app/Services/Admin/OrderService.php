@@ -112,5 +112,48 @@ class OrderService extends \App\Services\Common\OrderService{
         return true;
     }
 
+    public function getOrders(){
+        $order_model = new Order();
+        $order_model = $order_model->transferDataType(request()->get('status','all'));
 
+        $order_model = $order_model->with(['user'=>function($q){
+            return $q->select('id','username');
+        },'order_goods']);
+
+        // 订单号
+        $order_no  = request()->order_no;
+        if(!empty($order_no)){
+            $order_model = $order_model->where('order_no','like','%'.$order_no.'%');
+        }
+
+        // 拼团订单ID查询
+        $collective_active_id = request()->collective_active_id;
+        if(!empty($collective_active_id)){
+            $order_model = $order_model->where('collective_active_id',$collective_active_id);
+        }
+
+        // 用户ID
+        $user_id = request()->user_id;
+        if(!empty($user_id)){
+            $order_model = $order_model->where('user_id',$user_id);
+        }
+
+        // 店铺ID
+        $store_id = request()->store_id;
+        if(!empty($store_id)){
+            $order_model = $order_model->where('store_id',$store_id);
+        }
+
+        // 下单时间
+        $created_at = request()->created_at;
+        if(!empty($created_at)){
+            $order_model = $order_model->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        }
+
+
+
+        $order_model = $order_model->orderBy('id','desc')
+            ->paginate(request()->per_page??30);
+        return $this->format($order_model);
+    }
 }

@@ -12,6 +12,23 @@ use Illuminate\Http\Request;
 class StoreController extends Controller
 {
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $store_model = new Store();
+        $store_model->store_name = $request->store_name;
+        $store_model->store_description = $request->store_description;
+        $store_model->is_store = $request->is_store ? 1 : 0;
+        $store_model->save();
+        return $this->success(['id' => $store_model->id],__('base.success'));
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

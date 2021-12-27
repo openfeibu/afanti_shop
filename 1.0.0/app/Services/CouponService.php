@@ -90,7 +90,7 @@ class CouponService extends BaseService{
         $list = $coupon_model->where('store_id',$store_id)->where('stock','>',0)->where('start_time','<',now())->where('end_time','>',now())->get();
 
         if($list->isEmpty()){
-            OutputServerMessageException('coupon_empty');
+            return $this->format([]);
         }
 
         return $this->format(new CouponCollection($list));
@@ -101,7 +101,7 @@ class CouponService extends BaseService{
         $list = $coupon_model->where('stock','>',0)->where('start_time','<',now())->where('end_time','>',now())->get();
 
         if($list->isEmpty()){
-            OutputServerMessageException('coupon_empty');
+            return $this->format([]);
         }
 
         return $this->format(new CouponCollection($list));

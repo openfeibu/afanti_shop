@@ -29,6 +29,7 @@ class OrderCommentResource extends JsonResource
                                                 ],
             'content'                       =>  $this->content,
             'image'                         =>  empty($this->image)?[]:explode(',',$this->image),
+            'active'                         =>  $this->active,
             'reply'                         =>  $this->reply,
             'reply_time'                    =>  $this->reply_time,
             'created_at'                    =>  $this->created_at->format('Y-m-d H:i:s'),

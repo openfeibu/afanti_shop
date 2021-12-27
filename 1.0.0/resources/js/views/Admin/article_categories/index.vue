@@ -27,7 +27,7 @@ export default {
     data() {
       return {
           searchConfig:[
-              {label:'标题',name:'name',type:'text'},
+              //{label:'标题',name:'name',type:'text'},
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[

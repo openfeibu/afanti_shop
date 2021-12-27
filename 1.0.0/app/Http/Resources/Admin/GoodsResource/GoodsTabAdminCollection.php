@@ -18,7 +18,6 @@ class GoodsTabAdminCollection extends ResourceCollection
     use HelperTrait;
     public function toArray($request)
     {
-        $goods_service = new GoodsService();
         return [
             'data'=>$this->collection->map(function($item){
                 $goods_class = new GoodsClass();
@@ -60,8 +59,7 @@ class GoodsTabAdminCollection extends ResourceCollection
             'total'=>$this->total(), // 数据总数
             'per_page'=>$this->perPage(), // 每页数量
             'current_page'=>$this->currentPage(), // 当前页码
-            // 统计
-            'count'=>$goods_service->getCount(),
+
         ];
     }
 }

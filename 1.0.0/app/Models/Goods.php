@@ -12,11 +12,11 @@ class Goods extends Model
     protected $guarded = [];
 
     public function goods_class(){
-        return $this->hasOne('App\Models\GoodsClass','id','class_id')->withTrashed();
+        return $this->belongsTo('App\Models\GoodsClass','class_id','id')->withTrashed();
     }
 
     public function goods_brand(){
-        return $this->hasOne('App\Models\GoodsBrand','id','brand_id')->withTrashed();
+        return $this->belongsTo('App\Models\GoodsBrand','brand_id','id')->withTrashed();
     }
 
     public function goods_skus(){
@@ -30,7 +30,7 @@ class Goods extends Model
     //     return $this->hasMany('App\Models\Store','id','store_id');
     // }
     public function store(){
-        return $this->hasOne('App\Models\Store','id','store_id')->withTrashed();
+        return $this->belongsTo('App\Models\Store','store_id','id')->withTrashed();
     }
 
     // 获取评论数量

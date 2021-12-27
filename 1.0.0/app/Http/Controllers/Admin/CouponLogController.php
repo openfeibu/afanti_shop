@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\CouponLogResource\CouponLogCollection;
+use App\Http\Resources\Admin\CouponLogResource\CouponLogCollection;
 use App\Models\CouponLog;
 use Illuminate\Http\Request;
 

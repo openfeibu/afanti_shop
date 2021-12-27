@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\CollectiveLogResourcee\CollectiveLogCollection;
+use App\Http\Resources\Admin\CollectiveLogResource\CollectiveLogCollection;
 use App\Models\CollectiveLog;
 use Illuminate\Http\Request;
 

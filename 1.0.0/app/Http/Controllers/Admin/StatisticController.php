@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Order\OrderStatus;
+use App\Enums\Order\PayStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\OrderResource\OrderCollection;
 use App\Http\Resources\Admin\StoreResource\StoreCollection;
@@ -100,6 +102,27 @@ class StatisticController extends Controller
         return $this->success($data);
     }
 
+    public function basic()
+    {
+        $created_at = request()->created_at;
+
+        $user_count = User::when($created_at,function ($query) use ($created_at){
+            return $query->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        })->count();
+        $pay_order_count = Order::when($created_at,function ($query) use ($created_at){
+            return $query->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        })->where('pay_status',PayStatus::SUCCESS)->count();
+        $goods_count = Goods::when($created_at,function ($query) use ($created_at){
+            return $query->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        })->count();
+        $pay_user_count = Order::when($created_at,function ($query) use ($created_at){
+            return $query->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        })->where('pay_status',PayStatus::SUCCESS)->groupBy('user_id')->count();
+        $pay_order_price = Order::when($created_at,function ($query) use ($created_at){
+            return $query->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        })->where('pay_status',PayStatus::SUCCESS)->sum('total_price');
+        return $this->success(compact('user_count','pay_order_count','goods_count','pay_user_count','pay_order_price'));
+    }
     // 用户数据分析
     public function user(User $user_model){
         // 时间条件
@@ -190,16 +213,45 @@ class StatisticController extends Controller
     public function order(Order $order_model,Goods $goods_model,Store $store_model){
         // 时间条件
         $created_at = request()->created_at;
-        $is_type = request()->is_type;
-
-        // 如果有传时间有 以时间为准，如果未传时间则取当前一周
-        $first_time = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $end_time = Carbon::now()->endOfWeek()->format('Y-m-d');
+        $is_type = request()->get('is_type',0);
         if(!empty($created_at)){
             $first_time = $created_at[0];
             $end_time = $created_at[1];
         }
-        
+        switch ($is_type)
+        {
+            case 0:
+                // 如果有传时间有 以时间为准，如果未传时间则取当前一周
+                if(empty($created_at))
+                {
+                    $end_time = Carbon::now()->format('Y-m-d');
+                    $first_time = Carbon::now()->subDays(6)->format('Y-m-d');
+                }
+                $format = ['Y-m-d','%Y-%m-%d','DAY'];
+                $diffDay = Carbon::parse($first_time)->diffInDays(Carbon::parse($end_time));
+                break;
+            case 1:
+                if(empty($created_at)){
+                    $first_time = Carbon::now()->startOfYear()->format('Y-m-d');
+                    $end_time = Carbon::now()->endOfYear()->format('Y-m-d');
+                }
+                $format = ['Y-m','%Y-%m','MONTH'];
+                $diffDay = Carbon::parse($first_time)->diffInMonths(Carbon::parse($end_time));
+                break;
+            case 2:
+                if(empty($created_at)){
+                    $first_time = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+                    $end_time = Carbon::now()->endOfYear()->format('Y-m-d');
+                }
+                $format = ['Y','%Y','YEAR'];
+                $diffDay = Carbon::parse(date('Y-01-01',strtotime($first_time)))->diffInYears(Carbon::parse(date('Y-01-01',strtotime($end_time))));
+                break;
+        }
+
+        $first_time .=" 00:00:00";
+        $end_time .=" 23:59:59";
+
+        /*
         $format = ['Y-m-d','%Y-%m-%d','DAY'];
         $diffDay = Carbon::parse($first_time)->diffInDays(Carbon::parse($end_time))+1; // 获取两个时间一共多少天
         if($is_type==1){
@@ -218,13 +270,13 @@ class StatisticController extends Controller
             }
             $diffDay = Carbon::parse($first_time)->diffInYears(Carbon::parse($end_time));
         }
-
+*/
         // dd($end_time,$first_time);
-        $sql = "select tpl.time,ifNull(U.num,0) as num from (select @s :=@s + 1 AS _index,DATE_FORMAT(DATE_SUB('".$end_time."', INTERVAL @s ".$format[2]."),'".$format[1]."') AS time FROM information_schema.CHARACTER_SETS,(SELECT @s := 0) temp where @s<".$diffDay." ORDER BY time) as tpl";
-        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(created_at,'".$format[1]."') as time from orders where created_at between ? and ? and order_status>1 group by time) as U on U.time=tpl.time";
+        $sql = "select tpl.time,ifNull(U.num,0) as num from (select @s :=@s + 1 AS _index,DATE_FORMAT(DATE_SUB('".$end_time."', INTERVAL @s-1 ".$format[2]."),'".$format[1]."') AS time FROM information_schema.CHARACTER_SETS,(SELECT @s := 0) temp where @s<=".$diffDay." ORDER BY time) as tpl";
+        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(pay_time,'".$format[1]."') as time from orders where pay_time between ? and ? and pay_status = '".PayStatus::SUCCESS."' and order_status <>'".OrderStatus::COMPLETED."' group by time) as U on U.time=tpl.time";
+        //var_dump($sql,$first_time,$end_time);exit;
         // dd($sql);
         $data['plot'] = DB::select($sql,[$first_time,$end_time]);
-        $data['list'] = new OrderCollection($order_model->whereBetween('created_at',[$first_time,$end_time])->where('order_status','>',1)->orderBy('id','desc')->paginate(request()->per_page??30));
 
         // 获取店铺销售排行
         $data['store'] = $store_model->select('store_name','id')->withCount(['orders'=>function($q){

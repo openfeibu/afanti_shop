@@ -342,26 +342,6 @@ class GoodsService extends BaseService{
         return $this->format($goods_info);
     }
 
-    // 获取统计数据
-    public function getCount($auth="seller"){
-        $goods_model = new Goods();
-
-        if($auth == 'seller'){
-            $store_id = $this->get_store(true);
-            $data = [
-                'wait'  =>  $goods_model->where('goods_verify',2)->where('store_id',$store_id)->count(),
-                'refuse'  =>  $goods_model->where('goods_verify',0)->where('store_id',$store_id)->count(),
-            ];
-        }else{
-            $data = [
-                'wait'  =>  $goods_model->where('goods_verify',2)->count(),
-                'refuse'  =>  $goods_model->where('goods_verify',0)->count(),
-            ];
-        }
-        
-        return $data;
-    }
-
     // 搜索
     public function goodsSearch(){
         $goods_model = new Goods;

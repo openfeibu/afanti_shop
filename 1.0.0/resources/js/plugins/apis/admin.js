@@ -129,4 +129,7 @@ export default
     'adminStatistics' : baseUrl + 'Admin/statistics',
 
     'adminGoodsAttrs' : baseUrl + 'Admin/goods_attrs',
+
+    //信标
+    'adminBeacons' : baseUrl + 'Admin/beacons',
 };

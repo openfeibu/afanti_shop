@@ -30,6 +30,9 @@ class GoodsController extends Controller
         if(!empty($request->goods_name)){
             $goods_model = $goods_model->where('goods_name','like','%'.$request->goods_name.'%');
         }
+        if(!empty($request->store_id)){
+            $goods_model = $goods_model->where('store_id','like','%'.$request->store_id.'%');
+        }
         if(!empty($request->brand_id)){
             $goods_model = $goods_model->where('brand_id',$request->brand_id);
         }

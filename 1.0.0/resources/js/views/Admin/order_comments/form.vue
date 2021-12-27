@@ -6,13 +6,14 @@
         </div>
         <div class="unline underm"></div>
         <div class="admin_form">
+            <a-divider orientation="left">
+                评论
+            </a-divider>
             <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
                 <a-form-model-item label="评论内容">
                         {{params.content}}
                 </a-form-model-item>
-                <a-form-model-item label="商家回复内容">
-                    <a-textarea placeholder="输入评论内容..." :rows="4" allow-clear v-model="params.reply" />
-                </a-form-model-item>
+
                 <a-form-model-item label='综合评分'>
                     <a-rate disabled style="font-size:14px;line-height: 16px;" v-model="params.score" :tooltips="desc" />
                     <span class="ant-rate-text">{{ desc[params.score-1] }}分</span>
@@ -40,6 +41,15 @@
                         <div class="item noimg" v-else><a-font type="iconphoto" /></div>
                     </div>
                 </a-form-model-item>
+                <a-divider orientation="left">
+                    审核&回复
+                </a-divider>
+                <a-form-model-item label="回复内容">
+                    <a-textarea placeholder="输入评论内容..." :rows="4" allow-clear v-model="params.reply" />
+                </a-form-model-item>
+                <a-form-model-item label="是否显示">
+                    <a-switch  v-model="params.active" />
+                </a-form-model-item>
                 <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
                     <a-button type="primary" @click="handleSubmit">提交</a-button>
                 </a-form-model-item>
@@ -63,16 +73,19 @@ export default {
               speed:5,
               content:'',
               image:[],
+              active:true,
           },
           desc: [1.00, 2.00, 3.00, 4.00, 5.00],
           id:0,
+
       };
     },
     watch: {},
     computed: {},
     methods: {
         handleSubmit(){
-            this.$put(this.$api.adminOrderComments+'/'+this.id,{reply:this.params.reply}).then(res=>{
+            this.params.active = this.params.active?1:0;
+            this.$put(this.$api.adminOrderComments+'/'+this.id,{reply:this.params.reply,'active':this.params.active}).then(res=>{
                 this.$returnInfo(res);
                 return this.$router.go(-1);
             })

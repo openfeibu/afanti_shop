@@ -20,6 +20,7 @@ class AdvCollection extends ResourceCollection
                     'id'                    =>  $item->id,
                     'ap_id'                 =>  $item->ap_id,
                     'name'                  =>  $item->name,
+                    'ap_name'         =>  $item->adv_position->ap_name,
                     'url'                   =>  $item->url,
                     'image_url'             =>  $item->image_url,
                     'adv_start'             =>  $item->adv_start,

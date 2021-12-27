@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\CouponResource\CouponCollection;
-use App\Http\Resources\Seller\CouponResource\CouponResource;
+use App\Http\Resources\Admin\CouponResource\CouponCollection;
+use App\Http\Resources\Admin\CouponResource\CouponResource;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 

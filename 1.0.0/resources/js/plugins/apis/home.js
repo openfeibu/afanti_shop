@@ -93,4 +93,5 @@ export default {
     // 帮助
     'homeHelp': baseUrl + 'article_categories',
     'homeHelpDetail': baseUrl + 'articles', //传/id
+    'homeEzviz': baseUrl + 'ezviz', //传/id
 };

@@ -4,7 +4,6 @@
         <div class="unline underm"></div>
 
         <div class="admin_table_handle_btn">
-            <a-button disabled @click="$router.push('#')" type="primary" icon="plus">添加</a-button>
             <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
         </div>
         <div class="admin_table_list">
@@ -17,7 +16,7 @@
                     </div>
                 </span>
                 <span slot="action" slot-scope="rows">
-                    <a-button icon="read" @click="$router.push('/Admin/order_comments/form/'+rows.id)" :disabled="rows.goods.id==0">回复</a-button>
+                    <a-button icon="read" @click="$router.push('/Admin/order_comments/form/'+rows.id)" :disabled="rows.goods.id==0">审核&回复</a-button>
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">

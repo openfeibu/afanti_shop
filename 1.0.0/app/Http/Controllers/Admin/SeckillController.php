@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\SeckillResource\SeckillCollection;
-use App\Http\Resources\Seller\SeckillResource\SeckillGoodsCollection;
-use App\Http\Resources\Seller\SeckillResource\SeckillResource;
+use App\Http\Resources\Admin\SeckillResource\SeckillCollection;
+use App\Http\Resources\Admin\SeckillResource\SeckillGoodsCollection;
+use App\Http\Resources\Admin\SeckillResource\SeckillResource;
 use App\Models\Goods;
 use App\Models\Seckill;
 use Illuminate\Http\Request;

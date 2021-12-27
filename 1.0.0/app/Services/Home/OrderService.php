@@ -411,5 +411,80 @@ class OrderService extends \App\Services\Common\OrderService{
         return $this->format($address_info);
     }
 
+    // 获取订单
+    public function getOrders(){
+        $order_model = new Order();
 
+
+        $user_service = new UserService;
+        $user_info = $user_service->getUserInfo();
+        $order_model = $order_model->where('user_id',$user_info['id']);
+
+        $order_model = $order_model->with(['user'=>function($q){
+            return $q->select('id','username');
+        },'order_goods']);
+
+        // 订单号
+        $order_no  = request()->order_no;
+        if(!empty($order_no)){
+            $order_model = $order_model->where('order_no','like','%'.$order_no.'%');
+        }
+
+        // 拼团订单ID查询
+        $collective_active_id = request()->collective_active_id;
+        if(!empty($collective_active_id)){
+            $order_model = $order_model->where('collective_active_id',$collective_active_id);
+        }
+
+        // 用户ID
+        $user_id = request()->user_id;
+        if(!empty($user_id)){
+            $order_model = $order_model->where('user_id',$user_id);
+        }
+
+        // 店铺ID
+        $store_id = request()->store_id;
+        if(!empty($store_id)){
+            $order_model = $order_model->where('store_id',$store_id);
+        }
+
+        // 下单时间
+        $created_at = request()->created_at;
+        if(!empty($created_at)){
+            $order_model = $order_model->whereBetween('created_at',[$created_at[0],$created_at[1]]);
+        }
+        $filter = [];
+        // 订单数据类型
+        switch (request()->type) {
+            case 'all':
+                break;
+            case 'payment';
+                $filter['pay_status'] = PayStatus::PENDING;
+                $filter['order_status'] = OrderStatus::NORMAL;
+                break;
+            case 'delivery';
+                $filter['pay_status'] = PayStatus::SUCCESS;
+                $filter['delivery_status'] = DeliveryStatus::UNDELIVERED;
+                $filter['order_status'] = OrderStatus::NORMAL;
+                break;
+            case 'received';
+                $filter['pay_status'] = PayStatus::SUCCESS;
+                $filter['delivery_status'] = DeliveryStatus::DELIVERED;
+                $filter['receipt_status'] = ReceiptStatus::UNRECEIVED;
+                $filter['order_status'] = OrderStatus::NORMAL;
+                break;
+            case 'comment';
+                $filter['is_comment'] = 0;
+                $filter['order_status'] = OrderStatus::COMPLETED;
+                break;
+        }
+        foreach($filter as $key => $value)
+        {
+            $order_model = $order_model->where($key,$value);
+        }
+
+        $order_model = $order_model->orderBy('id','desc')
+            ->paginate(request()->per_page??30);
+        return $this->format($order_model);
+    }
 }

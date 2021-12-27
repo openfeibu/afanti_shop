@@ -38,9 +38,7 @@ export default {
           },
           total:0, //总页数
           searchConfig:[
-              {label:'接口名称',name:'name',type:'text'},
-              {label:'接口路由',name:'apis',type:'text'},
-              {label:'所属分组',name:'pid',type:'select',data:[{label:'全部',value:''}]},
+
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[

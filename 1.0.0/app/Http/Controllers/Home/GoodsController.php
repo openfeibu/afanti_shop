@@ -66,7 +66,6 @@ class GoodsController extends Controller
     public function goods_comment_statistics($id){
         $data = $this->order_comment_service->getCommentStatistics($id);
         if($data['status']){
-            $data=$this->order_comment_service->getCommentStatistics($id);
             return $this->success($data['data']);
         }
         return $this->error($data['msg']);
@@ -76,7 +75,6 @@ class GoodsController extends Controller
     public function goods_comments($id){
         $data = $this->order_comment_service->getList($id);
         if($data['status']){
-            $data=$this->order_comment_service->getList($id);
             return $this->success($data['data']);
         }
         return $this->error($data['msg']);

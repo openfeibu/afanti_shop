@@ -52,10 +52,11 @@ export default {
           },
           total:0, //总页数
           searchConfig:[
-              {label:'展馆名称',name:'store_name',type:'text'},
+              //{label:'展馆名称',name:'store_name',type:'text'},
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[
+              {title:'ID',dataIndex:'id',fixed:'left'},
               {title:'展馆名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
               {title:'展馆状态',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
               {title:'申请时间',fixed:'right',dataIndex:'created_at'},

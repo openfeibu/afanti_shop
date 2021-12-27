@@ -34,7 +34,7 @@ export default {
           searchConfig:[
               {label:'标题',name:'name',type:'text'},
               {label:'英文名',name:'ename',type:'text'},
-              {label:'文章分类',name:'article_category_id',type:'text'},
+              //{label:'文章分类',name:'article_category_id',type:'text'},
           ],
           selectedRowKeys:[], // 被选择的行
           columns:[

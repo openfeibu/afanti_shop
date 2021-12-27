@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Seller\CollectiveResource\CollectiveCollection;
-use App\Http\Resources\Seller\CollectiveResource\CollectiveGoodsCollection;
-use App\Http\Resources\Seller\CollectiveResource\CollectiveResource;
+use App\Http\Resources\Admin\CollectiveResource\CollectiveCollection;
+use App\Http\Resources\Admin\CollectiveResource\CollectiveGoodsCollection;
+use App\Http\Resources\Admin\CollectiveResource\CollectiveResource;
 use App\Models\Collective;
 use App\Models\Goods;
 use Illuminate\Http\Request;

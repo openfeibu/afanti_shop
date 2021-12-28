@@ -43,7 +43,7 @@
                             </a-col>
                             <a-col :span="12" :xs="{ span: 24 }" :lg="{ span: 12 }">
                                 <div class="color_block">
-                                    <div><a-tag color="orange">售后处理</a-tag></div>
+                                    <div><a-tag color="orange">售后待处理</a-tag></div>
                                     <div class="color_blcok_font">{{info.order_refund||'0'}}</div>
                                 </div>
                             </a-col>

@@ -12,6 +12,7 @@ use App\Models\Goods;
 use App\Models\Order;
 use App\Models\OrderGoods;
 use App\Models\OrderPay;
+use App\Models\OrderRefund;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,17 +29,17 @@ class StatisticController extends Controller
         $is_type = request()->is_type;
 
         
-        $data['total_price'] = $order_model->where('order_status','>',1)->sum('total_price');// 总销售额
-        $data['today_price'] = $order_model->where('order_status','>',1)->where('pay_time','>=',date('Y-m-d'))->sum('total_price'); // 今日销售额
-        $data['yesterday_price'] = $order_model->where('order_status','>',1)->where('pay_time','<',date('Y-m-d'))->where('pay_time','>=',Carbon::yesterday()->format('Y-m-d'))->sum('total_price'); // 昨日销售额
-        $data['week_price'] = $order_model->where('order_status','>',1)->where('pay_time','>=',Carbon::now()->startOfWeek()->format('Y-m-d'))->sum('total_price'); // 这周销售额
-        $data['last_week_price'] = $order_model->where('order_status','>',1)->where('pay_time','<',Carbon::now()->startOfWeek()->format('Y-m-d'))->where('pay_time','>=',Carbon::now()->subWeeks(1)->startOfWeek()->format('Y-m-d'))->sum('total_price'); // 上周销售额
-        $data['month_price'] = $order_model->where('order_status','>',1)->where('pay_time','>=',Carbon::now()->startOfMonth()->format('Y-m-d'))->sum('total_price'); // 这月销售额
-        $data['last_month_price'] = $order_model->where('order_status','>',1)->where('pay_time','<',Carbon::now()->startOfMonth()->format('Y-m'))->where('pay_time','>=',Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m'))->sum('total_price'); // 上月销售额
-        $data['order_wait'] = $order_model->where('order_status',1)->count(); // 等待支付
-        $data['order_send'] = $order_model->where('order_status',2)->count(); // 等待发货
-        $data['order_complete'] = $order_model->where('order_status',6)->count(); // 完成
-        $data['order_refund'] = $order_model->where('order_status',5)->count(); // 售后
+        $data['total_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->sum('total_price');// 总销售额
+        $data['today_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->where('pay_time','>=',date('Y-m-d'))->sum('total_price'); // 今日销售额
+        $data['yesterday_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->where('pay_time','<',date('Y-m-d'))->where('pay_time','>=',Carbon::yesterday()->format('Y-m-d'))->sum('total_price'); // 昨日销售额
+        $data['week_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->where('pay_time','>=',Carbon::now()->startOfWeek()->format('Y-m-d'))->sum('total_price'); // 这周销售额
+        $data['last_week_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->where('pay_time','<',Carbon::now()->startOfWeek()->format('Y-m-d'))->where('pay_time','>=',Carbon::now()->subWeeks(1)->startOfWeek()->format('Y-m-d'))->sum('total_price'); // 上周销售额
+        $data['month_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->where('pay_time','>=',Carbon::now()->startOfMonth()->format('Y-m-d'))->sum('total_price'); // 这月销售额
+        $data['last_month_price'] = $order_model->where('pay_status',PayStatus::SUCCESS)->where('pay_time','<',Carbon::now()->startOfMonth()->format('Y-m'))->where('pay_time','>=',Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m'))->sum('total_price'); // 上月销售额
+        $data['order_wait'] = $order_model->transferDataType('pay')->count(); // 等待支付
+        $data['order_send'] = $order_model->transferDataType('delivery')->count(); // 等待发货
+        $data['order_complete'] = $order_model->transferDataType('complete')->count(); // 完成
+        $data['order_refund'] = OrderRefund::where('status',0)->count(); // 售后
 
         $data['day_rate'] = 0.00; // 日比
         $data['week_rate'] = 0.00; // 周比
@@ -85,7 +86,7 @@ class StatisticController extends Controller
         }
 
         $sql = "select tpl.time,ifNull(U.num,0) as num from (select @s :=@s + 1 AS _index,DATE_FORMAT(DATE_SUB('".$end_time."', INTERVAL @s ".$format[2]."),'".$format[1]."') AS time FROM information_schema.CHARACTER_SETS,(SELECT @s := 0) temp where @s<".$diffDay." ORDER BY time) as tpl";
-        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(created_at,'".$format[1]."') as time from orders where created_at between ? and ? and order_status>1 group by time) as U on U.time=tpl.time";
+        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(created_at,'".$format[1]."') as time from orders where created_at between ? and ? and pay_status = '".PayStatus::SUCCESS."' and order_status <>'".OrderStatus::CANCELLED."' group by time) as U on U.time=tpl.time";
         $data['order_plot'] = DB::select($sql,[$first_time,$end_time]);
 
 
@@ -96,7 +97,7 @@ class StatisticController extends Controller
 
         // 获取店铺销售排行
         $data['list'] = $store_model->select('store_name','id')->withCount(['orders'=>function($q){
-            $q->select(DB::raw('sum(total_price)'))->where('order_status','>',1);
+            $q->select(DB::raw('sum(total_price)'))->where('pay_status',PayStatus::SUCCESS);
         }])->orderBy('orders_count','desc')->take(10)->get();
 
         return $this->success($data);
@@ -273,7 +274,7 @@ class StatisticController extends Controller
 */
         // dd($end_time,$first_time);
         $sql = "select tpl.time,ifNull(U.num,0) as num from (select @s :=@s + 1 AS _index,DATE_FORMAT(DATE_SUB('".$end_time."', INTERVAL @s-1 ".$format[2]."),'".$format[1]."') AS time FROM information_schema.CHARACTER_SETS,(SELECT @s := 0) temp where @s<=".$diffDay." ORDER BY time) as tpl";
-        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(pay_time,'".$format[1]."') as time from orders where pay_time between ? and ? and pay_status = '".PayStatus::SUCCESS."' and order_status <>'".OrderStatus::COMPLETED."' group by time) as U on U.time=tpl.time";
+        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(pay_time,'".$format[1]."') as time from orders where pay_time between ? and ? and pay_status = '".PayStatus::SUCCESS."' and order_status <>'".OrderStatus::CANCELLED."' group by time) as U on U.time=tpl.time";
         //var_dump($sql,$first_time,$end_time);exit;
         // dd($sql);
         $data['plot'] = DB::select($sql,[$first_time,$end_time]);

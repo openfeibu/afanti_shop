@@ -97,7 +97,7 @@ class StatisticController extends Controller
         // 获取店铺销售排行
         $data['list'] = $store_model->select('store_name','id')->withCount(['orders'=>function($q){
             $q->select(DB::raw('sum(total_price)'))->where('order_status','>',1);
-        }])->orderBy('orders_count','desc')->take(6)->get();
+        }])->orderBy('orders_count','desc')->take(10)->get();
 
         return $this->success($data);
     }

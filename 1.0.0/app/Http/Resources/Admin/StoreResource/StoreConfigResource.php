@@ -26,6 +26,7 @@ class StoreConfigResource extends JsonResource
             'store_status'                  =>  $this->store_status,
             'store_verify'                  =>  $this->store_verify,
             'is_store'        =>  $this->is_store,
+            'monitoring_channel'  =>  $this->monitoring_channel,
             'created_at'                    =>  $this->created_at->format('Y-m-d H:i:s'),
             'updated_at'                    =>  $this->updated_at->format('Y-m-d H:i:s'),
         ];

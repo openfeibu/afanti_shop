@@ -36,6 +36,7 @@ export default [
         {path:"/Admin/configs/pay",name:"admin_configs_pay",component:()=>import("@/views/Admin/configs/pay/index")}, // 支付配置
         {path:"/Admin/configs/upload",name:"admin_configs_upload",component:()=>import("@/views/Admin/configs/oss/alioss")}, // 上传配置
         {path:"/Admin/configs/kuaibao",name:"admin_configs_kuaibao",component:()=>import("@/views/Admin/configs/kuaibao/index")}, // 快宝物流查询
+        {path:"/Admin/configs/monitoring",name:"admin_configs_monitoring",component:()=>import("@/views/Admin/configs/monitoring/index")}, // 海康
         {path:"/Admin/configs/sms",name:"admin_configs_sms",component:()=>import("@/views/Admin/configs/sms/index")}, // 短信配置
         {path:"/Admin/sms_logs/index",name:"admin_sms_logs_index",component:()=>import("@/views/Admin/configs/sms/sms_log")}, // 短信日志
         {path:"/Admin/sms_signs/index",name:"admin_sms_signs_index",component:()=>import("@/views/Admin/configs/sms/sign/index")}, // 短信签名列表

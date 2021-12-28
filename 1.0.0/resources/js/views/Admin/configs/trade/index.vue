@@ -2,7 +2,7 @@
     <div class="afanti">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
-            物流查询配置
+            自动任务配置
         </div>
         <div class="unline underm"></div>
         

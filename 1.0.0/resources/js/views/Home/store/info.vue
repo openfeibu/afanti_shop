@@ -11,7 +11,7 @@
                 <video :src="store_info.store_video" controls="controls">
                 您的浏览器不支持 video 标签。
                 </video>
-        
+                <div id="monitoring_video"></div>
             </div>
         </div>
         <div class="store_info_block w1200">
@@ -175,6 +175,21 @@ export default {
         get_store_info(){
             this.$get(this.$api.homeStore+'/'+this.id).then(res=>{
                 this.store_info = res.data;
+                if(this.store_info.equipment_url && this.store_info.access_token)
+                {
+                    new EZUIKit.EZUIKitPlayer({
+                        id: "monitoring_video", // 视频容器ID
+                        accessToken: this.store_info.access_token,
+                        url: this.store_info.equipment_url,
+                        template: 'theme',//
+                        autoplay: false,
+                        plugin: [],// 加载插件，talk-对讲
+                        //startTalk: ()=> this.playr.startTalk(),
+                        //stopTalk: ()=> this.playr.stopTalk(),
+                        width: 600,
+                        height:400,
+                    })
+                }
             })
         },
         get_goods_list(){

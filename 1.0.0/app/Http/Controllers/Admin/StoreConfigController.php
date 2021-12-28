@@ -22,6 +22,9 @@ class StoreConfigController extends Controller
             if(isset($request->store_name)){
                 $store_model->store_name = $request->store_name;
             }
+            if(isset($request->monitoring_channel)){
+                $store_model->monitoring_channel = $request->monitoring_channel;
+            }
             if(isset($request->store_logo)){
                 $store_model->store_logo = $request->store_logo;
             }

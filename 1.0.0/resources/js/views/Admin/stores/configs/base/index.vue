@@ -22,6 +22,9 @@
         <a-form-model-item label="展馆描述">
             <a-textarea placeholder="展馆描述" v-model="info.store_description" :rows="4" />
         </a-form-model-item>
+        <a-form-model-item label="摄像头通道号">
+            <a-input v-model="info.monitoring_channel"></a-input>
+        </a-form-model-item>
         <a-form-model-item label="是否线上商店">
             <a-switch  v-model="info.is_store" />
         </a-form-model-item>

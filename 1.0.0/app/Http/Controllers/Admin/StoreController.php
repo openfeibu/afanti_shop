@@ -21,6 +21,7 @@ class StoreController extends Controller
     {
         $store_model = new Store();
         $store_model->store_name = $request->store_name;
+        $store_model->monitoring_channel = $request->monitoring_channel;
         $store_model->store_description = $request->store_description;
         $store_model->is_store = $request->is_store ? 1 : 0;
         $store_model->save();

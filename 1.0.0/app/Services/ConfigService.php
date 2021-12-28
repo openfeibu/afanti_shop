@@ -174,7 +174,14 @@ class ConfigService extends BaseService{
         }else{
             $data['return_address'] = json_decode($data['return_address'],true);
         }
-
+        if(empty($data['monitoring'])){
+            $data['monitoring'] = [
+                'sn'=> '',
+                'code'=>'',
+            ];
+        }else{
+            $data['monitoring'] = json_decode($data['monitoring'],true);
+        }
         return $data;
     }
 

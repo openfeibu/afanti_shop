@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Home\IntegralOrderResource;
 
-use App\Services\OrderService;
+use App\Services\Home\OrderService;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class IntegralOrderCollection extends ResourceCollection

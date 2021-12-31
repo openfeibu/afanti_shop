@@ -16,7 +16,7 @@ class StoreController extends Controller
 
     // 获取店铺列表
     public function index(StoreService $store_service){
-        $info = $store_service->getWeappStoreList();
+        $info = $store_service->getHomeStoreList();
         if($info['status']){
             return $this->success($info['data']);
         }else{

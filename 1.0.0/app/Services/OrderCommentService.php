@@ -39,7 +39,7 @@ class OrderCommentService extends BaseService{
             $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('user_id',$user_info['id'])->where('is_comment',0)->get();
         }
         if(empty($order_list->count())){
-            OutputServerMessageException(__('orders.order_comment_error'));
+            return $this->format_error(__('orders.order_comment_error'));
         }
 
         $data = [];
@@ -112,7 +112,7 @@ class OrderCommentService extends BaseService{
             }
         }
         $rs = OrderComment::insert($data);
-        $order_model->whereIn('id',$ids)->update(['order_status'=>6,'comment_time'=>now()]);
+        $order_model->whereIn('id',$ids)->update(['comment_time'=>now()]);
         return $this->format($rs);
     }
 

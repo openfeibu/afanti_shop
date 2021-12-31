@@ -86,7 +86,7 @@ class StatisticController extends Controller
         }
 
         $sql = "select tpl.time,ifNull(U.num,0) as num from (select @s :=@s + 1 AS _index,DATE_FORMAT(DATE_SUB('".$end_time."', INTERVAL @s ".$format[2]."),'".$format[1]."') AS time FROM information_schema.CHARACTER_SETS,(SELECT @s := 0) temp where @s<".$diffDay." ORDER BY time) as tpl";
-        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(created_at,'".$format[1]."') as time from orders where created_at between ? and ? and pay_status = '".PayStatus::SUCCESS."' and order_status <>'".OrderStatus::CANCELLED."' group by time) as U on U.time=tpl.time";
+        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(created_at,'".$format[1]."') as time from orders where created_at between ? and ? and pay_status = '".PayStatus::SUCCESS."' group by time) as U on U.time=tpl.time";
         $data['order_plot'] = DB::select($sql,[$first_time,$end_time]);
 
 
@@ -274,7 +274,7 @@ class StatisticController extends Controller
 */
         // dd($end_time,$first_time);
         $sql = "select tpl.time,ifNull(U.num,0) as num from (select @s :=@s + 1 AS _index,DATE_FORMAT(DATE_SUB('".$end_time."', INTERVAL @s-1 ".$format[2]."),'".$format[1]."') AS time FROM information_schema.CHARACTER_SETS,(SELECT @s := 0) temp where @s<=".$diffDay." ORDER BY time) as tpl";
-        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(pay_time,'".$format[1]."') as time from orders where pay_time between ? and ? and pay_status = '".PayStatus::SUCCESS."' and order_status <>'".OrderStatus::CANCELLED."' group by time) as U on U.time=tpl.time";
+        $sql .= " left join (select sum(total_price) as num,DATE_FORMAT(pay_time,'".$format[1]."') as time from orders where pay_time between ? and ? and pay_status = '".PayStatus::SUCCESS."' group by time) as U on U.time=tpl.time";
         //var_dump($sql,$first_time,$end_time);exit;
         // dd($sql);
         $data['plot'] = DB::select($sql,[$first_time,$end_time]);

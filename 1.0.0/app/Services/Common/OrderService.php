@@ -220,7 +220,7 @@ class OrderService extends BaseService{
     public function getOrderStatusCn($order_info){
         // 订单状态
         if (in_array($order_info['order_status'], [20, 30])) {
-            return  __('orders'.$order_info['order_status']);
+            return  __('orders.order_status.'.$order_info['order_status']);
         }
         // 付款状态
         if ($order_info['pay_status'] == 10) {
@@ -228,7 +228,7 @@ class OrderService extends BaseService{
         }
         // 订单类型：单独购买
         if ($order_info['delivery_status'] == 10) {
-            return __('orders.delivery_status.'.$order_info['delivery_status']);
+            return __('orders.pay_status.'.$order_info['pay_status']).', '.__('orders.delivery_status.'.$order_info['delivery_status']);
             return '已付款，待发货';
         }
         if ($order_info['receipt_status'] == 10) {

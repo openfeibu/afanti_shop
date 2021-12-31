@@ -11,7 +11,7 @@
                             <span>日同比 {{info.day_rate||'0.00'}} %<a-icon v-if="info.day_rate>=0" style="margin-left:5px;color:red;" type="caret-up" /><a-icon v-else style="margin-left:5px;color:green;" type="caret-down" /></span>
                         </div>
                         <div class="unline"></div>
-                        <div class="month_rate"><a-tooltip><template slot="title">月订单完成度</template><a-progress :percent="info.month_rate||60.00" /></a-tooltip></div>
+                        <div class="month_rate"><a-tooltip><template slot="title">月同比</template><a-progress :percent="info.month_rate||0.00" /></a-tooltip></div>
                         <div class="today_price">日销售额：￥ {{info.today_price||'0.00'}}</div>
                     </div>
                 </div>

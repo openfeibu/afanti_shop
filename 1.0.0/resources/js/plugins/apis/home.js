@@ -2,7 +2,7 @@ import common from './common';
 const baseUrl = common.baseUrl;
 export default {
     /**
-     * 青梧商城PC接口
+     * PC接口
      * <www.feibu.info>
      */
 

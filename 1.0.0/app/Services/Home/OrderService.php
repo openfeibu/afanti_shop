@@ -487,4 +487,77 @@ class OrderService extends \App\Services\Common\OrderService{
             ->paginate(request()->per_page??30);
         return $this->format($order_model);
     }
+    // 获取订单状态
+
+    public function getOrderStatusCn($order_info){
+
+        switch ($order_info['order_source'])
+        {
+            case 'collective':
+                $collective_active = $order_info->collective_active;
+                $order_info['active_status'] = $collective_active['status'] ?? 'un-collect';
+                // 订单状态：已完成
+                if ($order_info['order_status'] == 30) {
+                    return  __('orders.order_status.'.$order_info['order_status']);
+                }
+                // 订单状态：已取消
+                if ($order_info['order_status'] == 20) {
+                    // 拼单未成功
+                    if ($order_info['active_status'] == 'failed-collect') {
+                        return $order_info['is_refund'] ? '拼团未成功，已退款' : '拼团未成功，待退款';
+                    }
+                    return $order_info['is_refund'] ? '已退款' : '待退款';
+                }
+                // 付款状态
+                if ($order_info['pay_status'] == 10) {
+                    return '待付款';
+                }
+                // 拼单未成功
+                if ($order_info['active_status'] == 'failed-collect') {
+                    return $order_info['is_refund'] ? '拼团未成功，已退款' : '拼团未成功，待退款';
+                }
+                // 拼单中
+                if ($order_info['active_status'] == 'collecting') {
+                    return '已付款，待成团';
+                }
+                // 拼单成功
+                if ($order_info['active_status'] == 'collected') {
+                    if ($order_info['delivery_status'] == 10) {
+                        return '拼团成功，待发货';
+                    }
+                    if ($order_info['receipt_status'] == 10) {
+                        return '已发货，待收货';
+                    }
+                }
+                return "未知订单";
+                break;
+            default:
+                // 订单状态
+                if ($order_info['order_status'] == 30) {
+                    return  __('orders.order_status.'.$order_info['order_status']);
+                }
+                // 订单状态：已取消
+                if ($order_info['order_status'] == 20) {
+                    if ($order_info['pay_status'] == 20) {
+                        return $order_info['is_refund'] ? '已退款' : '待退款';
+                    }
+                    return  __('orders.order_status.'.$order_info['order_status']);
+                }
+                // 付款状态
+                if ($order_info['pay_status'] == 10) {
+                    return __('orders.pay_status.'.$order_info['pay_status']);
+                }
+                // 订单类型：单独购买
+                if ($order_info['delivery_status'] == 10) {
+                    return __('orders.delivery_status.'.$order_info['delivery_status']);
+                }
+                if ($order_info['receipt_status'] == 10) {
+                    return __('orders.delivery_status.'.$order_info['delivery_status']).', '.__('orders.receipt_status.'.$order_info['receipt_status']);
+                }
+                break;
+        }
+
+        return "未知订单";
+
+    }
 }

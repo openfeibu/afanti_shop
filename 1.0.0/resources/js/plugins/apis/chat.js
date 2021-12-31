@@ -3,7 +3,7 @@ const baseUrl = common.baseUrl;
 export default 
 {
      /**
-     * 青梧商城聊天接口
+     * 聊天接口
      * <www.feibu.info>
      */
 

@@ -6,6 +6,7 @@ use App\Models\IntegralOrder;
 use App\Models\IntegralOrderGoods;
 use App\Traits\HelperTrait;
 use Illuminate\Support\Facades\DB;
+use App\Services\Home\OrderService;
 
 class IntegralOrderService extends BaseService{
     

@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Admin\OrderResource;
 
 use App\Models\Express;
-use App\Services\OrderService;
+use App\Services\Admin\OrderService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource

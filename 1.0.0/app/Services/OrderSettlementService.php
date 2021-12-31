@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Enums\Order\OrderStatus;
 use App\Models\Goods;
 use App\Models\Order;
 use App\Models\OrderSettlement;
@@ -23,7 +24,7 @@ class OrderSettlementService extends BaseService{
 
         $dateString = Carbon::parse('30 days ago')->toDateString(); // 30天前的数据 最多可结算
         $now = now();
-        $order_status = 6; // 订单完成状态
+        $order_status = OrderStatus::COMPLETED; // 订单完成状态
         $settlement_no = date('YmdHis').mt_rand(1000,9999); // 此处操作结算订单号
 
         $order_list = $order_model->whereDate('pay_time','>',$dateString)
@@ -34,7 +35,7 @@ class OrderSettlementService extends BaseService{
 
         // 结算订单为空
         if($order_list->isEmpty()){
-            OutputServerMessageException(__('admins.order_settlement_empty'));
+            return $this->format_error(__('admins.order_settlement_empty'));
         }
 
         $distribution_order = []; // 分销订单ID
@@ -51,7 +52,6 @@ class OrderSettlementService extends BaseService{
             $item = [];
             $item['order_id'] = $v->id;
             $item['user_id'] = $v->user_id;
-            $item['store_id'] = $v->store_id;
             $item['settlement_no'] = $settlement_no;
             $item['total_price'] = $v->total_price; // 订单金额
             $item['settlement_price'] = $v->total_price; // 结算金额
@@ -59,37 +59,25 @@ class OrderSettlementService extends BaseService{
             $item['info'] = $auto?__('admins.order_settlement_auto'):__('admins.order_settlement_handle'); // 备注信息
             $item['created_at'] = $now;
             $item['updated_at'] = $now;
-            
-            // 如果订单存在分销的情况
-            if(!empty($v->distribution)){
-                $distribution_order[] = $v->id;
 
-                // 结算金额减去分销的金额
-                $commission = 0;
-                foreach($v->distribution as $vo){
-                    $commission += $vo['commission'];
-                }
-                $item['settlement_price'] -= $commission;
-                $item['info'] .= '|商品分佣-'.$commission;
-                
-            }
 
             // 如果order_goods 不为空 统计每个商品成功售卖的数量
             if(!empty($v->order_goods)){
-                foreach($v->order_goods as $vo){
-                    if(isset($order_goods_list[$vo['goods_id']])){
-                        $order_goods_list[$vo['goods_id']] += $vo['buy_num'];
+                foreach($v->order_goods as $goods){
+                    if(isset($order_goods_list[$goods['goods_id']])){
+                        $order_goods_list[$goods['goods_id']] += $goods['buy_num'];
                     }else{
-                        $order_goods_list[$vo['goods_id']] = $vo['buy_num'];
+                        $order_goods_list[$goods['goods_id']] = $goods['buy_num'];
                     }
-                }
-            }
+                    if (
+                        !empty($goods['order_refund'])
+                        && $goods['order_refund']['refund_type'] == 10      // 售后类型：退货退款
+                        && $goods['order_refund']['is_agree'] == 10  // 商家审核：已同意
+                    ) {
+                        $item['settlement_price'] -= $goods['refund']['refund_money'];
+                    }
 
-            // 商家账号应该返回金额的统计
-            if(!isset($store_list[$v->store_id])){
-                $store_list[$v->store_id] = $item['settlement_price'];
-            }else{
-                $store_list[$v->store_id] += $item['settlement_price'];
+                }
             }
 
             $order_settlement_array[] = $item;
@@ -105,15 +93,7 @@ class OrderSettlementService extends BaseService{
 
             // 数据库处理日志
             $os_model = new OrderSettlement();
-            $dis_service = new DistributionService();
-            $ml_service = new MoneyLogService();
             $os_model->insert($order_settlement_array); // 插入结算日志数据库
-            $dis_service->handleSettlement($distribution_order); // 处理分销
-
-            // 商家金额处理
-            foreach($store_list as $k=>$v){
-                $ml_service->editSellerMoney(__('users.money_log_order_settlement'),$k,$v);
-            }
 
             // 订单修改状态为已经结算
             $order_model->whereIn('id',$order_settlement_array)->update(['is_settlement'=>1]);

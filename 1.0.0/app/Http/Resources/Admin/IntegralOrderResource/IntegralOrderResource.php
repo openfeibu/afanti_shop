@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Admin\IntegralOrderResource;
 
-use App\Services\OrderService;
+use App\Services\Admin\OrderService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class IntegralOrderResource extends JsonResource

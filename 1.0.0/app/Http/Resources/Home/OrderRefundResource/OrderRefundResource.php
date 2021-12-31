@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Home\OrderRefundResource;
 
-use App\Services\OrderService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderRefundResource extends JsonResource
@@ -15,7 +14,6 @@ class OrderRefundResource extends JsonResource
      */
     public function toArray($request)
     {
-        $order_service = new OrderService();
         return [
             'id'                    =>  $this->id,
             'order_id'              =>  $this->order_id,

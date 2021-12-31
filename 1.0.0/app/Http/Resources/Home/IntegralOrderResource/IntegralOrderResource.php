@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Home\IntegralOrderResource;
 
 use App\Services\KuaibaoService;
-use App\Services\OrderService;
+use App\Services\Home\OrderService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class IntegralOrderResource extends JsonResource

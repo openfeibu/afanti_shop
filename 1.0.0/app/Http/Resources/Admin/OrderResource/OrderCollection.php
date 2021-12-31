@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Admin\OrderResource;
 
-use App\Services\OrderService;
+use App\Services\Admin\OrderService;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class OrderCollection extends ResourceCollection

@@ -11,7 +11,7 @@ use App\Services\UserService;
 use App\Models\UserCheck;
 use App\Models\UserWechat;
 use App\Services\FavoriteService;
-use App\Services\OrderService;
+use App\Services\Home\OrderService;
 use App\Services\UploadService;
 use Illuminate\Http\Request;
 

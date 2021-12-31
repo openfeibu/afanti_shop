@@ -92,11 +92,12 @@ class StoreService extends BaseService{
 
     // 获取店铺信息
     public function getStoreInfo($store_id,$select=""){
-        $stores_model = new Store();
+        $store_model = new Store();
+        $store_model = $store_model->where('is_store',1);
         if(!empty($select)){
-            $stores_model = $stores_model->select(DB::raw($select));
+            $store_model = $store_model->select(DB::raw($select));
         }
-        $store_info = $stores_model->find($store_id);
+        $store_info = $store_model->find($store_id);
         if(empty($store_info)){
             OutputServerMessageException(__('stores.store_not_defined'));
         }

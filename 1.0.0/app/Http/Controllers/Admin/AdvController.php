@@ -39,8 +39,8 @@ class AdvController extends Controller
         $adv_model->name = $request->name??'';
         $adv_model->url = $request->url??'';
         $adv_model->image_url = $request->image_url??'';
-        $adv_model->adv_start = $request->adv_start;
-        $adv_model->adv_end = $request->adv_end;
+        //$adv_model->adv_start = $request->adv_start;
+       // $adv_model->adv_end = $request->adv_end;
         $adv_model->adv_sort = $request->adv_sort??0;
         $adv_model->adv_type = $request->adv_type??0;
         $adv_model->save();
@@ -73,8 +73,8 @@ class AdvController extends Controller
         $adv_model->name = $request->name??'';
         $adv_model->url = $request->url??'';
         $adv_model->image_url = $request->image_url??'';
-        $adv_model->adv_start = $request->adv_start;
-        $adv_model->adv_end = $request->adv_end;
+        //$adv_model->adv_start = $request->adv_start;
+        //$adv_model->adv_end = $request->adv_end;
         $adv_model->adv_sort = $request->adv_sort??0;
         $adv_model->adv_type = $request->adv_type??0;
         $adv_model->save();

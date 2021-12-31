@@ -34,14 +34,7 @@
                 <a-form-model-item label="链接">
                     <a-input v-model="info.url"></a-input>
                 </a-form-model-item>
-                <a-form-model-item label="时间">
-                    <a-range-picker :value="[moment(info.adv_start), moment(info.adv_end)]" @change="time_format" format="YYYY-MM-DD HH:mm:ss" show-time></a-range-picker>
-                </a-form-model-item>
-                <a-form-model-item label="类型">
-                    <a-select v-model="info.adv_type">
-                        <a-select-option :value="0">默认</a-select-option>
-                    </a-select>
-                </a-form-model-item>
+
 
                 <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
                     <a-button type="primary" @click="handleSubmit">提交</a-button>

@@ -46,8 +46,6 @@ export default {
               {title:'广告名',fixed:'left',key:'id',scopedSlots: { customRender: 'pic' }},
               {title:'广告位',dataIndex:'ap_name'},
               {title:'链接',dataIndex:'url'},
-              {title:'开始时间',fixed:'right',dataIndex:'adv_start'},
-              {title:'结束时间',fixed:'right',dataIndex:'adv_end'},
             //   {title:'修改时间',dataIndex:'updated_at'},
             //   {title:'创建时间',dataIndex:'created_at'},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},

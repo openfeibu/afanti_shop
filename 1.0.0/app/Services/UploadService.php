@@ -329,6 +329,7 @@ class UploadService extends BaseService{
             'height'=>1200,
             'thumb'=>[
                 [600,600],
+                [400,400],
                 [300,300],
                 [150,150],
             ],

@@ -147,7 +147,7 @@ export default {
     data() {
       return {
           goods_info:{
-              goods_images_thumb_600:[],
+              goods_images_thumb_400:[],
               goods_images_thumb_150:[],
               goods_images:[],
               sale_list:[],

@@ -11,7 +11,7 @@
         <div class="goods_info_top w1200">
             <div class="goods_info_top_left" >
                 <div class="goods_image_item">
-                    <pic-zoom :url="goods_info.goods_images_thumb_600[chose_img_pos]" :highUrl="goods_info.goods_images[chose_img_pos]"></pic-zoom>
+                    <pic-zoom :url="goods_info.goods_images_thumb_400[chose_img_pos]" :highUrl="goods_info.goods_images[chose_img_pos]"></pic-zoom>
                 </div>
                 <div class="pic_zoom_list">
                     <div class="pic_zoom_list_left" @click="pre_img()">
@@ -277,7 +277,7 @@ export default {
       return {
           goods_type:'',
           goods_info:{
-              goods_images_thumb_600:[],
+              goods_images_thumb_400:[],
               goods_images_thumb_150:[],
               goods_images:[],
               sale_list:[],

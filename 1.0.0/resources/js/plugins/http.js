@@ -3,7 +3,7 @@ import axios from 'axios'
 import { message } from 'ant-design-vue';
 import router from './router'
 
-axios.defaults.timeout = 5000; // 请求超时
+axios.defaults.timeout = 50000; // 请求超时
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 // axios.defaults.withCredentials = true; // 允许跨域携带cookie
 

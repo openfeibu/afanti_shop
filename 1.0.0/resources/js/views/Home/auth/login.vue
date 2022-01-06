@@ -97,7 +97,7 @@
         methods: {
             // 登录
             login: function(from) {
-                this.isLoading = true;
+                
                 // 重新赋值vm使 axios可用vue实例
                 var vm = this;
                 var from = from || '';
@@ -121,6 +121,7 @@
                         password: this.password
                     }
                 }
+                this.isLoading = true;
                 this.$post(this.$api.homeLogin, params).then(function(res) {
                       vm.isLoading = false;
                     if (res.code == 200) {

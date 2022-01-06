@@ -14,6 +14,7 @@
         data() {
             return {
                 equipments:[],
+                a:123
             };
         },
         watch: {},
@@ -36,6 +37,7 @@
                     });
 
                     vm.equipments = equipments;
+                    vm.access_token = access_token;
                     console.log(vm.equipments);
                 })
             },
@@ -44,15 +46,18 @@
             this.onload();
         },
         mounted() {
+            var that = this;
+            setTimeout(function(){
+                that.equipments.forEach((item, index) => {
 
-            this.equipments.forEach((item, index) => {
                 console.log("myPlayer_" + index);
+                console.log(that.access_token);
                 new EZUIKit.EZUIKitPlayer({
                     id: "myPlayer_" + index, // 视频容器ID
-                    accessToken: access_token,
+                    accessToken: that.access_token,
                     url: item,
                     template: 'theme',//
-                    autoplay: true,
+                    autoplay: false,
                     plugin: [],// 加载插件，talk-对讲
                     //startTalk: ()=> this.playr.startTalk(),
                     //stopTalk: ()=> this.playr.stopTalk(),
@@ -60,6 +65,8 @@
                     height:400,
                 })
             })
+            },5000)
+            
         },
         beforeDestroy(){
             if(this.modal != null){

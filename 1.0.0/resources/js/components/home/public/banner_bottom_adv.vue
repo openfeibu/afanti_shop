@@ -3,7 +3,7 @@
     <div class="banner_bottom_adv width_center_1200">
         <div class="shop_left_on">
             <ul>
-
+ 
                 <li><router-link to="/seckill">
                 <img :src="require('@/asset/pc/active01.png')" alt="">
                 <p>秒杀活动</p>

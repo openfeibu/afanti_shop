@@ -294,7 +294,7 @@ class GoodsService extends BaseService{
 
         $goods_info['goods_images'] = explode(',',$goods_info['goods_images']);
         $goods_info['goods_images_thumb_150'] = $this->thumb_array($goods_info['goods_images'],150);
-        $goods_info['goods_images_thumb_400'] = $this->thumb_array($goods_info['goods_images'],400);
+        $goods_info['goods_images_thumb_600'] = $this->thumb_array($goods_info['goods_images'],600);
         
         // 获取处理后的规格信息
         $sku = $goods_skus_model->where('goods_id',$id)->get()->toArray();

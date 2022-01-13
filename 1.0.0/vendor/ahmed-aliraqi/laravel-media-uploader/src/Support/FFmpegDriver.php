@@ -17,12 +17,13 @@ class FFmpegDriver
      */
     public function __construct()
     {
+        $app = app();
         $this->driver = FFMpeg::create([
             'ffmpeg.binaries' => Config::get('media-library.ffmpeg_path'),
             'ffprobe.binaries' => Config::get('media-library.ffprobe_path'),
             'timeout' => 3600,
             'ffmpeg.threads' => 12,
-        ]);
+        ],new \Illuminate\Log\LogManager($app));
     }
 
     /**

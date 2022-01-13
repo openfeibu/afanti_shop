@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits;
 
+use Alchemy\BinaryDriver\Exception\ExecutableNotFoundException;
 use App\Exceptions\OutOfStockException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Yansongda\Pay\Exceptions\BusinessException;
@@ -85,6 +86,13 @@ trait ExceptionCustomHandlerTrait
                 ];
                 break;
             case ($exception instanceof BusinessException):
+                $responseJson = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'message' => $exception->getMessage(),
+                ];
+                break;
+            case ($exception instanceof ExecutableNotFoundException):
                 $responseJson = [
                     'code' => 400,
                     'status' => 'error',

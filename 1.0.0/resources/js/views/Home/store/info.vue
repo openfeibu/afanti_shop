@@ -6,14 +6,16 @@
             <div class="shopInfo-test">
                 <div class="title">{{store_info.store_name}}</div>
                 <div class="des">{{store_info.store_description}}</div>
+                <div v-if="store_info.equipment_url && store_info.access_token" class="monitoring_btn" @click="monitoringFun">查看卖场实时监控</div>
             </div>
             <div class="shopInfo-video">
                 <video :src="store_info.store_video" controls="controls">
                 您的浏览器不支持 video 标签。
                 </video>
-                <div id="monitoring_video"></div>
+                
             </div>
         </div>
+       
         <div class="store_info_block w1200">
             <div class="left_item">
                 <!-- <div class="store_info">
@@ -138,6 +140,18 @@
          <transition name="fade">
             <loading v-if="isLoading"></loading>
         </transition>
+        <a-drawer
+            title="卖场实时监控"
+            placement="left"
+            :closable="false"
+             :width="720"
+            :visible="visible"
+            :body-style="{ paddingBottom: '80px' }"
+            :after-visible-change="afterVisibleChange"
+            @close="monitoringonClose"
+            >
+             <div id="monitoring_video"></div>
+            </a-drawer>
     </div>
 </template>
 
@@ -166,30 +180,59 @@ export default {
           comment_statistics:[],
           isFav:false,
           isLoading:true,
+          visible:false
 
       };
     },
     watch: {},
     computed: {},
     methods: {
+        monitoringFun(){
+             var that = this;
+              if(that.store_info.equipment_url && that.store_info.access_token)
+                {
+                    that.visible = true;
+                    
+                    setTimeout(function(){
+                        new EZUIKit.EZUIKitPlayer({
+                            id: "monitoring_video", // 视频容器ID
+                            accessToken: that.store_info.access_token,
+                            url: that.store_info.equipment_url,
+                            template: 'theme',//
+                            autoplay: false,
+                            plugin: [],// 加载插件，talk-对讲
+                            //startTalk: ()=> that.playr.startTalk(),
+                            //stopTalk: ()=> that.playr.stopTalk(),
+                            width: 600,
+                            height:467,
+                        })
+                    },500)
+                    
+                    
+                }
+        },
+        monitoringonClose(){
+            this.visible = false;
+            $("#monitoring_video").html('');
+        },
         get_store_info(){
             this.$get(this.$api.homeStore+'/'+this.id).then(res=>{
                 this.store_info = res.data;
-                if(this.store_info.equipment_url && this.store_info.access_token)
-                {
-                    new EZUIKit.EZUIKitPlayer({
-                        id: "monitoring_video", // 视频容器ID
-                        accessToken: this.store_info.access_token,
-                        url: this.store_info.equipment_url,
-                        template: 'theme',//
-                        autoplay: false,
-                        plugin: [],// 加载插件，talk-对讲
-                        //startTalk: ()=> this.playr.startTalk(),
-                        //stopTalk: ()=> this.playr.stopTalk(),
-                        width: 600,
-                        height:400,
-                    })
-                }
+                // if(this.store_info.equipment_url && this.store_info.access_token)
+                // {
+                //     new EZUIKit.EZUIKitPlayer({
+                //         id: "monitoring_video", // 视频容器ID
+                //         accessToken: this.store_info.access_token,
+                //         url: this.store_info.equipment_url,
+                //         template: 'theme',//
+                //         autoplay: false,
+                //         plugin: [],// 加载插件，talk-对讲
+                //         //startTalk: ()=> this.playr.startTalk(),
+                //         //stopTalk: ()=> this.playr.stopTalk(),
+                //         width: 600,
+                //         height:400,
+                //     })
+                // }
             })
         },
         get_goods_list(){
@@ -614,5 +657,14 @@ export default {
             height:304px ;
             video{width: 100%;height: 100%;}
         }
+       
     }
+    #monitoring_video{width: 600px;height: auto;background: #eee;}
+    .monitoring_btn{width: 150px;
+    height: 40px;
+    background: #4bb16f;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    border-radius: 5px;cursor: pointer;}
 </style>

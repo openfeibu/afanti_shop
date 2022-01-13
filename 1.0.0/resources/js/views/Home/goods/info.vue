@@ -180,6 +180,11 @@
             <div class="right_item tablist" >
                  <a-tabs default-active-key="1" >
                 <a-tab-pane key="1" tab="商品详情" force-render>
+                    <div class="detail_video" v-if="goods_info.goods_video">
+                         <video :src="goods_info.goods_video" controls="controls">
+                        您的浏览器不支持 video 标签。
+                        </video>
+                    </div>
                     <div v-html="goods_info.goods_content||''"></div>
                 </a-tab-pane>
                 <a-tab-pane key="2" :tab="'用户评价 ('+(comment_statistics.all||0)+')'" force-render>
@@ -1355,5 +1360,11 @@ export default {
             text-align: left;font-size: 14px;color: #666;margin-left: 30px;
         }
     }
-
+.detail_video{
+            width: 640px;
+            background: #fbfbfb;
+            border-radius: 5px;
+            height:400px ;
+            video{width: 100%;height: 100%;}
+        }
 </style>

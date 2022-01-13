@@ -19,7 +19,7 @@ class OrderCommentController extends Controller
     public function index(Request $request)
     {
         $oc_model = new OrderComment();
-        $list = $oc_model->paginate($request->per_page??30);
+        $list = $oc_model->orderBy('id','desc')->paginate($request->per_page??30);
         return $this->success(new OrderCommentCollection($list));
     }
 

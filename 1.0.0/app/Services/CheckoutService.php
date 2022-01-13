@@ -279,8 +279,8 @@ class CheckoutService extends BaseService{
         foreach($this->store_goods_list as $key => &$store_list) {
             foreach ($store_list['goods_list'] as $goods_key => &$goods) {
                 // 减去优惠券抵扣金额
-                $goods_total_discount = bcadd($goods['coupon_money'], $goods['full_reduction_money']);
-                $value = bcsub($goods['total_price'], $goods_total_discount);
+                $goods_total_discount = (float)bcadd($goods['coupon_money'], $goods['full_reduction_money'], 2);
+                $value = (float)bcsub($goods['total_price'], $goods_total_discount, 2);
                 $goods['total_pay_price'] = number2($value);
             }
         }

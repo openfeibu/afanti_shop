@@ -22,10 +22,10 @@
                     action="/api/uploader/media/upload"
                     accept="video/*"
                     @change="change"
-                    :file-list="fileList"
+                    :file-list="videoList"
 
             >
-                <a-button> <a-icon type="upload" /> Upload </a-button>
+                <a-button> <a-icon type="upload" /> 上传 </a-button>
             </a-upload>
             </template>
         </a-form-model-item>
@@ -48,7 +48,7 @@
                 media:'',
                 //store_video:{},
                 loading:false,
-                fileList: null,
+                videoList: null,
             };
         },
         watch: {},
@@ -56,7 +56,7 @@
         methods: {
             change(e)
             {
-                this.fileList = e.fileList;  // 加这句就行了
+                this.videoList = e.fileList;  // 加这句就行了
                 console.log(e.file.status);
 
                 if (e.file.status !== 'uploading') {
@@ -95,7 +95,7 @@
                     this.info = res.data;
                     if(this.info.store_video)
                     {
-                        this.fileList = [
+                        this.videoList = [
                             {
                                 uid: '1',
                                 name: this.info.store_video,

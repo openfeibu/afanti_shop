@@ -10,9 +10,9 @@
                 <a-tab-pane :key="0" tab="网站配置">
                     <web-config></web-config>
                 </a-tab-pane>
-                <!--<a-tab-pane :key="1" tab="展馆配置">-->
-                    <!--<store-config></store-config>-->
-                <!--</a-tab-pane>-->
+                <a-tab-pane :key="1" tab="退货地址">
+                    <return-config></return-config>
+                </a-tab-pane>
                 <!--<a-tab-pane :key="2" tab="积分配置">-->
                     <!--<integral-config></integral-config>-->
                 <!--</a-tab-pane>-->
@@ -25,9 +25,9 @@
 
 <script>
 import webConfig from "./web.vue"
-import storeConfig from "./store.vue"
-import integralConfig from "./integral.vue"
+import returnConfig from "./return.vue"
+
 export default {
-    components: {webConfig,storeConfig,integralConfig},
+    components: {webConfig,returnConfig},
 };
 </script>

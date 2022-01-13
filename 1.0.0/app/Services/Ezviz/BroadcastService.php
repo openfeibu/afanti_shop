@@ -29,12 +29,11 @@ class BroadcastService extends BaseService{
             'appSecret' => $this->appSecret
         ];
         $accessToken = Cache::get('accessToken');
-        if(!$accessToken || $accessToken['expireTime'] < time()){// 缓存 不存在 或者 缓存 accessToken 已过期
+        if(!$accessToken || $accessToken['expireTime'] < getUnixTimestamp()){// 缓存 不存在 或者 缓存 accessToken 已过期
             $accessToken = $this->httpPost($url,$this->header,$request_data);
             Cache::put('accessToken',$accessToken['data']);
             return $accessToken['data']['accessToken'];
         }
-
         return $accessToken['accessToken'];
 
     }

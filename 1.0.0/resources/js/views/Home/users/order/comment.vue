@@ -74,6 +74,7 @@ export default {
           },
           params:{
               order_id:0,
+              goods_id:0,
               score:5,
               agree:5,
               service:5,
@@ -91,7 +92,9 @@ export default {
         handleSubmit(){
             this.$post(this.$api.homeOrderComments,this.params).then(res=>{
                 this.$returnInfo(res);
-                return this.$router.go(-1);
+                if(res.code == 200) {
+                    return this.$router.go(-1);
+                }
             })
         },
         upload(e){
@@ -112,11 +115,13 @@ export default {
     },
     created() {
         let id = this.$route.params.id;
-        if(this.$isEmpty(id)){
+        let goods_id = this.$route.query.goods_id;
+        if(this.$isEmpty(id) || this.$isEmpty(goods_id)){
             this.$messasge.error('error');
             return this.$router.go(-1);
         }else{
             this.params.order_id = id;
+            this.params.goods_id = goods_id;
         }
     },
     mounted() {}

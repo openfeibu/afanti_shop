@@ -21,7 +21,7 @@ class BeaconController extends Controller
         if(!empty($request->major_id)){
             $beacon_model = $beacon_model->where('major_id','like','%'.$request->major_id.'%');
         }
-        $beacons = $beacon_model->orderBy('id','desc')->paginate($request->per_page??30);
+        $beacons = $beacon_model->orderBy('id','desc')->get();
         foreach ($beacons as $key => $beacon)
         {
             $beacon_store = BeaconStore::where('beacon_id',$beacon->id)->first();

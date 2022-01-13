@@ -19,7 +19,7 @@
                     </a-col>
                     <a-col :span="8">
                         <span class="content">
-                            <a-button @click="$router.push('/Admin/order/form/'+info.order.id)">订单详情</a-button>
+                            <a-button @click="$router.push('/Admin/orders/form/'+info.order.id)">订单详情</a-button>
                         </span>
                     </a-col>
                 </a-row>
@@ -241,6 +241,7 @@ export default {
               user:[],
               order_goods:[],
           },
+          return_address:[],
           delivery_list:[],
           id:0,
           columns:[
@@ -258,6 +259,7 @@ export default {
               { label: '拒绝', value: '20' },
           ],
           is_agree:'10',
+          fileList: null,
       };
     },
     watch: {},
@@ -290,6 +292,15 @@ export default {
                 this.info = res.data;
                 this.info.refund_money = Math.min(this.info.order.total_price,this.info.order_goods.total_pay_price);
                 this.order_goods = [this.info.order_goods];
+                this.get_return_address();
+            })
+
+        },
+        get_return_address(){
+            this.$get(this.$api.adminConfigs).then(res=>{
+                this.info.return_name = res.data.return_address.name;
+                this.info.return_phone = res.data.return_address.phone;
+                this.info.return_address = res.data.return_address.address;
             })
         },
         onChangeIsAgree(e){

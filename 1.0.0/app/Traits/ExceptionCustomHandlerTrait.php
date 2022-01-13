@@ -14,7 +14,7 @@ trait ExceptionCustomHandlerTrait
         switch ($exception) {
             case ($exception instanceof \App\Exceptions\RequestSuccessException):
                 $responseJson = [
-                    'code' => 0,
+                    'code' => 200,
                     'status' => 'success',
                     'message' => sprintf(config('error.200'), $exception->getMessage() ?: '请求成功'),
                 ];
@@ -41,6 +41,13 @@ trait ExceptionCustomHandlerTrait
                 ];
                 break;
             case ($exception instanceof \App\Exceptions\DataNotFoundException):
+                $responseJson = [
+                    'code' => 404,
+                    'status' => 'error',
+                    'message' => $exception->getMessage() ? $exception->getMessage() : trans('error.404'),
+                ];
+                break;
+            case ($exception instanceof  \Illuminate\Database\Eloquent\ModelNotFoundException):
                 $responseJson = [
                     'code' => 404,
                     'status' => 'error',

@@ -27,21 +27,6 @@
                 </div>
             </a-upload>
         </a-form-model-item>
-        <a-form-model-item label="游览器ICON">
-            <a-upload
-                list-type="picture-card"
-                class="avatar-uploader"
-                :show-upload-list="false"
-                :action="$api.adminConfigsUploadIcon"
-                :data="{token:$getSession('token_type')}"
-                @change="icon"
-            >
-                <img width="60px" v-if="info.icon" :src="info.icon" />
-                <div v-else>
-                    <a-font type="iconplus" />
-                </div>
-            </a-upload>
-        </a-form-model-item>
         <a-form-model-item label="用户默认头像" extra="新用户有效">
             <a-upload
                     list-type="picture-card"

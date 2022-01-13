@@ -33,7 +33,7 @@
                 </span>
                 <span slot="action" slot-scope="rows">
                     <a-button icon="read" @click="$router.push('/goods/'+rows.id)">前往</a-button>
-                    <a-button icon="edit" @click="$router.push('/Admin/goods/form/'+rows.id)">查看</a-button>
+                    <a-button icon="edit" @click="$router.push('/Admin/goods/form/'+rows.id)">编辑</a-button>
                     <a-button icon="edit" @click="$router.push({path:'/Admin/goods/form/'+rows.id,query: { copy: 1 }})">复制</a-button>
                 </span>
             </a-table>

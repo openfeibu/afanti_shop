@@ -87,7 +87,7 @@ export default {
         },
         onload(){
             this.$get(this.$api.adminBeacons,this.params).then(res=>{
-                this.list = res.data.data;
+                this.list = res.data;
             });
         },
     },

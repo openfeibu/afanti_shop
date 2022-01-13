@@ -206,6 +206,14 @@
                                     <!-- <template slot="actions">
                                     </template> -->
                                     {{ item.content }}
+                                    <div class="goods_image"  v-if="item.image.length>0">
+                                        <div class="item" v-if="item.image.length>0">
+                                            <div class="item_img" v-for="(v,k) in item.image" :key="k" style="display:inline-block" >
+                                                <img width="160px" style="margin-right:15px;border:1px solid #efefef;" :src="v" />
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <a-tooltip slot="datetime" :title="item.created_at">
                                     <span>{{item.created_at}}</span>
                                     </a-tooltip>

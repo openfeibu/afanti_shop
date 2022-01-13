@@ -43,6 +43,7 @@ class GoodsTabAdminCollection extends ResourceCollection
                     'goods_stock'           =>  $goods_stock,
                     'goods_sale'            =>  $item->goods_sale,
                     'goods_master_image'    =>  $this->thumb($item->goods_master_image,150),
+                    'goods_video'          =>  $item->goods_video,
                     'brand_name'            =>  $item->goods_brand->name??'',
                     'class_name'            =>  $item->goods_class->name??'',
                     //'class_id'              =>  [$goods_class->withTrashed()->where('id',$item->goods_class->pid)->first()['pid'],$item->goods_class->pid,$item->goods_class->id],

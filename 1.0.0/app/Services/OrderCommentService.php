@@ -4,6 +4,8 @@ namespace App\Services;
 use App\Http\Resources\Home\OrderCommentResource\GoodsInfoCommentCollection;
 use App\Models\Order;
 use App\Models\OrderComment;
+use App\Models\OrderGoods;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class OrderCommentService extends BaseService{
@@ -22,25 +24,23 @@ class OrderCommentService extends BaseService{
      * @Description
      *
      */
-    public function add($ids=[]){
+    public function add(){
         // 判断订单是否已经评论过了
         $order_model = new Order();
         $user_service = new UserService();
-        
-        
-        if(!empty($ids)){
-            $idArray = $ids;
-            $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('is_comment',0)->get();
-        }else{
-            $user_info = $user_service->getUserInfo();
-            $idArray = array_filter(explode(',',request()->order_id),function($item){
-                return is_numeric($item);
-            });
-            $order_list = $order_model->with('order_goods')->whereIn('id',$idArray)->where('user_id',$user_info['id'])->where('is_comment',0)->get();
+        $user_info = $user_service->getUserInfo();
+        $order_id = request()->order_id;
+        $goods_id = request()->goods_id;
+        $order_goods = OrderGoods::where('order_id',$order_id)->where('goods_id',$goods_id)->first();
+        if(!$order_goods)
+        {
+            throw new ModelNotFoundException('数据不存在');
         }
-        if(empty($order_list->count())){
-            return $this->format_error(__('orders.order_comment_error'));
+        if($order_goods['is_comment'] != 0)
+        {
+            OutputServerMessageException("请勿重复评论");
         }
+
 
         $data = [];
         $score = request()->score??5.00;
@@ -49,33 +49,27 @@ class OrderCommentService extends BaseService{
         $speed = request()->speed??5.00;
         $content = request()->content??'非常好！';
         $image = request()->image??[];
-        foreach($order_list as $v){
-            foreach($v['order_goods'] as $vo){
-                $comment = [];
-                $comment['user_id'] = $user_info['id'];
-                $comment['goods_id'] = $vo['goods_id'];
-                $comment['order_id'] = $v['id'];
-                $comment['store_id'] = $v['store_id'];
-                $comment['score'] = $score;
-                $comment['agree'] = $agree;
-                $comment['service'] = $service;
-                $comment['service'] = $speed;
-                $comment['content'] = $content;
-                if(is_array($image)){
-                    $comment['image'] = empty($image)?'':implode(',',$image);
-                }else{
-                    $comment['image'] = $image;
-                }
-                $comment['created_at'] = now();
-                $data[] = $comment;
-            }
-        }
 
-        if(!empty($ids)){
-            $order_model->whereIn('id',$idArray)->update(['is_comment'=>1,'comment_time'=>now()]);
+        $comment = [];
+        $comment['user_id'] = $user_info['id'];
+        $comment['goods_id'] = $order_goods['goods_id'];
+        $comment['order_id'] = $order_goods['order_id'];
+        $comment['store_id'] = $order_goods['store_id'];
+        $comment['score'] = $score;
+        $comment['agree'] = $agree;
+        $comment['service'] = $service;
+        $comment['service'] = $speed;
+        $comment['content'] = $content;
+        if(is_array($image)){
+            $comment['image'] = empty($image)?'':implode(',',$image);
         }else{
-            $order_model->whereIn('id',$idArray)->where('user_id',$user_info['id'])->update(['is_comment'=>1,'comment_time'=>now()]);
+            $comment['image'] = $image;
         }
+        $comment['created_at'] = now();
+        $data[] = $comment;
+
+        $order_goods->update(['is_comment'=>1,'comment_time'=>now()]);
+
         $rs = OrderComment::insert($data);
         return $this->format($rs,__('orders.order_comment_success'));
     }

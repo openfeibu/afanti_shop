@@ -63,8 +63,20 @@
                         >
                             <a-button type="primary">上传图片</a-button>
                         </a-upload>
-                        <a-button icon="picture" @click="$message.info('暂未开发')">图片空间</a-button>
                     </div>
+                </a-form-model-item>
+                <a-form-model-item label="商品视频"  extra="格式要求: mp4">
+                    <template>
+                        <a-upload
+                                action="/api/uploader/media/upload"
+                                accept="video/*"
+                                @change="changeVideo"
+                                :file-list="videoList"
+
+                        >
+                            <a-button> <a-icon type="upload" /> 上传 </a-button>
+                        </a-upload>
+                    </template>
                 </a-form-model-item>
                 <template v-if="skuList.length<=0">
                     <a-form-model-item label="平台价格" :rules="{ required: true}">
@@ -83,47 +95,6 @@
                     </a-form-model-item>
 
                 </template>
-                <a-form-model-item label="规格属性(SKU)">
-                    <div class="attr_modal">
-                        <div class="attr_item" v-for="(v,k) in goodsAttr" :key="k">
-                            <span style="margin-right:10px;margin-left:8px">{{v.name}}：</span>
-                            <a-checkbox v-for="(vo,key) in v.specs" :key="key" @change="specChange(v,vo)" :default-checked="vo.check" :value="vo.check">{{vo.name}}</a-checkbox>
-                            <a-tag style="background: #fff; borderStyle: dashed;">
-                                <a-icon type="plus" /> 添加
-                            </a-tag>
-                        </div>
-                    </div>
-                    <div class="seller_goods_form_btn"><a-button type="primary" icon="plus" @click="open_attr_modal">选择属性</a-button></div>
-
-                    <!-- 规格SKU start -->
-                    <div class="goods_specs" v-if="skuList.length>0">
-                        <div class="row_th">
-                            <a-row>
-                                <a-col class="col_th" :span="4">SKU</a-col>
-                                <a-col class="col_th" :span="4">市场价</a-col>
-                                <a-col class="col_th" :span="4">平台价</a-col>
-                                <a-col class="col_th" :span="4">重量</a-col>
-                                <a-col class="col_th" :span="4">库存</a-col>
-                                <a-col class="col_th" :span="4">图片</a-col>
-                            </a-row>
-                        </div>
-                        <div class="row_td">
-                            <a-row :gutter="16" v-for="(v,k) in skuList" :key="k">
-                                <a-col class="col_th" :span="4">{{v.sku_name.join(' ')}}</a-col>
-                                <a-col :span="4"><a-input v-model="v.goods_market_price" type="number" suffix="￥" /></a-col>
-                                <a-col :span="4"><a-input v-model="v.goods_price" type="number" suffix="￥" /></a-col>
-                                <a-col :span="4"><a-input v-model="v.goods_weight" type="number" suffix="Kg" /></a-col>
-                                <a-col :span="4">
-                                    <a-input type="number" v-model="v.goods_stock">
-                                        <a-icon slot="suffix" type="stock"></a-icon>
-                                    </a-input>
-                                </a-col>
-                                <a-col class="col_th" :span="4">-</a-col>
-                            </a-row>
-                        </div>
-                    </div>
-                    <!-- 规格sku end -->
-                </a-form-model-item>
                 <a-form-model-item label="运费模版">
                     <a-select v-model="info.freight_id" :filter-option="false">
                         <a-select-option :value="0">默认运费</a-select-option>
@@ -133,7 +104,7 @@
                 <a-form-model-item label="商品详情">
                     <div>
                         <span :class="platform?'admin_editor_span':'admin_editor_span check'" @click="check_platform(false)">PC端</span>
-                        <span :class="platform?'admin_editor_span check':'admin_editor_span'" @click="check_platform(true)">Mobile端</span>
+                        <!--<span :class="platform?'admin_editor_span check':'admin_editor_span'" @click="check_platform(true)">Mobile端</span>-->
                         <wang-editor :contents="goods_content" @goods_content="goods_content_fun" />
                     </div>
                 </a-form-model-item>
@@ -152,7 +123,7 @@
         </div>
     </div>
 </template>
-
+<script src="https://cdn.jsdelivr.net/npm/laravel-file-uploader"></script>
 <script>
     import wangEditor from "@/components/wangeditor"
     import GoodsAttrModal from "@/components/admin/goods_attr_modal"
@@ -162,6 +133,7 @@
         data() {
             return {
                 info:{
+                    goods_video:'',
                     goods_images:[],
                     goods_status:true,
                 },
@@ -184,6 +156,7 @@
                 skuList:[],
                 market_price_rate: 1,
                 copy: 0,
+                videoList:null
             };
         },
         watch: {},
@@ -232,6 +205,17 @@
                     if(this.copy)
                     {
                         this.info.goods_no = '';
+                    }
+                    if(this.info.goods_video)
+                    {
+                        this.videoList = [
+                            {
+                                uid: '1',
+                                name: this.info.goods_video,
+                                status: 'done',
+                                url: this.info.goods_video,
+                            },
+                        ]
                     }
                 })
             },
@@ -497,7 +481,34 @@
             },
             changeGoodsPrice(){
                 this.info.goods_market_price = this.$formatFloat(this.info.goods_price * this.market_price_rate);
-            }
+            },
+            changeVideo(e)
+            {
+                this.videoList = e.fileList;  // 加这句就行了
+                console.log(e.file.status);
+
+                if (e.file.status !== 'uploading') {
+                    console.log(e.file, e.fileList);
+                }
+                if (e.file.status === 'removed') {
+                    this.info.goods_video = "";
+                    console.log(1);
+                    return true;
+                }
+                if (e.file.status === 'done') {
+                    console.log(e);
+                    if(typeof(e.file.response.code) == "undefined" || e.file.response.code == null || e.file.response.code == 200)
+                    {
+                        console.log( e.file.response.data[0].url);
+                        this.info.goods_video =e.file.response.data[0].url;
+                        this.$message.success(`${e.file.name} 上传成功`);
+                    }else{
+                        this.$message.error(e.file.response.msg);
+                    }
+                } else if (e.file.status === 'error') {
+                    this.$message.error(`${e.file.name} 上传失败.`);
+                }
+            },
 
         },
         created() {

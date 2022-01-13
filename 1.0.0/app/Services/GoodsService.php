@@ -37,6 +37,7 @@ class GoodsService extends BaseService{
             'goods_status'          => abs(request()->goods_status)??0,               // 商品上架状态
             'freight_id'            => abs(request()->freight_id)??0,                 // 运费模版ID
             'goods_images'          => implode(',',request()->goods_images??[]),
+            'goods_video'            => request()->goods_video ?? '',                         // 商品视频
         ];
 
         // 判断是否开启添加商品审核
@@ -106,6 +107,10 @@ class GoodsService extends BaseService{
         // 商品主图
         if(isset(request()->goods_master_image) && !empty(request()->goods_master_image)){
             $goods_model->goods_master_image = request()->goods_master_image;
+        }
+        // 商品视频
+        if(isset(request()->goods_video) && !empty(request()->goods_video)){
+            $goods_model->goods_video = request()->goods_video;
         }
         // 商品价格
         if(isset(request()->goods_price) && !empty(request()->goods_price)){

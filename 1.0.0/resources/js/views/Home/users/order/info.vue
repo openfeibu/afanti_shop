@@ -76,11 +76,15 @@
                         </span>
                         <span slot="actions" slot-scope="rows">
                              <div class="m-top20 dis-flex flex-x-end">
+                                 <a-space direction="vertical">
                                  <span v-if="rows.order_refund" >已申请售后</span>
-                                 <a-button type="danger" size="small"  v-else-if="info.isAllowRefund" @click="$router.push('/user/order_refund/form/'+rows.id)">
+                                 <a-button type="danger" size="small"  v-else-if="info.isAllowRefund" @click="$router.push('/user/order_refund/form/'+rows.id)" >
                                      申请售后
                                  </a-button>
+                                 <a-button type="primary" size="small" v-if="info.order_status ==30 && rows.is_comment==0" @click="$router.push('/user/comment/add/'+info.id+'?goods_id='+rows.goods_id)">前往评论</a-button>
+                                     </a-space>
                              </div>
+
                         </span>
 
                     </a-table>
@@ -100,7 +104,6 @@
                     </template>
                     <div class="success_btn" v-if="info.pay_status==10" @click="pay_order(info.id)">立即支付</div>
                     <div class="error_btn" v-if="info.delivery_status ==20 && info.receipt_status == 10" @click="receipt(info.id)">确定收货</div>
-                    <div class="gray_btn" v-if="info.order_status ==30 && info.is_comment==0" @click="$router.push('/user/comment/add/'+info.id)">前往评论</div>
                 </div>
 
                 <template v-if="info.delivery_status==20">

@@ -61,6 +61,7 @@ class OrderResource extends JsonResource
                                         'sku_name'=>$q->sku_name,
                                         'buy_num'=>$q->buy_num,
                                         'order_refund' => $q->order_refund,
+                                        'is_comment' => $q->is_comment,
                                     ];
             }),
         ];

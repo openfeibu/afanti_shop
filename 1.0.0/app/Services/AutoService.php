@@ -96,8 +96,10 @@ class AutoService extends BaseService{
         foreach($order_list as $v){$ids[] = $v['id'];}
         $order_model->whereIn('id',$ids)->update(['order_status'=>30,'receipt_status' => 20, 'receipt_time'=> now()]);
         return $this->success();
+        /*
         $rs = $oc_service->systemAdd($ids);
         return $rs['status']?$this->format($rs['data']):$this->format_error($rs['msg']);
+        */
     }
 
     // 自动结算

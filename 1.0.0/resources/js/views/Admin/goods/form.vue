@@ -501,6 +501,16 @@
                     {
                         console.log( e.file.response.data[0].url);
                         this.info.goods_video =e.file.response.data[0].url;
+
+                        this.videoList = [
+                            {
+                                uid: '1',
+                                name: this.info.goods_video,
+                                status: 'done',
+                                url: this.info.goods_video,
+                            },
+                        ]
+
                         this.$message.success(`${e.file.name} 上传成功`);
                     }else{
                         this.$message.error(e.file.response.msg);

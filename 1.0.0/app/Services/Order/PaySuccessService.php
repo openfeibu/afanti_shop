@@ -72,7 +72,7 @@ class PaySuccessService extends BaseService{
             DB::beginTransaction();
             $order_model = new Order();
             $oid_arr = explode(',', $order_pay->order_ids);
-            $rs = $order_model->whereIn('id', $oid_arr)->update([
+            $order_model->whereIn('id', $oid_arr)->update([
                 'pay_status' => PayStatus::SUCCESS,
                 'pay_time' => now(),
                 'payment_name' => $payment_name,

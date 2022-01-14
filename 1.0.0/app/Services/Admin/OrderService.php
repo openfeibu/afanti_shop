@@ -11,6 +11,7 @@ use App\Models\Goods;
 use App\Models\GoodsSku;
 use App\Models\Order;
 use App\Models\OrderGoods;
+use App\Services\MessageService;
 use App\Traits\HelperTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,8 +42,9 @@ class OrderService extends \App\Services\Common\OrderService{
             //todo
             // 获取已发货的订单
             //$completed = Order::find($order['order_id'])->with(['user', 'address', 'goods', 'express']);
-            // 发送消息通知
-            //$this->sendDeliveryMessage([$completed]);
+            // 发送消息
+            $message_service = new MessageService();
+            $message_service->send($order['user_id'],trans('messages.order.delivery'));
         }
         return $status;
     }
@@ -72,6 +74,7 @@ class OrderService extends \App\Services\Common\OrderService{
             OutputServerMessageException("该订单不合法");
         }
         DB::beginTransaction();
+        $message_service = new MessageService();
         if ($data['is_cancel']) {
             // 执行退款操作
             $payment_service = new PayMentService();
@@ -86,6 +89,12 @@ class OrderService extends \App\Services\Common\OrderService{
             // 回退用户优惠券 如果有优惠券则修改优惠券
             $coupon_log_model = new CouponLog();
             $coupon_log_model->where('order_id',$order['id'])->update(['status'=>0,'order_id'=>0]);
+
+            // 发送消息
+            $message_service->send($order['user_id'],trans('messages.order.cancel.agree'));
+        }else{
+            // 发送消息
+            $message_service->send($order['user_id'],trans('messages.order.cancel.reject'));
         }
         // 更新订单状态
         $order->order_status = $data['is_cancel'] ? 20 : 10;
@@ -156,4 +165,13 @@ class OrderService extends \App\Services\Common\OrderService{
             ->paginate(request()->per_page??30);
         return $this->format($order_model);
     }
+    // 获取订单信息通过订单ID 默认是需要用用户
+    public function getOrderInfoById($id){
+
+        $order_model = new Order();
+        $order_info = $order_model->with('order_goods')->where('id',$id)->first();
+
+        return $this->format($order_info);
+    }
+
 }

@@ -40,7 +40,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $rs = $this->order_service->getOrderInfoById($id,'admin');
+        $rs = $this->order_service->getOrderInfoById($id);
         return $rs['status']?$this->success(new OrderResource($rs['data'])):$this->error($rs['msg']);
     }
 
@@ -72,7 +72,7 @@ class OrderController extends Controller
     }
     public function delivery(Request $request, $id)
     {
-        $rs = $this->order_service->getOrderInfoById($id,'admin');
+        $rs = $this->order_service->getOrderInfoById($id);
         $order = $rs['data'];
         $data = [
             'delivery_code' => $request->get('delivery_code',''),
@@ -85,7 +85,7 @@ class OrderController extends Controller
     }
     public function confirm_cancel(Request $request, $id)
     {
-        $rs = $this->order_service->getOrderInfoById($id,'admin');
+        $rs = $this->order_service->getOrderInfoById($id);
         $order = $rs['data'];
         $data = [
             'is_cancel' => $request->get('is_cancel',''),

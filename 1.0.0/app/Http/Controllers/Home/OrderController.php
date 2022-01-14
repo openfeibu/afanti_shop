@@ -84,7 +84,7 @@ class OrderController extends Controller
     // 获取订单详情
     public function get_order_info($id){
         $order_service = new OrderService();
-        $rs = $order_service->getOrderInfoById($id,'user');
+        $rs = $order_service->getOrderInfoById($id);
 
         return $rs['status']?$this->success(new OrderResource($rs['data']),$rs['msg']):$this->error($rs['msg']);
     }

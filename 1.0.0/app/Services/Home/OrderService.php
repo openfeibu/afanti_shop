@@ -487,6 +487,19 @@ class OrderService extends \App\Services\Common\OrderService{
             ->paginate(request()->per_page??30);
         return $this->format($order_model);
     }
+
+    // 获取订单信息通过订单ID 默认是需要用用户
+    public function getOrderInfoById($id){
+        $order_model = new Order();
+        $user_service = new UserService;
+
+        $user_info = $user_service->getUserInfo();
+        $order_model = $order_model->where('user_id',$user_info['id']);
+        $order_info = $order_model->with('order_goods')->where('id',$id)->first();
+
+        return $this->format($order_info);
+    }
+
     // 获取订单状态
 
     public function getOrderStatusCn($order_info){

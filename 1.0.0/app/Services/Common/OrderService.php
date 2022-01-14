@@ -194,27 +194,6 @@ class OrderService extends BaseService{
     }
 
 
-
-    // 获取订单信息通过订单ID 默认是需要用用户
-    public function getOrderInfoById($id,$auth='user'){
-        $order_model = new Order();
-
-        if($auth=='user'){
-            $user_service = new UserService;
-            $user_info = $user_service->getUserInfo();
-            $order_model = $order_model->where('user_id',$user_info['id']);
-        }
-
-        if($auth=='seller'){
-            $store_id = $this->get_store(true);
-            $order_model = $order_model->where('store_id',$store_id);
-        }
-
-        $order_info = $order_model->with('order_goods')->where('id',$id)->first();
-
-        return $this->format($order_info);
-    }
-
     // 获取订单状态
 
     public function getOrderStatusCn($order_info){

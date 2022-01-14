@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 use App\Models\Order;
 use App\Models\OrderRefund;
 use App\Services\BaseService;
+use App\Services\MessageService;
 use App\Services\PayMentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -63,6 +64,7 @@ class OrderRefundService extends BaseService{
             // 同意换货申请, 标记售后单状态为已完成
             $data['is_agree'] == 10 && $order_refund['refund_type'] == 20 && $order_refund->status = 20;
             // 更新退款单状态
+
             $order_refund->is_agree =  $data['is_agree'];
             $order_refund->refuse_desc =  $data['refuse_desc'] ?? '';
 
@@ -73,6 +75,9 @@ class OrderRefundService extends BaseService{
                 $order_refund->return_address = $data['return_address'] ?? '';
             }
             $order_refund->save();
+            $message_service = new MessageService();
+            $content = $data['is_agree'] == 10 ? trans('messages.order.return.agree') : trans('messages.order.return.reject');
+            $message_service->send($order_refund['user_id'],$content);
             // 订单详情
             // 发送模板消息
             // 事务提交
@@ -106,8 +111,10 @@ class OrderRefundService extends BaseService{
         // 执行原路退款
         $payment_service = new PayMentService();
         $payment_service->refund($order,$data['refund_money']);
-        // 发送模板消息
-
+        // 发送消息
+        $message_service = new MessageService();
+        $message_service->send($order['user_id'],trans('messages.order.refund.agree'));
+        
         DB::commit();
         return true;
     }

@@ -15,6 +15,29 @@ use Yansongda\Pay\Pay;
  */
 
 class PayMentService extends BaseService{
+
+    protected $wx_config = [
+        'appid' => 'wxb3fxxxxxxxxxxx', // APP APPID
+        'app_id' => 'wxb3fxxxxxxxxxxx', // 公众号 APPID
+        'miniapp_id' => 'wxb3fxxxxxxxxxxx', // 小程序 APPID
+        'mch_id' => '14577xxxx',
+        'key' => 'mF2suE9sU6Mk1Cxxxxxxxxxxx',
+        'notify_url' => 'www.feibu.info',
+        //'cert_client' => './cert/apiclient_cert.pem', // optional，退款等情况时用到
+        //'cert_key' => './cert/apiclient_key.pem',// optional，退款等情况时用到
+        //'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
+    ];
+
+    protected $ali_config = [
+        'app_id' => '2016082000295641',
+        'notify_url' => '',
+        'return_url' => '',
+        'ali_public_key' => '',
+        // 加密方式： **RSA2**
+        'private_key' => '',
+        'mode' => 'dev', // optional,设置此参数，将进入沙箱模式
+    ];
+
     public function payment($payment_name){
         Log::channel('afanti_log')->debug("开始支付：".$payment_name);
         try{
@@ -88,6 +111,7 @@ class PayMentService extends BaseService{
         // 判断是否是余额支付
         if($payment_name == 'money'){
             $pay_success_service = new PaySuccessService();
+            $this->checkPayPassword();
             return $pay_success_service->onPaymentByBalance($payment_name,$order_pay);
 
         }else{
@@ -323,7 +347,6 @@ class PayMentService extends BaseService{
             OutputServerMessageException("未找到相关支付");
         }
         $payment_name = $order_pay->payment_name;
-        $this->getPaymentConfig($payment_name);
         try {
             switch ($payment_provider) {
                 case 'wechat':
@@ -338,6 +361,8 @@ class PayMentService extends BaseService{
                         ],
                     ];
                     */
+
+                    $this->getPaymentConfig($payment_name);
                     $refund_order = [
                         'transaction_id' => $order_pay->trade_no, //微信交易号
                         'out_refund_no' => time(),
@@ -352,6 +377,7 @@ class PayMentService extends BaseService{
                     $wxpayObj->refund($refund_order);
                     break;
                 case 'ali':
+                    $this->getPaymentConfig($payment_name);
                     $refund_order = [
                         'trade_no' => $order_pay->trade_no, //支付宝交易号
                         'refund_amount' => $money,
@@ -361,7 +387,7 @@ class PayMentService extends BaseService{
                     //var_dump($rs);exit;
                     break;
                 default:
-                    OutputServerMessageException("未找到相关支付方式");
+                    //OutputServerMessageException("未找到相关支付方式");
                     break;
             }
         } catch (\Exception $e) {
@@ -370,26 +396,19 @@ class PayMentService extends BaseService{
         }
     }
 
+    public function checkPayPassword()
+    {
+        $pay_password = request()->pay_password;
+        if(empty($pay_password)){
+            OutputServerMessageException(__('orders.pay_password_error'));
+        }
+        $user_info = auth('user')->user();
+        if(!Hash::check($pay_password , $user_info->pay_password)){
+            OutputServerMessageException(__('orders.pay_password_error'));
+        }
 
-    protected $wx_config = [
-        'appid' => 'wxb3fxxxxxxxxxxx', // APP APPID
-        'app_id' => 'wxb3fxxxxxxxxxxx', // 公众号 APPID
-        'miniapp_id' => 'wxb3fxxxxxxxxxxx', // 小程序 APPID
-        'mch_id' => '14577xxxx',
-        'key' => 'mF2suE9sU6Mk1Cxxxxxxxxxxx',
-        'notify_url' => 'www.feibu.info',
-        //'cert_client' => './cert/apiclient_cert.pem', // optional，退款等情况时用到
-        //'cert_key' => './cert/apiclient_key.pem',// optional，退款等情况时用到
-        //'mode' => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
-    ];
+        return true;
+    }
 
-    protected $ali_config = [
-        'app_id' => '2016082000295641',
-        'notify_url' => '',
-        'return_url' => '',
-        'ali_public_key' => '',
-        // 加密方式： **RSA2**  
-        'private_key' => '',
-        'mode' => 'dev', // optional,设置此参数，将进入沙箱模式
-    ];
+
 }

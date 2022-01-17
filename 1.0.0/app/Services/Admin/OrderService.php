@@ -44,7 +44,7 @@ class OrderService extends \App\Services\Common\OrderService{
             //$completed = Order::find($order['order_id'])->with(['user', 'address', 'goods', 'express']);
             // 发送消息
             $message_service = new MessageService();
-            $message_service->send($order['user_id'],trans('messages.order.delivery'));
+            $message_service->send($order['user_id'],sprintf(trans('messages.order.delivery'),$order['order_no']));
         }
         return $status;
     }
@@ -91,10 +91,10 @@ class OrderService extends \App\Services\Common\OrderService{
             $coupon_log_model->where('order_id',$order['id'])->update(['status'=>0,'order_id'=>0]);
 
             // 发送消息
-            $message_service->send($order['user_id'],trans('messages.order.cancel.agree'));
+            $message_service->send($order['user_id'],sprintf(trans('messages.order.cancel.agree'),$order['order_no']));
         }else{
             // 发送消息
-            $message_service->send($order['user_id'],trans('messages.order.cancel.reject'));
+            $message_service->send($order['user_id'],sprintf(trans('messages.order.cancel.reject'),$order['order_no']));
         }
         // 更新订单状态
         $order->order_status = $data['is_cancel'] ? 20 : 10;

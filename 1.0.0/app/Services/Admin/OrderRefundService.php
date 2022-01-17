@@ -76,7 +76,25 @@ class OrderRefundService extends BaseService{
             }
             $order_refund->save();
             $message_service = new MessageService();
-            $content = $data['is_agree'] == 10 ? trans('messages.order.return.agree') : trans('messages.order.return.reject');
+
+            $order_no = $order_refund->order['order_no'];
+            if($order_refund['refund_type'] == 20)
+            {
+
+                if($data['is_agree'] == 10)
+                {
+                    $content = sprintf(trans('messages.order.return.agree'),$order_no) ;
+                }else{
+                    $content = sprintf(trans('messages.order.return.reject'),$order_no) ;
+                }
+            }else{
+                if($data['is_agree'] == 10)
+                {
+                    $content = sprintf(trans('messages.order.refund.agree'),$order_no) ;
+                }else{
+                    $content = sprintf(trans('messages.order.refund.reject'),$order_no) ;
+                }
+            }
             $message_service->send($order_refund['user_id'],$content);
             // 订单详情
             // 发送模板消息
@@ -113,7 +131,7 @@ class OrderRefundService extends BaseService{
         $payment_service->refund($order,$data['refund_money']);
         // 发送消息
         $message_service = new MessageService();
-        $message_service->send($order['user_id'],trans('messages.order.refund.agree'));
+        $message_service->send($order['user_id'],sprintf(trans('messages.order.refund.success'),$order['order_no']));
         
         DB::commit();
         return true;

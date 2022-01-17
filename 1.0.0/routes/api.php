@@ -318,7 +318,8 @@ Route::namespace('Home')->group(function(){
         // 全国省市区地址获取
         Route::get('/areas','AreaController@areas');
 
-
+        // 消息列表
+        Route::get('/users/messages','MessageController@getMessages'); // 获取订单列表
 
 
     });

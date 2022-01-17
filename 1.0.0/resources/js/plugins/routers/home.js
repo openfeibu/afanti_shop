@@ -353,14 +353,21 @@ export default [
                         name: "home_user_coupon",
                         component: () =>
                             import ("@/views/Home/users/coupon/index")
-                    },
-                    //我的砍价活动
+                    },//我的优惠券
+
                     {
                         path: '/user/my_bargain',
                         name: 'home_user_my_bargain',
                         component: () =>
                             import ('@/views/Home/users/my_bargain/index')
-                    }, // 申请售后
+                    }, //我的砍价活动
+
+                    {
+                        path: '/user/message',
+                            name: 'home_user_message',
+                        component: () =>
+                            import ('@/views/Home/users/message/index')
+                    }, //我的砍价活动
                 ]
             },
             // 优惠券

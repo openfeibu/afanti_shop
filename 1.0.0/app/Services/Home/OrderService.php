@@ -236,6 +236,11 @@ class OrderService extends \App\Services\Common\OrderService{
         if($order_list->isEmpty()){
             OutputServerMessageException(__('orders.order_pay'));
         }
+        if($payment_name == 'money')
+        {
+            $payment_service = new PayMentService();
+            $payment_service->checkPayPassword();
+        }
         $collective_orders =  $order_model->whereIn('id',$order_arr)->where('user_id',$user_info['id'])->where('order_source','collective')->get();
 
         if($collective_orders)
@@ -282,6 +287,10 @@ class OrderService extends \App\Services\Common\OrderService{
             $total_price += $v['total_price'];
             $order_balance += $v['order_balance'];
         }
+        if(OrderPay::where('pay_no',$pay_no)->value('id'))
+        {
+            OutputServerMessageException('操作频繁，请重新支付');
+        }
         $create_data = [
             'user_id'                   =>  $user_info['id'],
             'pay_no'                    =>  $pay_no,
@@ -297,7 +306,7 @@ class OrderService extends \App\Services\Common\OrderService{
             $order_pay_info = $order_pay_model->create($create_data);
         }catch(\Exception $e){
             Log::channel('afanti_log')->debug($e->getMessage());
-            OutputServerMessageException(__('orders.payment_failed'));
+            OutputServerMessageException(__('orders.payment_failed').' 请重新支付');
         }
 
         return $this->format($order_pay_info);

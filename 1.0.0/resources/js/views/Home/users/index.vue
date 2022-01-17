@@ -69,6 +69,7 @@ export default {
                         {name:'收藏商品',url:'/user/favorite'},
                         // {name:'关注展馆',url:'/user/follows'},
                         {name:'我的优惠券',url:'/user/coupon'},
+                        {name:'消息列表',url:'/user/message'},
                     ],
                 },
                

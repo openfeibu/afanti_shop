@@ -94,4 +94,5 @@ export default {
     'homeHelp': baseUrl + 'article_categories',
     'homeHelpDetail': baseUrl + 'articles', //传/id
     'homeEzviz': baseUrl + 'ezviz', //传/id
+
 };

@@ -30,14 +30,7 @@ class PaySuccessService extends BaseService{
      */
     public function onPaymentByBalance($payment_name,$order_pay)
     {
-        $pay_password = request()->pay_password;
-        if(empty($pay_password)){
-            OutputServerMessageException(__('orders.pay_password_error'));
-        }
         $user_info = auth('user')->user();
-        if(!Hash::check($pay_password , $user_info->pay_password)){
-            OutputServerMessageException(__('orders.pay_password_error'));
-        }
         if($order_pay->total_price>$user_info->money){
             OutputServerMessageException(__('orders.balance_insufficient'));
         }

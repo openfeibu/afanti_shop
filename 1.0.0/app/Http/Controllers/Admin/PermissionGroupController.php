@@ -20,7 +20,18 @@ class PermissionGroupController extends Controller
         }])->orderBy('id','desc')->paginate($request->per_page??30);
         return $this->success($list);
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all(Request $request,PermissionGroup $permission_group_model)
+    {
+        $list = $permission_group_model->with(['permissions'=>function($q){
+            return $q->select('id','pid','name','apis');
+        }])->orderBy('id','desc')->get();
+        return $this->success($list);
+    }
     /**
      * Store a newly created resource in storage.
      *

@@ -40,7 +40,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
             'permissions'=>'PermissionController', // 角色权限
             'permission_groups'=>'PermissionGroupController', // 接口权限分组
         ]);
-
+        Route::get('/all_permission_groups','PermissionGroupController@all')->name('permission_groups.all');
         // 菜单处理
         Route::get('/menus/cache/clear','MenuController@clear_cache')->name('menus.clear_cache'); // 缓存清除接口
 
@@ -76,9 +76,9 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::apiResource('stores','StoreController');
 
         // 商家配置
-        Route::get('store_configs','StoreConfigController@show');
-        Route::put('store_configs','StoreConfigController@update'); // 修改
-        Route::post('store_configs/upload/images','StoreConfigController@config_upload'); // 配置上传图片
+        Route::get('store_configs','StoreConfigController@show')->name('store_configs.show');
+        Route::put('store_configs','StoreConfigController@update')->name('store_configs.update'); // 修改
+        Route::post('store_configs/upload/images','StoreConfigController@config_upload')->name('store_configs.config_upload');  // 配置上传图片
 
         // 全国省市区地址
         Route::apiResource('areas','AreaController');

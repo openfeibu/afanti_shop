@@ -95,8 +95,8 @@ export default {
                 this.get_info();
             }
 
-            this.$get(this.$api.adminPermissionGroups).then(res=>{
-                this.list = res.data.data;
+            this.$get(this.$api.adminAllPermissionGroups).then(res=>{
+                this.list = res.data;
             });
         },
         

@@ -17,7 +17,7 @@ export default
     'adminRoles' : baseUrl + 'Admin/roles', // 角色管理
     'adminPermissionGroups' : baseUrl + 'Admin/permission_groups', // 后台接口分组
     'adminPermissions' : baseUrl + 'Admin/permissions', // 后台接口分组
-
+    'adminAllPermissionGroups': baseUrl + 'Admin/all_permission_groups', // 所有后台接口分组
     // 菜单处理
     'adminMenus' : baseUrl + 'Admin/menus', // 后台菜单
     'adminMenusClearCache' : baseUrl + 'Admin/menus/cache/clear', // 清空菜单缓存

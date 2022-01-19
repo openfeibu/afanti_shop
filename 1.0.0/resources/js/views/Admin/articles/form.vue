@@ -39,7 +39,7 @@ export default {
     data() {
       return {
           info:{
-              article_category_id:0,
+              article_category_id:'',
           },
           list:[],
           id:0,

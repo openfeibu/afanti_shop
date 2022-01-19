@@ -159,7 +159,11 @@ export default [
         {path:"/Admin/bargains",name:"admin_bargains",component:()=>import("@/views/Admin/bargains/index")},
         {path:"/Admin/bargains/form/:id?",name:"admin_bargains_form",component:()=>import("@/views/Admin/bargains/form")},
 
+        //信标
         {path:"/Admin/beacons",name:"admin_beacons",component:()=>import("@/views/Admin/beacons/index")},
         {path:"/Admin/beacons/form/:id?",name:"admin_beacons_form",component:()=>import("@/views/Admin/beacons/form")},
+
+        //文件
+        {path:"/Admin/files",name:"admin_files",component:()=>import("@/views/Admin/files/index")},
     ]},
 ];

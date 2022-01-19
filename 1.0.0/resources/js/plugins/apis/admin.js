@@ -27,6 +27,7 @@ export default
     'adminConfigsUploadLogo' : baseUrl + 'Admin/configs/upload/logo', // Logo图上传
     'adminConfigsUploadIcon' : baseUrl + 'Admin/configs/upload/icon', // Icon图上传
     'adminConfigsUploadUserAvatar' : baseUrl + 'Admin/configs/upload/user_avatar', // Icon图上传
+    'adminConfigsUploadQrcode' : baseUrl + 'Admin/configs/upload/qrcode', // Icon图上传
     // 站点协议
     'adminAgreements' : baseUrl + 'Admin/agreements', 
 
@@ -132,4 +133,6 @@ export default
 
     //信标
     'adminBeacons' : baseUrl + 'Admin/beacons',
+    // 文件
+    "adminFiles" : baseUrl + "Admin/files",
 };

@@ -26,7 +26,9 @@ class ConfigResource extends JsonResource
             'icp'                           =>  $this['icp'],
             'web_status'                    =>  $this['web_status'],
             'web_close_info'                =>  $this['web_close_info'],
-    
+            'wechat_official_account_qrcode' => $this['wechat_official_account_qrcode'],
+            'weapp_qrcode' => $this['weapp_qrcode'],
+            'service_qrcode' => $this['service_qrcode'],
         ];
     }
 }

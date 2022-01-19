@@ -39,15 +39,15 @@
                      <div class="clear"></div>
                     <div class="code-list">
                     <div class="code-list-item">
-                         <img src="@/asset/qrcode.png" alt="">  
+                         <img :src="common.common.wechat_official_account_qrcode" alt="">
                         <p>微信公众号</p>
                     </div>
                     <div class="code-list-item">
-                         <img src="@/asset/qrcode.png" alt="">  
+                         <img :src="common.common.weapp_qrcode" alt="">
                         <p>微信小程序</p>
                     </div>
                     <div class="code-list-item">
-                         <img src="@/asset/qrcode.png" alt="">  
+                         <img :src="common.common.service_qrcode" alt="">
                         <p>微信在线客服</p>
                     </div>
                 </div>

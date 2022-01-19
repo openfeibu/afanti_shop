@@ -49,6 +49,8 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         Route::post('/configs/upload/logo','ConfigController@config_logo')->name('configs.config_logo'); // 配置中心图上传(Logo)
         Route::post('/configs/upload/icon','ConfigController@config_icon')->name('configs.config_icon'); // 配置中心上传(icon)
         Route::post('/configs/upload/user_avatar','ConfigController@config_user_avatar')->name('configs.config_user_avatar'); // 配置中心图上传(user_avatar)
+        Route::post('/configs/upload/qrcode','ConfigController@config_qrcode')->name('configs.config_qrcode');
+
         Route::get('/configs/config/{name}','ConfigController@config')->name('configs.config');
 
         Route::apiResource('agreements','AgreementController'); // 站点协议
@@ -165,6 +167,9 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
 
         //信标管理
         Route::apiResource('beacons','BeaconController');
+
+        Route::get('files','FileController@index')->name('files.index');
+        Route::delete('files/{id}','FileController@destroy')->name('files.destroy');
     });
 
 

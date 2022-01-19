@@ -7,6 +7,7 @@ use Intervention\Image\ImageManager;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Models\File As FileModel;
 
 class UploadService extends BaseService{
 
@@ -30,6 +31,7 @@ class UploadService extends BaseService{
         }
 
         $ext = strtolower($file->getClientOriginalExtension()); // 后缀
+        $size = $file->getSize();
 
         if(!in_array($ext,$this->fileAllow)){
             OutputServerMessageException(__('upload.not_allow').'['.implode(',',$this->fileAllow).']');
@@ -62,6 +64,14 @@ class UploadService extends BaseService{
 
         $rs = Storage::disk($disk)->url($rs);
 
+        FileModel::create([
+            'url' => $rs,
+            'name' => basename($rs),
+            'path' => $this->path.'/'.basename($rs),
+            'size' => $size,
+            'type' => 'file',
+            'extension' => $ext,
+        ]);
         return $this->format($rs,__('upload.upload_success'));
 
     }
@@ -223,6 +233,16 @@ class UploadService extends BaseService{
         }
         return $this->uploadFile($path);
     }
+
+    public function config_qrcode()
+    {
+        $path = 'configs';
+        if(!empty($id)){
+            $path = $path.'/'.$id;
+        }
+        return $this->uploadPhoto($path);
+    }
+
     public function config_user_avatar($id=0){
         $path = 'configs';
         $opt = [
@@ -422,7 +442,8 @@ class UploadService extends BaseService{
         }
         
         $ext = strtolower($file->getClientOriginalExtension()); // 后缀
-
+        $size = $file->getSize();
+        
         if(!in_array($ext,$this->photoAllow)){
             throw new Exception(__('upload.not_allow').'['.implode(',',$this->photoAllow).']');
         }
@@ -517,7 +538,14 @@ class UploadService extends BaseService{
         }
         
         $rs = Storage::disk($disk)->url($rs);
-
+        FileModel::create([
+            'url' => $rs,
+            'name' =>  basename($rs),
+            'path' => $this->path.'/'.basename($rs),
+            'size' => $size,
+            'type' => 'image',
+            'extension' => $ext,
+        ]);
         return $rs;
     }
 

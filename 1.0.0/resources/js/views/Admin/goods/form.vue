@@ -249,7 +249,7 @@
                     this.brandList = res.data;
                     this.id ?  '' : this.info.brand_id = this.brandList[0].id;
                 })
-                this.$get(this.$api.adminStores).then(res=>{
+                this.$get(this.$api.adminStores,{all:1}).then(res=>{
                     this.storeList = res.data.data;
                 })
                 this.$get(this.$api.adminGoodsClasses,{}).then(res=>{

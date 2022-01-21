@@ -12,6 +12,11 @@
                 <span slot="action" slot-scope="rows">
                     <a-button icon="edit" @click="$router.push('/Admin/users/form/'+rows.id)">编辑</a-button>
                 </span>
+                <span slot="avatar" slot-scope="rows">
+                     <a  @click="$router.push('/Admin/users/form/'+rows.id)">
+                         <a-avatar :src="rows.avatar" />
+                     </a>
+                </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">
                 <a-pagination v-model="params.page" :page-size.sync="params.per_page" :total="total" @change="onChange" show-less-items />
@@ -33,10 +38,11 @@ export default {
           total:0, //总页数
           selectedRowKeys:[], // 被选择的行
           columns:[
-              {title:'#',dataIndex:'id',fixed:'left'},
+              {title:'ID',dataIndex:'id',fixed:'left'},
+              {title:'用户名',dataIndex:'username'},
+              {title:'头像',scopedSlots: { customRender: 'avatar' }},
               {title:'昵称',dataIndex:'nickname'},
               {title:'手机',dataIndex:'phone'},
-              {title:'用户名',dataIndex:'username'},
               {title:'登陆IP',dataIndex:'ip'},
               {title:'登陆时间',dataIndex:'login_time'},
               {title:'上次登陆',dataIndex:'last_login_time'},

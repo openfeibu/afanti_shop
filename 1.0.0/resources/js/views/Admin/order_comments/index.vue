@@ -7,7 +7,7 @@
             <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
         </div>
         <div class="admin_table_list">
-            <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
+            <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id" :scroll="{ x: 1500 }">
                 <span slot="name" slot-scope="rows">
                     <div class="admin_pic_txt">
                         <div class="img"><img v-if="rows.goods.id" :src="rows.goods.goods_master_image"><a-icon v-else type="picture" /></div>
@@ -15,6 +15,11 @@
                         <div class="clear"></div>
                     </div>
                 </span>
+                <span slot="active" slot-scope="rows">
+                    <a-icon type="check" style="color:blue" v-if="rows.active==1" />
+                    <a-icon type="close" style="color:red" v-else/>
+                </span>
+
                 <span slot="action" slot-scope="rows">
                     <a-button icon="read" @click="$router.push('/Admin/order_comments/form/'+rows.id)" :disabled="rows.goods.id==0">审核&回复</a-button>
                 </span>
@@ -40,13 +45,14 @@ export default {
           selectedRowKeys:[], // 被选择的行
           columns:[
               {title:'#',dataIndex:'id',fixed:'left'},
-              {title:'商品名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
-              {title:'综合评分',dataIndex:'score'},
-              {title:'描述相符',dataIndex:'agree'},
-              {title:'服务态度',dataIndex:'service'},
-              {title:'发货速度',dataIndex:'speed'},
-              {title:'内容',dataIndex:'content'},
-              {title:'回复内容',dataIndex:'reply'},
+              {title:'商品名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' },width:'300px'},
+              {title:'显示',key:'id',scopedSlots: { customRender: 'active' },width:'80px'},
+              {title:'综合评分',dataIndex:'score',width:'100px'},
+              {title:'描述相符',dataIndex:'agree',width:'100px'},
+              {title:'服务态度',dataIndex:'service',width:'100px'},
+              {title:'发货速度',dataIndex:'speed',width:'100px'},
+              {title:'内容',dataIndex:'content',width:'200px'},
+              {title:'回复内容',dataIndex:'reply',width:'200px'},
               {title:'建立时间',dataIndex:'created_at'},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],

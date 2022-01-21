@@ -29,12 +29,15 @@
                     </div>
                 </span>
                 <span slot="goods_status" slot-scope="rows">
-                    <div style="margin:0 auto" :class="rows.goods_status==1?'green_round':'red_round'"></div>
+                    <a-icon type="check" style="color:blue" v-if="rows.goods_status==1" />
+                    <a-icon type="close" style="color:red" v-else/>
                 </span>
                 <span slot="action" slot-scope="rows">
-                    <a-button icon="read" @click="$router.push('/goods/'+rows.id)">前往</a-button>
-                    <a-button icon="edit" @click="$router.push('/Admin/goods/form/'+rows.id)">编辑</a-button>
-                    <a-button icon="edit" @click="$router.push({path:'/Admin/goods/form/'+rows.id,query: { copy: 1 }})">复制</a-button>
+                    <a-space direction="vertical">
+                        <a-button icon="read" @click="$router.push('/goods/'+rows.id)">前往</a-button>
+                        <a-button icon="edit" @click="$router.push('/Admin/goods/form/'+rows.id)">编辑</a-button>
+                        <a-button icon="edit" @click="$router.push({path:'/Admin/goods/form/'+rows.id,query: { copy: 1 }})">复制</a-button>
+                    </a-space>
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">

@@ -7,6 +7,10 @@
         <div class="unline underm"></div>
         <div class="admin_form">
             <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+                <a-form-model-item label="头像" v-if="this.id">
+                    <a-avatar :src="info.avatar" />
+                </a-form-model-item>
+
                 <a-form-model-item label="用户名">
                     <a-input v-model="info.username"></a-input>
                 </a-form-model-item>

@@ -1,15 +1,12 @@
 <template>
     <div class="afanti">
-        <div class="admin_table_page_title"><a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>订单管理</div>
+        <div class="admin_table_page_title"><a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>售后管理</div>
         <div class="unline underm"></div>
 
+        <admin-search :searchConfig="searchConfig" @searchParams="search"></admin-search>
 
-        <div class="admin_table_handle_btn">
-            <!-- <a-button @click="$router.push('/Admin/orders/form')" type="primary" icon="plus">添加</a-button>
-            <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button> -->
-        </div>
         <div class="admin_table_list">
-            <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
+            <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id" :scroll="{ x: 1300 }">
                 <span slot="order_goods" slot-scope="rows">
                     <div class="admin_pic_txt">
                         <div class="img"><img v-if="rows.order_goods.goods_image" :src="rows.order_goods.goods_image"><a-icon v-else type="picture" /></div>
@@ -17,11 +14,14 @@
                         <div class="clear"></div>
                     </div>
                 </span>
+                <span slot="user" slot-scope="rows">
+                     <a  @click="$router.push('/Admin/users/form/'+rows.user.id)">
+                         <a-avatar :src="rows.user.avatar" />
+                        {{rows.user.username}}(ID：{{rows.user.id}})
+                     </a>
+                </span>
                 <span slot="buy_num" slot-scope="rows">
                      {{rows.order_goods.buy_num}}
-                </span>
-                <span slot="user" slot-scope="rows">
-                     {{rows.user.username}}
                 </span>
                 <span slot="goods_price" slot-scope="rows">
                     <font color="red">￥{{rows.order_goods.goods_price}}</font>
@@ -61,9 +61,11 @@
                 </span>
 
                 <span slot="action" slot-scope="rows">
-                    <a-button @click="$router.push('/Admin/order_refunds/form/'+rows.id)">查看详情</a-button>
-                    <a-button type="primary" v-if="rows.is_agree==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#delivery')">去审核</a-button>
-                    <a-button type="danger" v-if="rows.refund_type == 10 && rows.is_agree==10 && rows.is_user_send==1&&rows.is_receipt==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#cancel')">确认收货</a-button>
+                    <a-space direction="vertical">
+                        <a-button @click="$router.push('/Admin/order_refunds/form/'+rows.id)">查看详情</a-button>
+                        <a-button type="primary" v-if="rows.is_agree==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#delivery')">去审核</a-button>
+                        <a-button type="danger" v-if="rows.refund_type == 10 && rows.is_agree==10 && rows.is_user_send==1&&rows.is_receipt==0" @click="$router.push('/Admin/order_refunds/form/'+rows.id+'/#cancel')">确认收货</a-button>
+                    </a-space>
 
 
                 </span>
@@ -88,14 +90,20 @@ export default {
           },
           total:0, //总页数
           selectedRowKeys:[], // 被选择的行
+          searchConfig:{
+              "order_no":{label:'订单号',name:'order_no',type:'text'},
+              'created_at':{label:'申请时间',name:'created_at',type:'date_picker'},
+              'user_id':{label:'用户ID',name:'user_id',type:'text'},
+          },
           columns:[
             //   {title:'#',dataIndex:'id',fixed:'left'},
-              {title:'商品',key:'id',fixed:'left',scopedSlots: { customRender: 'order_goods' }},
-              {title:'数量',scopedSlots: { customRender: 'buy_num' }},
-              {title:'买家',scopedSlots: { customRender: 'user' }},
-              {title:'付款价',key:'id',scopedSlots: { customRender: 'goods_price' }},
-              {title:'售后类型',key:'id',scopedSlots: { customRender: 'refund_type' }},
-              {title:'处理状态',key:'id',scopedSlots: { customRender: 'status' }},
+              {title:'商品',key:'id',fixed:'left',scopedSlots: { customRender: 'order_goods' }, width: 280},
+              {title:'订单号',dataIndex:'order_no', width: 120 },
+              {title:'数量',scopedSlots: { customRender: 'buy_num' }, width: 80},
+              {title:'买家',scopedSlots: { customRender: 'user' }, width: 150},
+              {title:'付款价',key:'id',scopedSlots: { customRender: 'goods_price' }, width: 100},
+              {title:'售后类型',key:'id',scopedSlots: { customRender: 'refund_type' }, width: 100},
+              {title:'处理状态',key:'id',scopedSlots: { customRender: 'status' }, width: 180},
               {title:'申请时间',dataIndex:'created_at'},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],

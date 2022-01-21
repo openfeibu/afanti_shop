@@ -42,7 +42,7 @@ class GoodsController extends Controller
         if(!empty($request->goods_no)){
             $goods_model = $goods_model->where('goods_no',$request->goods_no);
         }
-        if(isset($request->goods_status)){
+        if(isset($request->goods_status) && $request->goods_status!==''){
             $goods_params['goods_status'] = $request->goods_status;
         }
         if(isset($request->goods_verify)){

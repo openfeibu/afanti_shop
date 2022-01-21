@@ -36,7 +36,6 @@ class StoreController extends Controller
      */
     public function index(Request $request,Store $store_model)
     {
-        $store_verify = 3;
         // 店铺名称
         if(empty($request->store_name)){
             $store_model->where('store_name','like','%'.$request->store_name.'%');
@@ -45,11 +44,22 @@ class StoreController extends Controller
         if(empty($request->store_company_name)){
             $store_model->where('store_company_name','like','%'.$request->store_company_name.'%');
         }
-        // 审核状态
-        if(isset($request->store_verify)){
-            $store_verify = $request->store_verify;
+
+        // 是否线上商店
+        if(isset($request->is_store) && $request->is_store == 1){
+            $store_model->where('is_store',1);
         }
-        $list = new StoreCollection($store_model->where('store_verify',$store_verify)->orderBy('id','desc')->paginate($request->per_page??30));
+        $store_model->orderBy('id','desc');
+        if(isset($request->all))
+        {
+            $stores = $store_model->get();
+
+        }else{
+            $stores = $store_model->paginate($request->per_page??30);
+            //$list = new StoreCollection($stores);
+        }
+        $list = new StoreCollection($stores);
+        //$list = new StoreCollection($store_model->orderBy('id','desc')->paginate($request->per_page??30));
         return $this->success($list);
     }
 

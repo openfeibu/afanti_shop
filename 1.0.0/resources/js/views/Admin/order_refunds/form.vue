@@ -2,24 +2,25 @@
     <div class="afanti">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
-            订单详情
+            售后详情
         </div>
         <div class="unline underm"></div>
         <div class="admin_form">
             <div class="order_info_list">
                 <a-row>
                     <a-col :span="8">
-                        订单号：<span class="content">{{info.order.order_no}}</span>
+                        订单号：<a @click="$router.push('/Admin/orders/form/'+info.order.id)">{{info.order.order_no}}</a>
                     </a-col>
                     <a-col :span="8">
                         买家：
-                        <span class="content">
-                            {{info.user.username}} (用户ID：{{info.user.id}})
-                        </span>
+                        <a  @click="$router.push('/Admin/users/form/'+info.user.id)">
+                            <a-avatar :src="info.user.avatar" />
+                           {{info.user.username}} (用户ID：{{info.user.id}})
+                        </a>
                     </a-col>
                     <a-col :span="8">
                         <span class="content">
-                            <a-button @click="$router.push('/Admin/orders/form/'+info.order.id)">订单详情</a-button>
+
                         </span>
                     </a-col>
                 </a-row>

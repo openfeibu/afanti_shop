@@ -27,7 +27,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $rs = $this->order_service->getOrders('admin');
+        $rs = $this->order_service->getOrders();
         return $rs['status']?$this->success(new OrderCollection($rs['data'])):$this->error($rs['msg']);
     }
 

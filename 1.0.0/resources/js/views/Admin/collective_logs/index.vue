@@ -18,9 +18,9 @@
                     <a-tag color="blue">折扣 {{rows.discount||0}} %</a-tag>
                 </span>
                 <span slot="status" slot-scope="rows">
-                    <div class="green_round" v-if="rows.status==1"></div>
-                    <div class="yellow_round" v-if="rows.status==2"></div>
-                    <div class="red_round" v-if="rows.status==0"></div>
+                    <a-badge status="success" text="完成" v-if="rows.status==1"/>
+                    <a-badge status="processing" text="拼团中" v-if="rows.status==2"/>
+                    <a-badge status="error" text="取消" v-if="rows.status==0"/>
                 </span>
              
                 <span slot="action" slot-scope="rows">

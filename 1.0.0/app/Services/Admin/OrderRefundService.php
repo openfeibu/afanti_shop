@@ -16,7 +16,7 @@ class OrderRefundService extends BaseService{
         $order_refund_model = new OrderRefund();
 
         $order_refund_model = $order_refund_model->with(['user'=>function($q){
-            return $q->select('id','username');
+            return $q->select('id','username','avatar');
         },'order_goods']);
 
         // 用户ID
@@ -38,7 +38,7 @@ class OrderRefundService extends BaseService{
     public function getOrderRefundById($id)
     {
         $order_refund = OrderRefund::where('id',$id)->with(['user'=>function($q){
-            return $q->select('id','username');
+            return $q->select('id','username','avatar');
         },'order_goods','order'])
             ->first();
         if(!$order_refund)

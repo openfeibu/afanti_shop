@@ -12,13 +12,7 @@
             <div id="user_plot2" style="margin-top:20px;margin-bottom:40px"></div>
         </div>
 
-        <div class="admin_table_list">
-            <a-table :columns="columns" :data-source="list" :pagination="false"  row-key="id">
-            </a-table>
-            <div class="admin_pagination" v-if="total>0">
-                <a-pagination v-model="params.page" :page-size.sync="params.per_page" :total="total" @change="onChange" show-less-items />
-            </div>
-        </div>
+        
     </div>
 </template>
 

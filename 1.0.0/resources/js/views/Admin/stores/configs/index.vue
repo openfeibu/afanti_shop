@@ -2,7 +2,7 @@
     <div class="afanti">
         <div class="admin_table_page_title">
             <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
-            商家配置
+            展馆管理
         </div>
         <div class="unline underm"></div>
         <div class="admin_form">

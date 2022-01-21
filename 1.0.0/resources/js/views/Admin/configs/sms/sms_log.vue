@@ -14,7 +14,8 @@
         <div class="admin_table_list">
             <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
                 <span slot="status" slot-scope="rows">
-                    <div :class="rows.status?'green_round':'red_round'"></div>
+                    <a-icon type="check" style="color:blue" v-if="rows.status" />
+                    <a-icon type="close" style="color:red" v-else/>
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">

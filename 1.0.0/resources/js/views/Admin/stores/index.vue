@@ -12,7 +12,8 @@
         <div class="admin_table_list">
             <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
                 <span slot="status" slot-scope="rows">
-                    <div :class="rows.store_status==1?'green_round':'red_round'" style="margin:0 auto"></div>
+                    <a-icon type="check" style="color:blue" v-if="rows.is_store==1" />
+                    <a-icon type="close" style="color:red" v-else/>
                 </span>
                 <span slot="name" slot-scope="rows">
                     <div class="admin_pic_txt">
@@ -52,7 +53,7 @@ export default {
           columns:[
               {title:'ID',dataIndex:'id',fixed:'left'},
               {title:'展馆名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
-              {title:'展馆状态',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
+              {title:'是否线上',key:'id',fixed:'left',scopedSlots: { customRender: 'status' }},
               {title:'创建时间',fixed:'right',dataIndex:'created_at'},
               {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
           ],

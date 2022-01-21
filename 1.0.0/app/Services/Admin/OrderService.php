@@ -126,7 +126,7 @@ class OrderService extends \App\Services\Common\OrderService{
         $order_model = $order_model->transferDataType(request()->get('status','all'));
 
         $order_model = $order_model->with(['user'=>function($q){
-            return $q->select('id','username');
+            return $q->select('id','username','avatar');
         },'order_goods']);
 
         // 订单号

@@ -10,14 +10,21 @@
             <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button> -->
         </div>
         <div class="admin_table_list">
-            <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id">
+            <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" row-key="id" :scroll="{ x: 1500 }">
                 <span slot="name" slot-scope="rows">
                     <div class="admin_pic_txt">
-                        <div class="img"><img v-if="rows.order_image" :src="rows.order_image"><a-icon v-else type="picture" /></div>
+                        <div class="img" style="float: none"><img v-if="rows.order_image" :src="rows.order_image"><a-icon v-else type="picture" /></div>
                         <div class="text">{{rows.order_name}}</div>
                         <div class="clear"></div>
                     </div>
                 </span>
+                <span slot="user" slot-scope="rows">
+                     <a  @click="$router.push('/Admin/users/form/'+rows.user.id)">
+                         <a-avatar :src="rows.user.avatar" />
+                         {{rows.user.username}}(ID：{{rows.user.id}})
+                     </a>
+                </span>
+
                 <span slot="total_price" slot-scope="rows">
                     <font color="red">￥{{rows.total_price}}</font>
                 </span>
@@ -25,10 +32,11 @@
                     <a-tag color="orange">{{rows.order_status_cn}}</a-tag>
                 </span>
                 <span slot="action" slot-scope="rows">
-                    <a-button icon="read" @click="$router.push('/Admin/orders/form/'+rows.id)">查看详情</a-button>
-                    <a-button icon="read" v-if="rows.pay_status==20 && rows.delivery_status==10 && rows.order_status!=20 && rows.order_status!=21" @click="$router.push('/Admin/orders/form/'+rows.id+'/#delivery')">去发货</a-button>
-                    <a-button icon="read" v-if="rows.order_status==21" @click="$router.push('/Admin/orders/form/'+rows.id+'/#cancel')">去审核</a-button>
-
+                    <a-space direction="vertical">
+                        <a-button icon="read" @click="$router.push('/Admin/orders/form/'+rows.id)">查看详情</a-button>
+                        <a-button icon="read" v-if="rows.pay_status==20 && rows.delivery_status==10 && rows.order_status!=20 && rows.order_status!=21" @click="$router.push('/Admin/orders/form/'+rows.id+'/#delivery')">去发货</a-button>
+                        <a-button icon="read" v-if="rows.order_status==21" @click="$router.push('/Admin/orders/form/'+rows.id+'/#cancel')">去审核</a-button>
+                    </a-space>
 
                 </span>
             </a-table>
@@ -68,13 +76,13 @@ export default {
           selectedRowKeys:[], // 被选择的行
           columns:[
             //   {title:'#',dataIndex:'id',fixed:'left'},
-              {title:'订单名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }},
-              {title:'订单号',dataIndex:'order_no'},
-              {title:'买家',dataIndex:'buyer_name'},
-              {title:'订单总额',key:'id',scopedSlots: { customRender: 'total_price' }},
-              {title:'订单状态',key:'id',scopedSlots: { customRender: 'order_status' }},
-              {title:'下单时间',dataIndex:'created_at'},
-              {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }},
+              {title:'订单名称',key:'id',fixed:'left',scopedSlots: { customRender: 'name' }, width: 280},
+              {title:'订单号',dataIndex:'order_no', width: 120 },
+              {title:'买家',scopedSlots: { customRender: 'user' }, width: 150},
+              {title:'订单总额',key:'id',scopedSlots: { customRender: 'total_price' }, width: 100 },
+              {title:'下单时间',dataIndex:'created_at', width: 150 },
+              {title:'订单状态',fixed:'right',key:'id',scopedSlots: { customRender: 'order_status' }, width: 120 },
+              {title:'操作',key:'id',fixed:'right',scopedSlots: { customRender: 'action' }, width: 150 },
           ],
           list:[],
           storeList:[],

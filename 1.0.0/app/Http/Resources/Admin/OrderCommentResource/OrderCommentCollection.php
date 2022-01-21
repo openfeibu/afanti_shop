@@ -33,6 +33,7 @@ class OrderCommentCollection extends ResourceCollection
                     'image'                         =>  empty($item->image)?[]:explode(',',$item->image),
                     'reply'                         =>  $item->reply,
                     'reply_time'                    =>  $item->reply_time,
+                    'active'                         =>  $item->active,
                     'created_at'                    =>  $item->created_at->format('Y-m-d H:i:s'),
                 ];
             }),

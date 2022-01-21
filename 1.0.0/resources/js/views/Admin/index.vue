@@ -32,13 +32,6 @@
                                 <span>管理员</span>
                             </div>
                             <a-menu slot="overlay">
-                                <a-menu-item key="0">
-                                    <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">QQ群：xxx</a>
-                                </a-menu-item>
-                                <a-menu-item key="1">
-                                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">阿凡提·水果巴扎</a>
-                                </a-menu-item>
-                                <a-menu-divider />
                                 <a-menu-item key="3" @click="logout">
                                     <a-icon style="color:red" type="logout"></a-icon>
                                     <font color="red">退出后台</font>
@@ -125,7 +118,7 @@ export default {
             this.drawerShow = false;
         },
         get_menus(){
-            this.$get(this.$api.adminMenus).then(res=>{
+            this.$get(this.$api.adminPermissionMenus).then(res=>{
                 this.menus = res.data;
             });
         },

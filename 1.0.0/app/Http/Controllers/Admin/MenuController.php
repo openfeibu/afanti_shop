@@ -21,6 +21,12 @@ class MenuController extends Controller
         return $this->success($list);
     }
 
+    public function getPermissionMenus()
+    {
+        $menu_service = new MenuService;
+        $list = $menu_service->getPermissionMenus()['data'];
+        return $this->success($list);
+    }
     /**
      * Store a newly created resource in storage.
      *

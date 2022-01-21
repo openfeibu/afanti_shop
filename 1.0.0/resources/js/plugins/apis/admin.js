@@ -21,8 +21,8 @@ export default
     // 菜单处理
     'adminMenus' : baseUrl + 'Admin/menus', // 后台菜单
     'adminMenusClearCache' : baseUrl + 'Admin/menus/cache/clear', // 清空菜单缓存
-
-    // 配置中心
+    'adminPermissionMenus' : baseUrl + 'Admin/permission_menus',
+    // 配置中心s
     'adminConfigs' : baseUrl + 'Admin/configs', // 配置信息获取
     'adminConfigsUploadLogo' : baseUrl + 'Admin/configs/upload/logo', // Logo图上传
     'adminConfigsUploadIcon' : baseUrl + 'Admin/configs/upload/icon', // Icon图上传

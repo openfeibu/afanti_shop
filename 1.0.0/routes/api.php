@@ -44,6 +44,7 @@ Route::namespace('Admin')->prefix('Admin')->group(function(){
         // 菜单处理
         Route::get('/menus/cache/clear','MenuController@clear_cache')->name('menus.clear_cache'); // 缓存清除接口
 
+        Route::get('permission_menus','MenuController@getPermissionMenus')->name('menus.permission_menus');
         // 配置中心
         Route::apiResource('configs','ConfigController')->except(['update','show','destroy']);
         Route::post('/configs/upload/logo','ConfigController@config_logo')->name('configs.config_logo'); // 配置中心图上传(Logo)

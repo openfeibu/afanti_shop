@@ -29,9 +29,14 @@ class MenuService extends BaseService{
     {
         $menu_model = new Menu();
         $admin = auth('admin')->user();
+        $role_ids = $admin->roles()->get()->pluck('id')->toArray();
+        if(in_array(1,$role_ids))
+        {
+            return $this->getMenus();
+        }
         $cache_name = 'admin_'.$admin->id.'_menus_cache';
         if(!Cache::has($cache_name)){
-            $role_ids = $admin->roles()->get()->pluck('id');
+
             $menu_ids = RoleMenu::whereIn('role_id',$role_ids)->groupBy('menu_id')->pluck('menu_id')->toArray();
 
             $ids = $this->getAllPermissionMenuIds($menu_ids);

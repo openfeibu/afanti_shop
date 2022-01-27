@@ -55,7 +55,7 @@ class StoreService extends BaseService{
     public function getWeappStoreList(){
         $store_model = new Store;
         $params = request()->params??'';
-
+        $store_model = $store_model->where('is_store',1);
         try{
             if(!empty($params)){
                 $params_array = json_decode(base64_decode($params),true);

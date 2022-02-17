@@ -391,6 +391,12 @@ export default [
                 name: 'home_monitoring',
                 component: () => import ('@/views/Home/monitoring')
 
+            },// 帮助中心
+            {
+                path: '/live',
+                name: 'home_live',
+                component: () => import ('@/views/Home/live')
+
             },
     ]
     },

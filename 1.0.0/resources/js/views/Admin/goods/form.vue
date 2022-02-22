@@ -136,6 +136,7 @@
                     goods_video:'',
                     goods_images:[],
                     goods_status:true,
+                    freight_id:0,
                 },
                 list:[],
                 categoryList:[],
@@ -247,7 +248,7 @@
                 })
                 this.$get(this.$api.adminAllGoodsBrands).then(res=>{
                     this.brandList = res.data;
-                    this.id ?  '' : this.info.brand_id = this.brandList[0].id;
+                    //this.id ?  '' : this.info.brand_id = this.brandList[0].id;
                 })
                 this.$get(this.$api.adminStores,{all:1}).then(res=>{
                     this.storeList = res.data.data;
@@ -472,12 +473,6 @@
                         })
                     }).reduce(function(a,b){ return a.concat(b) },[])
                 }, [[]])
-            },
-            // 品牌搜索
-            goodsBrandHandleSearch(e){
-                this.$get(this.$api.adminGoodsBrands,{name:e}).then(res=>{
-                    this.brandList = res.data.data;
-                })
             },
             changeGoodsPrice(){
                 this.info.goods_market_price = this.$formatFloat(this.info.goods_price * this.market_price_rate);

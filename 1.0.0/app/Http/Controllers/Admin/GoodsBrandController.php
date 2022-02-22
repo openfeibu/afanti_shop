@@ -95,7 +95,7 @@ class GoodsBrandController extends Controller
         $name = $request->get('name','');
         $list = GoodsBrand::when($request->name,function ($query) use ($name){
             return $query->where('name','like','%'.$name.'%');
-        })->orderBy('id','desc')->get();
+        })->orderBy('id','asc')->get();
         return $this->success($list);
     }
 }

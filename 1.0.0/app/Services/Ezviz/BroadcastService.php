@@ -17,6 +17,7 @@ class BroadcastService extends BaseService{
     //请求头部
     protected $header=['Content-Type: application/x-www-form-urlencoded'];
 
+    protected $live_url = 'https://open.ys7.com/api/lapp/v2/live/address/get';
     /**
      * 获取授权的accessToken
      */
@@ -36,6 +37,23 @@ class BroadcastService extends BaseService{
         }
         return $accessToken['accessToken'];
 
+    }
+    public function getLiveAddress($accessToken,$deviceSerial,$channelNo)
+    {
+        $request_data = [
+            'accessToken' => $accessToken,
+            'deviceSerial' => $deviceSerial,
+            'channelNo' => $channelNo,
+            'protocol' => 2,
+            'quality' => 2,
+        ];
+        $live_address_data = $this->httpPost($this->live_url,$this->header,$request_data);
+
+        if(!$live_address_data || $live_address_data['code'] != '200')
+        {
+            return '';
+        }
+        return $live_address_data['data']['url'];
     }
     /**
      * post 请求
@@ -77,4 +95,5 @@ class BroadcastService extends BaseService{
         return $res;
         */
     }
+
 }

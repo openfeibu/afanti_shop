@@ -1,0 +1,100 @@
+---------------------------------------------------------------
+[ 2022-03-15T12:00:59+08:00 ] 192.168.20.1 POST afantishop.g.com/index.php?s=/store/passport/login
+[ sql ] [ DB ] CONNECT:[ UseTime:0.033107s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_wxapp` [ RunTime:0.021519s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_store_user` [ RunTime:0.022982s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `user_name` = 'admin'  AND `password` = '9ae7b2e6f25c907a1fc81b503b16e25f'  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.019939s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_wxapp` WHERE  `wxapp_id` = 10001 [ RunTime:0.022163s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:02+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/store/index/index
+[ sql ] [ DB ] CONNECT:[ UseTime:0.027249s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_store_user` [ RunTime:0.021571s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.018980s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_order` [ RunTime:0.021810s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_user` [ RunTime:0.025371s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND `pay_status` = 10  AND `order_status` = 10  AND `create_time` <= 1647057661  AND `is_delete` = 0 [ RunTime:0.020199s ]
+[ sql ] [ SQL ] SELECT `order_id` FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `delivery_status` = 20  AND `receipt_status` = 10  AND `delivery_time` <= 1646452861 [ RunTime:0.018411s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `order_status` = 30  AND `receipt_time` <= 1646712061  AND `is_settled` = 0  AND `is_delete` = 0 [ RunTime:0.018932s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_sharp_setting` [ RunTime:0.021013s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_sharp_setting` WHERE  `afanti_sharp_setting`.`wxapp_id` = 10001 [ RunTime:0.017708s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `order_source` = 30  AND `pay_status` = 10  AND `order_status` = 10  AND `create_time` <= 1647316261  AND `is_delete` = 0 [ RunTime:0.020950s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_goods` [ RunTime:0.020386s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_goods` WHERE  `afanti_goods`.`wxapp_id` = 10001  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.019163s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_user` WHERE  `afanti_user`.`wxapp_id` = 10001  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018171s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017163s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_comment` [ RunTime:0.020477s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_comment` WHERE  `afanti_comment`.`wxapp_id` = 10001  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017394s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1647273600 AND `pay_time` < 1647360000 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018609s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1647187200 AND `pay_time` < 1647273600 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017885s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1647273600 AND `pay_time` < 1647360000 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017217s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1647187200 AND `pay_time` < 1647273600 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.022194s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_user` WHERE  ( `afanti_user`.`wxapp_id` = 10001 AND `afanti_user`.`wxapp_id` = 10001 )  AND ( `create_time` >= 1647273600 AND `create_time` < 1647360000 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017219s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_user` WHERE  ( `afanti_user`.`wxapp_id` = 10001 AND `afanti_user`.`wxapp_id` = 10001 )  AND ( `create_time` >= 1647187200 AND `create_time` < 1647273600 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017810s ]
+[ sql ] [ SQL ] SELECT DISTINCT  `user_id` FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND ( `pay_time` >= 1647273600 AND `pay_time` < 1647360000 )  AND `pay_status` = 20  AND `is_delete` = 0 [ RunTime:0.018320s ]
+[ sql ] [ SQL ] SELECT DISTINCT  `user_id` FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND ( `pay_time` >= 1647187200 AND `pay_time` < 1647273600 )  AND `pay_status` = 20  AND `is_delete` = 0 [ RunTime:0.017662s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1646755200 AND `pay_time` < 1646841600 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018422s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1646841600 AND `pay_time` < 1646928000 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017238s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1646928000 AND `pay_time` < 1647014400 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017323s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1647014400 AND `pay_time` < 1647100800 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017970s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1647100800 AND `pay_time` < 1647187200 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017282s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1647187200 AND `pay_time` < 1647273600 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017979s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_order` WHERE  `afanti_order`.`wxapp_id` = 10001  AND `pay_status` = 20  AND `order_status` <> 20  AND ( `pay_time` >= 1647273600 AND `pay_time` < 1647360000 )  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018464s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1646755200 AND `pay_time` < 1646841600 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018053s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1646841600 AND `pay_time` < 1646928000 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018942s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1646928000 AND `pay_time` < 1647014400 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018248s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1647014400 AND `pay_time` < 1647100800 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.018123s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1647100800 AND `pay_time` < 1647187200 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017554s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1647187200 AND `pay_time` < 1647273600 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017495s ]
+[ sql ] [ SQL ] SELECT SUM(pay_price) AS tp_sum FROM `afanti_order` WHERE  ( `afanti_order`.`wxapp_id` = 10001 AND `afanti_order`.`wxapp_id` = 10001 )  AND ( `pay_time` >= 1647273600 AND `pay_time` < 1647360000 )  AND `pay_status` = 20  AND `order_status` <> 20  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.017189s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:04+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/store/store.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.030399s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_store_user` [ RunTime:0.023921s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.020288s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.019824s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:10+08:00 ] 192.168.20.1 POST afantishop.g.com/index.php?s=/store/store.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.029230s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_store_user` [ RunTime:0.022306s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.020055s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.020093s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:16+08:00 ] 192.168.20.1 POST afantishop.g.com/index.php?s=/store/store.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.026690s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_store_user` [ RunTime:0.021494s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.017990s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.020034s ]
+[ sql ] [ SQL ] UPDATE `afanti_store_user`  SET `password`='9c4cb25665cf08667c815420ab383cb5',`update_time`=1647316876  WHERE  `store_user_id` = 10001 [ RunTime:0.023304s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:17+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/store/store.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.035306s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_store_user` [ RunTime:0.023029s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.022296s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_store_user` WHERE  `afanti_store_user`.`wxapp_id` = 10001  AND `is_delete` = 0  AND `store_user_id` = 10001 LIMIT 1 [ RunTime:0.021324s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:28+08:00 ] 192.168.20.1 POST afantishop.g.com/index.php?s=/admin/passport/login
+[ sql ] [ DB ] CONNECT:[ UseTime:0.030854s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_admin_user` [ RunTime:0.021717s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_admin_user` WHERE  `user_name` = 'admin'  AND `password` = '9ae7b2e6f25c907a1fc81b503b16e25f' LIMIT 1 [ RunTime:0.018015s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:33+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/admin/admin.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.031064s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_admin_user` [ RunTime:0.021503s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_admin_user` WHERE  `admin_user_id` = 10001 LIMIT 1 [ RunTime:0.020223s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:37+08:00 ] 192.168.20.1 POST afantishop.g.com/index.php?s=/admin/admin.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.034045s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_admin_user` [ RunTime:0.023333s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_admin_user` WHERE  `admin_user_id` = 10001 LIMIT 1 [ RunTime:0.021986s ]
+[ sql ] [ SQL ] UPDATE `afanti_admin_user`  SET `password`='9c4cb25665cf08667c815420ab383cb5',`update_time`=1647316897  WHERE  `admin_user_id` = 10001 [ RunTime:0.027504s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:39+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/admin/admin.user/renew
+[ sql ] [ DB ] CONNECT:[ UseTime:0.032825s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_admin_user` [ RunTime:0.025826s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_admin_user` WHERE  `admin_user_id` = 10001 LIMIT 1 [ RunTime:0.023965s ]
+---------------------------------------------------------------
+[ 2022-03-15T12:01:41+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/admin/store/index
+[ sql ] [ DB ] CONNECT:[ UseTime:0.031106s ] mysql:host=39.108.144.9;port=3306;dbname=afantishop;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `afanti_wxapp` [ RunTime:0.024671s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `afanti_wxapp` WHERE  `is_recycle` = 0  AND `is_delete` = 0 LIMIT 1 [ RunTime:0.021793s ]
+[ sql ] [ SQL ] SELECT * FROM `afanti_wxapp` WHERE  `is_recycle` = 0  AND `is_delete` = 0 ORDER BY `create_time` DESC LIMIT 0,15 [ RunTime:0.021255s ]

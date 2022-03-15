@@ -1,0 +1,6 @@
+---------------------------------------------------------------
+[ 2022-03-15T12:01:02+08:00 ] 192.168.20.1 GET afantishop.g.com/index.php?s=/store/index/index
+[ yoshop-info ] behavior Order --close --close_days 3 --deadline_time 1647057661 --orderIds []
+[ yoshop-info ] behavior Order --receive --receive_days 10 --deadline_time 1646452861 --orderIds []
+[ yoshop-info ] behavior Order --settled --refund_days 7 --deadline_time 1646712061 --orderIds []
+[ yoshop-info ] behavior sharp Order --close --close_minute 10 --deadline_time 1647316261 --orderIds []

@@ -31,7 +31,7 @@
         <div class="login-content">
             <div class="brand">
                 <img alt="logo" class="brand-img" src="assets/store/img/login/logo.png?v=<?= $version ?>">
-                <h2 class="brand-text">小程序电商系统</h2>
+                <h2 class="brand-text">阿凡提疆果巴扎</h2>
             </div>
             <form id="login-form" class="login-form">
                 <div class="form-group">
@@ -49,7 +49,7 @@
         </div>
     </div>
     <div class="copyright">
-        <span>Copyright ©2020 xxx版权所有 <a href="https://www.baidu.com/" target="_blank">粤ICP备18030800号-1</a></span>
+        <span>Copyright ©2022 新疆疆果巴扎农林科技有限公司版权所有 <a href="https://www.baidu.com/" target="_blank">粤ICP备</a></span>
     </div>
 </div>
 </body>

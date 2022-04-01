@@ -4,6 +4,7 @@ namespace app\store\controller;
 
 use app\store\model\Goods as GoodsModel;
 use app\store\model\Category as CategoryModel;
+use app\store\model\Showroom as ShowroomModel;
 use app\store\service\Goods as GoodsService;
 
 /**
@@ -22,10 +23,11 @@ class Goods extends Controller
     {
         // 获取全部商品列表
         $model = new GoodsModel;
+        $showroomList = ShowroomModel::getAllList();
         $list = $model->getList(array_merge(['status' => -1], $this->request->param()));
         // 商品分类
         $catgory = CategoryModel::getCacheTree();
-        return $this->fetch('index', compact('list', 'catgory'));
+        return $this->fetch('index', compact('list', 'catgory','showroomList'));
     }
 
     /**
@@ -36,9 +38,10 @@ class Goods extends Controller
     public function add()
     {
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             return $this->fetch(
                 'add',
-                array_merge(GoodsService::getEditData(null, 'add'), [])
+                array_merge(GoodsService::getEditData(null, 'add'), compact('showroomList'))
             );
         }
         $model = new GoodsModel;
@@ -59,9 +62,10 @@ class Goods extends Controller
         // 商品详情
         $model = GoodsModel::detail($goods_id);
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             return $this->fetch(
                 'edit',
-                array_merge(GoodsService::getEditData($model, 'copy'), compact('model'))
+                array_merge(GoodsService::getEditData($model, 'copy'), compact('model','showroomList'))
             );
         }
         $model = new GoodsModel;
@@ -81,9 +85,10 @@ class Goods extends Controller
         // 商品详情
         $model = GoodsModel::detail($goods_id);
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             return $this->fetch(
                 'edit',
-                array_merge(GoodsService::getEditData($model), compact('model'))
+                array_merge(GoodsService::getEditData($model), compact('model','showroomList'))
             );
         }
         // 更新记录

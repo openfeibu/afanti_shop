@@ -155,6 +155,33 @@ return [
             ],
         ]
     ],
+    'showroom' => [
+        'name' => '展馆管理',
+        'icon' => 'icon-shop',
+        'index' => 'showroom/index',
+        'submenu' => [
+            [
+                'name' => '展馆列表',
+                'index' => 'showroom/index',
+                'uris' => [
+                    'showroom/index',
+                    'showroom/add',
+                    'showroom/edit',
+                    'showroom/delete',
+                ]
+            ],
+            [
+                'name' => '蓝牙信标列表',
+                'index' => 'showroom.beacon/index',
+                'uris' => [
+                    'showroom.beacon/index',
+                    'showroom.beacon/add',
+                    'showroom.beacon/edit',
+                    'showroom.beacon/delete',
+                ]
+            ]
+        ]
+    ],
     'shop' => [
         'name' => '门店管理',
         'icon' => 'icon-shop',

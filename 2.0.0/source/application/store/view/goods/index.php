@@ -25,9 +25,21 @@
                             <div class="am-u-sm-12 am-u-md-9">
                                 <div class="am fr">
                                     <div class="am-form-group am-fl">
+                                        <select name="showroom_id"
+                                                data-am-selected="{searchBox: 1, btnSize: 'sm', placeholder: '所属展馆', maxHeight: 400, btnWidth:150}">
+                                            <option value=""></option>
+                                            <?php if (isset($showroomList)): foreach ($showroomList as $showroom): ?>
+                                                <option value="<?= $showroom['showroom_id'] ?>"
+                                                    <?= $request->get('showroom_id') == $showroom['showroom_id'] ? 'selected' : '' ?>>
+                                                    <?= $showroom['showroom_name'] ?>
+                                                </option>
+                                            <?php endforeach; endif; ?>
+                                        </select>
+                                    </div>
+                                    <div class="am-form-group am-fl">
                                         <?php $category_id = $request->get('category_id') ?: null; ?>
                                         <select name="category_id"
-                                                data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder: '商品分类', maxHeight: 400}">
+                                                data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder: '商品分类', maxHeight: 400, btnWidth:150}">
                                             <option value=""></option>
                                             <?php if (isset($catgory)): foreach ($catgory as $first): ?>
                                                 <option value="<?= $first['category_id'] ?>"
@@ -44,7 +56,7 @@
                                     <div class="am-form-group am-fl">
                                         <?php $status = $request->get('status') ?: null; ?>
                                         <select name="status"
-                                                data-am-selected="{btnSize: 'sm', placeholder: '商品状态'}">
+                                                data-am-selected="{btnSize: 'sm', placeholder: '商品状态', btnWidth:100}">
                                             <option value=""></option>
                                             <option value="10"
                                                 <?= $status == 10 ? 'selected' : '' ?>>上架
@@ -79,6 +91,7 @@
                                 <th>商品图片</th>
                                 <th>商品名称</th>
                                 <th>商品分类</th>
+                                <th>所属展馆</th>
                                 <th>实际销量</th>
                                 <th>商品排序</th>
                                 <th>商品状态</th>
@@ -101,6 +114,7 @@
                                         <p class="item-title"><?= $item['goods_name'] ?></p>
                                     </td>
                                     <td class="am-text-middle"><?= $item['category']['name'] ?></td>
+                                    <td class="am-text-middle"><?= $item['showroom']['showroom_name'] ?></td>
                                     <td class="am-text-middle"><?= $item['sales_actual'] ?></td>
                                     <td class="am-text-middle"><?= $item['goods_sort'] ?></td>
                                     <td class="am-text-middle">

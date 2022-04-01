@@ -18,6 +18,21 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label"> 所属展馆 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <select name="goods[showroom_id]"
+                                            data-am-selected="{searchBox: 1, btnSize: 'sm', placeholder:'请选择', maxHeight: 400}"
+                                    >
+                                        <option value=""></option>
+                                        <?php if (isset($showroomList) && !$showroomList->isEmpty()):
+                                            foreach ($showroomList as $item): ?>
+                                                <option value="<?= $item['showroom_id'] ?>">
+                                                    <?= $item['showroom_name'] ?></option>
+                                            <?php endforeach; endif; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <select name="goods[category_id]" required

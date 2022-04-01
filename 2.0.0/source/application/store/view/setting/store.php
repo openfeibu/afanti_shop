@@ -37,6 +37,23 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                 </div>
                             </div>
                             <div class="widget-head am-cf">
+                                <div class="widget-title am-fl"> 海康</div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-form-label form-require"> 序列号 </label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" class="tpl-form-input" name="store[monitoring][sn]"
+                                           value="<?= $values['monitoring']['sn'] ?? '' ?>" required>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-form-label form-require"> 验证码 </label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" class="tpl-form-input" name="store[monitoring][code]"
+                                           value="<?= $values['monitoring']['code'] ?? '' ?>" required>
+                                </div>
+                            </div>
+                            <div class="widget-head am-cf">
                                 <div class="widget-title am-fl"> 物流查询API</div>
                             </div>
                             <div class="am-form-group">

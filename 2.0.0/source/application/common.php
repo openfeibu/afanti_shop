@@ -361,3 +361,11 @@ function str_substr($str, $length = 30)
     }
     return $str;
 }
+if(!function_exists('getUnixTimestamp')) {
+    function getUnixTimestamp()
+    {
+        list($s1, $s2) = explode(' ', microtime());
+        return (float)sprintf('%.0f', (floatval($s1) + floatval($s2)) * 1000);
+
+    }
+}

@@ -94,6 +94,7 @@
                 // 配置项
                 , defaults = {
                     name: 'iFile'            // input name
+                    ,className: 'file'
                     , imagesList: '.uploader-list'    // 图片列表容器
                     , imagesItem: '.file-item'       // 图片元素容器
                     , imageDelete: '.file-item-delete'  // 删除按钮元素
@@ -112,7 +113,7 @@
                     }
                     // 新增图片列表
                     var list = options.multiple ? data : [data[0]];
-                    var $html = $(template('tpl-file-item', {list: list, name: options.name}))
+                    var $html = $(template('tpl-file-item', {list: list, name: options.name, class_name: options.className}))
                         , $imagesList = $this.next(options.imagesList);
                     if (
                         options.limit > 0

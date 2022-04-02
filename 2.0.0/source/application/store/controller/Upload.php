@@ -55,7 +55,24 @@ class Upload extends Controller
         // 图片上传成功
         return json(['code' => 1, 'msg' => '图片上传成功', 'data' => $uploadFile]);
     }
+    public function video()
+    {
+        // 实例化存储驱动
+        $StorageDriver = new StorageDriver($this->config);
+        // 设置上传文件的信息
+        $StorageDriver->setUploadFile('iFile');
+        // 上传文件
+        if (!$StorageDriver->upload()) {
+            return json(['code' => 0, 'msg' => '文件上传失败' . $StorageDriver->getError()]);
+        }
 
+        // 文件上传路径
+        $fileName = $StorageDriver->getFileName();
+        // 文件信息
+        $fileInfo = $StorageDriver->getFileInfo();
+        // 文件上传成功
+        return json(['code' => 1, 'msg' => '图片上传成功', 'data' => $fileName]);
+    }
     /**
      * 添加文件库上传记录
      * @param $group_id

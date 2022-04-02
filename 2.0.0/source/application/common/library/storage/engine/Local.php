@@ -36,7 +36,7 @@ class Local extends Server
         // 验证文件并上传
         $info = $this->file->validate([
             'size' => 4 * 1024 * 1024,
-            'ext' => 'jpg,jpeg,png,gif'
+            'ext' => 'jpg,jpeg,png,gif,mp4,MP4'
         ])->move($uplodDir, $this->fileName);
         if (empty($info)) {
             $this->error = $this->file->getError();

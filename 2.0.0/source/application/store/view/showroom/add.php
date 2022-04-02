@@ -55,6 +55,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="am-form-group am-form-file">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label">展馆视频 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <div class="upload-video" id="upload-video"> <i class="am-icon-cloud-upload"></i> 选择视频</div>
+                                    <div class="help-block am-margin-top-sm">
+                                        <small>大小20M以下 (必须mp4)</small>
+                                    </div>
+                                </div>
+                                <div id="videoList"></div>
+                            </div>
+                            <div id="file-list"></div>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label"> 监控频道号 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -100,6 +111,7 @@
 
 <!-- 图片文件列表模板 -->
 {{include file="layouts/_template/tpl_file_item" /}}
+{{include file="layouts/_template/tpl_video_item" /}}
 
 <!-- 文件库弹窗 -->
 {{include file="layouts/_template/file_library" /}}
@@ -155,7 +167,15 @@
                 'background-color': '#fff'
             }
         });
-
+        $('.upload-video').selectVideo({
+            name: 'showroom[video]'
+            ,pick:'#upload-video'
+            ,className: 'video'
+            , imagesList: '.uploader-list-video'    // 图片列表容器
+            , imagesItem: '.video-item'       // 图片元素容器
+            , imageDelete: '.video-item-delete'  // 删除按钮元素
+            , multiple: true
+        });
         /**
          * 表单验证提交
          * @type {*}

@@ -31,7 +31,9 @@ class Showroom extends ShowroomModel
         $data = $this->with(['logo','face_image'])->where('is_delete', '=', '0')
             ->where('is_store', '=', '1')
             ->order(['sort' => 'asc', 'create_time' => 'asc'])
-            ->select();
+            ->paginate(20, false, [
+                'query' => \request()->request()
+            ]);
 
         return $data;
     }

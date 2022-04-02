@@ -25,8 +25,6 @@ class Showroom extends Controller
         $goodsModel = new GoodsModel;
         $detail['goodsList'] = $goodsModel->getList([
             'showroom_id' => $showroom_id,
-            'status' => 10,
-            'sortType' => 'sales',
             'listRows' => 6
         ], $this->getUser(false));
         return $this->renderSuccess(compact('detail'));

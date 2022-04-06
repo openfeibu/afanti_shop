@@ -48,4 +48,8 @@ class Showroom extends BaseModel
         return static::get($showroom_id, ['logo','face_image','slide.file']);
     }
 
+    public function getVideoPathAttr($value, $data)
+    {
+        return self::$base_url . 'uploads/' . $data['video'];
+    }
 }

@@ -58,14 +58,18 @@
                             <div class="am-form-group am-form-file">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label">展馆视频 </label>
                                 <div class="am-u-sm-9 am-u-end">
-                                    <div class="upload-video" id="upload-video"> <i class="am-icon-cloud-upload"></i> 选择视频</div>
+                                    <div class="am-form-file">
+                                        <div class="upload-video" id="upload-video"> <i class="am-icon-cloud-upload"></i> 选择视频</div>
+                                        <div class="uploader-list uploader-list-video am-cf">
+
+                                        </div>
+                                    </div>
+
                                     <div class="help-block am-margin-top-sm">
                                         <small>大小20M以下 (必须mp4)</small>
                                     </div>
                                 </div>
-                                <div id="videoList"></div>
                             </div>
-                            <div id="file-list"></div>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label"> 监控频道号 </label>
                                 <div class="am-u-sm-9 am-u-end">

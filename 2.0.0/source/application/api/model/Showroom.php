@@ -53,7 +53,7 @@ class Showroom extends ShowroomModel
     }
     public function getVideoAttr($value, $data)
     {
-        return self::$base_url . 'uploads' . $data['video'];
+        return self::$base_url . 'uploads/' . $data['video'];
     }
 
 }

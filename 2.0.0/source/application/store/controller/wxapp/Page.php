@@ -142,4 +142,18 @@ class Page extends Controller
         return $this->fetch('links');
     }
 
+    public function banners()
+    {
+        $model = WxappPageModel::detail(10001);
+        return $this->fetch('banners', [
+            'defaultData' => json_encode($model->getDefaultItems()),
+            'jsonData' => json_encode($model['page_data']),
+            'opts' => json_encode([
+                'catgory' => CategoryModel::getCacheTree(),
+                'sharingCatgory' => SharingCategoryModel::getCacheTree(),
+                'articleCatgory' => ArticleCategoryModel::getALL(),
+            ])
+        ]);
+        return $this->fetch('banners');
+    }
 }

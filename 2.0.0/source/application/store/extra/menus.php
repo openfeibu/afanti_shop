@@ -376,6 +376,10 @@ return [
                 'active' => true,
                 'submenu' => [
                     [
+                        'name' => '轮播图',
+                        'index' => 'wxapp.page/banners'
+                    ],
+                    [
                         'name' => '页面设计',
                         'index' => 'wxapp.page/index',
                         'uris' => [

@@ -54,7 +54,6 @@
                                 <th>用户ID</th>
                                 <th>微信头像</th>
                                 <th>微信昵称</th>
-                                <th>用户余额</th>
                                 <th>实际消费金额</th>
                                 <th>性别</th>
                                 <th>国家</th>
@@ -74,9 +73,6 @@
                                         </a>
                                     </td>
                                     <td class="am-text-middle"><?= $item['nickName'] ?></td>
-                                    <td class="am-text-middle">
-                                        <?= !empty($item['grade']) ? $item['grade']['name'] : '--' ?>
-                                    </td>
                                     <td class="am-text-middle"><?= $item['expend_money'] ?></td>
                                     <td class="am-text-middle"><?= $item['gender'] ?></td>
                                     <td class="am-text-middle"><?= $item['country'] ?: '--' ?></td>

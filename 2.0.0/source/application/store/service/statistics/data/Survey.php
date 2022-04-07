@@ -41,6 +41,8 @@ class Survey extends BasicsService
             'goods_total' => $this->getGoodsTotal($startDate, $endDate),
             // 用户充值总额
             'recharge_total' => $this->getRechargeTotal($startDate, $endDate),
+            //客单价
+            'per_customer_transaction' => helper::number2($this->getOrderTotalMoney($startDate, $endDate)/$this->getConsumeUsers($startDate, $endDate)),
         ];
     }
 

@@ -40,36 +40,6 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                             </div>
                             <div class="am-u-sm-12 am-u-md-9">
                                 <div class="am fr">
-                                    <div class="am-form-group am-fl">
-                                        <?php $deliveryType = $request->get('delivery_type'); ?>
-                                        <select name="delivery_type"
-                                                data-am-selected="{btnSize: 'sm', placeholder: '配送方式'}">
-                                            <option value=""></option>
-                                            <option value="-1"
-                                                <?= $deliveryType === '-1' ? 'selected' : '' ?>>全部
-                                            </option>
-                                            <?php foreach (DeliveryTypeEnum::data() as $item): ?>
-                                                <option value="<?= $item['value'] ?>"
-                                                    <?= $item['value'] == $deliveryType ? 'selected' : '' ?>><?= $item['name'] ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="am-form-group am-fl">
-                                        <?php $extractShopId = $request->get('extract_shop_id'); ?>
-                                        <select name="extract_shop_id"
-                                                data-am-selected="{btnSize: 'sm', placeholder: '自提门店名称'}">
-                                            <option value=""></option>
-                                            <option value="-1"
-                                                <?= $extractShopId === '-1' ? 'selected' : '' ?>>全部
-                                            </option>
-                                            <?php if (isset($shopList)): foreach ($shopList as $item): ?>
-                                                <option value="<?= $item['shop_id'] ?>"
-                                                    <?= $item['shop_id'] == $extractShopId ? 'selected' : '' ?>><?= $item['shop_name'] ?>
-                                                </option>
-                                            <?php endforeach; endif; ?>
-                                        </select>
-                                    </div>
                                     <div class="am-form-group tpl-form-border-form am-fl">
                                         <input type="text" name="start_time"
                                                class="am-form-field"

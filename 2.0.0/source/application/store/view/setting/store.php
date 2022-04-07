@@ -26,8 +26,8 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                     <?php foreach (DeliveryTypeEnum::data() as $item): ?>
                                         <label class="am-checkbox-inline">
                                             <input type="checkbox" name="store[delivery_type][]"
-                                                   value="<?= $item['value'] ?>" data-am-ucheck
-                                                <?= in_array($item['value'], $values['delivery_type']) ? 'checked' : '' ?>>
+                                                   value="<?= $item['value']?>" data-am-ucheck
+                                                <?= in_array($item['value'], $values['delivery_type']) ? 'checked' : '' ?> >
                                             <?= $item['name'] ?>
                                         </label>
                                     <?php endforeach; ?>
@@ -53,6 +53,7 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                            value="<?= $values['monitoring']['code'] ?? '' ?>" required>
                                 </div>
                             </div>
+                            <!--
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl"> 物流查询API</div>
                             </div>
@@ -72,12 +73,14 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                            value="<?= $values['kuaidi100']['key'] ?>">
                                 </div>
                             </div>
+                            -->
                             <div class="am-form-group">
                                 <div class="am-u-sm-9 am-u-sm-push-3 am-margin-top-lg">
                                     <button type="submit" class="j-submit am-btn am-btn-secondary">提交
                                     </button>
                                 </div>
                             </div>
+
                         </fieldset>
                     </div>
                 </form>

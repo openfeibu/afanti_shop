@@ -299,6 +299,7 @@ return [
                     ],
                 ]
             ],
+            /*
             [
                 'name' => '用户充值',
                 'submenu' => [
@@ -347,10 +348,12 @@ return [
 //                    ],
                 ]
             ],
+            */
             [
                 'name' => '满额包邮',
                 'index' => 'market.basic/full_free',
             ],
+
         ],
     ],
     'statistics' => [
@@ -413,8 +416,9 @@ return [
         'name' => '应用中心',
         'icon' => 'icon-application',
         'is_svg' => true,   // 多色图标
-        'index' => 'apps.dealer.apply/index',
+        'index' => 'apps.sharing.category/index',
         'submenu' => [
+            /*
             [
                 'name' => '分销中心',
                 'submenu' => [
@@ -449,6 +453,7 @@ return [
                     ],
                 ]
             ],
+            */
             [
                 'name' => '拼团管理',
                 'submenu' => [
@@ -580,6 +585,7 @@ return [
                     ]
                 ]
             ],
+            /*
             [
                 'name' => '好物圈',
                 'index' => 'apps.wow.shoping/index',
@@ -608,6 +614,7 @@ return [
                     ],
                 ]
             ],
+            */
         ]
     ],
     'setting' => [
@@ -663,6 +670,7 @@ return [
                     'setting.address/edit',
                 ],
             ],
+            /*
             [
                 'name' => '上传设置',
                 'index' => 'setting/storage',
@@ -685,6 +693,7 @@ return [
                     ]
                 ]
             ],
+            */
             [
                 'name' => '其他',
                 'submenu' => [

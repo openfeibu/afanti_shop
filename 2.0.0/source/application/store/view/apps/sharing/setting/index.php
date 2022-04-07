@@ -47,6 +47,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <!--
                             <div class="am-form-group am-padding-top-lg">
                                 <label class="am-u-sm-3 am-form-label form-require"> 是否支持分销 </label>
                                 <div class="am-u-sm-9">
@@ -68,7 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            -->
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl">规则描述</div>
                             </div>

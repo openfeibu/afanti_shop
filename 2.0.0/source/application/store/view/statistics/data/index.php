@@ -93,14 +93,15 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="am-u-sm-6 am-u-md-6 am-u-lg-4">
                             <div class="widget-outline dis-flex flex-y-center">
                                 <div class="outline-left">
                                     <img src="assets/store/img/statistics/survey/02.png" alt="">
                                 </div>
                                 <div class="outline-right dis-flex flex-dir-column flex-x-center">
-                                    <div class="item-name">用户充值总额</div>
-                                    <div class="item-value">{{ survey.values.recharge_total }}</div>
+                                    <div class="item-name">客单价</div>
+                                    <div class="item-value">{{ survey.values.per_customer_transaction }}</div>
                                 </div>
                             </div>
                         </div>

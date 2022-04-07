@@ -26,10 +26,10 @@ class DeliveryType extends EnumBasics
                 'name' => '快递配送',
                 'value' => self::EXPRESS,
             ],
-            self::EXTRACT => [
-                'name' => '上门自提',
-                'value' => self::EXTRACT,
-            ],
+//            self::EXTRACT => [
+//                'name' => '上门自提',
+//                'value' => self::EXTRACT,
+//            ],
         ];
     }
 

@@ -8,6 +8,7 @@
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl"> 砍价设置</div>
                             </div>
+                            <!--
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require"> 是否支持分销 </label>
                                 <div class="am-u-sm-9 am-u-md-6 am-u-lg-5 am-u-end">
@@ -27,6 +28,7 @@
                                     </div>
                                 </div>
                             </div>
+                            -->
                             <div class="am-form-group am-padding-top">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require"> 砍价规则 </label>
                                 <div class="am-u-sm-9 am-u-md-6 am-u-lg-5 am-u-end">

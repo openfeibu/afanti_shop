@@ -28,21 +28,23 @@ class Survey extends BasicsService
      */
     public function getSurveyData($startDate = null, $endDate = null)
     {
+        $order_total_money = $this->getOrderTotalMoney($startDate, $endDate);
+        $consume_users = $this->getConsumeUsers($startDate, $endDate);
         return [
             // 用户数量
             'user_total' => $this->getUserTotal($startDate, $endDate),
             // 消费人数
-            'consume_users' => $this->getConsumeUsers($startDate, $endDate),
+            'consume_users' => $consume_users,
             // 付款订单数
             'order_total' => $this->getOrderTotal($startDate, $endDate),
             // 付款订单总额
-            'order_total_money' => $this->getOrderTotalMoney($startDate, $endDate),
+            'order_total_money' => $order_total_money,
             // 商品总量
             'goods_total' => $this->getGoodsTotal($startDate, $endDate),
             // 用户充值总额
             'recharge_total' => $this->getRechargeTotal($startDate, $endDate),
             //客单价
-            'per_customer_transaction' => helper::number2($this->getOrderTotalMoney($startDate, $endDate)/$this->getConsumeUsers($startDate, $endDate)),
+            'per_customer_transaction' => helper::number2($order_total_money/$consume_users),
         ];
     }
 

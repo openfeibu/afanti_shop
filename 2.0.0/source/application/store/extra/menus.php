@@ -123,6 +123,7 @@ return [
                 'name' => '用户列表',
                 'index' => 'user/index',
             ],
+            /*
             [
                 'name' => '会员等级',
                 'active' => true,
@@ -153,6 +154,7 @@ return [
                     ],
                 ]
             ],
+            */
         ]
     ],
     'showroom' => [
@@ -182,6 +184,7 @@ return [
             ]
         ]
     ],
+    /*
     'shop' => [
         'name' => '门店管理',
         'icon' => 'icon-shop',
@@ -218,6 +221,7 @@ return [
             ]
         ]
     ],
+    */
     'content' => [
         'name' => '内容管理',
         'icon' => 'icon-wenzhang',

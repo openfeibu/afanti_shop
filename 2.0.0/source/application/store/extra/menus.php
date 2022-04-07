@@ -648,10 +648,12 @@ return [
                     'setting.express/edit',
                 ],
             ],
+            /*
             [
                 'name' => '短信通知',
                 'index' => 'setting/sms'
             ],
+            */
             //    [
             //        'name' => '模板消息',
             //        'index' => 'setting/tplmsg',

@@ -66,41 +66,7 @@
                                 </div>
                             </div>
 
-                            <div class="widget-head am-cf">
-                                <div class="widget-title am-fl">分销商消息通知</div>
-                            </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require"> 分销商入驻审核通知 </label>
-                                <div class="am-u-sm-9 am-u-md-6 am-u-lg-5 am-u-end">
-                                    <input type="text" class="tpl-form-input" name="submsg[dealer][apply][template_id]"
-                                           value="<?= $values['dealer']['apply']['template_id'] ?>">
-                                    <div class="help-block">
-                                        <small>关键词：[申请时间、审核状态、审核时间、备注信息]</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require"> 提现成功通知 </label>
-                                <div class="am-u-sm-9 am-u-md-6 am-u-lg-5 am-u-end">
-                                    <input type="text" class="tpl-form-input"
-                                           name="submsg[dealer][withdraw_01][template_id]"
-                                           value="<?= $values['dealer']['withdraw_01']['template_id'] ?>">
-                                    <div class="help-block">
-                                        <small>关键词：[提现金额、打款方式、打款原因]</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require"> 提现失败通知 </label>
-                                <div class="am-u-sm-9 am-u-md-6 am-u-lg-5 am-u-end">
-                                    <input type="text" class="tpl-form-input"
-                                           name="submsg[dealer][withdraw_02][template_id]"
-                                           value="<?= $values['dealer']['withdraw_02']['template_id'] ?>">
-                                    <div class="help-block">
-                                        <small>关键词：[提现金额、申请时间、原因]</small>
-                                    </div>
-                                </div>
-                            </div>
+                           
                             <div id="shuttle" class="am-form-group">
                                 <div class="am-u-sm-9 am-u-sm-push-3 am-margin-top-lg">
                                     <button type="submit"

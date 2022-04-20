@@ -111,6 +111,7 @@
                     if (typeof options.done === 'function') {
                         return options.done(data, $touch);
                     }
+                    console.log(data);
                     // 新增图片列表
                     var list = options.multiple ? data : [data[0]];
                     var $html = $(template('tpl-file-item', {list: list, name: options.name, class_name: options.className}))
@@ -131,7 +132,24 @@
                 }
             });
         },
+        selectVideo: function (option) {
+            var $this = this
+                // 配置项
+                , defaults = {
+                    name: 'iFile'            // input name
+                    ,className: 'file'
+                    , imagesList: '.uploader-list'    // 图片列表容器
+                    , imagesItem: '.file-item'       // 图片元素容器
+                    , imageDelete: '.file-item-delete'  // 删除按钮元素
+                    , multiple: false    // 是否多选
+                    , limit: null        // 图片数量 (如果存在done回调函数则无效)
+                    , done: null  // 选择完成后的回调函数
+                }
+                , options = $.extend({}, defaults, option);
+            console.log(options);
+            $.uploadVideo($this,options);
 
+        },
         /**
          * 封装：ajaxSubmit
          * @param option
@@ -333,7 +351,97 @@
                 $error.text('上传失败');
             };
         },
+        uploadVideo:function($this,option){
+            var maxSize = option.maxSize !== undefined ? option.maxSize : 20;
+            var currentDate = new Date();
+            GUID = currentDate.getHours()
+                + "" +currentDate.getMinutes()
+                + "" +currentDate.getSeconds()
+                + "" +currentDate.getMilliseconds();
+            // 初始化Web Uploader
+            var uploader = WebUploader.create({
+                // 选完文件后，是否自动上传。
+                auto: true,
+                method:'POST',
+                dnd:option.dnd,
+                fileNumLimit:1,//验证文件总数量, 超出则不允许加入队列
+                fileSingleSizeLimit:maxSize*1024*1024,//5*1024*1024,//验证单个文件大小是否超出限制, 超出则不允许加入队列
+                // swf文件路径
+                swf: 'Uploader.swf',
+                // 文件接收服务端。
+                server: STORE_URL + '/upload/video',
+                pick : {id : option.pick,
+                    //只能选择一个文件上传
+                    multiple: false},
+                // 文件上传域的name
+                fileVal: 'iFile',
+                //限制只能上传一个文件
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Video',
+                    extensions: 'mp4,MP4',
+                    mimeTypes:'mp4,MP4'
+                },
+                threads: 1,
+                duplicate:true,
+                chunked: false,
+                chunkSize: 1024 * 1024,
+                formData : {guid : GUID} ,
+                resize:option.resize||false // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            });
+            // 文件开始上传
+            uploader.on('startUpload', function () {
+                loadIndex = layer.load();
+            });
+            // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+            uploader.on( 'uploadSuccess', function( file ,response) {
+                if (response.code === 1) {
+                    // 新增
+                    var $html = $(template('tpl-video-item', {file_name: response.data, name: option.name, class_name: option.className}))
+                        , $imagesList = $this.next(option.imagesList);
+                    // 注册删除事件
+                    $html.find(option.imageDelete).click(function () {
+                        $(this).parent().remove();
+                    });
+                    // 渲染html
+                   $imagesList.html($html);
+                    console.log(response.data);
+                } else {
+                    uploader.uploadError(file, response);
+                }
+            });
 
+            // 文件上传失败，显示上传出错。
+            uploader.on( 'uploadError', function( file, reason ) {
+                uploader.uploadError(file, reason);
+            });
+            // 文件上传失败回调函数
+            uploader.uploadError = function (file, reason) {
+                layer.msg(reason.msg, {anim: 6});
+            };
+            //  验证大小
+            uploader.on("error",function (type){
+                if(type == "F_DUPLICATE"){
+                    layer.msg("请不要重复选择文件！", {anim: 6});
+                }else if(type == "F_EXCEED_SIZE"){
+                    layer.msg("附件大小不可超过" + option.maxSize + "M!", {anim: 6});
+                }else if(type == "Q_TYPE_DENIED"){
+                    layer.msg("请上传格式为mp4的附件！", {anim: 6});
+                }else if (type == "Q_EXCEED_NUM_LIMIT"){
+                    layer.msg("最多只允许上传1个视频！", {anim: 6});
+                }
+            });
+
+            // 完成上传完了，成功或者失败，先删除进度条。
+            uploader.on( 'uploadComplete', function( file ) {
+
+            });
+            // 文件上传结束
+            uploader.on('uploadFinished', function () {
+                layer.close(loadIndex);
+                uploader.reset();
+            });
+        },
         /**
          * 显示模态对话框
          * @param option
@@ -457,7 +565,7 @@ $(function () {
         if (noClick) {
             return false;
         }
-        layer.confirm('您确定要删除该' + (name ? name : '图片') + '吗？', {
+        layer.confirm('您确定要删除该' + (name ? name : '文件') + '吗？', {
             title: '友情提示'
         }, function (index) {
             $this.parent().remove();

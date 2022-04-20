@@ -191,7 +191,7 @@ class User extends StoreUserModel
             return false;
         }
         // 更新session
-        Session::set('yoshop_store.user', [
+        Session::set('fbshop_store.user', [
             'store_user_id' => $this['store_user_id'],
             'user_name' => $data['user_name'],
         ]);

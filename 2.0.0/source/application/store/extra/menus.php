@@ -377,8 +377,14 @@ return [
                 'submenu' => [
                     [
                         'name' => '轮播图',
-                        'index' => 'wxapp.page/banners'
+                        'index' => 'wxapp.banner/index',
+                        'uris' => [
+                            'wxapp.banner/index',
+                            'wxapp.banner/add',
+                            'wxapp.banner/edit',
+                        ]
                     ],
+                    /*
                     [
                         'name' => '页面设计',
                         'index' => 'wxapp.page/index',
@@ -392,6 +398,7 @@ return [
                         'name' => '分类模板',
                         'index' => 'wxapp.page/category'
                     ],
+                    */
                     [
                         'name' => '页面链接',
                         'index' => 'wxapp.page/links'

@@ -3,7 +3,7 @@
 namespace app\api\controller;
 
 use app\api\model\WxappPage;
-
+use app\api\model\Banner as BannerModel;
 /**
  * 页面控制器
  * Class Index
@@ -26,6 +26,13 @@ class Page extends Controller
         // 页面元素
         $data = WxappPage::getPageData($this->getUser(false), $page_id);
         return $this->renderSuccess($data);
+    }
+    public function banner()
+    {
+        $model = new BannerModel;
+        $list = $model->getAllList();
+
+        return $this->renderSuccess(compact('list'));
     }
 
 }

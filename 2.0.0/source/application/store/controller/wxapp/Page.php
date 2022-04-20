@@ -156,4 +156,5 @@ class Page extends Controller
         ]);
         return $this->fetch('banners');
     }
+
 }

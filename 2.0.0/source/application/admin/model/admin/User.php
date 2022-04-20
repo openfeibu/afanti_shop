@@ -31,7 +31,7 @@ class User extends UserModel
             return false;
         }
         // 保存登录状态
-        Session::set('yoshop_admin', [
+        Session::set('fbshop_admin', [
             'user' => [
                 'admin_user_id' => $user['admin_user_id'],
                 'user_name' => $user['user_name'],
@@ -71,7 +71,7 @@ class User extends UserModel
             return false;
         }
         // 更新session
-        Session::set('yoshop_admin.user', [
+        Session::set('fbshop_admin.user', [
             'admin_user_id' => $this['admin_user_id'],
             'user_name' => $data['user_name'],
         ]);

@@ -6,12 +6,6 @@
                     <div class="widget-title am-cf">商品分类</div>
                 </div>
                 <div class="widget-body am-fr">
-                    <div class="tips am-margin-bottom-sm am-u-sm-12">
-                        <div class="pre">
-                            <p> 注：商品分类最多添加2级，分类图片可参考
-                                <a href="<?= url('wxapp.page/category') ?>" target="_blank">分类页模板</a> 上传</p>
-                        </div>
-                    </div>
                     <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
                         <div class="am-form-group">
                             <div class="am-btn-toolbar">

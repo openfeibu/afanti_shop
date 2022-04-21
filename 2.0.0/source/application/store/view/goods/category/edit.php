@@ -15,6 +15,7 @@
                                            value="<?= $model['name'] ?>" required>
                                 </div>
                             </div>
+                            <!--
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">上级分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -29,6 +30,7 @@
                                     </select>
                                 </div>
                             </div>
+                            -->
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">分类图片 </label>
                                 <div class="am-u-sm-9 am-u-end">

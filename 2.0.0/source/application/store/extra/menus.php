@@ -225,8 +225,9 @@ return [
     'content' => [
         'name' => '内容管理',
         'icon' => 'icon-wenzhang',
-        'index' => 'content.article/index',
+        'index' => 'content.files.group/index',
         'submenu' => [
+            /*
             [
                 'name' => '文章管理',
                 'active' => true,
@@ -251,6 +252,7 @@ return [
                     ],
                 ]
             ],
+            */
             [
                 'name' => '文件库管理',
                 'submenu' => [

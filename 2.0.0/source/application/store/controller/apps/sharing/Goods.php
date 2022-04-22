@@ -7,6 +7,7 @@ use app\store\model\user\Grade as GradeModel;
 use app\store\model\Delivery as DeliveryModel;
 use app\store\model\sharing\Goods as GoodsModel;
 use app\store\model\sharing\Category as CategoryModel;
+use app\store\model\Showroom as ShowroomModel;
 
 /**
  * 拼团商品管理控制器
@@ -24,10 +25,11 @@ class Goods extends Controller
     {
         // 获取全部商品列表
         $model = new GoodsModel;
+        $showroomList = ShowroomModel::getAllList();
         $list = $model->getList(array_merge(['status' => -1], $this->request->param()));
         // 商品分类
         $catgory = CategoryModel::getCacheTree();
-        return $this->fetch('index', compact('list', 'catgory'));
+        return $this->fetch('index', compact('list', 'catgory','showroomList'));
     }
 
     /**
@@ -38,13 +40,14 @@ class Goods extends Controller
     public function add()
     {
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             // 商品分类
             $catgory = CategoryModel::getCacheTree();
             // 配送模板
             $delivery = DeliveryModel::getAll();
             // 会员等级列表
             $gradeList = GradeModel::getUsableList();
-            return $this->fetch('add', compact('catgory', 'delivery', 'gradeList'));
+            return $this->fetch('add', compact('catgory', 'delivery', 'gradeList','showroomList'));
         }
         $model = new GoodsModel;
         if ($model->add($this->postData('goods'))) {
@@ -67,6 +70,7 @@ class Goods extends Controller
             return $this->renderError('商品信息不存在');
         }
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             // 商品分类
             $catgory = CategoryModel::getCacheTree();
             // 配送模板
@@ -78,7 +82,7 @@ class Goods extends Controller
             }
             // 会员等级列表
             $gradeList = GradeModel::getUsableList();
-            return $this->fetch('copy_master', compact('model', 'catgory', 'delivery', 'specData', 'gradeList'));
+            return $this->fetch('copy_master', compact('model', 'catgory', 'delivery', 'specData', 'gradeList','showroomList'));
         }
         // 新增拼团商品
         $model = new GoodsModel;
@@ -99,6 +103,7 @@ class Goods extends Controller
         // 商品详情
         $model = GoodsModel::detail($goods_id);
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             // 商品分类
             $catgory = CategoryModel::getCacheTree();
             // 配送模板
@@ -110,7 +115,7 @@ class Goods extends Controller
             }
             // 会员等级列表
             $gradeList = GradeModel::getUsableList();
-            return $this->fetch('edit', compact('model', 'catgory', 'delivery', 'specData', 'gradeList'));
+            return $this->fetch('edit', compact('model', 'catgory', 'delivery', 'specData', 'gradeList','showroomList'));
         }
         $model = new GoodsModel;
         if ($model->add($this->postData('goods'))) {
@@ -130,6 +135,7 @@ class Goods extends Controller
         // 商品详情
         $model = GoodsModel::detail($goods_id);
         if (!$this->request->isAjax()) {
+            $showroomList = ShowroomModel::getAllList();
             // 商品分类
             $catgory = CategoryModel::getCacheTree();
             // 配送模板
@@ -141,7 +147,7 @@ class Goods extends Controller
             }
             // 会员等级列表
             $gradeList = GradeModel::getUsableList();
-            return $this->fetch('edit', compact('model', 'catgory', 'delivery', 'specData', 'gradeList'));
+            return $this->fetch('edit', compact('model', 'catgory', 'delivery', 'specData', 'gradeList','showroomList'));
         }
         // 更新记录
         if ($model->edit($this->postData('goods'))) {

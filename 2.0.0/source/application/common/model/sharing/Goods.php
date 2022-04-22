@@ -56,6 +56,14 @@ class Goods extends BaseModel
     }
 
     /**
+     * 关联展馆表
+     * @return \think\model\relation\BelongsTo
+     */
+    public function showroom()
+    {
+        return $this->belongsTo('Showroom');
+    }
+    /**
      * 关联商品规格表
      * @return \think\model\relation\HasMany
      */

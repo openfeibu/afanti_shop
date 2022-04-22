@@ -72,36 +72,6 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="am-form-group am-fl">
-                                        <?php $deliveryType = $request->get('delivery_type'); ?>
-                                        <select name="delivery_type"
-                                                data-am-selected="{btnSize: 'sm', placeholder: '配送方式'}">
-                                            <option value=""></option>
-                                            <option value="-1"
-                                                <?= $deliveryType === '-1' ? 'selected' : '' ?>>全部
-                                            </option>
-                                            <?php foreach (DeliveryTypeEnum::data() as $item): ?>
-                                                <option value="<?= $item['value'] ?>"
-                                                    <?= $item['value'] == $deliveryType ? 'selected' : '' ?>><?= $item['name'] ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="am-form-group am-fl">
-                                        <?php $extractShopId = $request->get('extract_shop_id'); ?>
-                                        <select name="extract_shop_id"
-                                                data-am-selected="{btnSize: 'sm', placeholder: '自提门店名称'}">
-                                            <option value=""></option>
-                                            <option value="-1"
-                                                <?= $extractShopId === '-1' ? 'selected' : '' ?>>全部
-                                            </option>
-                                            <?php if (isset($shopList)): foreach ($shopList as $item): ?>
-                                                <option value="<?= $item['shop_id'] ?>"
-                                                    <?= $item['shop_id'] == $extractShopId ? 'selected' : '' ?>><?= $item['shop_name'] ?>
-                                                </option>
-                                            <?php endforeach; endif; ?>
-                                        </select>
-                                    </div>
                                     <div class="am-form-group tpl-form-border-form am-fl">
                                         <input type="text" name="start_time"
                                                class="am-form-field"
@@ -139,7 +109,6 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                 <th width="10%">实付款</th>
                                 <th>买家</th>
                                 <th>支付方式</th>
-                                <th>配送方式</th>
                                 <th>交易状态</th>
                                 <th>操作</th>
                             </tr>
@@ -194,9 +163,6 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                             </td>
                                             <td class="am-text-middle" rowspan="<?= $goodsCount ?>">
                                                 <span class="am-badge am-badge-secondary"><?= $order['pay_type']['text'] ?></span>
-                                            </td>
-                                            <td class="am-text-middle" rowspan="<?= $goodsCount ?>">
-                                                <span class="am-badge am-badge-secondary"><?= $order['delivery_type']['text'] ?></span>
                                             </td>
                                             <td class="am-text-middle" rowspan="<?= $goodsCount ?>">
                                                 <p>付款状态：

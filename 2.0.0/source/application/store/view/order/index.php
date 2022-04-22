@@ -76,7 +76,6 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                 <th width="15%">实付款</th>
                                 <th>买家</th>
                                 <th>支付方式</th>
-                                <th>配送方式</th>
                                 <th>交易状态</th>
                                 <th>操作</th>
                             </tr>
@@ -121,11 +120,6 @@ use app\common\enum\DeliveryType as DeliveryTypeEnum;
                                             <td class="am-text-middle" rowspan="<?= $goodsCount ?>">
                                                 <span class="am-badge am-badge-secondary">
                                                     <?= $order['pay_type']['text'] ?>
-                                                </span>
-                                            </td>
-                                            <td class="am-text-middle" rowspan="<?= $goodsCount ?>">
-                                                <span class="am-badge am-badge-secondary">
-                                                    <?= $order['delivery_type']['text'] ?>
                                                 </span>
                                             </td>
                                             <td class="am-text-middle" rowspan="<?= $goodsCount ?>">

@@ -61,7 +61,7 @@ class Goods extends BaseModel
      */
     public function showroom()
     {
-        return $this->belongsTo('Showroom');
+        return $this->belongsTo('app\\common\model\\Showroom');
     }
     /**
      * 关联商品规格表
@@ -140,6 +140,7 @@ class Goods extends BaseModel
         $params = array_merge([
             'status' => 10,         // 商品状态
             'category_id' => 0,     // 分类id
+            'showroom_id' => 0,     // 展馆id
             'search' => '',         // 搜索关键词
             'sortType' => 'all',    // 排序类型
             'sortPrice' => false,   // 价格排序 高低
@@ -148,6 +149,7 @@ class Goods extends BaseModel
         // 筛选条件
         $filter = [];
         $params['category_id'] > 0 && $filter['category_id'] = ['IN', Category::getSubCategoryId($params['category_id'])];
+        $params['showroom_id'] > 0 && $filter['showroom_id'] = $params['showroom_id'];
         $params['status'] > 0 && $filter['goods_status'] = $params['status'];
         !empty($params['search']) && $filter['goods_name'] = ['like', '%' . trim($params['search']) . '%'];
         // 排序规则

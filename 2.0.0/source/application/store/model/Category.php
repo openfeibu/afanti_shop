@@ -35,7 +35,7 @@ class Category extends CategoryModel
     public function edit($data)
     {
         // 验证：一级分类如果存在子类，则不允许移动
-        if ($data['parent_id'] > 0 && static::hasSubCategory($this['category_id'])) {
+        if (isset($data['parent_id']) && $data['parent_id'] > 0 && static::hasSubCategory($this['category_id'])) {
             $this->error = '该分类下存在子分类，不可以移动';
             return false;
         }

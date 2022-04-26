@@ -23,6 +23,13 @@ class Category extends Controller
         $templet = WxappCategoryModel::detail();
         // 商品分类列表
         $list = array_values(CategoryModel::getCacheTree());
+        foreach ($list as $key=> &$category)
+        {
+            if($category['status'] == 0)
+            {
+                unset($list[$key]);
+            }
+        }
         return $this->renderSuccess(compact('templet', 'list'));
     }
 

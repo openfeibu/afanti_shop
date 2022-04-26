@@ -30,6 +30,7 @@ class Category extends Controller
                 unset($list[$key]);
             }
         }
+        $list = array_values($list);
         return $this->renderSuccess(compact('templet', 'list'));
     }
 
